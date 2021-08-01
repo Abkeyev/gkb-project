@@ -1,0 +1,288 @@
+@import url(./design.css);
+
+.main-page {
+    padding: 30vh 0;
+}
+.login-page {
+    padding: 20vh 0;
+}
+.register-page {
+    padding: 10vh 0;
+}
+.special-card .d-flex-special {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 64px;
+}
+.special-card .d-flex-special button {
+    margin-right: 32px;
+}
+.special-card .d-flex-special button:last-child {
+    margin-right: 0;
+}
+.login-input {
+    display: grid;
+    justify-content: center;
+    margin-top: 48px;
+    grid-template-columns: 70%;
+}
+.login-input input {
+    
+}
+
+
+
+/* Register */
+.register-page .title-main {
+    text-align: left;
+}
+
+
+
+/* Sidebar */
+.main-body {
+    padding-left: 272px;
+    transition: .3s;
+}
+.left-sidebar {
+    background: #3F4B60;
+    color: white;
+    width: 272px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 2rem 0;
+    overflow-x: hidden;
+    transition: .3s;
+}
+.container-sidebar {
+    padding: 0 1rem;
+    position: relative;
+}
+.row-sidebar {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: 0 -1rem;
+}
+
+.avatar {
+    width: 100%;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+}
+.avatar .image-inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.avatar .text {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #FFFFFF;
+}
+.avatar .image-avatar {
+    margin-right: 1rem;
+    width: 72px;
+    height: 72px;
+}
+.avatar .image-avatar img {
+    object-fit: cover;
+    -o-object-fit: cover;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.avatar .btn-side {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: .5s;
+}
+.avatar .btn-side i {
+    transition: .5s;
+}
+.avatar .btn-side:hover {
+    opacity: 0.5;
+    background: #ffffff33;
+}
+
+.user-profile {
+    padding: 0 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+    position: relative;
+}
+.user-profile .name, .user-profile .bin, .user-profile .company {
+    color: white;
+    display: block;
+    white-space: nowrap;
+}
+.user-profile .name {
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 4px;
+    transition: .3s;
+}
+.user-profile .bin, .user-profile .company {
+    font-weight: normal;
+    font-size: 12px;
+    transition: .3s;
+    transform: translateX(0px);
+}
+
+.navigation {
+    width: 100%;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 70vh;
+}
+
+.list {
+    width: 100%;
+}
+.list li {
+    padding: 1rem;
+    transition: .3s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+.list li:hover {
+    padding: 1rem;
+    background: #596A87;
+}
+.list li .link-list {
+    display: flex;
+    align-items: center;
+}
+.list li .link-list .text {
+    font-weight: normal;
+    margin-left: 1rem;
+    font-size: 1rem;
+    line-height: 16px;
+    color: #FFFFFF;
+    transform: translateX(0px);
+    transition: .3s;
+    white-space: nowrap;
+}
+.list li .link-list i {
+    font-size: 18px;
+    margin-left: 0;
+    width: 18px;
+    height: 18px;
+    transition: .3s;
+}
+.status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: .3s;
+    transform: scale(0);
+    position: absolute;
+    right: 16px;
+}
+.status.active {
+    background: #FF0000;
+    transform: scale(1);
+}
+
+
+/* If close navigation */
+
+.left-sidebar.close {
+    width: 142px;
+    transition: .3s;
+}
+.left-sidebar.close .avatar .text {
+    transform: translateX(150px);
+    opacity: 0;
+    display: none;
+}
+.left-sidebar.close .avatar .btn-side i {
+    transform: rotate(180deg);
+    transition: .5s;
+}
+
+.left-sidebar.close .user-profile .name, .left-sidebar.close .user-profile .company {
+    transform: translateX(150px);
+}
+.left-sidebar.close .user-profile .bin {
+    margin-top: -27px;
+    padding-bottom: 27px;
+}
+.left-sidebar.close .list li .link-list .text {
+    transform: translateX(150px);
+    transition: .3s;
+}
+.left-sidebar.close .list li .link-list i {
+    font-size: 18px;
+    margin-left: 46px;
+    transition: .3s;
+    /* position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.left-sidebar.close + .main-body {
+    padding-left: 142px;
+    transition: .3s;
+}
+
+
+/* Profile Manager */
+.profile-manager {
+    padding: 100px;
+}
+.profile-manager h1 {
+    text-align: left;
+}
+
+
+
+
+
+
+
+
+
+
+/* Animation */
+@-webkit-keyframes pulse {
+    to {
+        width: 60px;
+        height: 60px;
+        opacity: 0
+    }
+}
+
+@keyframes pulse {
+    to {
+        width: 60px;
+        height: 60px;
+        opacity: 0
+    }
+}

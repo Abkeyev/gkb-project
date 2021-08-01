@@ -1,25 +1,35 @@
 import React from 'react';
 import './style.css';
-import "./responsive.css"; 
 
 const Login = () => {
     return (
-        <div className="">
-            
-           {/* <div className="container">
-               <div className="row">
-                   <div className="page-inner">
-                       <div>
-                           <Link className="back-link" to="/"><img src="images/icons/sr-chevron-square-left.svg" /></Link>
-                       </div>
-                    <h1>
-                        About
-                    </h1>
-                   </div>
-               </div>
-           </div> */}
+        <section className="login-page">
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-4 offset-md-4">
+                        <form>
 
-        </div>
+                            <div className="special-card">
+
+                                <h1 className="title-main">Вход по логину</h1>
+                                <div className="login-input">
+                                    <div className="form-group">
+                                        <label>Логин</label>
+                                        <input className="form-control" type="name" placeholder="Введите логин" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Пароль</label>
+                                        <input className="form-control" type="name" placeholder="Введите пароль" />
+                                    </div>
+                                    <button className="button btn-primary" disabled>Войти</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </section>
     );
 }
 export default Login;
