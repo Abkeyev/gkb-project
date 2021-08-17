@@ -1,5 +1,8 @@
+@import url(./icon.css);
 @import url(./design.css);
-
+.p-100 {
+    padding: 100px 100px;
+}
 .main-page {
     padding: 30vh 0;
 }
@@ -30,8 +33,6 @@
 .login-input input {
     
 }
-
-
 
 /* Register */
 .register-page .title-main {
@@ -113,6 +114,7 @@
 }
 .avatar .btn-side i {
     transition: .5s;
+    transform: rotate(180deg);
 }
 .avatar .btn-side:hover {
     opacity: 0.5;
@@ -146,9 +148,10 @@
 .navigation {
     width: 100%;
     padding: 0;
+    height: 70vh;
+    padding-bottom: 2rem;
     overflow-y: auto;
     overflow-x: hidden;
-    height: 70vh;
 }
 
 .list {
@@ -215,7 +218,7 @@
     display: none;
 }
 .left-sidebar.close .avatar .btn-side i {
-    transform: rotate(180deg);
+    transform: rotate(0deg);
     transition: .5s;
 }
 
@@ -252,7 +255,6 @@
     transition: .3s;
 }
 
-
 /* Profile Manager */
 .profile-manager {
     padding: 100px;
@@ -263,6 +265,7 @@
 
 
 
+/* Заявки */
 
 
 
