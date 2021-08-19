@@ -1,9 +1,11 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import './style.css';
 
 const Sidebar = () => {
+    const [close, setClose] = React.useState(false)
     return (
-        <nav className="left-sidebar "> {/* className для скрытия боковой модалки "close"*/}
+        <nav className={`left-sidebar ${close ? 'close' : ''}`}> {/* className для скрытия боковой модалки "close"*/}
         <div className="container-sidebar">
             <div className="row-sidebar">
                 <div className="avatar"> 
@@ -14,7 +16,7 @@ const Sidebar = () => {
                         <span className="text">Профиль</span>
                     </div>
 
-                    <span className="btn-side">
+                    <span className="btn-side" onClick={() => setClose(!close)}>
                         <i className="chevron-right"></i>
                     </span>
                     
@@ -27,7 +29,7 @@ const Sidebar = () => {
 
                 <div className="navigation">
                     <ul className="list">
-                        <li><span className="link-list"><i className="azla blank-alt-icon"></i> <span className="text">Заявка</span></span> <span className="status active"></span> </li>
+                        <li><Link to="/orders"  className="link-list"><i className="azla blank-alt-icon"></i> <span className="text">Заявка</span><span className="status active"></span></Link></li>
                         <li><span className="link-list"><i className="azla user-icon"></i> <span className="text">Контрагент </span></span> <span className="status active"></span> </li>
                         <li><span className="link-list"><i className="azla user-add-icon"></i> <span className="text">Уполномоченные лица </span></span> <span className="status"></span> </li>
                         <li><span className="link-list"><i className="azla chat-icon"></i> <span className="text">Контакты </span></span> <span className="status"></span> </li>

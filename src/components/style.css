@@ -158,7 +158,6 @@
     width: 100%;
 }
 .list li {
-    padding: 1rem;
     transition: .3s;
     cursor: pointer;
     display: flex;
@@ -167,12 +166,14 @@
     position: relative;
 }
 .list li:hover {
-    padding: 1rem;
     background: #596A87;
 }
 .list li .link-list {
+    width: 100%;
+    padding: 1rem;
     display: flex;
     align-items: center;
+    text-decoration: none;
 }
 .list li .link-list .text {
     font-weight: normal;
