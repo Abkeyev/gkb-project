@@ -7,41 +7,41 @@ const Manager = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-lg-12">
-                        <div className="profile-manager p-100">
-                                <h1 className="title-main">Профиль</h1>
+                        <div className="profile-manager p-50">
+                                <h1 className="title-main">Общие данные</h1>
                                 <h3 className="title-subhead mb-32">Данные организации</h3>
                                     <div className="col-md-8">
-                                        <div className="form-group-v">
+                                        <div className="form-wrapper">
+                                            <input type="name" placeholder="Напишите id клиента" />
                                             <label>ID клиента</label>
-                                            <input className="form-control-v" type="name" value="000487320" />
                                         </div>
-                                        <div className="form-group-v">
+                                        <div className="form-wrapper">
+                                            <input  type="name"  placeholder="Напишите id клиента" />
                                             <label>ID типа клиента</label>
-                                            <input className="form-control-v" type="name" value="000487320" />
                                         </div>
-                                        <div className="form-group-v">
+                                        <div className="form-wrapper">
+                                            <input  type="name" placeholder="Напишите id клиента"/>
                                             <label>Полное наименование</label>
-                                            <input className="form-control-v" type="name" value="ТОО КАНАТ СЕРВИС" />
                                         </div>
-                                        <div className="form-group-v">
+                                        <div className="form-wrapper">
+                                            <input  type="name"  placeholder="Напишите id клиента"/>
                                             <label>Краткое наименование</label>
-                                            <input className="form-control-v" type="name" value="СЕРВИС" />
                                         </div>
-                                        <div className="form-group-v">
+                                        <div className="form-wrapper">
+                                            <input  type="name" placeholder="Напишите id клиента"/>
                                             <label>Адрес сайта клиента</label>
-                                            <input className="form-control-v" type="name" value="www.service.kz" />
                                         </div>
-                                        <div className="form-group-v">
+                                        <div className="form-wrapper">
+                                            <input  type="name" required/>
                                             <label>БИН клиента</label>
-                                            <input className="form-control-v" type="name" value="849930046783939442" />
                                         </div>
-                                        <div className="form-group-v">
-                                            <label>Дата регистрации в<br/> системе</label>
-                                            <input className="form-control-v" type="date" value="12.07.2021" />
+                                        <div className="form-wrapper">
+                                            <input  type="date" />
+                                            <label>Дата регистрации в системе</label>
                                         </div>
-                                        <div className="form-group-v">
+                                        <div className="form-wrapper">
+                                            <input  type="name" placeholder="Напишите id клиента"/>
                                             <label>ID статус клиента</label>
-                                            <input className="form-control-v" type="name" value="Пользователь" />
                                         </div>
                                     </div>
                             </div>

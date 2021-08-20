@@ -13,7 +13,7 @@ const Sidebar = () => {
                         <div className="image-avatar">
                             <img src="images/avatar.png" />
                         </div>
-                        <span className="text">Профиль</span>
+                        {/* <span className="text">Профиль</span> */}
                     </div>
 
                     <span className="btn-side" onClick={() => setClose(!close)}>
@@ -26,19 +26,24 @@ const Sidebar = () => {
                     <span className="bin">БИН 124535262</span>
                     <span className="company">АО “Государственное Кредитное Бюро”</span>
                 </div>
-
+                
                 <div className="navigation">
-                    <ul className="list">
-                        <li><Link to="/orders"  className="link-list"><i className="azla blank-alt-icon"></i> <span className="text">Заявка</span><span className="status active"></span></Link></li>
-                        <li><span className="link-list"><i className="azla user-icon"></i> <span className="text">Контрагент </span></span> <span className="status active"></span> </li>
-                        <li><span className="link-list"><i className="azla user-add-icon"></i> <span className="text">Уполномоченные лица </span></span> <span className="status"></span> </li>
-                        <li><span className="link-list"><i className="azla chat-icon"></i> <span className="text">Контакты </span></span> <span className="status"></span> </li>
-                        <li><span className="link-list"><i className="azla pin-icon"></i> <span className="text">Адреса </span></span> <span className="status"></span> </li>
-                        <li><span className="link-list"><i className="azla paper-icon"></i> <span className="text">Банковские реквизиты </span></span> <span className="status"></span> </li>
-                        <li><span className="link-list"><i className="azla add-plus-icon"></i> <span className="text">Пользователи </span></span> <span className="status"></span> </li>
-                        <li><span className="link-list"><i className="azla star-icon"></i> <span className="text">Потребители услуг </span></span> <span className="status"></span> </li>
-                        <li><span className="link-list"><i className="azla file-icon"></i> <span className="text">Документы </span></span> <span className="status"></span> </li>
-                        <li><span className="link-list"><i className="azla bookmark-icon"></i> <span className="text">Подключенные сервисы </span></span> <span className="status"></span> </li>
+                    <ul className="list"> {/* Если перешли в сам Link то класс дается active */}
+                        <li><Link to="/orders" className="link-list active"><i className="azla blank-alt-icon"></i> <span className="text">Заявка</span><span className="status active"></span></Link></li>
+                        <li className="dropdown-menu"> {/* Если нажать на Dropdown то открывает самму сылку и раскрывает список, и класс дается collapse */}
+                            <Link to="/" className="link-list"><i className="azla user-add-icon"></i> <span className="text">Контрагент </span> <span className="status active"></span> <span className="dropdown down"></span></Link>
+                            <ul className="submenu">
+                                <li><Link to="/" className="link-list"><i className="azla user-add-icon"></i> <span className="text">Уполномоченные лица </span> <span className="status"></span></Link></li>
+                                <li><Link to="/" className="link-list"><i className="azla chat-icon"></i> <span className="text">Контакты </span> <span className="status"></span></Link> </li>
+                                <li><Link to="/" className="link-list"><i className="azla paper-icon"></i> <span className="text">Банковские реквизиты </span> <span className="status"></span></Link></li>
+                                <li><Link to="/" className="link-list"><i className="azla add-plus-icon"></i> <span className="text">Пользователи </span> <span className="status"></span></Link></li>
+                                <li><Link to="/" className="link-list"><i className="azla star-icon"></i> <span className="text">Потребители услуг </span> <span className="status"></span></Link></li>
+                                <li><Link to="/" className="link-list"><i className="azla file-icon"></i> <span className="text">Документы </span> <span className="status"></span></Link></li>
+                            </ul>
+                        </li>
+                        <li><Link to="/" className="link-list"><i className="azla bookmark-icon"></i> <span className="text">Пользователи портала </span> <span className="status"></span></Link></li>
+                        <li><Link to="/" className="link-list"><i className="azla user-icon"></i> <span className="text">Мой профиль </span> <span className="status"></span></Link></li>
+                        {/* <li><Link to="/" className="link-list"><i className="azla pin-icon"></i> <span className="text">Адреса </span> <span className="status"></span></Link></li> */}
                     </ul>
                 </div>
 

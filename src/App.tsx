@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Main from './components/Main';
+import Modal from './components/Modal';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import Manager from './components/Manager';
@@ -10,9 +11,9 @@ import Sidebar from './components/Sidebar';
 import './App.css';
 
 function App() {
-  const [logged, setLogged] = React.useState(false)
+  const [logged, setLogged] = React.useState(true)
   return (
-    <div className="app-root">
+    <div className="app-root">  {/* При открытии модалки добавляется класс modal-open */}
       <Router>
         {
           logged ?
@@ -25,6 +26,7 @@ function App() {
             </>)
             :
             (<Switch>
+              {/* <Modal/> */}
               <Route path="/" component={() => <Login />} exact/>
               <Route path="/registration" component={() => <Registration />} exact/>
             </Switch>)
