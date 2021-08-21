@@ -9,6 +9,7 @@ const Request = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-lg-12">
+
                         <div className="req-manager p-50">
                                 <div className="header-text justify-content-between mb-24">
                                     <h1 className="title-main">Заявки</h1>

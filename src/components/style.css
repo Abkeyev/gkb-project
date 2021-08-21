@@ -6,6 +6,10 @@
 .p-50 {
     padding: 50px 50px;
 }
+.p-16-50 {
+    padding: 16px 50px;
+}
+
 .main-page {
     padding: 30vh 0;
 }
@@ -337,11 +341,285 @@
 }
   
   
-  
+/* Заявки подробнее*/
+.req-manager-inner h1 {
+    text-align: left;
+}
+/* .req-inner-header {
+    border-bottom: 1px solid #C8C7CC;
+    margin-bottom: 32px;
+} */
+
+.back-breadcrumbs {
+    margin-bottom: 32px;
+}
+.back-breadcrumbs .back {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #3F4B60;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 4px;
+}
+.back-breadcrumbs .back i {
+    margin-right: 8px;
+    transition: .3s;
+}
+.back-breadcrumbs .back:hover i {
+    transform: translateX(-8px);
+}
+.back-breadcrumbs .breadcrumbs {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 20px;
+    color: #939393;
+}
+.back-breadcrumbs .breadcrumbs a {
+    color: #939393;
+}
+
+/* Step Bar */
+.status-bar {
+    margin: 32px 0;
+}
+.step-progressbar {
+  list-style: none;
+  counter-reset: step;
+  display: flex;
+  padding: 0;
+  margin-bottom: 0;
+}
+.step-item {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  text-align: left;
+  position: relative;
+  font-weight: normal;
+    font-size: 16px;
+    line-height: 16px;
+    color: #939393;
+}
+.step-item:before {
+  width: 24px;
+  height: 24px;
+  content: counter(step);
+  counter-increment: step;
+  align-self: flex-start;
+  background: #C8C7CC;
+  color: #fff;
+  border-radius: 100%;
+  line-height: 3em;
+  margin-bottom: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #FFFFFF;
+}
+.step-item:after {
+  height: 2px;
+  width: calc(100% - 24px);
+  content: "";
+  background: #C8C7CC;
+  position: absolute;
+  top: 11px;
+  left: 24px;
+}
+.step-item:last-child:after {
+  content: none;
+}
+.step-item-active:before {
+  background: #3F4B60;
+}
+.step-item-complete:before {
+  content: "";
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMiAyMUMxNi45NzA2IDIxIDIxIDE2Ljk3MDYgMjEgMTJDMjEgNy4wMjk0NCAxNi45NzA2IDMgMTIgM0M3LjAyOTQ0IDMgMyA3LjAyOTQ0IDMgMTJDMyAxNi45NzA2IDcuMDI5NDQgMjEgMTIgMjFaTTExLjc2ODIgMTUuNjQwMkwxNi43NjgyIDkuNjQwMThMMTUuMjMxOCA4LjM1OTgyTDEwLjkzMjggMTMuNTE4Nkw4LjcwNzExIDExLjI5MjlMNy4yOTI4OSAxMi43MDcxTDEwLjI5MjkgMTUuNzA3MUwxMS4wNjcyIDE2LjQ4MTRMMTEuNzY4MiAxNS42NDAyWiIgZmlsbD0iIzIwQjVCRSIvPgo8L3N2Zz4K");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 34px;
+  background-color: unset;
+}
+.step-item-complete:after {
+    background: #20B5BE;
+}
+
+/* Общие данные */
+.info-list {
+    margin-bottom: 32px;
+}
+.info-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.info-list li .left {
+    font-weight: 500;
+    font-size: 16px;
+    text-align: right;
+    color: #3F4B60;
+    width: 200px;
+    margin-right: 16px;
+    display: block;
+}
+.info-list li .right {
+    font-weight: normal;
+    font-size: 16px;
+    text-align: left;
+    color: #3F4B60;
+    display: block;
+    width: calc(100% - 216px);
+}
+
+/* Обзор заявки - Подписание договора - Нет документа на рассмотрении */
+.files-added {
+    margin-bottom: 24px;
+}
+.files-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    text-decoration: underline;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 20px;
+    color: #3F4B60;
+}
+.files-list li i {
+    margin-right: 8px;
+}
+
+.req-inner-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 16px 0;
+}
+.req-inner-footer:before {
+    content: '';
+    background: #F9F9F9;
+    position: absolute;
+    left: -50px;
+    top: 0;
+    width: calc(100% + 100px);
+    height: 100%;
+    z-index: -1;
+}
+.manager-req {
+    display: flex;
+    align-items: center;
+}
+.manager-req .left {
+    display: grid;
+    width: 30%;
+}
+.manager-req .left p {
+    font-weight: normal;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #939393;
+    margin-bottom: 6px;
+}
+
+.manager-req .profile {
+    display: flex;
+    align-items: center;
+    width: 70%;
+}
+.manager-req .profile .ava {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    margin-right: 12px;
+}
+.manager-req .profile .name {
+    font-weight: normal;
+    font-size: 14px;
+    color: #3F4B60;
+}
+.manager-req .right {
+    display: flex;
+    align-items: center;
+    width: 70%;
+}
+.manager-req .right p {
+    font-weight: normal;
+    font-size: 16px;
+    color: #000000;
+    margin-bottom: 0;
+    margin-right: 24px;
+}
+
+/* Modal Назначить менеджера */
+.manager-list ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 8px;
+    border-bottom: 1px solid #E0E6EF;
+}
+.manager-list ul li:last-child {
+    border-bottom: unset;
+}
+.manager-list ul li:hover {
+    background: #F7FBFA;
+    cursor: pointer;
+}
+.manager-list ul li .profile {
+    display: flex;
+    align-items: center;
+    width: 70%;
+}
+.manager-list ul li .profile .ava {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    margin-right: 12px;
+}
+.manager-list ul li .profile .name {
+    font-weight: normal;
+    font-size: 14px;
+    color: #3F4B60;
+}
+.manager-list ul li .position {
+    font-weight: normal;
+    font-size: 14px;
+    color: #939393;
+    width: 30%;
+}
+
+.search-input input {
+    padding: 14px 12px 14px 44px;
+    border: none;
+    border-bottom: 1px solid #C8C7CC;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: left calc(5px + 1px) center;
+    background-size: 32px;
+}
+.search-input input::placeholder {
+    font-weight: normal;
+    font-size: 16px;
+    color: #939393;
+}
+.search-input input:focus {
+    box-shadow: unset;
+    outline: none;
+} 
+.search-input input:hover {
+    box-shadow: unset;
+} 
 
 
 
-
+.manager-req .alert p  {
+    color: #FF0000;
+}
 
 /* Animation */
 @-webkit-keyframes pulse {

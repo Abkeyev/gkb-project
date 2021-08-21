@@ -11,7 +11,7 @@ const Sidebar = () => {
                 <div className="avatar"> 
                     <div className="image-inner">
                         <div className="image-avatar">
-                            <img src="images/avatar.png" />
+                        <img src={process.env.PUBLIC_URL + "/images/avatar.png"} />
                         </div>
                         {/* <span className="text">Профиль</span> */}
                     </div>

@@ -33,11 +33,15 @@ hr {
 hr:not([size]) {
   height: 1px;
 }
-
+.line-hr {
+  border-bottom: 1px solid #C8C7CC;
+}
 /* Padding Top and Bottom */
 .pad-tb-16 { padding: 16px 0; }
 .pad-tb-32 { padding: 32px 0; }
 .pad-tb-64 { padding: 64px 0; }
+
+.pad-b-128 { padding-bottom: 128px; }
 
 h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
     margin-top: 0;
@@ -194,9 +198,9 @@ textarea {
   user-select: none;
   background-color: transparent;
   border: 1px solid transparent;
-  padding: 16px 92px;
+  padding: 16px 32px;
   font-size: 16px;
-  border-radius: 1rem;
+  border-radius: 8px;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -1111,6 +1115,11 @@ textarea {
 .title-subhead {
   font-weight: bold;
   font-size: 24px;
+  color: #3F4B60;
+}
+.title-subhead-h5 {
+  font-weight: 500;
+  font-size: 18px;
   color: #3F4B60;
 }
 .title-subhead .number {

@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Registration from './components/Registration';
 import Manager from './components/Manager';
 import Request from './components/Request';
+import RequestInner from './components/RequestInner';
 import Sidebar from './components/Sidebar';
 import './App.css';
 
@@ -22,6 +23,8 @@ function App() {
               <Switch>
                 <Route path="/" component={() => <Manager />} exact/>
                 <Route path="/orders" component={() => <Request />} exact/>
+                <Route path="/orders/title" component={() => <RequestInner />} exact/>
+                
               </Switch>
             </>)
             :
