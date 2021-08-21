@@ -300,10 +300,12 @@
 }
 
 .main-body .req-inner-footer {
-    width: calc(100% - 322px);
+    width: calc(100% - 372px);
+    transition: .3s;
 }
 .left-sidebar.close + .main-body .req-inner-footer {
     width: calc(100% - 242px);
+    transition: .3s;
 }
 
 /* Profile Manager */
@@ -567,7 +569,7 @@
 }
 
 .manager-list {
-    
+
 }
 .manager-list ul {
     height: 45vh;
