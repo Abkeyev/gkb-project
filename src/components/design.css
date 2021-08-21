@@ -1246,6 +1246,26 @@ textarea {
   color: #C8C7CC;
   opacity: 1;
 }
+.form-control-textarea {
+  padding: 14px 16px;
+  background: #FFFFFF;
+  border: 1px solid #C8C7CC;
+  border-radius: 8px;
+  width: 100%;
+  transition: .3s;
+}
+.form-control-textarea::placeholder {
+  font-weight: normal;
+  font-size: 16px;
+  color: #C8C7CC;
+}
+.form-control-textarea:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #6FC9CE;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(32, 181, 190, 0.25);
+}
 .form-group-v {
   margin-bottom: 16px;
   display: flex;
@@ -1477,6 +1497,23 @@ textarea {
   content: unset !important;
 }
 
+.alert-mess {
+  display: inline-block;
+  padding: 16px 20px;
+  background: #FFF3F3;
+  border-radius: 8px;
+  color: #FF0000;
+}
+.alert-mess h5 {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+.alert-mess p {
+  font-weight: normal;
+  font-size: 14px;
+  margin-bottom: 0;
+}
 
 /* Animation */
 

@@ -21,7 +21,12 @@ const RequestInner = () => {
                                     </div>
                                 </div>
 
-                                <h1 className="title-main">Заявка №1353 - ТОО “М-Ломбард”</h1>
+                                <h1 className="title-main mb-32">Заявка №1353 - ТОО “М-Ломбард”</h1>
+
+                                <div className="alert-mess mb-32">
+                                    <h5>Заявка отклонена</h5>
+                                    <p>Причина: Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. </p>
+                                </div>
 
                                 <div className="status-bar">
                                     <ul className="step-progressbar">
@@ -201,16 +206,17 @@ const RequestInner = () => {
                                         </div>
                                     </div>
 
-                                    {/* <div className="right">
+                                    <div className="right">
                                         <p>Первичная проверка прошла успешно?</p>
                                         <button className="button btn-secondary mr-8">Нет</button>
                                         <button className="button btn-primary">Да, успешно</button>
-                                    </div> */}
+                                    </div>
 
-                                    <div className="right alert">
+                                    {/* <div className="right alert">
                                         <p>Заявка отклонена</p>
                                         <button className="button btn-secondary">В архив</button>
-                                    </div>
+                                    </div> */}
+                                    
                                 </div>
                                 
                             </div>

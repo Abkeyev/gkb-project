@@ -50,7 +50,7 @@
 
 /* Sidebar */
 .main-body {
-    padding-left: 272px;
+    margin-left: 272px;
     transition: .3s;
 }
 .left-sidebar {
@@ -295,8 +295,15 @@
 }
 
 .left-sidebar.close + .main-body {
-    padding-left: 142px;
+    margin-left: 142px;
     transition: .3s;
+}
+
+.main-body .req-inner-footer {
+    width: calc(100% - 322px);
+}
+.left-sidebar.close + .main-body .req-inner-footer {
+    width: calc(100% - 242px);
 }
 
 /* Profile Manager */
@@ -382,7 +389,7 @@
 
 /* Step Bar */
 .status-bar {
-    margin: 32px 0;
+    margin-bottom: 48px;
 }
 .step-progressbar {
   list-style: none;
@@ -401,6 +408,7 @@
     font-size: 16px;
     line-height: 16px;
     color: #939393;
+    transition: .3s;
 }
 .step-item:before {
   width: 24px;
@@ -420,6 +428,7 @@
     font-size: 14px;
     line-height: 20px;
     color: #FFFFFF;
+    transition: .3s;
 }
 .step-item:after {
   height: 2px;
@@ -429,6 +438,7 @@
   position: absolute;
   top: 11px;
   left: 24px;
+  transition: .3s;
 }
 .step-item:last-child:after {
   content: none;
@@ -545,6 +555,7 @@
 .manager-req .right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     width: 70%;
 }
 .manager-req .right p {
@@ -553,6 +564,16 @@
     color: #000000;
     margin-bottom: 0;
     margin-right: 24px;
+}
+
+.manager-list {
+    
+}
+.manager-list ul {
+    height: 45vh;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* Modal Назначить менеджера */

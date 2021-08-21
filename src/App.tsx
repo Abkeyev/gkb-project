@@ -14,13 +14,14 @@ import './App.css';
 function App() {
   const [logged, setLogged] = React.useState(true)
   return (
-    <div className="app-root">  {/* При открытии модалки добавляется класс modal-open */}
+    <div className="app-root modal-open">  {/* При открытии модалки добавляется класс modal-open */}
       <Router>
         {
           logged ?
             (<>
               <Sidebar />
               <Switch>
+                
                 <Route path="/" component={() => <Manager />} exact/>
                 <Route path="/orders" component={() => <Request />} exact/>
                 <Route path="/orders/title" component={() => <RequestInner />} exact/>
