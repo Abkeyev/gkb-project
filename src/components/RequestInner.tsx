@@ -64,6 +64,7 @@ const RequestInner = (props: RequestProps) => {
                       className={`step-item ${
                         step === 0 ? "step-item-active" : "step-item-complete"
                       }`}
+                      onClick={() => setStep(0)}
                     >
                       Проверка
                     </li>
@@ -75,6 +76,7 @@ const RequestInner = (props: RequestProps) => {
                           ? "step-item-complete"
                           : ""
                       }`}
+                      onClick={() => setStep(1)}
                     >
                       Подписание
                       <br />
@@ -88,6 +90,7 @@ const RequestInner = (props: RequestProps) => {
                           ? "step-item-complete"
                           : ""
                       }`}
+                      onClick={() => setStep(2)}
                     >
                       Форма
                       <br />
@@ -222,123 +225,100 @@ const RequestInner = (props: RequestProps) => {
                       <h3 className="title-subhead mb-16">
                         56 заявленных пользователей
                       </h3>
-                      
-                      <div className="card mb-24 pad-24">
+
+                      {[1, 2, 3].map((s) => (
+                        <div className="card mb-24 pad-24">
                           <div className="card-header">
-                                <div className="title">
-                                    <h6 className="text">Султангалиева Камилла Избасарова</h6>
-                                    <span className="num">№1</span>
-                                </div>
-                                <p className="desc">Аналитик – Департамент финансового анализа – ТОО “М-Ломбард”</p>
+                            <div className="title">
+                              <h6 className="text">
+                                Султангалиева Камилла Избасарова
+                              </h6>
+                              <span className="num">№1</span>
+                            </div>
+                            <p className="desc">
+                              Аналитик – Департамент финансового анализа – ТОО
+                              “М-Ломбард”
+                            </p>
                           </div>
                           <div className="card-body pad-rl-16">
-                              <div className="row">
-                                  <div className="col-md-6">
-                                    <div className="total-info">
-                                        <ul className="info-list">
-                                            <li>
-                                                <span className="left">ID пользователя:</span>
-                                                <span className="right">64522352</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">ИИН сотрудника:</span>
-                                                <span className="right">941125352353</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">Контактный номер:</span>
-                                                <span className="right">+7 (705) 1234-56-78</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">Email:</span>
-                                                <span className="right">sultangaliyeva.k.i@gmail.com</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                  </div>
-                                  <div className="col-md-6">
-                                    <div className="total-info">
-                                        <ul className="info-list">
-                                            <li>
-                                                <span className="left">Первый руководитель:</span>
-                                                <span className="right">Кусаинов Ахан Ермекович</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">Заместитель:</span>
-                                                <span className="right">Мусаханов Дидар Ерланович</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">Курирующий менеджер:</span>
-                                                <span className="right">Константинопольский Александр Александрович</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">Контакты менеджера:</span>
-                                                <span className="right">+7 (705) 1234-56-78,<br/>alex.const@gmail.com</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-
-                      <div className="card mb-24 pad-24">
-                          <div className="card-header">
-                                <div className="title">
-                                    <h6 className="text">Султангалиева Камилла Избасарова</h6>
-                                    <span className="num">№1</span>
+                            <div className="row">
+                              <div className="col-md-6">
+                                <div className="total-info">
+                                  <ul className="info-list">
+                                    <li>
+                                      <span className="left">
+                                        ID пользователя:
+                                      </span>
+                                      <span className="right">64522352</span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        ИИН сотрудника:
+                                      </span>
+                                      <span className="right">
+                                        941125352353
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Контактный номер:
+                                      </span>
+                                      <span className="right">
+                                        +7 (705) 1234-56-78
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">Email:</span>
+                                      <span className="right">
+                                        sultangaliyeva.k.i@gmail.com
+                                      </span>
+                                    </li>
+                                  </ul>
                                 </div>
-                                <p className="desc">Аналитик – Департамент финансового анализа – ТОО “М-Ломбард”</p>
-                          </div>
-                          <div className="card-body pad-rl-16">
-                              <div className="row">
-                                  <div className="col-md-6">
-                                    <div className="total-info">
-                                        <ul className="info-list">
-                                            <li>
-                                                <span className="left">ID пользователя:</span>
-                                                <span className="right">64522352</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">ИИН сотрудника:</span>
-                                                <span className="right">941125352353</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">Контактный номер:</span>
-                                                <span className="right">+7 (705) 1234-56-78</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">Email:</span>
-                                                <span className="right">sultangaliyeva.k.i@gmail.com</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                  </div>
-                                  <div className="col-md-6">
-                                    <div className="total-info">
-                                        <ul className="info-list">
-                                            <li>
-                                                <span className="left">Первый руководитель:</span>
-                                                <span className="right">Кусаинов Ахан Ермекович</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">Заместитель:</span>
-                                                <span className="right">Мусаханов Дидар Ерланович</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">Курирующий менеджер:</span>
-                                                <span className="right">Константинопольский Александр Александрович</span>
-                                            </li>
-                                            <li>
-                                                <span className="left">Контакты менеджера:</span>
-                                                <span className="right">+7 (705) 1234-56-78,<br/>alex.const@gmail.com</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                  </div>
                               </div>
+                              <div className="col-md-6">
+                                <div className="total-info">
+                                  <ul className="info-list">
+                                    <li>
+                                      <span className="left">
+                                        Первый руководитель:
+                                      </span>
+                                      <span className="right">
+                                        Кусаинов Ахан Ермекович
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">Заместитель:</span>
+                                      <span className="right">
+                                        Мусаханов Дидар Ерланович
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Курирующий менеджер:
+                                      </span>
+                                      <span className="right">
+                                        Константинопольский Александр
+                                        Александрович
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Контакты менеджера:
+                                      </span>
+                                      <span className="right">
+                                        +7 (705) 1234-56-78,
+                                        <br />
+                                        alex.const@gmail.com
+                                      </span>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                      </div>
-
+                        </div>
+                      ))}
                     </div>
                   </TabPanel>
                 </Tabs>
@@ -361,7 +341,9 @@ const RequestInner = (props: RequestProps) => {
                     <h3 className="title-subhead">
                       История изменения договора 32
                     </h3>
-                    <button type="button" className="button btn-secondary">Загрузить договор</button>
+                    <button type="button" className="button btn-secondary">
+                      Загрузить договор
+                    </button>
                   </div>
                   <table className="table req-table">
                     <thead>
@@ -374,7 +356,12 @@ const RequestInner = (props: RequestProps) => {
                     </thead>
                     <tbody>
                       {[1, 2, 3, 4].map((m) => (
-                        <tr>
+                        <tr
+                          onClick={() => {
+                            setIsOpenModal(true);
+                            setModalType(2);
+                          }}
+                        >
                           <td>Договор вер. 2.4255</td>
                           <td>24 Июня 2021</td>
                           <td>Изменили что-то</td>
@@ -420,7 +407,94 @@ const RequestInner = (props: RequestProps) => {
                   </div>
                 </div>
               ) : step === 2 ? (
-                <></>
+                <>
+                  {[1, 2, 3].map((s) => (
+                    <div className="card mb-24 pad-24">
+                      <div className="card-header">
+                        <div className="title">
+                          <h6 className="text">
+                            Султангалиева Камилла Избасарова
+                          </h6>
+                          <span className="num">№1</span>
+                        </div>
+                        <p className="desc">
+                          Аналитик – Департамент финансового анализа – ТОО
+                          “М-Ломбард”
+                        </p>
+                      </div>
+                      <div className="card-body pad-rl-16">
+                        <div className="row">
+                          <div className="col-md-6">
+                            <div className="total-info">
+                              <ul className="info-list">
+                                <li>
+                                  <span className="left">ID пользователя:</span>
+                                  <span className="right">64522352</span>
+                                </li>
+                                <li>
+                                  <span className="left">ИИН сотрудника:</span>
+                                  <span className="right">941125352353</span>
+                                </li>
+                                <li>
+                                  <span className="left">
+                                    Контактный номер:
+                                  </span>
+                                  <span className="right">
+                                    +7 (705) 1234-56-78
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">Email:</span>
+                                  <span className="right">
+                                    sultangaliyeva.k.i@gmail.com
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="total-info">
+                              <ul className="info-list">
+                                <li>
+                                  <span className="left">
+                                    Первый руководитель:
+                                  </span>
+                                  <span className="right">
+                                    Кусаинов Ахан Ермекович
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">Заместитель:</span>
+                                  <span className="right">
+                                    Мусаханов Дидар Ерланович
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">
+                                    Курирующий менеджер:
+                                  </span>
+                                  <span className="right">
+                                    Константинопольский Александр Александрович
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">
+                                    Контакты менеджера:
+                                  </span>
+                                  <span className="right">
+                                    +7 (705) 1234-56-78,
+                                    <br />
+                                    alex.const@gmail.com
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
               ) : step === 3 ? (
                 <></>
               ) : step === 4 ? (

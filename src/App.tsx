@@ -12,7 +12,7 @@ import Sidebar from "./components/Sidebar";
 import "./App.css";
 
 function App() {
-  const [logged, setLogged] = React.useState(true);
+  const [logged, setLogged] = React.useState(false);
   const [isOpenModal, setIsOpenModal] = React.useState(false);
   const [modalType, setModalType] = React.useState<number>(0);
   const [modalManager, setModalManager] = React.useState(false);
@@ -32,6 +32,7 @@ function App() {
           declineReason={declineReason}
           setDeclineReason={setDeclineReason}
           setDecline={setDecline}
+          setStep={setStep}
         />
       )}
       <Router>
@@ -68,7 +69,11 @@ function App() {
         ) : (
           <Switch>
             <Route path="/" component={() => <Main />} exact />
-            <Route path="/login" component={() => <Login />} exact />
+            <Route
+              path="/login"
+              component={() => <Login setLogged={setLogged} />}
+              exact
+            />
             <Route
               path="/registration"
               component={() => <Registration />}
