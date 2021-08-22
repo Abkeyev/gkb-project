@@ -488,6 +488,11 @@ textarea {
 .align-self-stretch {
   align-self: stretch !important;
 }
+.d-flex-align-c-spaceb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 /* Grid Layout */
 .container,

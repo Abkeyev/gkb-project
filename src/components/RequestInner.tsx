@@ -357,9 +357,12 @@ const RequestInner = (props: RequestProps) => {
                       </li>
                     </ul>
                   </div>
-                  <h3 className="title-subhead mb-16">
-                    История изменения договора 32
-                  </h3>
+                  <div className="d-flex-align-c-spaceb mb-16">
+                    <h3 className="title-subhead">
+                      История изменения договора 32
+                    </h3>
+                    <button type="button" className="button btn-secondary">Загрузить договор</button>
+                  </div>
                   <table className="table req-table">
                     <thead>
                       <tr>
