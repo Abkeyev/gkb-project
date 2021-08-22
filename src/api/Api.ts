@@ -1,9 +1,11 @@
 import axios from "axios";
 import moment from "moment";
-import { MainController } from "./Controllers/MainController";
+import { ClientController } from "./Controllers/ClientController";
+import { ServiceController } from "./Controllers/ServiceController";
 
 export class Api {
-  main = new MainController();
+  client = new ClientController();
+  service = new ServiceController();
 }
 
 export default new Api();

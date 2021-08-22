@@ -1,12 +1,17 @@
-import React from 'react';
-import './style.css';
+import React from "react";
+import "./style.css";
 
-const Modal = () => {
-    return (
-        <div>
-        {/* Это при добавлении файла в Регистрации */}
+interface ModalProps {
+  setIsOpenModal: any;
+}
 
-            {/* <div className="modal modal-default">
+const Modal = (props: ModalProps) => {
+  const { setIsOpenModal } = props;
+  return (
+    <div>
+      {/* Это при добавлении файла в Регистрации */}
+
+      {/* <div className="modal modal-default">
                 <div className="modal-backbg"></div>
                 <div className="modal-dialog">
                     <div className="modal-content fadeInModal animated">
@@ -25,88 +30,116 @@ const Modal = () => {
 
             </div> */}
 
-            {/* Это Назначить менеджера */}
+      {/* Это Назначить менеджера */}
 
-            <div className="modal modal-large">
-                <div className="modal-backbg"></div>
-                <div className="modal-dialog">
-                    <div className="modal-content fadeInModal animated">
-                        <div className="modal-close"><i className="azla close-icon"></i></div>
-                        <div className="modal-body">
-
-                            <div className="add-manager">
-                                <h3 className="text-left title-subhead">Назначить менеджера</h3>
-                                <div className="search-input">
-                                    <input type="seatch" className="search-icon" placeholder="Поиск"/>
-                                </div>
-                                <div className="manager-list">
-                                    <ul>
-                                        <li>
-                                            <div className="profile">
-                                                <img className="ava" src={process.env.PUBLIC_URL + "/images/def-ava.svg"} />
-                                                <span className="name">Султангалиева К.И</span>
-                                            </div>
-                                            <span className="position">Менеджер</span>
-                                        </li>
-                                        <li>
-                                            <div className="profile">
-                                                <img className="ava" src={process.env.PUBLIC_URL + "/images/def-ava.svg"} />
-                                                <span className="name">Султангалиева К.И</span>
-                                            </div>
-                                            <span className="position">Менеджер</span>
-                                        </li>
-                                        <li>
-                                            <div className="profile">
-                                                <img className="ava" src={process.env.PUBLIC_URL + "/images/def-ava.svg"} />
-                                                <span className="name">Султангалиева К.И</span>
-                                            </div>
-                                            <span className="position">Менеджер</span>
-                                        </li>
-                                        <li>
-                                            <div className="profile">
-                                                <img className="ava" src={process.env.PUBLIC_URL + "/images/def-ava.svg"} />
-                                                <span className="name">Султангалиева К.И</span>
-                                            </div>
-                                            <span className="position">Менеджер</span>
-                                        </li>
-                                        <li>
-                                            <div className="profile">
-                                                <img className="ava" src={process.env.PUBLIC_URL + "/images/def-ava.svg"} />
-                                                <span className="name">Султангалиева К.И</span>
-                                            </div>
-                                            <span className="position">Менеджер</span>
-                                        </li>
-                                        <li>
-                                            <div className="profile">
-                                                <img className="ava" src={process.env.PUBLIC_URL + "/images/def-ava.svg"} />
-                                                <span className="name">Султангалиева К.И</span>
-                                            </div>
-                                            <span className="position">Менеджер</span>
-                                        </li>
-                                        <li>
-                                            <div className="profile">
-                                                <img className="ava" src={process.env.PUBLIC_URL + "/images/def-ava.svg"} />
-                                                <span className="name">Султангалиева К.И</span>
-                                            </div>
-                                            <span className="position">Менеджер</span>
-                                        </li>
-                                        <li>
-                                            <div className="profile">
-                                                <img className="ava" src={process.env.PUBLIC_URL + "/images/def-ava.svg"} />
-                                                <span className="name">Султангалиева К.И</span>
-                                            </div>
-                                            <span className="position">Менеджер</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+      <div className="modal modal-large">
+        <div className="modal-backbg"></div>
+        <div className="modal-dialog">
+          <div className="modal-content fadeInModal animated">
+            <div className="modal-close" onClick={() => setIsOpenModal(false)}>
+              <i className="azla close-icon"></i>
             </div>
-            
-            {/* <div className="modal modal-large">
+            <div className="modal-body">
+              <div className="add-manager">
+                <h3 className="text-left title-subhead">Назначить менеджера</h3>
+                <div className="search-input">
+                  <input
+                    type="seatch"
+                    className="search-icon"
+                    placeholder="Поиск"
+                  />
+                </div>
+                <div className="manager-list">
+                  <ul>
+                    <li>
+                      <div className="profile">
+                        <img
+                          className="ava"
+                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                        />
+                        <span className="name">Султангалиева К.И</span>
+                      </div>
+                      <span className="position">Менеджер</span>
+                    </li>
+                    <li>
+                      <div className="profile">
+                        <img
+                          className="ava"
+                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                        />
+                        <span className="name">Султангалиева К.И</span>
+                      </div>
+                      <span className="position">Менеджер</span>
+                    </li>
+                    <li>
+                      <div className="profile">
+                        <img
+                          className="ava"
+                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                        />
+                        <span className="name">Султангалиева К.И</span>
+                      </div>
+                      <span className="position">Менеджер</span>
+                    </li>
+                    <li>
+                      <div className="profile">
+                        <img
+                          className="ava"
+                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                        />
+                        <span className="name">Султангалиева К.И</span>
+                      </div>
+                      <span className="position">Менеджер</span>
+                    </li>
+                    <li>
+                      <div className="profile">
+                        <img
+                          className="ava"
+                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                        />
+                        <span className="name">Султангалиева К.И</span>
+                      </div>
+                      <span className="position">Менеджер</span>
+                    </li>
+                    <li>
+                      <div className="profile">
+                        <img
+                          className="ava"
+                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                        />
+                        <span className="name">Султангалиева К.И</span>
+                      </div>
+                      <span className="position">Менеджер</span>
+                    </li>
+                    <li>
+                      <div className="profile">
+                        <img
+                          className="ava"
+                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                        />
+                        <span className="name">Султангалиева К.И</span>
+                      </div>
+                      <span className="position">Менеджер</span>
+                    </li>
+                    <li>
+                      <div className="profile">
+                        <img
+                          className="ava"
+                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                        />
+                        <span className="name">Султангалиева К.И</span>
+                      </div>
+                      <span className="position">Менеджер</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="modal modal-large">
                 <div className="modal-backbg"></div>
                 <div className="modal-dialog">
                     <div className="modal-content fadeInModal animated">
@@ -126,8 +159,7 @@ const Modal = () => {
                     </div>
                 </div>
             </div>  */}
-
-        </div>
-    );
-}
+    </div>
+  );
+};
 export default Modal;
