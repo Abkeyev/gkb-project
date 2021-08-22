@@ -4,7 +4,13 @@ import { useHistory } from "react-router";
 import "react-tabs/style/react-tabs.css";
 import "./style.css";
 
-const Request = () => {
+interface RequestProps {
+  tab: any;
+  setTab: any;
+}
+
+const Request = (props: RequestProps) => {
+  const { tab, setTab } = props;
   const [advance, setAdvance] = React.useState(false);
   const history = useHistory();
   return (
@@ -20,7 +26,7 @@ const Request = () => {
                 </div>
               </div>
 
-              <Tabs>
+              <Tabs selectedIndex={tab} onSelect={(index) => setTab(index)}>
                 <div className="">
                   <TabList>
                     <Tab>Нераспределенные</Tab>

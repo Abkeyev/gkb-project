@@ -15,23 +15,50 @@ function App() {
   const [logged, setLogged] = React.useState(true);
   const [isOpenModal, setIsOpenModal] = React.useState(false);
   const [modalType, setModalType] = React.useState<number>(0);
+  const [modalManager, setModalManager] = React.useState(false);
+  const [decline, setDecline] = React.useState(false);
+  const [declineReason, setDeclineReason] = React.useState("");
+  const [tab, setTab] = React.useState(0);
+  const [step, setStep] = React.useState(0);
+
   return (
     <div className="app-root modal-open">
       {/* При открытии модалки добавляется класс modal-open */}
-      {isOpenModal && <Modal setIsOpenModal={setIsOpenModal} />}
+      {isOpenModal && (
+        <Modal
+          setIsOpenModal={setIsOpenModal}
+          setModalManager={setModalManager}
+          modalType={modalType}
+          declineReason={declineReason}
+          setDeclineReason={setDeclineReason}
+          setDecline={setDecline}
+        />
+      )}
       <Router>
         {logged ? (
           <>
             <Sidebar />
             <Switch>
               <Route path="/" component={() => <Manager />} exact />
-              <Route path="/orders" component={() => <Request />} exact />
+              <Route
+                path="/orders"
+                component={() => <Request tab={tab} setTab={setTab} />}
+                exact
+              />
               <Route
                 path="/orders/title"
                 component={() => (
                   <RequestInner
                     setIsOpenModal={setIsOpenModal}
                     setModalType={setModalType}
+                    modalManager={modalManager}
+                    decline={decline}
+                    declineReason={declineReason}
+                    setDecline={setDecline}
+                    setDeclineReason={setDeclineReason}
+                    setTab={setTab}
+                    step={step}
+                    setStep={setStep}
                   />
                 )}
                 exact
