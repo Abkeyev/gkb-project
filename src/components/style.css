@@ -466,8 +466,11 @@
 }
 .info-list li {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 12px;
+}
+.info-list li:last-child {
+    margin-bottom: 0;
 }
 .info-list li .left {
     font-weight: 500;
@@ -479,6 +482,36 @@
     display: block;
 }
 .info-list li .right {
+    font-weight: normal;
+    font-size: 16px;
+    text-align: left;
+    color: #3F4B60;
+    display: block;
+    width: calc(100% - 216px);
+}
+
+
+.info-list-sec {
+    margin-bottom: 0px;
+}
+.info-list-sec li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+.info-list-sec li:last-child {
+    margin-bottom: 0;
+}
+.info-list-sec li .left {
+    font-weight: normal;
+    font-size: 16px;
+    text-align: right;
+    color: #939393;
+    width: 200px;
+    margin-right: 16px;
+    display: block;
+}
+.info-list-sec li .right {
     font-weight: normal;
     font-size: 16px;
     text-align: left;
@@ -538,18 +571,18 @@
     margin-bottom: 6px;
 }
 
-.manager-req .profile {
+.manager-req .profile, .paper-show .profile {
     display: flex;
     align-items: center;
     width: 70%;
 }
-.manager-req .profile .ava {
+.manager-req .profile .ava, .paper-show .profile .ava {
     width: 32px;
     height: 32px;
     object-fit: contain;
     margin-right: 12px;
 }
-.manager-req .profile .name {
+.manager-req .profile .name, .paper-show .profile .name {
     font-weight: normal;
     font-size: 14px;
     color: #3F4B60;
@@ -637,6 +670,41 @@
 .search-input input:hover {
     box-shadow: unset;
 } 
+
+.file-add {
+    display: flex;
+    align-items: center;
+}
+.file-add .info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    font-weight: normal;
+    font-size: 16px;
+    color: #939393;
+}
+.paper-show .author {
+    display: flex;
+    align-items: center;
+}
+.paper-show .author h5 {
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 0;
+    color: #3F4B60;
+}
+.paper-show .comment h5 {
+    font-weight: 500;
+    font-size: 16px;
+    color: #3F4B60;
+    margin-bottom: 8px;
+}
+.paper-show .comment p {
+    font-weight: normal;
+    font-size: 16px;
+    color: #3F4B60;
+    margin-bottom: 0;
+}
 
 
 

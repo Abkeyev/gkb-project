@@ -37,6 +37,10 @@ hr:not([size]) {
   border-bottom: 1px solid #C8C7CC;
 }
 /* Padding Top and Bottom */
+.pad-24 { padding: 24px; }
+
+.pad-rl-16 {padding: 0 16px;}
+
 .pad-tb-16 { padding: 16px 0; }
 .pad-tb-32 { padding: 32px 0; }
 .pad-tb-64 { padding: 64px 0; }
@@ -222,6 +226,20 @@ textarea {
 }
 .btn-icon i {
   margin-right: 8px;
+}
+.btn-file {
+  padding: 12px 16px;
+  background: #EAF6F5;
+  border-radius: 8px;
+  border: none;
+  font-weight: normal;
+  font-size: 16px;
+  text-align: center;
+  color: #20B5BE;
+  transition: .3s;
+}
+.btn-file:hover {
+  opacity: .6;
 }
 @media (prefers-reduced-motion: reduce) {
   .button {
@@ -1035,6 +1053,11 @@ textarea {
   flex: 1 1 auto;
   padding: 24px 16px;
 }
+.modal-footer {
+  background: #F3F3F3;
+  border-radius: 0px 0px 8px 8px;
+  padding: 16px 24px;
+}
 .modal-close {
   position: absolute;
   top: -30px;
@@ -1322,6 +1345,39 @@ textarea {
 }
 .is-invalid .invalid-feedback, .is-invalid~.invalid-tooltip, .was-validated :invalid~.invalid-feedback, .was-validated :invalid~.invalid-tooltip {
   display: block;
+}
+
+/* Card */
+.card {
+  background: #FFFFFF;
+  border: 1px solid #C8C7CC;
+  border-radius: 16px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+.card-header .title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.card-header .title .text {
+  font-weight: 500;
+  font-size: 18px;
+  color: #3F4B60;
+  margin: 0;
+}
+.card-header .title .num {
+  font-weight: 500;
+  font-size: 18px;
+  text-align: right;
+  color: #20B5BE;
+  display: block;
+}
+.card-header .desc {
+  font-weight: normal;
+  font-size: 16px;
+  color: #939393;
+  margin-bottom: 1rem;
 }
 
 

@@ -75,21 +75,21 @@ const Request = (props: RequestProps) => {
                             type="name"
                             placeholder="Напишите id клиента"
                           />
-                          <label>ID клиента</label>
+                          <label>Категория деятельности</label>
                         </div>
                         <div className="form-wrapper">
                           <input
                             type="name"
                             placeholder="Напишите id клиента"
                           />
-                          <label>ID клиента</label>
+                          <label>Тип сервиса</label>
                         </div>
                         <div className="form-wrapper">
                           <input
                             type="name"
                             placeholder="Напишите id клиента"
                           />
-                          <label>ID клиента</label>
+                          <label>Сортировать</label>
                         </div>
                       </div>
                       <div className="filter-btns">
