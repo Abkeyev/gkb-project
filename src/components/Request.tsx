@@ -12,6 +12,10 @@ interface RequestProps {
 const Request = (props: RequestProps) => {
   const { tab, setTab } = props;
   const [advance, setAdvance] = React.useState(false);
+  const [sort, setSort] = React.useState(false);
+  const [service, setService] = React.useState(false);
+  const [services, setServices] = React.useState<string[]>([]);
+  const [sortTitle, setSortTitle] = React.useState("");
   const history = useHistory();
   return (
     <div className="main-body">
@@ -68,6 +72,10 @@ const Request = (props: RequestProps) => {
                       className={`col-md-12 filter-content ${
                         advance ? "view" : ""
                       }`}
+                      onClick={() => {
+                        sort && setSort(false);
+                        service && setService(false);
+                      }}
                     >
                       {/* Класс "view" добавляется при нажатии "Расширенный поиск" */}
                       <div className="filter-inputs">
@@ -80,76 +88,158 @@ const Request = (props: RequestProps) => {
                         </div>
 
                         <div className="form-multiselect mb-0 mr-16">
-
                           <ul className="selected-options">
-                            <li><button className="remove-option" type="button">Apple</button></li>
-                            <li><button className="remove-option" type="button">Apple</button></li>
+                            {services.map((s) => (
+                              <li>
+                                <button
+                                  className="remove-option"
+                                  onClick={() =>
+                                    setServices([
+                                      ...services.filter((ss) => ss !== s),
+                                    ])
+                                  }
+                                  type="button"
+                                >
+                                  {s}
+                                </button>
+                              </li>
+                            ))}
                           </ul>
-                          <div className="multi js-multi-buttons open">
+                          <div
+                            className={`multi js-multi-buttons ${
+                              service ? "open" : ""
+                            }`}
+                          >
                             <div className="input-wrapper">
                               <input
                                 className="multi-input azla form-icon chevron-down-icon"
-                                type="text" placeholder="Выберите тип сервиса" />
-                                <label className="label">Тип сервиса</label>
+                                type="text"
+                                placeholder="Выберите тип сервиса"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setService(true);
+                                }}
+                              />
+                              <label className="label">Тип сервиса</label>
                             </div>
                             <div className="multi-menu">
-                              <div className="multi-search"><input type="search" className="azla form-icon search-icon" placeholder="Поиск" /></div>
-                              
-                              <div className="multi-option option-current" >
-
-                                <div className="multi-list">
-                                  <div className="form-check gkb-checkbox">
-                                      <input className="form-check-input" type="checkbox" value="" id="invalidCheck" required />
-                                      <label className="form-check-label" htmlFor="invalidCheck">
-                                      Категория 1
-                                      </label>
-                                      <div className="invalid-feedback">
-                                          Ошибка
-                                      </div>
-                                  </div>
-                                </div>
-
-                                <div className="multi-list">
-                                  <div className="form-check gkb-checkbox">
-                                      <input className="form-check-input" type="checkbox" value="" id="invalidCheck1" required />
-                                      <label className="form-check-label" htmlFor="invalidCheck1">
-                                      Категория 2
-                                      </label>
-                                      <div className="invalid-feedback">
-                                          Ошибка
-                                      </div>
-                                  </div>
-                                </div>
-
-
+                              <div className="multi-search">
+                                <input
+                                  type="search"
+                                  className="azla form-icon search-icon"
+                                  placeholder="Поиск"
+                                />
                               </div>
 
+                              <div className="multi-option option-current">
+                                <div className="multi-list">
+                                  <div className="form-check gkb-checkbox">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      checked={services.includes("Сервис 1")}
+                                      onClick={() =>
+                                        !services.includes("Сервис 1")
+                                          ? setServices([
+                                              ...services,
+                                              "Сервис 1",
+                                            ])
+                                          : services.filter(
+                                              (s) => s !== "Сервис 1"
+                                            )
+                                      }
+                                      id="invalidCheck"
+                                      required
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor="invalidCheck"
+                                    >
+                                      Сервис 1
+                                    </label>
+                                    <div className="invalid-feedback">
+                                      Ошибка
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="multi-list">
+                                  <div className="form-check gkb-checkbox">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      checked={services.includes("Сервис 2")}
+                                      onClick={() =>
+                                        !services.includes("Сервис 2")
+                                          ? setServices([
+                                              ...services,
+                                              "Сервис 2",
+                                            ])
+                                          : services.filter(
+                                              (s) => s !== "Сервис 2"
+                                            )
+                                      }
+                                      id="invalidCheck1"
+                                      required
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor="invalidCheck1"
+                                    >
+                                      Сервис 1
+                                    </label>
+                                    <div className="invalid-feedback">
+                                      Ошибка
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
 
                         <div className="form-multiselect mb-0">
-                        <div className="multi js-multi-buttons open"> {/* При наведении на Input появляется класс open */}
+                          <div
+                            className={`multi js-multi-buttons ${
+                              sort ? "open" : ""
+                            }`}
+                            onClick={() => setSort(true)}
+                          >
+                            {/* При наведении на Input появляется класс open */}
                             <div className="input-wrapper">
                               <input
                                 className="multi-input azla form-icon chevron-down-icon"
-                                type="text" placeholder="Выберите тип сортировки" value="сначала новые" /> {/* При выборе должен менятся Value */}
-                                <label className="label">Сортировать</label>
+                                type="text"
+                                placeholder="Выберите тип сортировки"
+                                value={sortTitle}
+                              />
+                              <label className="label">Сортировать</label>
                             </div>
                             <div className="multi-menu">
-                              <div className="multi-option option-current" >
-
+                              <div className="multi-option option-current">
                                 <div className="multi-list">
-                                  <span className="multi-option-select">сначала новые</span>
+                                  <span
+                                    className="multi-option-select"
+                                    onClick={() =>
+                                      setSortTitle("сначала новые")
+                                    }
+                                  >
+                                    сначала новые
+                                  </span>
                                 </div>
                                 <div className="multi-list">
-                                  <span className="multi-option-select">сначала новые</span>
+                                  <span
+                                    className="multi-option-select"
+                                    onClick={() =>
+                                      setSortTitle("сначала старые")
+                                    }
+                                  >
+                                    сначала старые
+                                  </span>
                                 </div>
-
                               </div>
                             </div>
-
-                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="filter-btns">
@@ -159,7 +249,14 @@ const Request = (props: RequestProps) => {
                         >
                           Применить
                         </button>
-                        <button type="button" className="button btn-secondary btn-icon">
+                        <button
+                          type="button"
+                          className="button btn-secondary btn-icon"
+                          onClick={() => {
+                            setServices([]);
+                            setSortTitle("");
+                          }}
+                        >
                           <i className="azla close-primary-icon"></i>
                           Убрать фильтры
                         </button>
@@ -318,7 +415,11 @@ const Request = (props: RequestProps) => {
                   </div>
                 </TabPanel>
               </Tabs>
-              <div className="req-inner-footer"><button type="button" className="button btn-primary btn-icon"><i className="azla add-plusRound-icon"></i> Новая заявка</button></div>
+              <div className="req-inner-footer">
+                <button type="button" className="button btn-primary btn-icon">
+                  <i className="azla add-plusRound-icon"></i> Новая заявка
+                </button>
+              </div>
             </div>
           </div>
         </div>
