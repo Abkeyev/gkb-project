@@ -18,10 +18,11 @@ const Request = (props: RequestProps) => {
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <div className="req-manager p-50">
+            <div className="req-manager p-50 pad-b-128">
               <div className="header-text justify-content-between mb-24">
                 <h1 className="title-main">Заявки</h1>
-                <div className="btn button btn-primary">
+                <div className="btn button btn-primary btn-icon">
+                  <i className="azla add-plusRound-icon"></i>
                   <span className="text">Новая заявка</span>
                 </div>
               </div>
@@ -49,7 +50,7 @@ const Request = (props: RequestProps) => {
                       <div className="filter-search">
                         <div className="form-group mr-16 mb-0">
                           <input
-                            className="form-control"
+                            className="form-control azla form-icon search-icon"
                             type="name"
                             placeholder="Поиск по названию, БИН"
                           />
@@ -77,19 +78,78 @@ const Request = (props: RequestProps) => {
                           />
                           <label>Категория деятельности</label>
                         </div>
-                        <div className="form-wrapper">
-                          <input
-                            type="name"
-                            placeholder="Напишите id клиента"
-                          />
-                          <label>Тип сервиса</label>
+
+                        <div className="form-multiselect mb-0 mr-16">
+
+                          <ul className="selected-options">
+                            <li><button className="remove-option" type="button">Apple</button></li>
+                            <li><button className="remove-option" type="button">Apple</button></li>
+                          </ul>
+                          <div className="multi js-multi-buttons open">
+                            <div className="input-wrapper">
+                              <input
+                                className="multi-input azla form-icon chevron-down-icon"
+                                type="text" placeholder="Выберите тип сервиса" />
+                                <label className="label">Тип сервиса</label>
+                            </div>
+                            <div className="multi-menu">
+                              <div className="multi-search"><input type="search" className="azla form-icon search-icon" placeholder="Поиск" /></div>
+                              
+                              <div className="multi-option option-current" >
+
+                                <div className="multi-list">
+                                  <div className="form-check gkb-checkbox">
+                                      <input className="form-check-input" type="checkbox" value="" id="invalidCheck" required />
+                                      <label className="form-check-label" htmlFor="invalidCheck">
+                                      Категория 1
+                                      </label>
+                                      <div className="invalid-feedback">
+                                          Ошибка
+                                      </div>
+                                  </div>
+                                </div>
+
+                                <div className="multi-list">
+                                  <div className="form-check gkb-checkbox">
+                                      <input className="form-check-input" type="checkbox" value="" id="invalidCheck1" required />
+                                      <label className="form-check-label" htmlFor="invalidCheck1">
+                                      Категория 2
+                                      </label>
+                                      <div className="invalid-feedback">
+                                          Ошибка
+                                      </div>
+                                  </div>
+                                </div>
+
+
+                              </div>
+
+                            </div>
+                          </div>
                         </div>
-                        <div className="form-wrapper">
-                          <input
-                            type="name"
-                            placeholder="Напишите id клиента"
-                          />
-                          <label>Сортировать</label>
+
+                        <div className="form-multiselect mb-0">
+                        <div className="multi js-multi-buttons open"> {/* При наведении на Input появляется класс open */}
+                            <div className="input-wrapper">
+                              <input
+                                className="multi-input azla form-icon chevron-down-icon"
+                                type="text" placeholder="Выберите тип сортировки" value="сначала новые" /> {/* При выборе должен менятся Value */}
+                                <label className="label">Сортировать</label>
+                            </div>
+                            <div className="multi-menu">
+                              <div className="multi-option option-current" >
+
+                                <div className="multi-list">
+                                  <span className="multi-option-select">сначала новые</span>
+                                </div>
+                                <div className="multi-list">
+                                  <span className="multi-option-select">сначала новые</span>
+                                </div>
+
+                              </div>
+                            </div>
+
+                            </div>
                         </div>
                       </div>
                       <div className="filter-btns">
@@ -99,7 +159,8 @@ const Request = (props: RequestProps) => {
                         >
                           Применить
                         </button>
-                        <button type="button" className="button btn-secondary">
+                        <button type="button" className="button btn-secondary btn-icon">
+                          <i className="azla close-primary-icon"></i>
                           Убрать фильтры
                         </button>
                       </div>
@@ -257,6 +318,7 @@ const Request = (props: RequestProps) => {
                   </div>
                 </TabPanel>
               </Tabs>
+              <div className="req-inner-footer"><button type="button" className="button btn-primary btn-icon"><i className="azla add-plusRound-icon"></i> Новая заявка</button></div>
             </div>
           </div>
         </div>

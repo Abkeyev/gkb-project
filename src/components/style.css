@@ -9,6 +9,7 @@
 .p-16-50 {
     padding: 16px 50px;
 }
+.pad-b-128 { padding-bottom: 128px; }
 
 .main-page {
     padding: 30vh 0;
@@ -338,7 +339,7 @@
 }
 .filter-inputs {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     margin: 16px 0;
 }
 .filter-inputs .form-wrapper {
@@ -347,6 +348,10 @@
 }
 .filter-inputs .form-wrapper:last-child {
     margin-right: 0px;
+}
+.filter-btns {
+    display: flex;
+    align-items: center;
 }
   
   

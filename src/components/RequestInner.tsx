@@ -217,6 +217,23 @@ const RequestInner = (props: RequestProps) => {
                           </li>
                         </ul>
                       </div>
+
+                      <h5 className="title-subhead-h5 mb-16">
+                      Существующие договоры
+                      </h5>
+
+                      <div className="files-added">
+                        <ul className="files-list">
+                          <li>
+                            <i className="azla blank-alt-primary-icon"></i>
+                            <span>Договор о поставке услуг по изъятию данных из БДКИ.docx</span>
+                          </li>
+                          <li>
+                            <i className="azla blank-alt-primary-icon"></i>
+                            <span>Договор о поставке услуг по изъятию данных из БДКИ.docx</span>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </TabPanel>
 
