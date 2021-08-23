@@ -1,5 +1,7 @@
 {
-  "version": "0.0.2",
+  "homepage": "https://gkb.kz",
+  "name": "gkb-project",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",

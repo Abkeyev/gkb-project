@@ -171,7 +171,10 @@ const Modal = (props: ModalProps) => {
               <div className="modal-footer">
                 <button
                   type="button"
-                  onClick={() => setStep(2)}
+                  onClick={() => {
+                    setIsOpenModal(false);
+                    setStep(2);
+                  }}
                   className="button btn-primary table-ml"
                 >
                   Отправить на согласование
