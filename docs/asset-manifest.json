@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.e8c30719.chunk.css",
-    "main.js": "/static/js/main.f3953169.chunk.js",
-    "main.js.map": "/static/js/main.f3953169.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.a7aab32d.js",
-    "runtime-main.js.map": "/static/js/runtime-main.a7aab32d.js.map",
-    "static/css/2.27175f2b.chunk.css": "/static/css/2.27175f2b.chunk.css",
-    "static/js/2.915b22ae.chunk.js": "/static/js/2.915b22ae.chunk.js",
-    "static/js/2.915b22ae.chunk.js.map": "/static/js/2.915b22ae.chunk.js.map",
-    "static/js/3.38affc99.chunk.js": "/static/js/3.38affc99.chunk.js",
-    "static/js/3.38affc99.chunk.js.map": "/static/js/3.38affc99.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/2.27175f2b.chunk.css.map": "/static/css/2.27175f2b.chunk.css.map",
-    "static/css/main.e8c30719.chunk.css.map": "/static/css/main.e8c30719.chunk.css.map",
-    "static/js/2.915b22ae.chunk.js.LICENSE.txt": "/static/js/2.915b22ae.chunk.js.LICENSE.txt"
+    "main.css": "/gkb-project/static/css/main.e8c30719.chunk.css",
+    "main.js": "/gkb-project/static/js/main.a232b541.chunk.js",
+    "main.js.map": "/gkb-project/static/js/main.a232b541.chunk.js.map",
+    "runtime-main.js": "/gkb-project/static/js/runtime-main.7f871f5b.js",
+    "runtime-main.js.map": "/gkb-project/static/js/runtime-main.7f871f5b.js.map",
+    "static/css/2.27175f2b.chunk.css": "/gkb-project/static/css/2.27175f2b.chunk.css",
+    "static/js/2.915b22ae.chunk.js": "/gkb-project/static/js/2.915b22ae.chunk.js",
+    "static/js/2.915b22ae.chunk.js.map": "/gkb-project/static/js/2.915b22ae.chunk.js.map",
+    "static/js/3.38affc99.chunk.js": "/gkb-project/static/js/3.38affc99.chunk.js",
+    "static/js/3.38affc99.chunk.js.map": "/gkb-project/static/js/3.38affc99.chunk.js.map",
+    "index.html": "/gkb-project/index.html",
+    "static/css/2.27175f2b.chunk.css.map": "/gkb-project/static/css/2.27175f2b.chunk.css.map",
+    "static/css/main.e8c30719.chunk.css.map": "/gkb-project/static/css/main.e8c30719.chunk.css.map",
+    "static/js/2.915b22ae.chunk.js.LICENSE.txt": "/gkb-project/static/js/2.915b22ae.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.a7aab32d.js",
+    "static/js/runtime-main.7f871f5b.js",
     "static/css/2.27175f2b.chunk.css",
     "static/js/2.915b22ae.chunk.js",
     "static/css/main.e8c30719.chunk.css",
-    "static/js/main.f3953169.chunk.js"
+    "static/js/main.a232b541.chunk.js"
   ]
 }
