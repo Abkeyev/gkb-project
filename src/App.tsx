@@ -1,6 +1,5 @@
 import React from "react";
-import logo from "./logo.svg";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Main from "./components/Main";
 import Modal from "./components/Modal";
 import Login from "./components/Login";
@@ -35,53 +34,51 @@ function App() {
           setStep={setStep}
         />
       )}
-      <Router>
-        {logged ? (
-          <>
-            <Sidebar />
-            <Switch>
-              <Route path="/" component={() => <Manager />} exact />
-              <Route
-                path="/orders"
-                component={() => <Request tab={tab} setTab={setTab} />}
-                exact
-              />
-              <Route
-                path="/orders/title"
-                component={() => (
-                  <RequestInner
-                    setIsOpenModal={setIsOpenModal}
-                    setModalType={setModalType}
-                    modalManager={modalManager}
-                    decline={decline}
-                    declineReason={declineReason}
-                    setDecline={setDecline}
-                    setDeclineReason={setDeclineReason}
-                    setTab={setTab}
-                    step={step}
-                    setStep={setStep}
-                  />
-                )}
-                exact
-              />
-            </Switch>
-          </>
-        ) : (
+      {logged ? (
+        <>
+          <Sidebar />
           <Switch>
-            <Route path="/" component={() => <Main />} exact />
+            <Route path="/" component={() => <Manager />} exact />
             <Route
-              path="/login"
-              component={() => <Login setLogged={setLogged} />}
+              path="/orders"
+              component={() => <Request tab={tab} setTab={setTab} />}
               exact
             />
             <Route
-              path="/registration"
-              component={() => <Registration />}
+              path="/orders/title"
+              component={() => (
+                <RequestInner
+                  setIsOpenModal={setIsOpenModal}
+                  setModalType={setModalType}
+                  modalManager={modalManager}
+                  decline={decline}
+                  declineReason={declineReason}
+                  setDecline={setDecline}
+                  setDeclineReason={setDeclineReason}
+                  setTab={setTab}
+                  step={step}
+                  setStep={setStep}
+                />
+              )}
               exact
             />
           </Switch>
-        )}
-      </Router>
+        </>
+      ) : (
+        <Switch>
+          <Route path="/" component={() => <Main />} exact />
+          <Route
+            path="/login"
+            component={() => <Login setLogged={setLogged} />}
+            exact
+          />
+          <Route
+            path="/registration"
+            component={() => <Registration />}
+            exact
+          />
+        </Switch>
+      )}
     </div>
   );
 }
