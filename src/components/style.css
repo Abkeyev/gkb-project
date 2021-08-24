@@ -406,16 +406,17 @@
   margin-bottom: 0;
 }
 .step-item {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  text-align: left;
-  position: relative;
-  font-weight: normal;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: left;
+    position: relative;
+    font-weight: normal;
     font-size: 16px;
     line-height: 16px;
     color: #939393;
     transition: .3s;
+    cursor: pointer;
 }
 .step-item:before {
   width: 24px;
@@ -467,7 +468,7 @@
 
 /* Общие данные */
 .info-list {
-    margin-bottom: 32px;
+    margin-bottom: 0;
 }
 .info-list li {
     display: flex;
@@ -481,7 +482,7 @@
     font-weight: 500;
     font-size: 16px;
     text-align: right;
-    color: #3F4B60;
+    color: #939393;
     width: 200px;
     margin-right: 16px;
     display: block;
@@ -709,6 +710,43 @@
     font-size: 16px;
     color: #3F4B60;
     margin-bottom: 0;
+}
+.keys-add .keys-loader {
+    background: #F3F3F3;
+    border-radius: 16px;
+    padding: 16px;
+}
+.keys-add .keys-loader h5 {
+    font-weight: 500;
+    font-size: 14px;
+    color: #3F4B60;
+}
+.keys-add .keys-loader p {
+    font-weight: normal;
+    font-size: 14px;
+    color: #3F4B60;
+}
+.keys-btn .btn-file {
+    width: 100%;
+    margin-bottom: 12px;
+}
+.done-request {
+    padding: 24px 24px 24px 64px;
+    background: #EAF6F5;
+    border-radius: 16px;
+    position: relative;
+}
+.done-request:before {
+    content: '';
+    position: absolute;
+    left: 24px;
+    top: 22px;
+    width: 32px;
+    height: 32px;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMiAyMUMxNi45NzA2IDIxIDIxIDE2Ljk3MDYgMjEgMTJDMjEgNy4wMjk0NCAxNi45NzA2IDMgMTIgM0M3LjAyOTQ0IDMgMyA3LjAyOTQ0IDMgMTJDMyAxNi45NzA2IDcuMDI5NDQgMjEgMTIgMjFaTTExLjc2ODIgMTUuNjQwMkwxNi43NjgyIDkuNjQwMThMMTUuMjMxOCA4LjM1OTgyTDEwLjkzMjggMTMuNTE4Nkw4LjcwNzExIDExLjI5MjlMNy4yOTI4OSAxMi43MDcxTDEwLjI5MjkgMTUuNzA3MUwxMS4wNjcyIDE2LjQ4MTRMMTEuNzY4MiAxNS42NDAyWiIgZmlsbD0iIzIwQjVCRSIvPgo8L3N2Zz4K);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 32px;
 }
 
 

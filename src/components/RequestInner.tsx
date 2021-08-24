@@ -104,6 +104,7 @@ const RequestInner = (props: RequestProps) => {
                           ? "step-item-complete"
                           : ""
                       }`}
+                      onClick={() => setStep(3)}
                     >
                       Тестирование
                     </li>
@@ -115,6 +116,7 @@ const RequestInner = (props: RequestProps) => {
                           ? "step-item-complete"
                           : ""
                       }`}
+                      onClick={() => setStep(4)}
                     >
                       Готово
                     </li>
@@ -513,9 +515,154 @@ const RequestInner = (props: RequestProps) => {
                   ))}
                 </>
               ) : step === 3 ? (
-                <></>
+                <>
+                  <div className="pad-b-128">
+                    <div className="req-inner-body">
+                      <div className="pad-rl-16">
+                        <div className="row">
+                          <div className="col-md-8">
+                          <h3 className="title-subhead mb-16">Тестирование сервисов</h3>
+                            <div className="files-added">
+                              <ul className="files-list">
+                                <li>
+                                  <i className="azla blank-alt-primary-icon"></i>
+                                  <span>Протокол тестирования.docx</span>
+                                </li>
+                                <li>
+                                  <i className="azla blank-alt-primary-icon"></i>
+                                  <span>Акт тестирования.pdf</span>
+                                </li>
+                              </ul>
+                            </div>
+
+                            <h3 className="title-subhead mb-16">Тестирование сервисов</h3>
+                            <p className="text-desc">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
+
+                          </div>
+                          <div className="col-md-3 offset-md-1">
+                            <div className="keys-add">
+                              <h3 className="title-subhead mb-16">Ключи доступа</h3>
+                              <div className="keys-loader mb-32">
+                                <h5>Тестовые ключи не предоставлены. Ожидайте.</h5>
+                                <p>Ключи предоставляются департаментом Service Desk после проверки всех данных контрагента. Это занимает 2-7 дней с момента принятия формы доступа менеджером.</p>
+                              </div>
+                              <div className="keys-btn">
+                                <button type="button" className="btn-file btn-icon">Скачать тестовые ключи</button>
+                                <button type="button" className="btn-file btn-icon">Скачать боевые ключи</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </>
               ) : step === 4 ? (
-                <></>
+                <>
+                  <div className="pad-b-128">
+                    <div className="done-request">
+                      
+                      <h3 className="title-subhead mb-16">Контрагент успешно зарегистрирован!</h3>
+
+                      <h5 className="title-subhead-h5 mb-16">
+                        Организационные документы
+                      </h5>
+
+                      <div className="pad-rl-16 mb-32">
+                        <div className="row">
+
+                          <div className="col-md-6">
+                            <div className="total-info">
+                              <ul className="info-list">
+                                <li>
+                                  <span className="left">Номер заявки:</span>
+                                  <span className="right">41252526</span>
+                                </li>
+                                <li>
+                                  <span className="left">Статус заявки:</span>
+                                  <span className="right">941125352353</span>
+                                </li>
+                                <li>
+                                  <span className="left">
+                                  Организация:
+                                  </span>
+                                  <span className="right">
+                                  ТОО “М-Ломбард”
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">БИН:</span>
+                                  <span className="right">
+                                  123456789098
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">Категория деятельности:</span>
+                                  <span className="right">
+                                  Ломбарды
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">Тип сервиса:</span>
+                                  <span className="right">
+                                  Изъятие данных
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">Дата регистрации заявки:</span>
+                                  <span className="right">
+                                  20 Июня 2021
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">Дата исполнения заявки:</span>
+                                  <span className="right">
+                                  20 Июня 2021
+                                  </span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <h5 className="title-subhead-h5 mb-16">
+                        Документы
+                      </h5>
+                      <div className="files-added">
+                        <ul className="files-list">
+                          <li>
+                            <i className="azla blank-alt-primary-icon"></i>
+                            <span>Договор МЛомбард-ГКБ от 22 Июня 2021.pdf</span>
+                          </li>
+                          <li>
+                            <i className="azla blank-alt-primary-icon"></i>
+                            <span>Форма доступа.pdf</span>
+                          </li>
+                          <li>
+                            <i className="azla blank-alt-primary-icon"></i>
+                            <span>Акт прохождения тестирования</span>
+                          </li>
+                          <li>
+                            <i className="azla blank-alt-primary-icon"></i>
+                            <span>Акт прохождения тестирования</span>
+                          </li>
+                        </ul>
+                      </div>
+                      
+                      <h5 className="title-subhead-h5 mb-16">
+                        Ключи доступа
+                      </h5>
+                      <div className="d-flex">
+                        <button type="button" className="button btn-secondary mr-16">Скачать тестовые ключи</button>
+                        <button type="button" className="button btn-secondary">Скачать боевые ключи</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </>
               ) : (
                 <></>
               )}
