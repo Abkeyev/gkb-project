@@ -577,18 +577,18 @@
     margin-bottom: 6px;
 }
 
-.manager-req .profile, .paper-show .profile {
+.manager-req .profile, .paper-show .profile, .collapse-main .profile, .signatory-profile .profile, .method-list-users .profile {
     display: flex;
     align-items: center;
     width: 70%;
 }
-.manager-req .profile .ava, .paper-show .profile .ava {
+.manager-req .profile .ava, .paper-show .profile .ava, .collapse-main .profile .ava, .signatory-profile .profile .ava, .method-list-users .profile .ava {
     width: 32px;
     height: 32px;
     object-fit: contain;
     margin-right: 12px;
 }
-.manager-req .profile .name, .paper-show .profile .name {
+.manager-req .profile .name, .paper-show .profile .name, .collapse-main .profile .name, .signatory-profile .profile .name, .method-list-users .profile .name  {
     font-weight: normal;
     font-size: 14px;
     color: #3F4B60;
@@ -749,6 +749,252 @@
     background-size: 32px;
 }
 
+.collapse-main {
+    margin-top: 20px;
+}
+.collapse-main .desc {
+    font-weight: normal;
+    font-size: 16px;
+    color: #939393;
+    margin-bottom: 4px;
+}
+.collapse-main .profile .name {
+    font-weight: 500;
+}
+
+.signatory-profile {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+}
+.signatory-profile .desc {
+    font-weight: normal;
+    font-size: 14px;
+    color: #939393;
+    margin-bottom: 0;
+}
+.signatory-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.btn-status {
+    width: 144px;
+    text-align: center;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: normal;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #939393;
+    display: block;
+    transition: .3s;
+}
+.btn-status.not-active {
+    background: #F3F3F3;
+}
+.btn-status.done {
+    color: #20B5BE;
+    background: #EAF6F5;
+}
+.btn-status.canceled {
+    color: #FF0000;
+    background: #FFF3F3;
+    cursor: pointer;
+}
+.btn-status-signatory {
+    padding: 5px 16px;
+    border-radius: 4px;
+    font-weight: normal;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    border: none;
+    display: flex;
+    align-items: center;
+    transition: .3s;
+}
+.btn-status-signatory.not-active {
+    background: #C8C7CC;
+    color: white;
+    pointer-events: none;
+}
+.btn-status-signatory.active {
+    background: #20B5BE;
+    color: white;
+}
+.btn-status-signatory.active:hover {
+    opacity: .6;
+}
+.btn-status-signatory.done {
+    color: #20B5BE;
+    background: #EAF6F5;
+    padding: 8px 16px;
+    pointer-events: none;
+    text-transform: uppercase;
+}
+.btn-status-signatory.done i {
+    display: none;
+}
+.btn-alert-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-alert-close button {
+    width: 160px;
+}
+.btn-alert-close button:first-child {
+    margin-right: 16px;
+}
+
+
+.card-collapse .method-main .collapse-body{
+    padding: 0;
+}
+.card-collapse .method-main .collapse-footer {
+    padding: 24px;
+}
+.method-signatory .method-signatory-add {
+    border-bottom: 1px solid #C8C7CC;
+}
+.method-signatory .method-signatory-header {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid #C8C7CC;
+}
+.method-signatory .method-signatory-header .left {
+    width: 35%;
+}
+.method-signatory .method-signatory-header .left p {
+    font-weight: normal;
+    font-size: 14px;
+    color: #939393;
+}
+.method-signatory .method-signatory-header .left p .delete {
+    text-decoration: underline;
+    position: relative;
+    padding-left: 7px;
+    margin-left: 4px;
+    cursor: pointer;
+    transition: .3s;
+}
+.method-signatory .method-signatory-header .left p .delete:hover {
+    color: tomato;
+}
+.method-signatory .method-signatory-header .left p .delete:before {
+    content: '';
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #939393;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+}
+.method-signatory .method-signatory-header .right {
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.method-add-user .method-list-users {
+    margin-bottom: 24px;
+}
+.method-add-user .method-list-users li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    position: relative;
+    transition: .3s;
+}
+.method-add-user .method-list-users li::before {
+    content: "";
+    width: calc(100% - 48px);
+    height: 1px;
+    background: #E0E6EF;
+    position: absolute;
+    bottom: 0;
+}
+.method-add-user .method-list-users li .left {
+    width: 50%;
+    display: flex;
+    align-items: center;
+}
+.method-add-user .method-list-users li:hover ~ i {
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+}
+.method-add-user .method-list-users li .grab {
+    cursor: grabbing;
+    margin-right: 8px;
+}
+.method-add-user .method-list-users li .position {
+    font-weight: normal;
+    font-size: 14px;
+    color: #939393;
+}
+
+.method-add-group {
+    padding: 24px;
+    border-bottom: 1px solid #C8C7CC;
+}
+.add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #3F4B60;
+}
+.add-btn .circle {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #EAF6F5;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    margin-right: 8px;
+    transition: .3s;
+}
+.add-btn:hover .circle {
+    border: 1px solid #20B5BE;
+    background: transparent;
+}
+.paper-signatory .gkb-checkbox {
+    margin-bottom: 0;
+}
+.paper-signatory-footer {
+    
+}
+
+.two-signatory {
+    position: relative;
+}
+.two-signatory::before {
+    content: '';
+    border-left: 2px dashed #C8C7CC;
+    position: absolute;
+    left: 12px;
+    bottom: -32px;
+    height: 32px;
+}
+
+.delete-if-icon {
+    cursor: pointer;
+    transition: .3s;
+    border-radius: 4px;
+}
+.delete-if-icon:hover {
+    background-color: #F3F3F3;
+}
 
 
 .manager-req .alert p  {

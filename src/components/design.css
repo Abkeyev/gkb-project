@@ -37,12 +37,36 @@ hr:not([size]) {
   border-bottom: 1px solid #c8c7cc;
 }
 /* Padding Top and Bottom */
+.pad-0 {
+  padding: 0 !important;
+}
+
 .pad-24 {
   padding: 24px;
 }
 
 .pad-rl-16 {
   padding: 0 16px;
+}
+
+.pad-l-0 {
+  padding-left: 0 !important;
+}
+.pad-l-56 {
+  padding-left: 56px;
+}
+.pad-l-32 {
+  padding-left: 32px;
+}
+.pad-r-32 {
+  padding-right: 32px;
+}
+
+.pad-t-24 {
+  padding-top: 24px;
+}
+.pad-b-24 {
+  padding-bottom: 24px;
 }
 
 .pad-tb-16 {
@@ -598,6 +622,10 @@ fieldset:disabled .button {
   justify-content: space-between;
 }
 
+.w-160 {
+  width: 160px;
+}
+
 /* Grid Layout */
 .container,
 .container-fluid {
@@ -1146,6 +1174,11 @@ fieldset:disabled .button {
   transition: 0.5s;
   transform: translate(0, -70px);
 }
+.modal-large-xl .modal-dialog {
+  max-width: 720px;
+  margin: 1.75rem auto;
+  min-height: calc(100% - 3.5rem);
+}
 .modal-large .modal-dialog {
   max-width: 600px;
   margin: 1.75rem auto;
@@ -1242,12 +1275,12 @@ fieldset:disabled .button {
 }
 .btn-secondary {
   border: 1px solid #20b5be;
-  background: white;
+  background: transparent;
   color: #20b5be;
 }
 .btn-secondary:hover {
   border: 1px solid #19959c;
-  background: white;
+  background: transparent;
   color: #19959c;
 }
 /* Text */
@@ -1650,6 +1683,146 @@ fieldset:disabled .button {
 .checkbox-list {
   display: grid;
 }
+
+/* Tabs buttons START*/
+
+.tab-button {
+  display: flex;
+  align-items: center;
+}
+.tab-button .tab-btn {
+  background: #FFFFFF;
+  border-top-color: #20B5BE;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-bottom-color: #20B5BE;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-right-color: #20B5BE;
+  border-right-style: solid;
+  border-right-width: 1px;
+  cursor: pointer;
+  padding: 12px 48px;
+  width: 188px;
+  display: block;
+  font-weight: normal;
+  font-size: 16px;
+  color: #20B5BE;
+  text-align: center;
+}
+.tab-button .tab-btn.active {
+  background: #20B5BE;
+  border: 1px solid #20B5BE;
+  color: white;
+}
+.tab-button .tab-btn:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-left-color: #20B5BE;
+  border-left-style: solid;
+  border-left-width: 1px;
+}
+.tab-button .tab-btn:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-left-width: 0px;
+  border-right-width: 1px;
+}
+.method-signatory .tab-btn {
+  width: auto;
+}
+.card-collapse {
+  background: #FFFFFF;
+  border: 1px solid #20B5BE;
+  border-radius: 16px;
+  margin-bottom: 32px;
+}
+.card-collapse .card-collapse-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #C8C7CC;
+}
+.card-collapse .card-collapse-header .collapsing-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-collapse .card-collapse-header .collapsing-header i {
+  transition: .3s;
+}
+.card-collapse .collapse-body {
+  padding: 20px 24px;
+}
+.card-collapse .collapse-footer {
+  padding: 0px 24px 20px 24px;
+}
+
+.card-collapse .collapse-body .collapse-signatory {
+  border-bottom: 1px solid #E0E6EF;
+}
+.card-collapse .collapse-body .collapse-text {
+  font-weight: 500;
+  font-size: 18px;
+  color: #3F4B60;
+  margin-bottom: 8px;
+}
+
+.card-collapse .collapse-content, .card-collapse .collapse-main {
+  max-height: 10000px;
+  transition: .4s;
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0px);
+}
+.card-collapse .collapse-content {
+  transition: .4s;
+}
+
+
+.card-collapse.collapsed {
+  border: 1px solid transparent;
+}
+
+.card-collapse.collapsed .collapse-content, .card-collapse.collapsed .collapse-main {
+  max-height: 0;
+  transition: .4s;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.card-collapse.collapsed .collapse-main {
+  margin-top: 0px;
+}
+
+.card-collapse .card-collapse-header.success {
+  background: #EAF6F5;
+  border-bottom: 1px solid transparent;
+}
+.card-collapse .card-collapse-header.success {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.card-collapse.collapsed .card-collapse-header.success {
+  border-radius: 16px;
+}
+.card-collapse.collapsed .card-collapse-header .collapsing-header i {
+  transform: rotate(180deg);
+}
+
+
+.btn-collapse {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #20B5BE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tabs buttons END*/
+
 
 .react-tabs .react-tabs__tab-list {
   border-bottom: none;

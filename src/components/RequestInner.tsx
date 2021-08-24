@@ -343,7 +343,420 @@ const RequestInner = (props: RequestProps) => {
                 </Tabs>
               ) : step === 1 ? (
                 <div className="req-inner-body">
-                  <h3 className="title-subhead mb-16">Шаблоны договоров</h3>
+
+                    <h3 className="title-subhead mb-16">
+                      Выберите тип договора
+                    </h3>
+
+                    <div className="tab-button mb-24">
+                      <span className="tab-btn active">Типовой</span>
+                      <span className="tab-btn" onClick={() => {
+                            setIsOpenModal(true);
+                            setModalType(3);
+                          }}>Нетиповой</span>
+                    </div>
+                    
+                    <div className="tab-btn-content mb-32">
+
+                      <div className="card-collapse tab-num-1 d-none">{/* При сворачивании дается класс "collapsed" */}
+                        <div className="card-collapse-header "> {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
+                          <div className="collapsing-header">
+                            <h3 className="title-subhead mb-0">
+                              На подписание: “Договор №314 - вер. 24 от 24 июня
+                            </h3>
+                            <span className="btn-collapse"><i className="azla chevron-up-icon"></i></span>
+                          </div>
+                          <div className="pad-rl-16 collapse-main">
+                            <div className="row">
+                              <div className="col-md-6">
+                                <p className="desc">Типовой договор</p>
+                                <button type="button" className="button btn-secondary btn-icon"><i className="azla blank-alt-primary-icon"></i> Скачать договор</button>
+                              </div>
+                              <div className="col-md-6">
+                                <p className="desc">Менеджер заявки</p>
+                                <div className="profile mt-8">
+                                  <img
+                                    className="ava"
+                                    src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                  />
+                                  <span className="name">Султангалиева К.И</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="collapse-content">
+                          <div className="collapse-body">
+                            <div className="collapse-signatory mb-24">
+                              <h4 className="collapse-text">Подписант от ТОО “М-Ломбард”</h4>
+
+                              <div className="signatory-profile">
+                                <div className="col-md-6">
+                                  <div className="profile">
+                                    <img
+                                      className="ava"
+                                      src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                    />
+                                    <span className="name">Кусаинов А.Е.</span>
+                                  </div>
+                                </div>
+                                <div className="col-md-6">
+                                  <div className="signatory-status">
+                                    <p className="desc">Директор</p>
+                                    <span className="btn-status not-active">Не Подписано</span> {/* При подписании дается класс "done" */}
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+
+                            <div className="collapse-signatory">
+                              <h4 className="collapse-text">Подписант от АО “Государственное Кредитное Бюро”</h4>
+
+                              <div className="signatory-profile">
+                                <div className="col-md-6">
+                                  <div className="profile">
+                                    <img
+                                      className="ava"
+                                      src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                    />
+                                    <span className="name">Султангалиева К.И</span>
+                                  </div>
+                                </div>
+                                <div className="col-md-6">
+                                  <div className="signatory-status">
+                                    <p className="desc">Менеджер</p>
+                                    <button className="btn-status-signatory btn-icon not-active"><i className="azla edit-white-icon"></i> Подписать</button> {/* Когда дается разрешение дается класс "active". При подписании дается класс "done" и текст становится "Подписано" */}
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="collapse-footer">
+                            <button type="button" className="button btn-primary">Отправить на подписание</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      
+
+                      <div className="card-collapse tab-num-2 collapsed two-signatory">{/* При сворачивании дается класс "collapsed" */}
+                        <div className="card-collapse-header success"> {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
+                          <div className="collapsing-header">
+                            <h3 className="title-subhead mb-0">
+                              На согласование: “Договор №314 - вер. 24 от 24 июня
+                            </h3>
+                            <span className="btn-collapse"><i className="azla chevron-up-icon"></i></span>
+                          </div>
+                          <div className="pad-rl-16 collapse-main">
+                            <div className="row">
+                              <div className="col-md-6">
+                                <p className="desc">Нетиповой договор</p>
+                                <button type="button" className="button btn-secondary btn-icon"><i className="azla blank-alt-primary-icon"></i> Скачать договор</button>
+                              </div>
+                              <div className="col-md-6">
+                                <p className="desc">Менеджер заявки</p>
+                                <div className="profile mt-8">
+                                  <img
+                                    className="ava"
+                                    src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                  />
+                                  <span className="name">Султангалиева К.И</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="collapse-content method-main">
+                          <div className="collapse-body">
+                            
+                            <div className="method-signatory">
+                              <div className="method-signatory-add">
+                                <div className="method-signatory-header">
+                                  <div className="left">
+                                    <h4 className="collapse-text mb-8">Согласующие от ГКБ 1</h4>
+                                    <p className="mb-0">2 участников<span className="delete">Удалить группу</span></p>
+                                  </div>
+                                  <div className="right">
+                                    <p className="text-desc mb-0 mr-8">Метод согласования:</p>
+                                    <div className="tab-button">
+                                      <span className="tab-btn active">Последовательный</span>
+                                      <span className="tab-btn">Параллельный</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="method-add-user">
+                                  <div className="method-add-users">
+                                    <ul className="method-list-users">
+
+                                      <li>
+                                        <div className="left">
+                                          <i className="azla arrow-primary-down-up grab"></i>
+                                          <div className="profile">
+                                            <img
+                                              className="ava"
+                                              src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                            />
+                                            <span className="name">Султангалиева К.И</span>
+                                          </div>
+                                        </div>
+                                        <span className="position">Директор</span>
+                                        <i className="azla close-red-icon delete-if-icon "></i>
+                                      </li>
+                                      <li>
+                                        <div className="left">
+                                          <i className="azla arrow-primary-down-up grab"></i>
+                                          <div className="profile">
+                                            <img
+                                              className="ava"
+                                              src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                            />
+                                            <span className="name">Султангалиева К.И</span>
+                                          </div>
+                                        </div>
+                                        <span className="position">Директор</span>
+                                        <i className="azla close-red-icon delete-if-icon "></i>
+                                      </li>
+                                      
+                                    </ul>
+                                  </div>
+                                  <span className="add-btn pad-l-56 pad-b-24" onClick={() => {
+                                        setIsOpenModal(true);
+                                        setModalType(4);
+                                      }}><span className="circle"><i className="azla plus-primary-icon size-18"></i></span>Участники согласования</span>
+                                </div>
+                              </div>
+
+                              <div className="method-signatory-add">
+                                <div className="method-signatory-header">
+                                  <div className="left">
+                                    <h4 className="collapse-text mb-8">Согласующие от ГКБ 2</h4>
+                                    <p className="mb-0">2 участников<span className="delete">Удалить группу</span></p>
+                                  </div>
+                                  <div className="right">
+                                    <p className="text-desc mb-0 mr-8">Метод согласования:</p>
+                                    <div className="tab-button">
+                                      <span className="tab-btn">Последовательный</span>
+                                      <span className="tab-btn active">Параллельный</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="method-add-user">
+                                  <div className="method-add-users">
+                                    <ul className="method-list-users">
+
+                                      <li>
+                                        <div className="left">
+                                          <i className="azla arrow-primary-down-up grab"></i>
+                                          <div className="profile">
+                                            <img
+                                              className="ava"
+                                              src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                            />
+                                            <span className="name">Султангалиева К.И</span>
+                                          </div>
+                                        </div>
+                                        <span className="position">Директор</span>
+                                        <i className="azla close-red-icon delete-if-icon "></i>
+                                      </li>
+                                      <li>
+                                        <div className="left">
+                                          <i className="azla arrow-primary-down-up grab"></i>
+                                          <div className="profile">
+                                            <img
+                                              className="ava"
+                                              src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                            />
+                                            <span className="name">Султангалиева К.И</span>
+                                          </div>
+                                        </div>
+                                        <span className="position">Директор</span>
+                                        <i className="azla close-red-icon delete-if-icon "></i>
+                                      </li>
+
+                                      {/* Тут момент происходит когда согласовали и показываю как заменяются кнопки */}
+
+                                      <li>
+                                        <div className="left">
+                                          {/* <i className="azla arrow-primary-down-up grab"></i> */}
+                                          <div className="profile">
+                                            <img
+                                              className="ava"
+                                              src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                            />
+                                            <span className="name">Султангалиева К.И</span>
+                                          </div>
+                                        </div>
+                                        <span className="position">Директор</span>
+                                        <span className="btn-status not-active">Не согласовано</span>
+                                        {/* <i className="azla close-red-icon delete-if-icon "></i> */}
+                                      </li>
+                                      <li>
+                                        <div className="left">
+                                          {/* <i className="azla arrow-primary-down-up grab"></i> */}
+                                          <div className="profile">
+                                            <img
+                                              className="ava"
+                                              src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                            />
+                                            <span className="name">Султангалиева К.И</span>
+                                          </div>
+                                        </div>
+                                        <span className="position">Директор</span>
+                                        <span className="btn-status done">Согласовано</span>
+                                        {/* <i className="azla close-red-icon delete-if-icon "></i> */}
+                                      </li>
+                                      <li>
+                                        <div className="left">
+                                          {/* <i className="azla arrow-primary-down-up grab"></i> */}
+                                          <div className="profile">
+                                            <img
+                                              className="ava"
+                                              src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                            />
+                                            <span className="name">Султангалиева К.И</span>
+                                          </div>
+                                        </div>
+                                        <span className="position">Директор</span>
+                                        <span className="btn-status canceled" onClick={() => {
+                                        setIsOpenModal(true);
+                                        setModalType(5);
+                                      }}>Отклонено</span>
+                                        {/* <i className="azla close-red-icon delete-if-icon "></i> */}
+                                      </li>
+                                      
+                                    </ul>
+                                        
+                                  </div>
+                                  <span className="add-btn pad-l-56 pad-b-24" onClick={() => {
+                                        setIsOpenModal(true);
+                                        setModalType(4);
+                                      }}><span className="circle"><i className="azla plus-primary-icon size-18"></i></span>Участники согласования</span>
+                                </div>
+                              </div>
+
+                              <div className="method-add-group">
+                                <span className="add-btn"><span className="circle"><i className="azla plus-primary-icon size-18"></i></span>Добавить группу</span>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div className="collapse-footer">
+                            <button type="button" className="button btn-primary disabled">Отправить на подписание</button>
+                          </div>
+                        </div>
+
+
+                      </div>
+                      
+                      <div className="card-collapse tab-num-1">{/* При сворачивании дается класс "collapsed" */}
+                        <div className="card-collapse-header "> {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
+                          <div className="collapsing-header">
+                            <h3 className="title-subhead mb-0"> {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
+                              На подписание: “Договор №314 - вер. 24 от 24 июня
+                            </h3>
+                            <span className="btn-collapse"><i className="azla chevron-up-icon"></i></span>
+                          </div>
+                          <div className="pad-rl-16 collapse-main">
+                            <div className="row">
+                              <div className="col-md-6">
+                                <p className="desc">Типовой договор</p>
+                                <button type="button" className="button btn-secondary btn-icon"><i className="azla blank-alt-primary-icon"></i> Скачать договор</button>
+                              </div>
+                              <div className="col-md-6">
+                                <p className="desc">Менеджер заявки</p>
+                                <div className="profile mt-8">
+                                  <img
+                                    className="ava"
+                                    src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                  />
+                                  <span className="name">Султангалиева К.И</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="collapse-content">
+                          <div className="collapse-body">
+                            <div className="collapse-signatory mb-24">
+                              <h4 className="collapse-text">Подписант от ТОО “М-Ломбард”</h4>
+
+                              <div className="signatory-profile">
+                                <div className="col-md-6">
+                                  <div className="profile">
+                                    <img
+                                      className="ava"
+                                      src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                    />
+                                    <span className="name">Кусаинов А.Е.</span>
+                                  </div>
+                                </div>
+                                <div className="col-md-6">
+                                  <div className="signatory-status">
+                                    <p className="desc">Директор</p>
+                                    <span className="btn-status not-active">Не Подписано</span> {/* При подписании дается класс "done" */}
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+
+                            <div className="collapse-signatory">
+                              <h4 className="collapse-text">Подписант от АО “Государственное Кредитное Бюро”</h4>
+                              
+                              <div className="signatory-profile">
+                                <div className="col-md-6">
+                                  <div className="profile">
+                                    <img
+                                      className="ava"
+                                      src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                                    />
+                                    <span className="name">Кусаинов А.Е.</span>
+                                  </div>
+                                </div>
+                                <div className="col-md-6">
+                                  <div className="signatory-status">
+                                    <p className="desc">Директор</p>
+                                    {/* <i className="azla close-red-icon delete-if-icon"></i> */}
+
+                                    <button className="btn-status-signatory btn-icon not-active"><i className="azla edit-white-icon"></i> Подписать</button>
+                                  </div>
+                                </div>
+
+                              </div>
+                              
+                              {/* По дефолту стоит выбор подписанта, после выбора исчезает и добавляется выше дивка, и включается кнопка "Отправить на подписание" */}
+                              <div className="method-add-group pad-l-0">
+                                <span className="add-btn" onClick={() => {
+                                        setIsOpenModal(true);
+                                        setModalType(6);
+                                      }}><span className="circle"><i className="azla plus-primary-icon size-18"></i></span>Добавить подписанта</span>
+                              </div>
+                              
+                            </div>
+                          </div>
+
+                          <div className="collapse-footer">
+                            <button type="button" className="button btn-primary disabled">Отправить на подписание</button>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+
+
+                  {/* ЗДЕСЬ Начинается */}
+                  {/* Заменить эту часть на часть которую делаю выше */}
+                  {/* Если кол-во истории 0, то таблицы в целом нет  "История изменения договора" */}
+
+                  {/* <h3 className="title-subhead mb-16">Шаблоны договоров</h3>
                   <div className="files-added">
                     <ul className="files-list">
                       <li>
@@ -356,9 +769,11 @@ const RequestInner = (props: RequestProps) => {
                       </li>
                     </ul>
                   </div>
-                  <div className="d-flex-align-c-spaceb mb-16">
+                  
+                  <div className="d-flex-align-c-spaceb mb-32">
+                    
                     <h3 className="title-subhead">
-                      История изменения договора 32
+                      История изменения договора <span className="number">4</span>
                     </h3>
                     <button type="button" className="button btn-secondary">
                       Загрузить договор
@@ -388,7 +803,9 @@ const RequestInner = (props: RequestProps) => {
                         </tr>
                       ))}
                     </tbody>
-                  </table>
+                  </table> */}
+
+                  {/* ЗДЕСЬ заканчивается */}
 
                   <h3 className="title-subhead mb-16">Документы контрагента</h3>
                   <h5 className="title-subhead-h5 mb-16">
