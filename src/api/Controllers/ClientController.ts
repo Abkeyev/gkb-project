@@ -3,6 +3,11 @@ import { baseURL } from "../const";
 
 export class ClientController {
   // Client
+  async authEcp(data: any): Promise<any> {
+    return server.post(`/auth/ecp`, data, {
+      baseURL,
+    });
+  }
   async getClients(): Promise<any> {
     return server.get(`/clients`, {
       baseURL,

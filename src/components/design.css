@@ -1691,14 +1691,14 @@ fieldset:disabled .button {
   align-items: center;
 }
 .tab-button .tab-btn {
-  background: #FFFFFF;
-  border-top-color: #20B5BE;
+  background: #ffffff;
+  border-top-color: #20b5be;
   border-top-style: solid;
   border-top-width: 1px;
-  border-bottom-color: #20B5BE;
+  border-bottom-color: #20b5be;
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-right-color: #20B5BE;
+  border-right-color: #20b5be;
   border-right-style: solid;
   border-right-width: 1px;
   cursor: pointer;
@@ -1707,18 +1707,18 @@ fieldset:disabled .button {
   display: block;
   font-weight: normal;
   font-size: 16px;
-  color: #20B5BE;
+  color: #20b5be;
   text-align: center;
 }
 .tab-button .tab-btn.active {
-  background: #20B5BE;
-  border: 1px solid #20B5BE;
+  background: #20b5be;
+  border: 1px solid #20b5be;
   color: white;
 }
 .tab-button .tab-btn:first-child {
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
-  border-left-color: #20B5BE;
+  border-left-color: #20b5be;
   border-left-style: solid;
   border-left-width: 1px;
 }
@@ -1732,14 +1732,14 @@ fieldset:disabled .button {
   width: auto;
 }
 .card-collapse {
-  background: #FFFFFF;
-  border: 1px solid #20B5BE;
+  background: #ffffff;
+  border: 1px solid #20b5be;
   border-radius: 16px;
   margin-bottom: 32px;
 }
 .card-collapse .card-collapse-header {
   padding: 20px 24px;
-  border-bottom: 1px solid #C8C7CC;
+  border-bottom: 1px solid #c8c7cc;
 }
 .card-collapse .card-collapse-header .collapsing-header {
   display: flex;
@@ -1747,7 +1747,7 @@ fieldset:disabled .button {
   justify-content: space-between;
 }
 .card-collapse .card-collapse-header .collapsing-header i {
-  transition: .3s;
+  transition: 0.3s;
 }
 .card-collapse .collapse-body {
   padding: 20px 24px;
@@ -1757,34 +1757,35 @@ fieldset:disabled .button {
 }
 
 .card-collapse .collapse-body .collapse-signatory {
-  border-bottom: 1px solid #E0E6EF;
+  border-bottom: 1px solid #e0e6ef;
 }
 .card-collapse .collapse-body .collapse-text {
   font-weight: 500;
   font-size: 18px;
-  color: #3F4B60;
+  color: #3f4b60;
   margin-bottom: 8px;
 }
 
-.card-collapse .collapse-content, .card-collapse .collapse-main {
+.card-collapse .collapse-content,
+.card-collapse .collapse-main {
   max-height: 10000px;
-  transition: .4s;
+  transition: 0.4s;
   visibility: visible;
   opacity: 1;
   transform: translateY(0px);
 }
 .card-collapse .collapse-content {
-  transition: .4s;
+  transition: 0.4s;
 }
-
 
 .card-collapse.collapsed {
   border: 1px solid transparent;
 }
 
-.card-collapse.collapsed .collapse-content, .card-collapse.collapsed .collapse-main {
+.card-collapse.collapsed .collapse-content,
+.card-collapse.collapsed .collapse-main {
   max-height: 0;
-  transition: .4s;
+  transition: 0.4s;
   visibility: hidden;
   opacity: 0;
   transform: translateY(20px);
@@ -1794,7 +1795,7 @@ fieldset:disabled .button {
 }
 
 .card-collapse .card-collapse-header.success {
-  background: #EAF6F5;
+  background: #eaf6f5;
   border-bottom: 1px solid transparent;
 }
 .card-collapse .card-collapse-header.success {
@@ -1810,19 +1811,17 @@ fieldset:disabled .button {
   transform: rotate(180deg);
 }
 
-
 .btn-collapse {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1px solid #20B5BE;
+  border: 1px solid #20b5be;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 /* Tabs buttons END*/
-
 
 .react-tabs .react-tabs__tab-list {
   border-bottom: none;
@@ -1951,6 +1950,7 @@ fieldset:disabled .button {
 .multi-option .multi-list {
   border-bottom: 1px solid #f3f3f3;
   padding: 8px 0;
+  overflow: hidden;
 }
 .multi-option .multi-list:last-child {
   border-bottom: none;
@@ -1963,6 +1963,7 @@ fieldset:disabled .button {
   font-size: 14px;
   color: #3f4b60;
   cursor: pointer;
+  white-space: pre;
 }
 .multi.open .multi-menu {
   max-height: 100000px;

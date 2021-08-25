@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 interface LoginProps {
   setLogged: any;
@@ -17,6 +17,11 @@ const Login = (props: LoginProps) => {
         <div className="row">
           <div className="col-md-4 offset-md-4">
             <form>
+              <div className="back-breadcrumbs">
+                <Link to="/" className="back">
+                  <i className="azla arrow-left-icon"></i> Назад
+                </Link>
+              </div>
               <div className="special-card">
                 <h1 className="title-main">Вход по логину</h1>
                 <div className="login-input">
