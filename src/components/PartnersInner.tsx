@@ -18,7 +18,7 @@ const PartnersInner = (props: RequestProps) => {
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <div className="req-manager-inner p-16-50">
+            <div className="req-manager-inner p-16-50 pad-b-128">
               <div className="req-inner-header">
                 <div className="back-breadcrumbs">
                   <Link to="/partners" className="back">
@@ -1399,83 +1399,85 @@ const PartnersInner = (props: RequestProps) => {
               )}
               {/* step 0-4 */}
               <div className="req-inner-footer">
-                {state.modalManager && state.step === 0 ? (
-                  <div className="manager-req">
-                    <div className="left">
-                      <p>Менеджер заявки</p>
-                      <div className="profile">
-                        <img
-                          className="ava"
-                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
-                        />
-                        <span className="name">Султангалиева К.И</span>
-                      </div>
-                    </div>
+                  <div className="container">
+                    {state.modalManager && state.step === 0 ? (
+                      <div className="manager-req mrl-32">
+                        <div className="left">
+                          <p>Менеджер заявки</p>
+                          <div className="profile">
+                            <img
+                              className="ava"
+                              src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                            />
+                            <span className="name">Султангалиева К.И</span>
+                          </div>
+                        </div>
 
-                    {state.decline ? (
-                      <div className="right alert">
-                        <p>Заявка отклонена</p>
-                        <button
-                          className="button btn-secondary"
-                          onClick={() => {
-                            setState({
-                              ...state,
-                              declineReason: "",
-                              decline: false,
-                              tab: 3,
-                            });
+                        {state.decline ? (
+                          <div className="right alert">
+                            <p>Заявка отклонена</p>
+                            <button
+                              className="button btn-secondary"
+                              onClick={() => {
+                                setState({
+                                  ...state,
+                                  declineReason: "",
+                                  decline: false,
+                                  tab: 3,
+                                });
 
-                            history.push("/partners");
-                          }}
-                        >
-                          В архив
-                        </button>
+                                history.push("/partners");
+                              }}
+                            >
+                              В архив
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="right">
+                            <p>Первичная проверка прошла успешно?</p>
+                            <button
+                              className="button btn-secondary mr-8"
+                              onClick={() => {
+                                setState({
+                                  ...state,
+                                  isOpenModal: false,
+                                  modalType: 1,
+                                });
+                              }}
+                            >
+                              Нет
+                            </button>
+                            <button
+                              className="button btn-primary"
+                              onClick={() =>
+                                setState({
+                                  ...state,
+                                  step: 1,
+                                })
+                              }
+                            >
+                              Да, успешно
+                            </button>
+                          </div>
+                        )}
                       </div>
+                    ) : state.step === 0 ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setState({
+                            ...state,
+                            isOpenModal: true,
+                          })
+                        }
+                        className="button btn-primary mrl-32"
+                      >
+                        Назначить
+                      </button>
                     ) : (
-                      <div className="right">
-                        <p>Первичная проверка прошла успешно?</p>
-                        <button
-                          className="button btn-secondary mr-8"
-                          onClick={() => {
-                            setState({
-                              ...state,
-                              isOpenModal: false,
-                              modalType: 1,
-                            });
-                          }}
-                        >
-                          Нет
-                        </button>
-                        <button
-                          className="button btn-primary"
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              step: 1,
-                            })
-                          }
-                        >
-                          Да, успешно
-                        </button>
-                      </div>
+                      <></>
                     )}
                   </div>
-                ) : state.step === 0 ? (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setState({
-                        ...state,
-                        isOpenModal: true,
-                      })
-                    }
-                    className="button btn-primary"
-                  >
-                    Назначить
-                  </button>
-                ) : (
-                  <></>
-                )}
               </div>
             </div>
           </div>

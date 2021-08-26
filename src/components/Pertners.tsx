@@ -348,9 +348,11 @@ const Partners = (props: RequestProps) => {
                 </TabPanel>
               </Tabs>
               <div className="req-inner-footer">
-                <button type="button" className="button btn-primary btn-icon">
-                  <i className="azla add-plusRound-icon"></i> Новая заявка
-                </button>
+                <div className="container">
+                  <button type="button" className="button btn-primary btn-icon mrl-32">
+                    <i className="azla add-plusRound-icon"></i> Новая заявка
+                  </button>
+                </div>
               </div>
             </div>
           </div>
