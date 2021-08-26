@@ -33,16 +33,11 @@ const RequestInner = (props: RequestProps) => {
                   Заявка №1353 - ТОО “М-Ломбард”
                 </h1>
 
-<<<<<<< Updated upstream
                 {state.decline && (
-                  <div className="alert-mess mb-32">
-=======
-                {decline && (
-                  <div className="mess-card alert-mess mb-32">
->>>>>>> Stashed changes
-                    <h5>Заявка отклонена</h5>
-                    <p>Причина: {state.declineReason}</p>
-                  </div>
+                   <div className="mess-card alert-mess mb-32">
+                      <h5>Заявка отклонена</h5>
+                      <p>Причина: {state.declineReason}</p>
+                    </div>
                 )}
 
                 <div className="status-bar">
@@ -1404,148 +1399,85 @@ const RequestInner = (props: RequestProps) => {
               {/* step 0-4 */}
               
               <div className="req-inner-footer">
-<<<<<<< Updated upstream
-                {state.modalManager && state.step === 0 ? (
-                  <div className="manager-req">
-                    <div className="left">
-                      <p>Менеджер заявки</p>
-                      <div className="profile">
-                        <img
-                          className="ava"
-                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
-                        />
-                        <span className="name">Султангалиева К.И</span>
-=======
-                <div className="container">
-                  {modalManager && step === 0 ? (
-                    <div className="manager-req mrl-32">
-                      <div className="left">
-                        <p>Менеджер заявки</p>
-                        <div className="profile">
-                          <img
-                            className="ava"
-                            src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
-                          />
-                          <span className="name">Султангалиева К.И</span>
+                  <div className="container">
+                    {state.modalManager && state.step === 0 ? (
+                      <div className="manager-req mrl-32">
+                        <div className="left">
+                          <p>Менеджер заявки</p>
+                          <div className="profile">
+                            <img
+                              className="ava"
+                              src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                            />
+                            <span className="name">Султангалиева К.И</span>
+                          </div>
                         </div>
->>>>>>> Stashed changes
-                      </div>
 
-<<<<<<< Updated upstream
-                    {state.decline ? (
-                      <div className="right alert">
-                        <p>Заявка отклонена</p>
-                        <button
-                          className="button btn-secondary"
-                          onClick={() => {
-                            setState({
-                              ...state,
-                              declineReason: "",
-                              decline: false,
-                              tab: 3,
-                            });
+                        {state.decline ? (
+                          <div className="right alert">
+                            <p>Заявка отклонена</p>
+                            <button
+                              className="button btn-secondary"
+                              onClick={() => {
+                                setState({
+                                  ...state,
+                                  declineReason: "",
+                                  decline: false,
+                                  tab: 3,
+                                });
 
-                            history.push("/orders");
-                          }}
-                        >
-                          В архив
-                        </button>
+                                history.push("/orders");
+                              }}
+                            >
+                              В архив
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="right">
+                            <p>Первичная проверка прошла успешно?</p>
+                            <button
+                              className="button btn-secondary mr-8"
+                              onClick={() => {
+                                setState({
+                                  ...state,
+                                  isOpenModal: false,
+                                  modalType: 1,
+                                });
+                              }}
+                            >
+                              Нет
+                            </button>
+                            <button
+                              className="button btn-primary"
+                              onClick={() =>
+                                setState({
+                                  ...state,
+                                  step: 1,
+                                })
+                              }
+                            >
+                              Да, успешно
+                            </button>
+                          </div>
+                        )}
                       </div>
+                    ) : state.step === 0 ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setState({
+                            ...state,
+                            isOpenModal: true,
+                          })
+                        }
+                        className="button btn-primary mrl-32"
+                      >
+                        Назначить
+                      </button>
                     ) : (
-                      <div className="right">
-                        <p>Первичная проверка прошла успешно?</p>
-                        <button
-                          className="button btn-secondary mr-8"
-                          onClick={() => {
-                            setState({
-                              ...state,
-                              isOpenModal: false,
-                              modalType: 1,
-                            });
-                          }}
-                        >
-                          Нет
-                        </button>
-                        <button
-                          className="button btn-primary"
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              step: 1,
-                            })
-                          }
-                        >
-                          Да, успешно
-                        </button>
-                      </div>
+                      <></>
                     )}
-                  </div>
-                ) : state.step === 0 ? (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setState({
-                        ...state,
-                        isOpenModal: true,
-                      })
-                    }
-                    className="button btn-primary"
-                  >
-                    Назначить
-                  </button>
-                ) : (
-                  <></>
-                )}
-=======
-                      {decline ? (
-                        <div className="right alert">
-                          <p>Заявка отклонена</p>
-                          <button
-                            className="button btn-secondary"
-                            onClick={() => {
-                              setDeclineReason("");
-                              setDecline(false);
-                              setTab(3);
-                              history.push("/orders");
-                            }}
-                          >
-                            В архив
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="right">
-                          <p>Первичная проверка прошла успешно?</p>
-                          <button
-                            className="button btn-secondary mr-8"
-                            onClick={() => {
-                              setIsOpenModal(true);
-                              setModalType(1);
-                            }}
-                          >
-                            Нет
-                          </button>
-                          <button
-                            className="button btn-primary"
-                            onClick={() => setStep(1)}
-                          >
-                            Да, успешно
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ) : step === 0 ? (
-                    <button
-                      type="button"
-                      onClick={() => setIsOpenModal(true)}
-                      className="button btn-primary ml-32"
-                    >
-                      Назначить
-                    </button>
-                  ) : (
-                    <></>
-                  )}
                 </div>
->>>>>>> Stashed changes
               </div>
             </div>
           </div>

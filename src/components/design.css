@@ -1819,6 +1819,9 @@ fieldset:disabled .button {
 .card-collapse.collapsed .collapse-main {
   margin-top: 0px;
 }
+.card-collapse .card-collapse-header {
+  border-bottom: 1px solid transparent;
+}
 
 .card-collapse .card-collapse-header.success {
   background: #eaf6f5;
@@ -1845,6 +1848,7 @@ fieldset:disabled .button {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 /* Tabs buttons END*/

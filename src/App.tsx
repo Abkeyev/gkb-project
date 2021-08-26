@@ -8,11 +8,8 @@ import Registration from "./components/Registration";
 import Manager from "./components/Manager";
 import Request from "./components/Request";
 import RequestInner from "./components/RequestInner";
-<<<<<<< Updated upstream
 import PartnersInner from "./components/PartnersInner";
-=======
 import MyOrganization from "./components/MyOrganization";
->>>>>>> Stashed changes
 import Sidebar from "./components/Sidebar";
 import "./App.css";
 
