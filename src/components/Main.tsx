@@ -10,10 +10,10 @@ const Main = () => {
             <div className="special-card">
               <h1 className="title-main">Вход</h1>
               <div className="d-flex-special">
-                <Link className="button btn-primary" to="/ecp">
+                <Link className="button btn-primary w-160" to="/ecp">
                   По ЭЦП
                 </Link>
-                <Link className="button btn-secondary" to="/login">
+                <Link className="button btn-secondary w-160" to="/login">
                   По логину
                 </Link>
               </div>

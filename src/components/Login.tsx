@@ -47,7 +47,7 @@ const Login = (props: LoginProps) => {
                     />
                   </div>
                   <button
-                    className="button btn-primary"
+                    className="button btn-primary mt-16"
                     disabled={login.length < 0 || password.length < 0}
                     onClick={() => {
                       setState({ ...state, logged: true });

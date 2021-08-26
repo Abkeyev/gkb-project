@@ -127,6 +127,7 @@ a {
   color: #0d6efd;
   text-decoration: underline;
   font-family: "Roboto", sans-serif;
+  transition: .3s;
 }
 a:hover {
   color: #0a58ca;
@@ -163,6 +164,11 @@ textarea {
   line-height: inherit;
 }
 
+
+/* Colors */
+.pre-primary-color {
+  color: #19959C;
+}
 /* Tabs */
 .tab-links {
   display: flex;
@@ -193,8 +199,9 @@ textarea {
   padding: 32px 16px;
   width: 100%;
   position: relative;
+  border-bottom: 1px solid #C8C7CC;
 }
-.filter:before {
+/* .filter:before {
   content: "";
   background: #f9f9f9;
   position: absolute;
@@ -203,7 +210,7 @@ textarea {
   width: calc(100% + 100px);
   height: 100%;
   z-index: -1;
-}
+} */
 .filter .form-group {
   width: 100%;
 }
@@ -363,6 +370,25 @@ fieldset:disabled .button {
 }
 .mtb-auto-32 {
   margin: 32px auto;
+}
+/* Margin top and bottom */
+.mrl-0 {
+  margin: 0px auto;
+}
+.mrl-4 {
+  margin: 4px auto;
+}
+.mrl-8 {
+  margin: 8px auto;
+}
+.mrl-16 {
+  margin: 16px auto;
+}
+.mrl-24 {
+  margin: 0  24px;
+}
+.mrl-32 {
+  margin: 0 32px;
 }
 
 /* Margin Right */
@@ -1778,9 +1804,9 @@ fieldset:disabled .button {
   transition: 0.4s;
 }
 
-.card-collapse.collapsed {
+/* .card-collapse.collapsed {
   border: 1px solid transparent;
-}
+} */
 
 .card-collapse.collapsed .collapse-content,
 .card-collapse.collapsed .collapse-main {
@@ -1848,12 +1874,15 @@ fieldset:disabled .button {
 .react-tabs__tab:focus:after {
   content: unset !important;
 }
-
-.alert-mess {
+.mess-card {
   display: inline-block;
   padding: 16px 20px;
+  background: #F9F9F9;
+  border-radius: 16px;
+  color: #3F4B60;
+}
+.alert-mess {
   background: #fff3f3;
-  border-radius: 8px;
   color: #ff0000;
 }
 .alert-mess h5 {
@@ -1885,6 +1914,7 @@ fieldset:disabled .button {
   left: 16px;
   top: 18px;
   padding: 0 2px;
+  border-radius: 4px;
   pointer-events: none;
   background: #fff;
   transition: transform 100ms ease;

@@ -302,11 +302,13 @@
 }
 
 .main-body .req-inner-footer {
-  width: calc(100% - 372px);
+  left: 272px;
+  width: calc(100% - 272px);
   transition: 0.3s;
 }
 .left-sidebar.close + .main-body .req-inner-footer {
-  width: calc(100% - 242px);
+  width: calc(100% - 142px);
+  left: 142px;
   transition: 0.3s;
 }
 
@@ -549,9 +551,9 @@
   content: "";
   background: #f9f9f9;
   position: absolute;
-  left: -50px;
+  left: 0;
   top: 0;
-  width: calc(100% + 100px);
+  width: 100%;
   height: 100%;
   z-index: -1;
 }

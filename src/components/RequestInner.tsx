@@ -18,7 +18,7 @@ const RequestInner = (props: RequestProps) => {
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <div className="req-manager-inner p-16-50">
+            <div className="req-manager-inner p-16-50 pad-b-128">
               <div className="req-inner-header">
                 <div className="back-breadcrumbs">
                   <Link to="/orders" className="back">
@@ -33,8 +33,13 @@ const RequestInner = (props: RequestProps) => {
                   Заявка №1353 - ТОО “М-Ломбард”
                 </h1>
 
+<<<<<<< Updated upstream
                 {state.decline && (
                   <div className="alert-mess mb-32">
+=======
+                {decline && (
+                  <div className="mess-card alert-mess mb-32">
+>>>>>>> Stashed changes
                     <h5>Заявка отклонена</h5>
                     <p>Причина: {state.declineReason}</p>
                   </div>
@@ -120,7 +125,7 @@ const RequestInner = (props: RequestProps) => {
                   <TabPanel>
                     <div className="req-inner-body pad-b-128">
                       <h3 className="title-subhead mb-16">Общие данные</h3>
-                      <div className="total-info">
+                      <div className="total-info mb-32">
                         <ul className="info-list">
                           <li>
                             <span className="left">Номер заявки:</span>
@@ -132,7 +137,7 @@ const RequestInner = (props: RequestProps) => {
                           </li>
                           <li>
                             <span className="left">Организация:</span>
-                            <span className="right">ТОО “М-Ломбард”</span>
+                            <span className="right"><a href="#" className="pre-primary-color">ТОО “М-Ломбард”</a></span>
                           </li>
                           <li>
                             <span className="left">Номер заявки:</span>
@@ -160,7 +165,7 @@ const RequestInner = (props: RequestProps) => {
                           </li>
                           <li>
                             <span className="left">
-                              Дата исполнения заявки::
+                              Дата исполнения заявки:
                             </span>
                             <span className="right">20 Июня 2021</span>
                           </li>
@@ -1397,7 +1402,9 @@ const RequestInner = (props: RequestProps) => {
                 <></>
               )}
               {/* step 0-4 */}
+              
               <div className="req-inner-footer">
+<<<<<<< Updated upstream
                 {state.modalManager && state.step === 0 ? (
                   <div className="manager-req">
                     <div className="left">
@@ -1408,9 +1415,23 @@ const RequestInner = (props: RequestProps) => {
                           src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
                         />
                         <span className="name">Султангалиева К.И</span>
+=======
+                <div className="container">
+                  {modalManager && step === 0 ? (
+                    <div className="manager-req mrl-32">
+                      <div className="left">
+                        <p>Менеджер заявки</p>
+                        <div className="profile">
+                          <img
+                            className="ava"
+                            src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                          />
+                          <span className="name">Султангалиева К.И</span>
+                        </div>
+>>>>>>> Stashed changes
                       </div>
-                    </div>
 
+<<<<<<< Updated upstream
                     {state.decline ? (
                       <div className="right alert">
                         <p>Заявка отклонена</p>
@@ -1475,6 +1496,56 @@ const RequestInner = (props: RequestProps) => {
                 ) : (
                   <></>
                 )}
+=======
+                      {decline ? (
+                        <div className="right alert">
+                          <p>Заявка отклонена</p>
+                          <button
+                            className="button btn-secondary"
+                            onClick={() => {
+                              setDeclineReason("");
+                              setDecline(false);
+                              setTab(3);
+                              history.push("/orders");
+                            }}
+                          >
+                            В архив
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="right">
+                          <p>Первичная проверка прошла успешно?</p>
+                          <button
+                            className="button btn-secondary mr-8"
+                            onClick={() => {
+                              setIsOpenModal(true);
+                              setModalType(1);
+                            }}
+                          >
+                            Нет
+                          </button>
+                          <button
+                            className="button btn-primary"
+                            onClick={() => setStep(1)}
+                          >
+                            Да, успешно
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : step === 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => setIsOpenModal(true)}
+                      className="button btn-primary ml-32"
+                    >
+                      Назначить
+                    </button>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+>>>>>>> Stashed changes
               </div>
             </div>
           </div>
