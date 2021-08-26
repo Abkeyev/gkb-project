@@ -10,7 +10,7 @@ interface RequestProps {
   setState: any;
 }
 
-const RequestInner = (props: RequestProps) => {
+const PartnersInner = (props: RequestProps) => {
   const { state, setState } = props;
   const history = useHistory();
   return (
@@ -21,11 +21,12 @@ const RequestInner = (props: RequestProps) => {
             <div className="req-manager-inner p-16-50">
               <div className="req-inner-header">
                 <div className="back-breadcrumbs">
-                  <Link to="/orders" className="back">
+                  <Link to="/partners" className="back">
                     <i className="azla arrow-left-icon"></i> Назад
                   </Link>
                   <div className="breadcrumbs">
-                    <Link to="/orders">Заявки</Link> / <span>Заявка №1353</span>
+                    <Link to="/partners">Заявки</Link> /{" "}
+                    <span>Заявка №1353</span>
                   </div>
                 </div>
 
@@ -1424,7 +1425,7 @@ const RequestInner = (props: RequestProps) => {
                               tab: 3,
                             });
 
-                            history.push("/orders");
+                            history.push("/partners");
                           }}
                         >
                           В архив
@@ -1483,4 +1484,4 @@ const RequestInner = (props: RequestProps) => {
     </div>
   );
 };
-export default RequestInner;
+export default PartnersInner;

@@ -8,6 +8,7 @@ import Registration from "./components/Registration";
 import Manager from "./components/Manager";
 import Request from "./components/Request";
 import RequestInner from "./components/RequestInner";
+import PartnersInner from "./components/PartnersInner";
 import Sidebar from "./components/Sidebar";
 import "./App.css";
 
@@ -15,20 +16,22 @@ import AppState, { initAppState, CheckState } from "./ncalayer/state";
 import NCALayer, { MethodName } from "./ncalayer/ncalayer";
 import { extractKeyAlias, checkInputs, isNullOrEmpty } from "./ncalayer/helper";
 import Response, { ValidationType } from "./ncalayer/response";
+import Partners from "./components/Pertners";
 
 function App() {
-  const [logged, setLogged] = React.useState(true);
-  const [isOpenModal, setIsOpenModal] = React.useState(false);
-  const [modalType, setModalType] = React.useState<number>(0);
-  const [modalManager, setModalManager] = React.useState(false);
-  const [decline, setDecline] = React.useState(false);
-  const [declineReason, setDeclineReason] = React.useState("");
-  const [tab, setTab] = React.useState(0);
-  const [step, setStep] = React.useState(0);
+  // const [logged, setLogged] = React.useState(false);
+  // const [isOpenModal, setIsOpenModal] = React.useState(false);
+  // const [modalType, setModalType] = React.useState<number>(0);
+  // const [modalManager, setModalManager] = React.useState(false);
+  // const [decline, setDecline] = React.useState(false);
+  // const [declineReason, setDeclineReason] = React.useState("");
+  // const [tab, setTab] = React.useState(0);
+  // const [step, setStep] = React.useState(0);
+  // const [agreement, setAgreement] = React.useState(false);
+  // const [notTypical, setNotTypical] = React.useState(false);
 
   const ws = React.useRef<WebSocket>();
   const [state, setState] = React.useState<AppState>(initAppState());
-  const [ready, setReady] = React.useState(false);
 
   React.useEffect(() => {
     ws.current = new WebSocket("wss://127.0.0.1:13579/");
@@ -36,7 +39,7 @@ function App() {
     ws.current.onopen = (e: any) => {
       // tslint:disable-next-line
       console.log("connection opened");
-      setReady(true);
+      setState({ ...state, ready: true });
     };
 
     ws.current.onclose = (e: any) => {
@@ -49,13 +52,13 @@ function App() {
           "connection error: [code]=" + e.code + ", [reason]=" + e.reason
         );
       }
-      setReady(false);
+      setState({ ...state, ready: false });
     };
 
     return () => {
       ws.current!.close();
     };
-  }, [setReady]);
+  }, [state.ready]);
 
   // set onmessage
   React.useEffect(() => {
@@ -433,42 +436,33 @@ function App() {
   return (
     <div className="app-root modal-open">
       {/* При открытии модалки добавляется класс modal-open */}
-      {isOpenModal && (
-        <Modal
-          setIsOpenModal={setIsOpenModal}
-          setModalManager={setModalManager}
-          modalType={modalType}
-          declineReason={declineReason}
-          setDeclineReason={setDeclineReason}
-          setDecline={setDecline}
-          setStep={setStep}
-        />
-      )}
-      {logged ? (
+      {state.isOpenModal && <Modal state={state} setState={setState} />}
+      {state.logged ? (
         <>
           <Sidebar />
           <Switch>
             <Route path="/" component={() => <Manager />} exact />
             <Route
               path="/orders"
-              component={() => <Request tab={tab} setTab={setTab} />}
+              component={() => <Request state={state} setState={setState} />}
+              exact
+            />
+            <Route
+              path="/partners"
+              component={() => <Partners state={state} setState={setState} />}
+              exact
+            />
+            <Route
+              path="/partners/title"
+              component={() => (
+                <PartnersInner state={state} setState={setState} />
+              )}
               exact
             />
             <Route
               path="/orders/title"
               component={() => (
-                <RequestInner
-                  setIsOpenModal={setIsOpenModal}
-                  setModalType={setModalType}
-                  modalManager={modalManager}
-                  decline={decline}
-                  declineReason={declineReason}
-                  setDecline={setDecline}
-                  setDeclineReason={setDeclineReason}
-                  setTab={setTab}
-                  step={step}
-                  setStep={setStep}
-                />
+                <RequestInner state={state} setState={setState} />
               )}
               exact
             />
@@ -484,14 +478,14 @@ function App() {
                 client={client}
                 state={state}
                 setState={setState}
-                ready={ready}
+                ready={state.ready}
               />
             )}
             exact
           />
           <Route
             path="/login"
-            component={() => <Login setLogged={setLogged} />}
+            component={() => <Login state={state} setState={setState} />}
             exact
           />
           <Route

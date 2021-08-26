@@ -83,6 +83,24 @@ interface AppState {
   toHash: string;
   alg: string;
   hashed: string;
+  logged: boolean;
+  isOpenModal: boolean;
+  modalType: number;
+  modalManager: boolean;
+  decline: boolean;
+  declineReason: string;
+  tab: number;
+  step: number;
+  agreement: boolean;
+  notTypical: boolean;
+  ready: boolean;
+  step1: boolean;
+  step2: boolean;
+  step1status: boolean;
+  step2status: boolean;
+  signStep: number;
+  agreeUsers: number[];
+  agreeGroup: number[];
 }
 
 export const initAppState = (): AppState => {
@@ -143,6 +161,24 @@ export const initAppState = (): AppState => {
     toHash: "",
     alg: "SHA1",
     hashed: "",
+    logged: false,
+    isOpenModal: false,
+    modalType: 0,
+    modalManager: false,
+    decline: false,
+    declineReason: "",
+    tab: 0,
+    step: 0,
+    agreement: false,
+    notTypical: false,
+    ready: false,
+    step1: false,
+    step1status: false,
+    step2: false,
+    step2status: false,
+    signStep: 0,
+    agreeUsers: [],
+    agreeGroup: [],
   };
 };
 

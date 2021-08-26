@@ -10,7 +10,7 @@ interface RequestProps {
   setState: any;
 }
 
-const Request = (props: RequestProps) => {
+const Partners = (props: RequestProps) => {
   const { state, setState } = props;
   const [advance, setAdvance] = React.useState(false);
   const [sort, setSort] = React.useState(false);
@@ -38,20 +38,10 @@ const Request = (props: RequestProps) => {
               >
                 <div className="">
                   <TabList>
-                    <Tab>Нераспределенные</Tab>
-                    <Tab>Мои</Tab>
-                    <Tab>Подписанные</Tab>
-                    <Tab>В архиве</Tab>
+                    <Tab>Исходящие</Tab>
+                    <Tab>Завершенные</Tab>
                   </TabList>
                 </div>
-
-                {/* <div className="tab-links ">
-                                    <span className="link active">Нераспределенные</span>
-                                    <span className="link">Мои (3)</span>
-                                    <span className="link">Подписанные</span>
-                                    <span className="link">В архиве</span>
-                                    <span className="bottomLine"></span>
-                                </div> */}
                 <div className="filter mb-24">
                   <div className="row">
                     <div className="col-md-12">
@@ -286,7 +276,7 @@ const Request = (props: RequestProps) => {
                       </thead>
                       <tbody>
                         {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/orders/title")}>
+                          <tr onClick={() => history.push("/partners/title")}>
                             <td>52345634643</td>
                             <td>М-Ломбард</td>
                             <td>Ломбард</td>
@@ -316,7 +306,7 @@ const Request = (props: RequestProps) => {
                       </thead>
                       <tbody>
                         {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/orders/title")}>
+                          <tr onClick={() => history.push("/partners/title")}>
                             <td>52345634643</td>
                             <td>М-Ломбард</td>
                             <td>Ломбард</td>
@@ -344,69 +334,7 @@ const Request = (props: RequestProps) => {
                       </thead>
                       <tbody>
                         {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/orders/title")}>
-                            <td>52345634643</td>
-                            <td>М-Ломбард</td>
-                            <td>Ломбард</td>
-                            <td>Кредитная история</td>
-                            <td>12.12.2021</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </TabPanel>
-
-                <TabPanel>
-                  <div className="tab-content tab-3">
-                    <h3 className="title-subhead mb-16">
-                      Подписанные <span className="number">32</span>
-                    </h3>
-                    <p>
-                      Список подписанных заявок контрагентов, которые стали
-                      партнерами ГКБ
-                    </p>
-                    <table className="table req-table">
-                      <thead>
-                        <tr>
-                          <th>БИН</th>
-                          <th>Организации</th>
-                          <th>Категория деятельности</th>
-                          <th>Сервис</th>
-                          <th>Дата поступления</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/orders/title")}>
-                            <td>52345634643</td>
-                            <td>М-Ломбард</td>
-                            <td>Ломбард</td>
-                            <td>Кредитная история</td>
-                            <td>12.12.2021</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </TabPanel>
-
-                <TabPanel>
-                  <div className="tab-content tab-4">
-                    <h3 className="title-subhead mb-16">В архиве</h3>
-                    <table className="table req-table">
-                      <thead>
-                        <tr>
-                          <th>БИН</th>
-                          <th>Организации</th>
-                          <th>Категория деятельности</th>
-                          <th>Сервис</th>
-                          <th>Дата поступления</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/orders/title")}>
+                          <tr onClick={() => history.push("/partners/title")}>
                             <td>52345634643</td>
                             <td>М-Ломбард</td>
                             <td>Ломбард</td>
@@ -431,4 +359,4 @@ const Request = (props: RequestProps) => {
     </div>
   );
 };
-export default Request;
+export default Partners;

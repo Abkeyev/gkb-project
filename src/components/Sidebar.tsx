@@ -46,7 +46,7 @@ const Sidebar = () => {
               </li>
               <li className={`dropdown-menu ${collapse ? "collapse" : ""}`}>
                 {/* Если нажать на Dropdown то открывает самму сылку и раскрывает список, и класс дается collapse */}
-                <Link to="/" className="link-list">
+                <Link to="/partners" className="link-list">
                   <i className="azla user-add-icon"></i>
                   <span className="text">Контрагент </span>
                   <span className="status active"></span>

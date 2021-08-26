@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/gkb-project/static/css/main.a077fb6d.chunk.css",
-    "main.js": "/gkb-project/static/js/main.08d3e6b6.chunk.js",
-    "main.js.map": "/gkb-project/static/js/main.08d3e6b6.chunk.js.map",
-    "runtime-main.js": "/gkb-project/static/js/runtime-main.3a73b814.js",
-    "runtime-main.js.map": "/gkb-project/static/js/runtime-main.3a73b814.js.map",
+    "main.css": "/gkb-project/static/css/main.557764e7.chunk.css",
+    "main.js": "/gkb-project/static/js/main.a9b3a8fb.chunk.js",
+    "main.js.map": "/gkb-project/static/js/main.a9b3a8fb.chunk.js.map",
+    "runtime-main.js": "/gkb-project/static/js/runtime-main.666afaff.js",
+    "runtime-main.js.map": "/gkb-project/static/js/runtime-main.666afaff.js.map",
     "static/css/2.27175f2b.chunk.css": "/gkb-project/static/css/2.27175f2b.chunk.css",
-    "static/js/2.42137807.chunk.js": "/gkb-project/static/js/2.42137807.chunk.js",
-    "static/js/2.42137807.chunk.js.map": "/gkb-project/static/js/2.42137807.chunk.js.map",
-    "static/js/3.b9007c04.chunk.js": "/gkb-project/static/js/3.b9007c04.chunk.js",
-    "static/js/3.b9007c04.chunk.js.map": "/gkb-project/static/js/3.b9007c04.chunk.js.map",
+    "static/js/2.46bfec1c.chunk.js": "/gkb-project/static/js/2.46bfec1c.chunk.js",
+    "static/js/2.46bfec1c.chunk.js.map": "/gkb-project/static/js/2.46bfec1c.chunk.js.map",
+    "static/js/3.cebe023b.chunk.js": "/gkb-project/static/js/3.cebe023b.chunk.js",
+    "static/js/3.cebe023b.chunk.js.map": "/gkb-project/static/js/3.cebe023b.chunk.js.map",
     "index.html": "/gkb-project/index.html",
     "static/css/2.27175f2b.chunk.css.map": "/gkb-project/static/css/2.27175f2b.chunk.css.map",
-    "static/css/main.a077fb6d.chunk.css.map": "/gkb-project/static/css/main.a077fb6d.chunk.css.map",
-    "static/js/2.42137807.chunk.js.LICENSE.txt": "/gkb-project/static/js/2.42137807.chunk.js.LICENSE.txt"
+    "static/css/main.557764e7.chunk.css.map": "/gkb-project/static/css/main.557764e7.chunk.css.map",
+    "static/js/2.46bfec1c.chunk.js.LICENSE.txt": "/gkb-project/static/js/2.46bfec1c.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.3a73b814.js",
+    "static/js/runtime-main.666afaff.js",
     "static/css/2.27175f2b.chunk.css",
-    "static/js/2.42137807.chunk.js",
-    "static/css/main.a077fb6d.chunk.css",
-    "static/js/main.08d3e6b6.chunk.js"
+    "static/js/2.46bfec1c.chunk.js",
+    "static/css/main.557764e7.chunk.css",
+    "static/js/main.a9b3a8fb.chunk.js"
   ]
 }

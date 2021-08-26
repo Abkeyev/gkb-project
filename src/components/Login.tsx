@@ -3,11 +3,12 @@ import "./style.css";
 import { useHistory, Link } from "react-router-dom";
 
 interface LoginProps {
-  setLogged: any;
+  state: any;
+  setState: any;
 }
 
 const Login = (props: LoginProps) => {
-  const { setLogged } = props;
+  const { setState, state } = props;
   const [login, setLogin] = React.useState("");
   const [password, setPassword] = React.useState("");
   const history = useHistory();
@@ -49,7 +50,7 @@ const Login = (props: LoginProps) => {
                     className="button btn-primary"
                     disabled={login.length < 0 || password.length < 0}
                     onClick={() => {
-                      setLogged(true);
+                      setState({ ...state, logged: true });
                       history.push("/orders");
                     }}
                   >
