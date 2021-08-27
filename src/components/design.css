@@ -1851,6 +1851,20 @@ fieldset:disabled .button {
   cursor: pointer;
 }
 
+.card-collapse.collapsed.disabled {
+  background: #F3F3F3;
+  border-color: #F3F3F3;
+}
+.card-collapse.collapsed.disabled .card-collapse-header .title-subhead {
+  color: #939393;
+}
+.card-collapse.collapsed.disabled .card-collapse-header .btn-collapse {
+  border-color: #939393;
+}
+.card-collapse.collapsed.disabled .card-collapse-header .btn-collapse .azla {
+  filter: contrast(0);
+}
+
 /* Tabs buttons END*/
 
 .react-tabs .react-tabs__tab-list {

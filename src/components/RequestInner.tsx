@@ -686,7 +686,7 @@ const RequestInner = (props: RequestProps) => {
                               className={
                                 state.signTwoStep === 3
                                   ? "card-collapse-header success"
-                                  : ""
+                                  : "card-collapse-header"
                               }
                             >
                               {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
