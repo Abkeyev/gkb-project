@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/gkb-project/static/css/main.604cb31e.chunk.css",
-    "main.js": "/gkb-project/static/js/main.e45cf39a.chunk.js",
-    "main.js.map": "/gkb-project/static/js/main.e45cf39a.chunk.js.map",
+    "main.css": "/gkb-project/static/css/main.ec3feeb2.chunk.css",
+    "main.js": "/gkb-project/static/js/main.accd54b7.chunk.js",
+    "main.js.map": "/gkb-project/static/js/main.accd54b7.chunk.js.map",
     "runtime-main.js": "/gkb-project/static/js/runtime-main.666afaff.js",
     "runtime-main.js.map": "/gkb-project/static/js/runtime-main.666afaff.js.map",
     "static/css/2.27175f2b.chunk.css": "/gkb-project/static/css/2.27175f2b.chunk.css",
@@ -12,14 +12,14 @@
     "static/js/3.cebe023b.chunk.js.map": "/gkb-project/static/js/3.cebe023b.chunk.js.map",
     "index.html": "/gkb-project/index.html",
     "static/css/2.27175f2b.chunk.css.map": "/gkb-project/static/css/2.27175f2b.chunk.css.map",
-    "static/css/main.604cb31e.chunk.css.map": "/gkb-project/static/css/main.604cb31e.chunk.css.map",
+    "static/css/main.ec3feeb2.chunk.css.map": "/gkb-project/static/css/main.ec3feeb2.chunk.css.map",
     "static/js/2.ac340e29.chunk.js.LICENSE.txt": "/gkb-project/static/js/2.ac340e29.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.666afaff.js",
     "static/css/2.27175f2b.chunk.css",
     "static/js/2.ac340e29.chunk.js",
-    "static/css/main.604cb31e.chunk.css",
-    "static/js/main.e45cf39a.chunk.js"
+    "static/css/main.ec3feeb2.chunk.css",
+    "static/js/main.accd54b7.chunk.js"
   ]
 }

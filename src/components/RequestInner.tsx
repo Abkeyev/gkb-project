@@ -866,23 +866,25 @@ const RequestInner = (props: RequestProps) => {
                                   ))}
 
                                   {/* По дефолту стоит выбор подписанта, после выбора исчезает и добавляется выше дивка, и включается кнопка "Отправить на подписание" */}
-                                  <div className="method-add-group pad-l-0">
-                                    <span
-                                      className="add-btn"
-                                      onClick={() =>
-                                        setState({
-                                          ...state,
-                                          isOpenModal: true,
-                                          modalType: 6,
-                                        })
-                                      }
-                                    >
-                                      <span className="circle">
-                                        <i className="azla plus-primary-icon size-18"></i>
+                                  {state.signTwoUsers.length === 0 && (
+                                    <div className="method-add-group pad-l-0">
+                                      <span
+                                        className="add-btn"
+                                        onClick={() =>
+                                          setState({
+                                            ...state,
+                                            isOpenModal: true,
+                                            modalType: 6,
+                                          })
+                                        }
+                                      >
+                                        <span className="circle">
+                                          <i className="azla plus-primary-icon size-18"></i>
+                                        </span>
+                                        Добавить подписанта
                                       </span>
-                                      Добавить подписанта
-                                    </span>
-                                  </div>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
 
@@ -1076,27 +1078,6 @@ const RequestInner = (props: RequestProps) => {
                                     </div>
                                   </div>
                                 </div>
-
-                                {/* По дефолту стоит выбор подписанта, после выбора исчезает и добавляется выше дивка, и включается кнопка "Отправить на подписание" */}
-                                {false && (
-                                  <div className="method-add-group pad-l-0">
-                                    <span
-                                      className="add-btn"
-                                      onClick={() =>
-                                        setState({
-                                          ...state,
-                                          isOpenModal: true,
-                                          modalType: 6,
-                                        })
-                                      }
-                                    >
-                                      <span className="circle">
-                                        <i className="azla plus-primary-icon size-18"></i>
-                                      </span>
-                                      Добавить подписанта
-                                    </span>
-                                  </div>
-                                )}
                               </div>
                             </div>
 

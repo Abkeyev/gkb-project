@@ -92,6 +92,7 @@ interface AppState {
   tab: number;
   step: number;
   agreement: boolean;
+  agreementPar: boolean;
   notTypical: boolean;
   ready: boolean;
   step1: boolean;
@@ -100,9 +101,11 @@ interface AppState {
   step1status: boolean;
   step2status: boolean;
   signStep: number;
+  signStepPar: number;
   agreeTwoStep: number;
   agreeParStep: number;
   signTwoStep: number;
+  signTwoStepPar: number;
   signTwoUsers: number[];
   agreeUsers: number[];
   agreeGroup: number[];
@@ -175,6 +178,7 @@ export const initAppState = (): AppState => {
     tab: 0,
     step: 0,
     agreement: false,
+    agreementPar: false,
     notTypical: false,
     ready: false,
     step1: false,
@@ -183,12 +187,14 @@ export const initAppState = (): AppState => {
     step3: false,
     step2status: false,
     signStep: 0,
+    signStepPar: 1,
     agreeTwoStep: 0,
     agreeParStep: 1,
     signTwoStep: 0,
+    signTwoStepPar: 1,
     agreeUsers: [],
     signTwoUsers: [],
-    agreeGroup: [],
+    agreeGroup: [0],
   };
 };
 

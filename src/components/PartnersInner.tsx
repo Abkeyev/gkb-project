@@ -347,7 +347,7 @@ const PartnersInner = (props: RequestProps) => {
                 </Tabs>
               ) : state.step === 1 ? (
                 <div className="req-inner-body">
-                  {state.agreement && (
+                  {state.agreementPar && (
                     <div className="tab-btn-content mb-32">
                       <h3 className="title-subhead mb-16">
                         Выберите тип договора
@@ -462,39 +462,9 @@ const PartnersInner = (props: RequestProps) => {
                                               Согласующие от ГКБ 1
                                             </h4>
                                             <p className="mb-0">
-                                              {3} участников
-                                              {state.agreeParStep === 0 && (
-                                                <span
-                                                  className="delete"
-                                                  onClick={() => {}}
-                                                >
-                                                  Удалить группу
-                                                </span>
-                                              )}
+                                              5 участников · Последовательное
+                                              согласование
                                             </p>
-                                          </div>
-                                          <div className="right">
-                                            <p className="text-desc mb-0 mr-8">
-                                              Метод согласования:
-                                            </p>
-                                            <div className="tab-button">
-                                              <span
-                                                className={`tab-btn ${
-                                                  !tab ? "active" : ""
-                                                }`}
-                                                onClick={() => setTab(false)}
-                                              >
-                                                Последовательный
-                                              </span>
-                                              <span
-                                                className={`tab-btn ${
-                                                  tab ? "active" : ""
-                                                }`}
-                                                onClick={() => setTab(true)}
-                                              >
-                                                Параллельный
-                                              </span>
-                                            </div>
                                           </div>
                                         </div>
 
@@ -658,7 +628,7 @@ const PartnersInner = (props: RequestProps) => {
                             {/* При сворачивании дается класс "collapsed" */}
                             <div
                               className={
-                                state.signTwoStep === 3
+                                state.signTwoStepPar === 3
                                   ? "card-collapse-header success"
                                   : "card-collapse-header"
                               }
@@ -667,13 +637,13 @@ const PartnersInner = (props: RequestProps) => {
                               <div className="collapsing-header">
                                 <h3
                                   className={
-                                    state.signTwoStep === 3
+                                    state.signTwoStepPar === 3
                                       ? "title-subhead mb-0 done-success"
                                       : "title-subhead mb-0"
                                   }
                                 >
                                   {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
-                                  {state.signTwoStep === 3
+                                  {state.signTwoStepPar === 3
                                     ? "Договор подписан"
                                     : "На подписание: “Договор №314 - вер. 24 от 24 июня"}
                                 </h3>
@@ -724,63 +694,7 @@ const PartnersInner = (props: RequestProps) => {
                                     Подписант от ТОО “М-Ломбард”
                                   </h4>
 
-                                  <div className="signatory-profile">
-                                    <div className="col-md-6">
-                                      <div className="profile">
-                                        <img
-                                          className="ava"
-                                          src={
-                                            process.env.PUBLIC_URL +
-                                            "/images/def-ava.svg"
-                                          }
-                                        />
-                                        <span className="name">
-                                          Кусаинов А.Е.
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <div className="col-md-6">
-                                      <div className="signatory-status">
-                                        <p className="desc">Директор</p>
-                                        {/* <i className="azla close-red-icon delete-if-icon"></i> */}
-
-                                        {state.signTwoStep === 1 ? (
-                                          <button className="btn-status-signatory btn-icon not-active">
-                                            <i className="azla edit-white-icon"></i>
-                                            Подписать
-                                          </button>
-                                        ) : state.signTwoStep === 2 ? (
-                                          <button
-                                            className="btn-status-signatory btn-icon active"
-                                            onClick={() =>
-                                              setState({
-                                                ...state,
-                                                signTwoStep: 3,
-                                              })
-                                            }
-                                          >
-                                            <i className="azla edit-white-icon"></i>
-                                            Подписать
-                                          </button>
-                                        ) : state.signTwoStep === 3 ? (
-                                          <span className="btn-status done">
-                                            Подписано
-                                          </span>
-                                        ) : (
-                                          <></>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="collapse-signatory">
-                                  <h4 className="collapse-text">
-                                    Подписант от АО “Государственное Кредитное
-                                    Бюро”
-                                  </h4>
-
-                                  {state.signTwoUsers.map((s) => (
+                                  {[0].map((s) => (
                                     <div className="signatory-profile">
                                       <div className="col-md-6">
                                         <div className="profile">
@@ -799,23 +713,24 @@ const PartnersInner = (props: RequestProps) => {
                                       <div className="col-md-6">
                                         <div className="signatory-status">
                                           <p className="desc">Директор</p>
-                                          {state.signTwoStep === 1 ? (
-                                            <span
-                                              className="btn-status not-active"
+                                          {state.signTwoStepPar === 1 ? (
+                                            <button
+                                              className="btn-status-signatory btn-icon active"
                                               onClick={() =>
                                                 setState({
                                                   ...state,
-                                                  signTwoStep: 2,
+                                                  signTwoStepPar: 2,
                                                 })
                                               }
                                             >
-                                              Не Подписано
-                                            </span>
-                                          ) : state.signTwoStep === 2 ? (
+                                              <i className="azla edit-white-icon"></i>
+                                              Подписать
+                                            </button>
+                                          ) : state.signTwoStepPar === 2 ? (
                                             <span className="btn-status done">
                                               Подписано
                                             </span>
-                                          ) : state.signTwoStep === 3 ? (
+                                          ) : state.signTwoStepPar === 3 ? (
                                             <span className="btn-status done">
                                               Подписано
                                             </span>
@@ -826,29 +741,64 @@ const PartnersInner = (props: RequestProps) => {
                                       </div>
                                     </div>
                                   ))}
+                                </div>
 
-                                  {/* По дефолту стоит выбор подписанта, после выбора исчезает и добавляется выше дивка, и включается кнопка "Отправить на подписание" */}
-                                  <div className="method-add-group pad-l-0">
-                                    <span
-                                      className="add-btn"
-                                      onClick={() =>
-                                        setState({
-                                          ...state,
-                                          isOpenModal: true,
-                                          modalType: 6,
-                                        })
-                                      }
-                                    >
-                                      <span className="circle">
-                                        <i className="azla plus-primary-icon size-18"></i>
-                                      </span>
-                                      Добавить подписанта
-                                    </span>
-                                  </div>
+                                <div className="collapse-signatory">
+                                  <h4 className="collapse-text">
+                                    Подписант от АО “Государственное Кредитное
+                                    Бюро”
+                                  </h4>
+
+                                  {[0].map((s) => (
+                                    <div className="signatory-profile">
+                                      <div className="col-md-6">
+                                        <div className="profile">
+                                          <img
+                                            className="ava"
+                                            src={
+                                              process.env.PUBLIC_URL +
+                                              "/images/def-ava.svg"
+                                            }
+                                          />
+                                          <span className="name">
+                                            Кусаинов А.Е.
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div className="col-md-6">
+                                        <div className="signatory-status">
+                                          <p className="desc">Директор</p>
+                                          {state.signTwoStepPar === 1 ? (
+                                            <span className="btn-status not-active">
+                                              Не Подписано
+                                            </span>
+                                          ) : state.signTwoStepPar === 2 ? (
+                                            <span
+                                              className="btn-status not-active"
+                                              onClick={() =>
+                                                setState({
+                                                  ...state,
+                                                  signTwoStepPar: 3,
+                                                })
+                                              }
+                                            >
+                                              Не Подписано
+                                            </span>
+                                          ) : state.signTwoStepPar === 3 ? (
+                                            <span className="btn-status done">
+                                              Подписано
+                                            </span>
+                                          ) : (
+                                            ""
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
                                 </div>
                               </div>
 
-                              {state.signTwoStep === 0 && (
+                              {state.signTwoStepPar === 0 && (
                                 <div className="collapse-footer">
                                   <button
                                     type="button"
@@ -858,7 +808,7 @@ const PartnersInner = (props: RequestProps) => {
                                         : ""
                                     }`}
                                     onClick={() =>
-                                      setState({ ...state, signTwoStep: 1 })
+                                      setState({ ...state, signTwoStepPar: 1 })
                                     }
                                   >
                                     Отправить на подписание
@@ -877,7 +827,7 @@ const PartnersInner = (props: RequestProps) => {
                           {/* При сворачивании дается класс "collapsed" */}
                           <div
                             className={
-                              state.signStep === 3
+                              state.signStepPar === 3
                                 ? "card-collapse-header success"
                                 : "card-collapse-header"
                             }
@@ -886,13 +836,13 @@ const PartnersInner = (props: RequestProps) => {
                             <div className="collapsing-header">
                               <h3
                                 className={
-                                  state.signStep === 3
+                                  state.signStepPar === 3
                                     ? "title-subhead mb-0 done-success"
                                     : "title-subhead mb-0"
                                 }
                               >
                                 {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
-                                {state.signStep === 3
+                                {state.signStepPar === 3
                                   ? "Договор подписан"
                                   : "На подписание: “Договор №314 - вер. 24 от 24 июня"}
                               </h3>
@@ -962,21 +912,24 @@ const PartnersInner = (props: RequestProps) => {
                                     <div className="signatory-status">
                                       <p className="desc">Директор</p>
 
-                                      {state.signStep === 1 ? (
+                                      {state.signStepPar === 1 ? (
                                         <button
                                           className="btn-status-signatory btn-icon active"
                                           onClick={() =>
-                                            setState({ ...state, signStep: 2 })
+                                            setState({
+                                              ...state,
+                                              signStepPar: 2,
+                                            })
                                           }
                                         >
                                           <i className="azla edit-white-icon"></i>
                                           Подписать
                                         </button>
-                                      ) : state.signStep === 2 ? (
+                                      ) : state.signStepPar === 2 ? (
                                         <span className="btn-status done">
                                           Подписано
                                         </span>
-                                      ) : state.signStep === 3 ? (
+                                      ) : state.signStepPar === 3 ? (
                                         <span className="btn-status done">
                                           Подписано
                                         </span>
@@ -1015,20 +968,23 @@ const PartnersInner = (props: RequestProps) => {
                                       <p className="desc">Директор</p>
                                       {/* <i className="azla close-red-icon delete-if-icon"></i> */}
 
-                                      {state.signStep === 1 ? (
+                                      {state.signStepPar === 1 ? (
                                         <span className="btn-status not-active">
                                           Не Подписано
                                         </span>
-                                      ) : state.signStep === 2 ? (
+                                      ) : state.signStepPar === 2 ? (
                                         <span
                                           className="btn-status not-active"
                                           onClick={() =>
-                                            setState({ ...state, signStep: 3 })
+                                            setState({
+                                              ...state,
+                                              signStepPar: 3,
+                                            })
                                           }
                                         >
                                           Не Подписано
                                         </span>
-                                      ) : state.signStep === 3 ? (
+                                      ) : state.signStepPar === 3 ? (
                                         <span className="btn-status done">
                                           Подписано
                                         </span>
@@ -1062,13 +1018,13 @@ const PartnersInner = (props: RequestProps) => {
                               </div>
                             </div>
 
-                            {state.signStep === 0 && (
+                            {state.signStepPar === 0 && (
                               <div className="collapse-footer">
                                 <button
                                   type="button"
                                   className="button btn-primary"
                                   onClick={() =>
-                                    setState({ ...state, signStep: 1 })
+                                    setState({ ...state, signStepPar: 1 })
                                   }
                                 >
                                   Отправить на подписание
@@ -1495,21 +1451,19 @@ const PartnersInner = (props: RequestProps) => {
                         </div>
                       )}
                     </div>
-                  ) : state.step === 0 ? (
+                  ) : (
                     <button
                       type="button"
                       onClick={() =>
                         setState({
                           ...state,
-                          isOpenModal: true,
+                          step: 4,
                         })
                       }
                       className="button btn-primary mrl-32"
                     >
-                      Назначить
+                      Подписать акт тестирования
                     </button>
-                  ) : (
-                    <></>
                   )}
                 </div>
               </div>

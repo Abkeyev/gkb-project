@@ -1,6 +1,7 @@
 import React from "react";
 import "./style.css";
 import AppState from "../ncalayer/state";
+import { useHistory } from "react-router-dom";
 
 interface ModalProps {
   state: AppState;
@@ -9,6 +10,7 @@ interface ModalProps {
 
 const Modal = (props: ModalProps) => {
   const { state, setState } = props;
+  const history = useHistory();
   return (
     <div>
       {state.modalType === 0 ? (
@@ -190,15 +192,23 @@ const Modal = (props: ModalProps) => {
                 <button
                   type="button"
                   onClick={() =>
-                    setState({
-                      ...state,
-                      isOpenModal: false,
-                      agreement: true,
-                    })
+                    history.location.pathname.includes("orders")
+                      ? setState({
+                          ...state,
+                          isOpenModal: false,
+                          agreement: true,
+                        })
+                      : setState({
+                          ...state,
+                          isOpenModal: false,
+                          agreementPar: true,
+                        })
                   }
                   className="button btn-primary table-ml"
                 >
-                  Отправить на согласование
+                  {history.location.pathname.includes("orders")
+                    ? "Отправить на согласование"
+                    : "Далее"}
                 </button>
               </div>
             </div>
