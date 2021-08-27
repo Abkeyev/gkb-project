@@ -12,6 +12,7 @@ interface RequestProps {
 
 const PartnersInner = (props: RequestProps) => {
   const { state, setState } = props;
+  const [tab, setTab] = React.useState(false);
   const history = useHistory();
   return (
     <div className="main-body">
@@ -34,10 +35,18 @@ const PartnersInner = (props: RequestProps) => {
                   Заявка №1353 - ТОО “М-Ломбард”
                 </h1>
 
-                {state.decline && (
-                  <div className="alert-mess mb-32">
+                {state.decline ? (
+                  <div className="mess-card alert-mess mb-32">
                     <h5>Заявка отклонена</h5>
                     <p>Причина: {state.declineReason}</p>
+                  </div>
+                ) : (
+                  <div className="mess-card mb-32">
+                    <p>
+                      Данная заявка проходит первичную проверку менеджером.
+                      Пожалуйста, ожидайте. Среднее время проверки составляет 1
+                      день.
+                    </p>
                   </div>
                 )}
 
@@ -121,7 +130,7 @@ const PartnersInner = (props: RequestProps) => {
                   <TabPanel>
                     <div className="req-inner-body pad-b-128">
                       <h3 className="title-subhead mb-16">Общие данные</h3>
-                      <div className="total-info">
+                      <div className="total-info mb-32">
                         <ul className="info-list">
                           <li>
                             <span className="left">Номер заявки:</span>
@@ -133,7 +142,11 @@ const PartnersInner = (props: RequestProps) => {
                           </li>
                           <li>
                             <span className="left">Организация:</span>
-                            <span className="right">ТОО “М-Ломбард”</span>
+                            <span className="right">
+                              <a href="#" className="pre-primary-color">
+                                ТОО “М-Ломбард”
+                              </a>
+                            </span>
                           </li>
                           <li>
                             <span className="left">Номер заявки:</span>
@@ -161,7 +174,7 @@ const PartnersInner = (props: RequestProps) => {
                           </li>
                           <li>
                             <span className="left">
-                              Дата исполнения заявки::
+                              Дата исполнения заявки:
                             </span>
                             <span className="right">20 Июня 2021</span>
                           </li>
@@ -348,7 +361,8 @@ const PartnersInner = (props: RequestProps) => {
                           onClick={() =>
                             setState({
                               ...state,
-                              notTypical: false,
+                              isOpenModal: true,
+                              modalType: 3,
                             })
                           }
                         >
@@ -369,482 +383,495 @@ const PartnersInner = (props: RequestProps) => {
                           Нетиповой
                         </span>
                       </div>
-                      <div className="card-collapse tab-num-1 d-none">
-                        {/* При сворачивании дается класс "collapsed" */}
-                        <div className="card-collapse-header ">
-                          {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
-                          <div className="collapsing-header">
-                            <h3 className="title-subhead mb-0">
-                              На подписание: “Договор №314 - вер. 24 от 24 июня
-                            </h3>
-                            <span className="btn-collapse">
-                              <i className="azla chevron-up-icon"></i>
-                            </span>
-                          </div>
-                          <div className="pad-rl-16 collapse-main">
-                            <div className="row">
-                              <div className="col-md-6">
-                                <p className="desc">Типовой договор</p>
-                                <button
-                                  type="button"
-                                  className="button btn-secondary btn-icon"
-                                >
-                                  <i className="azla blank-alt-primary-icon"></i>
-                                  Скачать договор
-                                </button>
-                              </div>
-                              <div className="col-md-6">
-                                <p className="desc">Менеджер заявки</p>
-                                <div className="profile mt-8">
-                                  <img
-                                    className="ava"
-                                    src={
-                                      process.env.PUBLIC_URL +
-                                      "/images/def-ava.svg"
-                                    }
-                                  />
-                                  <span className="name">
-                                    Султангалиева К.И
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="collapse-content">
-                          <div className="collapse-body">
-                            <div className="collapse-signatory mb-24">
-                              <h4 className="collapse-text">
-                                Подписант от ТОО “М-Ломбард”
-                              </h4>
-
-                              <div className="signatory-profile">
-                                <div className="col-md-6">
-                                  <div className="profile">
-                                    <img
-                                      className="ava"
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/def-ava.svg"
-                                      }
-                                    />
-                                    <span className="name">Кусаинов А.Е.</span>
-                                  </div>
-                                </div>
-                                <div className="col-md-6">
-                                  <div className="signatory-status">
-                                    <p className="desc">Директор</p>
-                                    {state.signStep !== 0 && (
-                                      <span className="btn-status not-active">
-                                        Не Подписано
-                                      </span>
-                                    )}
-                                    {/* При подписании дается класс "done" */}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="collapse-signatory">
-                              <h4 className="collapse-text">
-                                Подписант от АО “Государственное Кредитное Бюро”
-                              </h4>
-
-                              <div className="signatory-profile">
-                                <div className="col-md-6">
-                                  <div className="profile">
-                                    <img
-                                      className="ava"
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/def-ava.svg"
-                                      }
-                                    />
-                                    <span className="name">
-                                      Султангалиева К.И
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="col-md-6">
-                                  <div className="signatory-status">
-                                    <p className="desc">Менеджер</p>
-                                    {state.signStep !== 0 && (
-                                      <button className="btn-status-signatory btn-icon not-active">
-                                        <i className="azla edit-white-icon"></i>
-                                        Подписать
-                                      </button>
-                                    )}
-                                    {/* Когда дается разрешение дается класс "active". При подписании дается класс "done" и текст становится "Подписано" */}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="collapse-footer">
-                            <button
-                              type="button"
-                              className="button btn-primary"
-                            >
-                              Отправить на подписание
-                            </button>
-                          </div>
-                        </div>
-                      </div>
 
                       {state.notTypical ? (
-                        <div
-                          className={`card-collapse tab-num-2 two-signatory ${
-                            state.step1 ? "collapsed" : ""
-                          }`}
-                        >
-                          {/* При сворачивании дается класс "collapsed" */}
+                        <>
                           <div
-                            className={`card-collapse-header ${
-                              state.step1status ? "success" : ""
+                            className={`card-collapse tab-num-2 two-signatory ${
+                              state.step2 ? "collapsed" : ""
                             }`}
                           >
-                            {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
-                            <div className="collapsing-header">
-                              <h3 className="title-subhead mb-0">
-                                На согласование: “Договор №314 - вер. 24 от 24
-                                июня
-                              </h3>
-                              <span
-                                className="btn-collapse"
-                                onClick={() =>
-                                  setState({ ...state, step1: !state.step1 })
-                                }
-                              >
-                                <i className="azla chevron-up-icon"></i>
-                              </span>
-                            </div>
-                            <div className="pad-rl-16 collapse-main">
-                              <div className="row">
-                                <div className="col-md-6">
-                                  <p className="desc">Нетиповой договор</p>
-                                  <button
-                                    type="button"
-                                    className="button btn-secondary btn-icon"
-                                  >
-                                    <i className="azla blank-alt-primary-icon"></i>
-                                    Скачать договор
-                                  </button>
-                                </div>
-                                <div className="col-md-6">
-                                  <p className="desc">Менеджер заявки</p>
-                                  <div className="profile mt-8">
-                                    <img
-                                      className="ava"
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/def-ava.svg"
-                                      }
-                                    />
-                                    <span className="name">
-                                      Султангалиева К.И
-                                    </span>
+                            {/* При сворачивании дается класс "collapsed" */}
+                            <div
+                              className={`card-collapse-header ${
+                                state.agreeParStep === 2 ? "success" : ""
+                              }`}
+                            >
+                              {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
+                              <div className="collapsing-header">
+                                <h3
+                                  className={
+                                    state.agreeParStep === 2
+                                      ? "title-subhead mb-0 done-success"
+                                      : "title-subhead mb-0"
+                                  }
+                                >
+                                  {state.agreeParStep === 2
+                                    ? "Договор согласован"
+                                    : "На согласование: “Договор №314 - вер. 24 от 24 июня"}
+                                </h3>
+                                <span
+                                  className="btn-collapse"
+                                  onClick={() =>
+                                    setState({ ...state, step2: !state.step2 })
+                                  }
+                                >
+                                  <i className="azla chevron-up-icon"></i>
+                                </span>
+                              </div>
+                              <div className="pad-rl-16 collapse-main">
+                                <div className="row">
+                                  <div className="col-md-6">
+                                    <p className="desc">Нетиповой договор</p>
+                                    <button
+                                      type="button"
+                                      className="button btn-secondary btn-icon"
+                                    >
+                                      <i className="azla blank-alt-primary-icon"></i>
+                                      Скачать договор
+                                    </button>
+                                  </div>
+                                  <div className="col-md-6">
+                                    <p className="desc">Менеджер заявки</p>
+                                    <div className="profile mt-8">
+                                      <img
+                                        className="ava"
+                                        src={
+                                          process.env.PUBLIC_URL +
+                                          "/images/def-ava.svg"
+                                        }
+                                      />
+                                      <span className="name">
+                                        Султангалиева К.И
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
 
-                          <div className="collapse-content method-main">
-                            <div className="collapse-body">
-                              <div className="method-signatory">
-                                <div className="method-signatory-add">
-                                  <div className="method-signatory-header">
-                                    <div className="left">
-                                      <h4 className="collapse-text mb-8">
-                                        Согласующие от ГКБ 1
-                                      </h4>
-                                      <p className="mb-0">
-                                        {state.agreeUsers} участников
-                                        <span className="delete">
-                                          Удалить группу
-                                        </span>
-                                      </p>
-                                    </div>
-                                    <div className="right">
-                                      <p className="text-desc mb-0 mr-8">
-                                        Метод согласования:
-                                      </p>
-                                      <div className="tab-button">
-                                        <span className="tab-btn active">
-                                          Последовательный
-                                        </span>
-                                        <span className="tab-btn">
-                                          Параллельный
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="method-add-user">
-                                    <div className="method-add-users">
-                                      <ul className="method-list-users">
-                                        {state.agreeUsers.map((s) => (
-                                          <li>
-                                            <div className="left">
-                                              <i className="azla arrow-primary-down-up grab"></i>
-                                              <div className="profile">
-                                                <img
-                                                  className="ava"
-                                                  src={
-                                                    process.env.PUBLIC_URL +
-                                                    "/images/def-ava.svg"
-                                                  }
-                                                />
-                                                <span className="name">
-                                                  Султангалиева К.И
+                            <div className="collapse-content method-main">
+                              <div className="collapse-body">
+                                <div className="method-signatory">
+                                  <div className="method-signatory-add">
+                                    {[1].map((s) => (
+                                      <>
+                                        <div className="method-signatory-header">
+                                          <div className="left">
+                                            <h4 className="collapse-text mb-8">
+                                              Согласующие от ГКБ 1
+                                            </h4>
+                                            <p className="mb-0">
+                                              {3} участников
+                                              {state.agreeParStep === 0 && (
+                                                <span
+                                                  className="delete"
+                                                  onClick={() => {}}
+                                                >
+                                                  Удалить группу
                                                 </span>
-                                              </div>
+                                              )}
+                                            </p>
+                                          </div>
+                                          <div className="right">
+                                            <p className="text-desc mb-0 mr-8">
+                                              Метод согласования:
+                                            </p>
+                                            <div className="tab-button">
+                                              <span
+                                                className={`tab-btn ${
+                                                  !tab ? "active" : ""
+                                                }`}
+                                                onClick={() => setTab(false)}
+                                              >
+                                                Последовательный
+                                              </span>
+                                              <span
+                                                className={`tab-btn ${
+                                                  tab ? "active" : ""
+                                                }`}
+                                                onClick={() => setTab(true)}
+                                              >
+                                                Параллельный
+                                              </span>
                                             </div>
-                                            <span className="position">
-                                              Директор
-                                            </span>
-                                            <i
+                                          </div>
+                                        </div>
+
+                                        <div className="method-add-user">
+                                          <div className="method-add-users">
+                                            <ul className="method-list-users">
+                                              {[1, 2, 3].map((s) => (
+                                                <li>
+                                                  <div className="left">
+                                                    <i className="azla arrow-primary-down-up grab"></i>
+                                                    <div className="profile">
+                                                      <img
+                                                        className="ava"
+                                                        src={
+                                                          process.env
+                                                            .PUBLIC_URL +
+                                                          "/images/def-ava.svg"
+                                                        }
+                                                      />
+                                                      <span className="name">
+                                                        Султангалиева К.И
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <span className="position">
+                                                    Директор
+                                                  </span>
+                                                  {state.agreeParStep > 0 ? (
+                                                    <span className="btn-status not-active">
+                                                      Не согласовано
+                                                    </span>
+                                                  ) : (
+                                                    <></>
+                                                  )}
+                                                </li>
+                                              ))}
+                                              {state.agreeParStep > 0 &&
+                                                [1, 2, 3].map((s, i) => (
+                                                  <li>
+                                                    <div className="left">
+                                                      <i className="azla arrow-primary-down-up grab"></i>
+                                                      <div className="profile">
+                                                        <img
+                                                          className="ava"
+                                                          src={
+                                                            process.env
+                                                              .PUBLIC_URL +
+                                                            "/images/def-ava.svg"
+                                                          }
+                                                        />
+                                                        <span className="name">
+                                                          Султангалиева К.И
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                    <span className="position">
+                                                      Директор
+                                                    </span>
+                                                    {i === 0 ? (
+                                                      <span className="btn-status not-active">
+                                                        Не согласовано
+                                                      </span>
+                                                    ) : i === 1 ? (
+                                                      <span
+                                                        className="btn-status done"
+                                                        onClick={() =>
+                                                          setState({
+                                                            ...state,
+                                                            agreeParStep: 2,
+                                                            step2: false,
+                                                            step3: true,
+                                                          })
+                                                        }
+                                                      >
+                                                        Согласовано
+                                                      </span>
+                                                    ) : i === 2 ? (
+                                                      <span
+                                                        className="btn-status canceled"
+                                                        onClick={() =>
+                                                          setState({
+                                                            ...state,
+                                                            isOpenModal: true,
+                                                            modalType: 5,
+                                                          })
+                                                        }
+                                                      >
+                                                        Отклонено
+                                                      </span>
+                                                    ) : (
+                                                      <></>
+                                                    )}
+                                                  </li>
+                                                ))}
+                                            </ul>
+                                          </div>
+                                          {state.agreeParStep === 0 && (
+                                            <span
+                                              className="add-btn pad-l-56 pad-b-24"
                                               onClick={() =>
                                                 setState({
                                                   ...state,
-                                                  agreeUsers:
-                                                    state.agreeUsers.splice(1),
+                                                  isOpenModal: true,
+                                                  modalType: 4,
                                                 })
                                               }
-                                              className="azla close-red-icon delete-if-icon "
-                                            ></i>
-                                          </li>
-                                        ))}
-                                      </ul>
+                                            >
+                                              <span className="circle">
+                                                <i className="azla plus-primary-icon size-18"></i>
+                                              </span>
+                                              Участники согласования
+                                            </span>
+                                          )}
+                                        </div>
+                                      </>
+                                    ))}
+                                  </div>
+                                  {state.agreeParStep === 0 && (
+                                    <div
+                                      className="method-add-group"
+                                      onClick={() => {}}
+                                    >
+                                      <span className="add-btn">
+                                        <span className="circle">
+                                          <i className="azla plus-primary-icon size-18"></i>
+                                        </span>
+                                        Добавить группу
+                                      </span>
                                     </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {state.agreeParStep === 0 && (
+                                <div className="collapse-footer">
+                                  <button
+                                    type="button"
+                                    className={`button btn-primary ${
+                                      state.agreeGroup.length === 0 ||
+                                      state.agreeUsers.length === 0
+                                        ? "disabled"
+                                        : ""
+                                    }`}
+                                    onClick={() =>
+                                      setState({ ...state, agreeParStep: 1 })
+                                    }
+                                  >
+                                    Отправить на подписание
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div
+                            className={`card-collapse tab-num-1 ${
+                              state.agreeParStep < 2 || !state.step3
+                                ? "collapsed "
+                                : ""
+                            } ${state.agreeParStep < 2 ? "disabled" : ""}`}
+                          >
+                            {/* При сворачивании дается класс "collapsed" */}
+                            <div
+                              className={
+                                state.signTwoStep === 3
+                                  ? "card-collapse-header success"
+                                  : ""
+                              }
+                            >
+                              {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
+                              <div className="collapsing-header">
+                                <h3
+                                  className={
+                                    state.signTwoStep === 3
+                                      ? "title-subhead mb-0 done-success"
+                                      : "title-subhead mb-0"
+                                  }
+                                >
+                                  {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
+                                  {state.signTwoStep === 3
+                                    ? "Договор подписан"
+                                    : "На подписание: “Договор №314 - вер. 24 от 24 июня"}
+                                </h3>
+                                <span
+                                  className="btn-collapse"
+                                  onClick={() =>
+                                    setState({ ...state, step3: !state.step3 })
+                                  }
+                                >
+                                  <i className="azla chevron-up-icon"></i>
+                                </span>
+                              </div>
+                              <div className="pad-rl-16 collapse-main">
+                                <div className="row">
+                                  <div className="col-md-6">
+                                    <p className="desc">Типовой договор</p>
+                                    <button
+                                      type="button"
+                                      className="button btn-secondary btn-icon"
+                                    >
+                                      <i className="azla blank-alt-primary-icon"></i>
+                                      Скачать договор
+                                    </button>
+                                  </div>
+                                  <div className="col-md-6">
+                                    <p className="desc">Менеджер заявки</p>
+                                    <div className="profile mt-8">
+                                      <img
+                                        className="ava"
+                                        src={
+                                          process.env.PUBLIC_URL +
+                                          "/images/def-ava.svg"
+                                        }
+                                      />
+                                      <span className="name">
+                                        Султангалиева К.И
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="collapse-content">
+                              <div className="collapse-body">
+                                <div className="collapse-signatory mb-24">
+                                  <h4 className="collapse-text">
+                                    Подписант от ТОО “М-Ломбард”
+                                  </h4>
+
+                                  <div className="signatory-profile">
+                                    <div className="col-md-6">
+                                      <div className="profile">
+                                        <img
+                                          className="ava"
+                                          src={
+                                            process.env.PUBLIC_URL +
+                                            "/images/def-ava.svg"
+                                          }
+                                        />
+                                        <span className="name">
+                                          Кусаинов А.Е.
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                      <div className="signatory-status">
+                                        <p className="desc">Директор</p>
+                                        {/* <i className="azla close-red-icon delete-if-icon"></i> */}
+
+                                        {state.signTwoStep === 1 ? (
+                                          <button className="btn-status-signatory btn-icon not-active">
+                                            <i className="azla edit-white-icon"></i>
+                                            Подписать
+                                          </button>
+                                        ) : state.signTwoStep === 2 ? (
+                                          <button
+                                            className="btn-status-signatory btn-icon active"
+                                            onClick={() =>
+                                              setState({
+                                                ...state,
+                                                signTwoStep: 3,
+                                              })
+                                            }
+                                          >
+                                            <i className="azla edit-white-icon"></i>
+                                            Подписать
+                                          </button>
+                                        ) : state.signTwoStep === 3 ? (
+                                          <span className="btn-status done">
+                                            Подписано
+                                          </span>
+                                        ) : (
+                                          <></>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="collapse-signatory">
+                                  <h4 className="collapse-text">
+                                    Подписант от АО “Государственное Кредитное
+                                    Бюро”
+                                  </h4>
+
+                                  {state.signTwoUsers.map((s) => (
+                                    <div className="signatory-profile">
+                                      <div className="col-md-6">
+                                        <div className="profile">
+                                          <img
+                                            className="ava"
+                                            src={
+                                              process.env.PUBLIC_URL +
+                                              "/images/def-ava.svg"
+                                            }
+                                          />
+                                          <span className="name">
+                                            Кусаинов А.Е.
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div className="col-md-6">
+                                        <div className="signatory-status">
+                                          <p className="desc">Директор</p>
+                                          {state.signTwoStep === 1 ? (
+                                            <span
+                                              className="btn-status not-active"
+                                              onClick={() =>
+                                                setState({
+                                                  ...state,
+                                                  signTwoStep: 2,
+                                                })
+                                              }
+                                            >
+                                              Не Подписано
+                                            </span>
+                                          ) : state.signTwoStep === 2 ? (
+                                            <span className="btn-status done">
+                                              Подписано
+                                            </span>
+                                          ) : state.signTwoStep === 3 ? (
+                                            <span className="btn-status done">
+                                              Подписано
+                                            </span>
+                                          ) : (
+                                            ""
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+
+                                  {/* По дефолту стоит выбор подписанта, после выбора исчезает и добавляется выше дивка, и включается кнопка "Отправить на подписание" */}
+                                  <div className="method-add-group pad-l-0">
                                     <span
-                                      className="add-btn pad-l-56 pad-b-24"
+                                      className="add-btn"
                                       onClick={() =>
                                         setState({
                                           ...state,
                                           isOpenModal: true,
-                                          modalType: 4,
+                                          modalType: 6,
                                         })
                                       }
                                     >
                                       <span className="circle">
                                         <i className="azla plus-primary-icon size-18"></i>
                                       </span>
-                                      Участники согласования
+                                      Добавить подписанта
                                     </span>
                                   </div>
-                                </div>
-                                {state.agreeGroup.map((s) => (
-                                  <div className="method-signatory-add">
-                                    <div className="method-signatory-header">
-                                      <div className="left">
-                                        <h4 className="collapse-text mb-8">
-                                          Согласующие от ГКБ 2
-                                        </h4>
-                                        <p className="mb-0">
-                                          2 участников
-                                          <span className="delete">
-                                            Удалить группу
-                                          </span>
-                                        </p>
-                                      </div>
-                                      <div className="right">
-                                        <p className="text-desc mb-0 mr-8">
-                                          Метод согласования:
-                                        </p>
-                                        <div className="tab-button">
-                                          <span className="tab-btn">
-                                            Последовательный
-                                          </span>
-                                          <span className="tab-btn active">
-                                            Параллельный
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="method-add-user">
-                                      <div className="method-add-users">
-                                        <ul className="method-list-users">
-                                          <li>
-                                            <div className="left">
-                                              <i className="azla arrow-primary-down-up grab"></i>
-                                              <div className="profile">
-                                                <img
-                                                  className="ava"
-                                                  src={
-                                                    process.env.PUBLIC_URL +
-                                                    "/images/def-ava.svg"
-                                                  }
-                                                />
-                                                <span className="name">
-                                                  Султангалиева К.И
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <span className="position">
-                                              Директор
-                                            </span>
-                                            <i className="azla close-red-icon delete-if-icon "></i>
-                                          </li>
-                                          <li>
-                                            <div className="left">
-                                              <i className="azla arrow-primary-down-up grab"></i>
-                                              <div className="profile">
-                                                <img
-                                                  className="ava"
-                                                  src={
-                                                    process.env.PUBLIC_URL +
-                                                    "/images/def-ava.svg"
-                                                  }
-                                                />
-                                                <span className="name">
-                                                  Султангалиева К.И
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <span className="position">
-                                              Директор
-                                            </span>
-                                            <i className="azla close-red-icon delete-if-icon "></i>
-                                          </li>
-
-                                          {/* Тут момент происходит когда согласовали и показываю как заменяются кнопки */}
-
-                                          <li>
-                                            <div className="left">
-                                              {/* <i className="azla arrow-primary-down-up grab"></i> */}
-                                              <div className="profile">
-                                                <img
-                                                  className="ava"
-                                                  src={
-                                                    process.env.PUBLIC_URL +
-                                                    "/images/def-ava.svg"
-                                                  }
-                                                />
-                                                <span className="name">
-                                                  Султангалиева К.И
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <span className="position">
-                                              Директор
-                                            </span>
-                                            <span className="btn-status not-active">
-                                              Не согласовано
-                                            </span>
-                                            {/* <i className="azla close-red-icon delete-if-icon "></i> */}
-                                          </li>
-                                          <li>
-                                            <div className="left">
-                                              {/* <i className="azla arrow-primary-down-up grab"></i> */}
-                                              <div className="profile">
-                                                <img
-                                                  className="ava"
-                                                  src={
-                                                    process.env.PUBLIC_URL +
-                                                    "/images/def-ava.svg"
-                                                  }
-                                                />
-                                                <span className="name">
-                                                  Султангалиева К.И
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <span className="position">
-                                              Директор
-                                            </span>
-                                            <span className="btn-status done">
-                                              Согласовано
-                                            </span>
-                                            {/* <i className="azla close-red-icon delete-if-icon "></i> */}
-                                          </li>
-                                          <li>
-                                            <div className="left">
-                                              {/* <i className="azla arrow-primary-down-up grab"></i> */}
-                                              <div className="profile">
-                                                <img
-                                                  className="ava"
-                                                  src={
-                                                    process.env.PUBLIC_URL +
-                                                    "/images/def-ava.svg"
-                                                  }
-                                                />
-                                                <span className="name">
-                                                  Султангалиева К.И
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <span className="position">
-                                              Директор
-                                            </span>
-                                            <span
-                                              className="btn-status canceled"
-                                              onClick={() =>
-                                                setState({
-                                                  ...state,
-                                                  isOpenModal: true,
-                                                  modalType: 5,
-                                                })
-                                              }
-                                            >
-                                              Отклонено
-                                            </span>
-                                            {/* <i className="azla close-red-icon delete-if-icon "></i> */}
-                                          </li>
-                                        </ul>
-                                      </div>
-                                      <span
-                                        className="add-btn pad-l-56 pad-b-24"
-                                        onClick={() =>
-                                          setState({
-                                            ...state,
-                                            isOpenModal: true,
-                                            modalType: 4,
-                                          })
-                                        }
-                                      >
-                                        <span className="circle">
-                                          <i className="azla plus-primary-icon size-18"></i>
-                                        </span>
-                                        Участники согласования
-                                      </span>
-                                    </div>
-                                  </div>
-                                ))}
-                                <div
-                                  className="method-add-group"
-                                  onClick={() =>
-                                    setState({
-                                      ...state,
-                                      agreeGroup: [...state.agreeGroup, 0],
-                                    })
-                                  }
-                                >
-                                  <span className="add-btn">
-                                    <span className="circle">
-                                      <i className="azla plus-primary-icon size-18"></i>
-                                    </span>
-                                    Добавить группу
-                                  </span>
                                 </div>
                               </div>
-                            </div>
 
-                            <div className="collapse-footer">
-                              <button
-                                type="button"
-                                className="button btn-primary disabled"
-                              >
-                                Отправить на подписание
-                              </button>
+                              {state.signTwoStep === 0 && (
+                                <div className="collapse-footer">
+                                  <button
+                                    type="button"
+                                    className={`button btn-primary ${
+                                      state.signTwoUsers.length === 0
+                                        ? "disabled"
+                                        : ""
+                                    }`}
+                                    onClick={() =>
+                                      setState({ ...state, signTwoStep: 1 })
+                                    }
+                                  >
+                                    Отправить на подписание
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           </div>
-                        </div>
+                        </>
                       ) : (
                         <div
                           className={`card-collapse tab-num-1 ${
-                            state.step2 ? "collapsed" : ""
+                            state.step1 ? "collapsed" : ""
                           }`}
                         >
                           {/* При сворачивании дается класс "collapsed" */}
@@ -857,7 +884,13 @@ const PartnersInner = (props: RequestProps) => {
                           >
                             {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
                             <div className="collapsing-header">
-                              <h3 className="title-subhead mb-0">
+                              <h3
+                                className={
+                                  state.signStep === 3
+                                    ? "title-subhead mb-0 done-success"
+                                    : "title-subhead mb-0"
+                                }
+                              >
                                 {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
                                 {state.signStep === 3
                                   ? "Договор подписан"
@@ -866,7 +899,7 @@ const PartnersInner = (props: RequestProps) => {
                               <span
                                 className="btn-collapse"
                                 onClick={() =>
-                                  setState({ ...state, step2: !state.step2 })
+                                  setState({ ...state, step1: !state.step1 })
                                 }
                               >
                                 <i className="azla chevron-up-icon"></i>
@@ -928,15 +961,17 @@ const PartnersInner = (props: RequestProps) => {
                                   <div className="col-md-6">
                                     <div className="signatory-status">
                                       <p className="desc">Директор</p>
+
                                       {state.signStep === 1 ? (
-                                        <span
-                                          className="btn-status not-active"
+                                        <button
+                                          className="btn-status-signatory btn-icon active"
                                           onClick={() =>
                                             setState({ ...state, signStep: 2 })
                                           }
                                         >
-                                          Не Подписано
-                                        </span>
+                                          <i className="azla edit-white-icon"></i>
+                                          Подписать
+                                        </button>
                                       ) : state.signStep === 2 ? (
                                         <span className="btn-status done">
                                           Подписано
@@ -981,20 +1016,18 @@ const PartnersInner = (props: RequestProps) => {
                                       {/* <i className="azla close-red-icon delete-if-icon"></i> */}
 
                                       {state.signStep === 1 ? (
-                                        <button className="btn-status-signatory btn-icon not-active">
-                                          <i className="azla edit-white-icon"></i>
-                                          Подписать
-                                        </button>
+                                        <span className="btn-status not-active">
+                                          Не Подписано
+                                        </span>
                                       ) : state.signStep === 2 ? (
-                                        <button
-                                          className="btn-status-signatory btn-icon active"
+                                        <span
+                                          className="btn-status not-active"
                                           onClick={() =>
                                             setState({ ...state, signStep: 3 })
                                           }
                                         >
-                                          <i className="azla edit-white-icon"></i>
-                                          Подписать
-                                        </button>
+                                          Не Подписано
+                                        </span>
                                       ) : state.signStep === 3 ? (
                                         <span className="btn-status done">
                                           Подписано
@@ -1398,86 +1431,87 @@ const PartnersInner = (props: RequestProps) => {
                 <></>
               )}
               {/* step 0-4 */}
+
               <div className="req-inner-footer">
-                  <div className="container">
-                    {state.modalManager && state.step === 0 ? (
-                      <div className="manager-req mrl-32">
-                        <div className="left">
-                          <p>Менеджер заявки</p>
-                          <div className="profile">
-                            <img
-                              className="ava"
-                              src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
-                            />
-                            <span className="name">Султангалиева К.И</span>
-                          </div>
+                <div className="container">
+                  {state.modalManager && state.step === 0 ? (
+                    <div className="manager-req mrl-32">
+                      <div className="left">
+                        <p>Менеджер заявки</p>
+                        <div className="profile">
+                          <img
+                            className="ava"
+                            src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                          />
+                          <span className="name">Султангалиева К.И</span>
                         </div>
-
-                        {state.decline ? (
-                          <div className="right alert">
-                            <p>Заявка отклонена</p>
-                            <button
-                              className="button btn-secondary"
-                              onClick={() => {
-                                setState({
-                                  ...state,
-                                  declineReason: "",
-                                  decline: false,
-                                  tab: 3,
-                                });
-
-                                history.push("/partners");
-                              }}
-                            >
-                              В архив
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="right">
-                            <p>Первичная проверка прошла успешно?</p>
-                            <button
-                              className="button btn-secondary mr-8"
-                              onClick={() => {
-                                setState({
-                                  ...state,
-                                  isOpenModal: false,
-                                  modalType: 1,
-                                });
-                              }}
-                            >
-                              Нет
-                            </button>
-                            <button
-                              className="button btn-primary"
-                              onClick={() =>
-                                setState({
-                                  ...state,
-                                  step: 1,
-                                })
-                              }
-                            >
-                              Да, успешно
-                            </button>
-                          </div>
-                        )}
                       </div>
-                    ) : state.step === 0 ? (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setState({
-                            ...state,
-                            isOpenModal: true,
-                          })
-                        }
-                        className="button btn-primary mrl-32"
-                      >
-                        Назначить
-                      </button>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+
+                      {state.decline ? (
+                        <div className="right alert">
+                          <p>Заявка отклонена</p>
+                          <button
+                            className="button btn-secondary"
+                            onClick={() => {
+                              setState({
+                                ...state,
+                                declineReason: "",
+                                decline: false,
+                                tab: 3,
+                              });
+
+                              history.push("/partners");
+                            }}
+                          >
+                            В архив
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="right">
+                          <p>Первичная проверка прошла успешно?</p>
+                          <button
+                            className="button btn-secondary mr-8"
+                            onClick={() => {
+                              setState({
+                                ...state,
+                                isOpenModal: true,
+                                modalType: 1,
+                              });
+                            }}
+                          >
+                            Нет
+                          </button>
+                          <button
+                            className="button btn-primary"
+                            onClick={() =>
+                              setState({
+                                ...state,
+                                step: 1,
+                              })
+                            }
+                          >
+                            Да, успешно
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : state.step === 0 ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setState({
+                          ...state,
+                          isOpenModal: true,
+                        })
+                      }
+                      className="button btn-primary mrl-32"
+                    >
+                      Назначить
+                    </button>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
             </div>
           </div>

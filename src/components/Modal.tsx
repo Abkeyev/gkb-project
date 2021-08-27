@@ -99,7 +99,7 @@ const Modal = (props: ModalProps) => {
                       onClick={() =>
                         setState({
                           ...state,
-                          modalManager: false,
+                          modalManager: true,
                           isOpenModal: false,
                           decline: true,
                         })
@@ -251,7 +251,7 @@ const Modal = (props: ModalProps) => {
                       setState({
                         ...state,
                         isOpenModal: false,
-                        notTypical: true,
+                        notTypical: !state.notTypical,
                       })
                     }
                     className="button btn-primary"
@@ -461,7 +461,7 @@ const Modal = (props: ModalProps) => {
                             setState({
                               ...state,
                               isOpenModal: false,
-                              modalManager: true,
+                              signTwoUsers: [...state.signTwoUsers, 0],
                             })
                           }
                         >

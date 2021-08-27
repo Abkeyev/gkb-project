@@ -92,7 +92,7 @@ const Request = (props: RequestProps) => {
                         </div>
 
                         <div className="form-multiselect mb-0 mr-16">
-                          <ul className="selected-options">
+                          {/* <ul className="selected-options">
                             {services.map((s) => (
                               <li>
                                 <button
@@ -108,7 +108,7 @@ const Request = (props: RequestProps) => {
                                 </button>
                               </li>
                             ))}
-                          </ul>
+                          </ul> */}
                           <div
                             className={`multi js-multi-buttons ${
                               service ? "open" : ""
@@ -422,17 +422,18 @@ const Request = (props: RequestProps) => {
 
               <div className="req-inner-footer">
                 <div className="container">
-                  <button type="button" className="button btn-primary btn-icon ml-32">
+                  <button
+                    type="button"
+                    className="button btn-primary btn-icon ml-32"
+                  >
                     <i className="azla add-plusRound-icon"></i> Новая заявка
                   </button>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div>
-
     </div>
   );
 };

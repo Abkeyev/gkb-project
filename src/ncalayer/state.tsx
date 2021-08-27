@@ -96,9 +96,14 @@ interface AppState {
   ready: boolean;
   step1: boolean;
   step2: boolean;
+  step3: boolean;
   step1status: boolean;
   step2status: boolean;
   signStep: number;
+  agreeTwoStep: number;
+  agreeParStep: number;
+  signTwoStep: number;
+  signTwoUsers: number[];
   agreeUsers: number[];
   agreeGroup: number[];
 }
@@ -175,9 +180,14 @@ export const initAppState = (): AppState => {
     step1: false,
     step1status: false,
     step2: false,
+    step3: false,
     step2status: false,
     signStep: 0,
+    agreeTwoStep: 0,
+    agreeParStep: 1,
+    signTwoStep: 0,
     agreeUsers: [],
+    signTwoUsers: [],
     agreeGroup: [],
   };
 };

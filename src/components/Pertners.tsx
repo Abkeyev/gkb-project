@@ -26,10 +26,10 @@ const Partners = (props: RequestProps) => {
             <div className="req-manager p-50 pad-b-128">
               <div className="header-text justify-content-between mb-24">
                 <h1 className="title-main">Заявки</h1>
-                <div className="btn button btn-primary btn-icon">
+                {/* <div className="btn button btn-primary btn-icon">
                   <i className="azla add-plusRound-icon"></i>
                   <span className="text">Новая заявка</span>
-                </div>
+                </div> */}
               </div>
 
               <Tabs
@@ -39,7 +39,7 @@ const Partners = (props: RequestProps) => {
                 <div className="">
                   <TabList>
                     <Tab>Исходящие</Tab>
-                    <Tab>Завершенные</Tab>
+                    <Tab>Подписанные</Tab>
                   </TabList>
                 </div>
                 <div className="filter mb-24">
@@ -347,9 +347,13 @@ const Partners = (props: RequestProps) => {
                   </div>
                 </TabPanel>
               </Tabs>
+
               <div className="req-inner-footer">
                 <div className="container">
-                  <button type="button" className="button btn-primary btn-icon mrl-32">
+                  <button
+                    type="button"
+                    className="button btn-primary btn-icon ml-32"
+                  >
                     <i className="azla add-plusRound-icon"></i> Новая заявка
                   </button>
                 </div>
