@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.css";
+
 import AppState from "../ncalayer/state";
 import { useHistory } from "react-router-dom";
 
@@ -192,7 +192,7 @@ const Modal = (props: ModalProps) => {
                 <button
                   type="button"
                   onClick={() =>
-                    history.location.pathname.includes("orders")
+                    history.location.pathname.includes("request")
                       ? setState({
                           ...state,
                           isOpenModal: false,
@@ -206,7 +206,7 @@ const Modal = (props: ModalProps) => {
                   }
                   className="button btn-primary table-ml"
                 >
-                  {history.location.pathname.includes("orders")
+                  {history.location.pathname.includes("request")
                     ? "Отправить на согласование"
                     : "Далее"}
                 </button>

@@ -1,4 +1,4 @@
-import { isNone, isNullOrEmpty } from "./helper"
+import { isNone, isNullOrEmpty } from "./helper";
 
 export enum ValidationType {
   Common = "common",
@@ -11,54 +11,54 @@ export enum ValidationType {
 }
 
 export default class Response {
-  private result: string
-  private secondResult: string
-  private errorCode: string
+  private result: string;
+  private secondResult: string;
+  private errorCode: string;
 
   constructor(result: string, secondResult: string, errorCode: string) {
-    this.result = result
-    this.secondResult = secondResult
-    this.errorCode = errorCode
+    this.result = result;
+    this.secondResult = secondResult;
+    this.errorCode = errorCode;
   }
 
   public IsOK(): boolean {
-    return isNone(this.errorCode) && !isNullOrEmpty(this.result)
+    return isNone(this.errorCode) && !isNullOrEmpty(this.result);
   }
 
   public GetResult(): string {
-    return this.result
+    return this.result;
   }
 
   public GetSecondResult(): string {
-    return this.secondResult
+    return this.secondResult;
   }
 
   public GetErrorCode(): string {
-    return this.errorCode
+    return this.errorCode;
   }
 
   public IsWrongPasswordWithAttempts(): boolean {
-    return this.IsWrongPassword() && +this.result > -1
+    return this.IsWrongPassword() && +this.result > -1;
   }
 
   public IsWrongPassword(): boolean {
-    return this.errorCode === "WRONG_PASSWORD"
+    return this.errorCode === "WRONG_PASSWORD";
   }
 
   public IsWrongKeyType(): boolean {
-    return this.errorCode === "EMPTY_KEY_LIST"
+    return this.errorCode === "EMPTY_KEY_LIST";
   }
 
   public IsRDNNotFound(): boolean {
-    return this.errorCode === "RDN_NOT_FOUND"
+    return this.errorCode === "RDN_NOT_FOUND";
   }
 
   public IsWrongXml(): boolean {
-    return this.errorCode === "XML_PARSE_EXCEPTION"
+    return this.errorCode === "XML_PARSE_EXCEPTION";
   }
 
   public IsWrongSignature(): boolean {
-    return this.errorCode === "SIGNATURE_VALIDATION_ERROR"
+    return this.errorCode === "SIGNATURE_VALIDATION_ERROR";
   }
 
   public HandleError(type: ValidationType): void {
@@ -67,46 +67,46 @@ export default class Response {
         alert(
           "Неправильный пароль! Количество оставшихся попыток: " +
             this.GetResult()
-        )
-        return
+        );
+        return;
       }
     }
 
     if (type === ValidationType.Password) {
       if (this.IsWrongPassword()) {
-        alert("Неправильный пароль!")
-        return
+        alert("Неправильный пароль!");
+        return;
       }
     }
 
     if (type === ValidationType.KeyType) {
       if (this.IsWrongKeyType()) {
-        alert("Ключи не найдены. Попробуйте выбрать другой тип ключа")
-        return
+        alert("Ключи не найдены. Попробуйте выбрать другой тип ключа");
+        return;
       }
     }
 
     if (type === ValidationType.RDN) {
       if (this.IsRDNNotFound()) {
-        alert("Ключ не содержит данный параметр")
-        return
+        alert("Ключ не содержит данный параметр");
+        return;
       }
     }
 
     if (type === ValidationType.XML) {
       if (this.IsWrongXml()) {
-        alert("Невалидный формат XML")
-        return
+        alert("Невалидный формат XML");
+        return;
       }
     }
 
     if (type === ValidationType.Signature) {
       if (this.IsWrongSignature()) {
-        alert("Ошибка валидации XML")
-        return
+        alert("Ошибка валидации XML");
+        return;
       }
     }
 
-    alert("Ошибка: " + this.GetErrorCode())
+    alert("Ошибка: " + this.GetErrorCode());
   }
 }

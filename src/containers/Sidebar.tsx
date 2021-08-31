@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
-import "./style.css";
 
 const Sidebar = () => {
   const [close, setClose] = React.useState(false);
@@ -38,13 +37,13 @@ const Sidebar = () => {
           <div className="navigation">
             <ul className="list">
               {/* Если перешли в сам Link то класс дается active */}
-              {history.location.pathname.includes("orders") ? (
+              {history.location.pathname.includes("request") ? (
                 <>
                   <li>
                     <Link
-                      to="/orders"
+                      to="/request"
                       className={`link-list ${
-                        history.location.pathname.includes("orders")
+                        history.location.pathname.includes("request")
                           ? "active"
                           : ""
                       }`}
@@ -95,9 +94,9 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <Link
-                      to="/orders"
+                      to="/request"
                       className={`link-list ${
-                        history.location.pathname.includes("orders")
+                        history.location.pathname.includes("request")
                           ? "active"
                           : ""
                       }`}

@@ -3,7 +3,6 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import AppState from "../ncalayer/state";
 import { Link, useHistory } from "react-router-dom";
-import "./style.css";
 
 interface RequestProps {
   state: AppState;
@@ -1451,7 +1450,7 @@ const PartnersInner = (props: RequestProps) => {
                         </div>
                       )}
                     </div>
-                  ) : (
+                  ) : state.step === 3 ? (
                     <button
                       type="button"
                       onClick={() =>
@@ -1464,6 +1463,8 @@ const PartnersInner = (props: RequestProps) => {
                     >
                       Подписать акт тестирования
                     </button>
+                  ) : (
+                    ""
                   )}
                 </div>
               </div>

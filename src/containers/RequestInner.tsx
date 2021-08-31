@@ -3,7 +3,6 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import AppState from "../ncalayer/state";
 import { Link, useHistory } from "react-router-dom";
-import "./style.css";
 
 interface RequestProps {
   state: AppState;
@@ -13,6 +12,9 @@ interface RequestProps {
 const RequestInner = (props: RequestProps) => {
   const { state, setState } = props;
   const [tab, setTab] = React.useState(false);
+  const [step1, setStep1] = React.useState(false);
+  const [step2, setStep2] = React.useState(false);
+  const [step3, setStep3] = React.useState(false);
   const history = useHistory();
   return (
     <div className="main-body">
@@ -22,11 +24,12 @@ const RequestInner = (props: RequestProps) => {
             <div className="req-manager-inner p-16-50 pad-b-128">
               <div className="req-inner-header">
                 <div className="back-breadcrumbs">
-                  <Link to="/orders" className="back">
+                  <Link to="/request" className="back">
                     <i className="azla arrow-left-icon"></i> Назад
                   </Link>
                   <div className="breadcrumbs">
-                    <Link to="/orders">Заявки</Link> / <span>Заявка №1353</span>
+                    <Link to="/request">Заявки</Link> /{" "}
+                    <span>Заявка №1353</span>
                   </div>
                 </div>
 
@@ -379,7 +382,7 @@ const RequestInner = (props: RequestProps) => {
                         <>
                           <div
                             className={`card-collapse tab-num-2 two-signatory ${
-                              state.step2 ? "collapsed" : ""
+                              step2 && "collapsed"
                             }`}
                           >
                             {/* При сворачивании дается класс "collapsed" */}
@@ -403,9 +406,7 @@ const RequestInner = (props: RequestProps) => {
                                 </h3>
                                 <span
                                   className="btn-collapse"
-                                  onClick={() =>
-                                    setState({ ...state, step2: !state.step2 })
-                                  }
+                                  onClick={() => setStep2(!step2)}
                                 >
                                   <i className="azla chevron-up-icon"></i>
                                 </span>
@@ -676,9 +677,7 @@ const RequestInner = (props: RequestProps) => {
                           </div>
                           <div
                             className={`card-collapse tab-num-1 ${
-                              state.agreeTwoStep < 2 || !state.step3
-                                ? "collapsed"
-                                : ""
+                              state.agreeTwoStep < 2 || (!step3 && "collapsed")
                             } ${state.agreeTwoStep < 2 ? "disabled" : ""}`}
                           >
                             {/* При сворачивании дается класс "collapsed" */}
@@ -705,9 +704,7 @@ const RequestInner = (props: RequestProps) => {
                                 </h3>
                                 <span
                                   className="btn-collapse"
-                                  onClick={() =>
-                                    setState({ ...state, step3: !state.step3 })
-                                  }
+                                  onClick={() => setStep3(!step3)}
                                 >
                                   <i className="azla chevron-up-icon"></i>
                                 </span>
@@ -910,9 +907,11 @@ const RequestInner = (props: RequestProps) => {
                         </>
                       ) : (
                         <div
-                          className={`card-collapse tab-num-1 ${
-                            state.step1 ? "collapsed" : ""
-                          }`}
+                          className={
+                            step1
+                              ? "card-collapse tab-num-1 collapsed"
+                              : "card-collapse tab-num-1"
+                          }
                         >
                           {/* При сворачивании дается класс "collapsed" */}
                           <div
@@ -938,9 +937,7 @@ const RequestInner = (props: RequestProps) => {
                               </h3>
                               <span
                                 className="btn-collapse"
-                                onClick={() =>
-                                  setState({ ...state, step1: !state.step1 })
-                                }
+                                onClick={() => setStep1(!step1)}
                               >
                                 <i className="azla chevron-up-icon"></i>
                               </span>
@@ -1479,7 +1476,7 @@ const RequestInner = (props: RequestProps) => {
                                 tab: 3,
                               });
 
-                              history.push("/orders");
+                              history.push("/request");
                             }}
                           >
                             В архив

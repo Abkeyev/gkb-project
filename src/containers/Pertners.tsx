@@ -3,7 +3,6 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
 import AppState from "../ncalayer/state";
 import "react-tabs/style/react-tabs.css";
-import "./style.css";
 
 interface RequestProps {
   state: AppState;

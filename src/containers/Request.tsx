@@ -3,7 +3,6 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
 import AppState from "../ncalayer/state";
 import "react-tabs/style/react-tabs.css";
-import "./style.css";
 
 interface RequestProps {
   state: AppState;
@@ -286,7 +285,7 @@ const Request = (props: RequestProps) => {
                       </thead>
                       <tbody>
                         {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/orders/title")}>
+                          <tr onClick={() => history.push("/request/title")}>
                             <td>52345634643</td>
                             <td>М-Ломбард</td>
                             <td>Ломбард</td>
@@ -316,7 +315,7 @@ const Request = (props: RequestProps) => {
                       </thead>
                       <tbody>
                         {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/orders/title")}>
+                          <tr onClick={() => history.push("/request/title")}>
                             <td>52345634643</td>
                             <td>М-Ломбард</td>
                             <td>Ломбард</td>
@@ -344,7 +343,7 @@ const Request = (props: RequestProps) => {
                       </thead>
                       <tbody>
                         {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/orders/title")}>
+                          <tr onClick={() => history.push("/request/title")}>
                             <td>52345634643</td>
                             <td>М-Ломбард</td>
                             <td>Ломбард</td>
@@ -378,7 +377,7 @@ const Request = (props: RequestProps) => {
                       </thead>
                       <tbody>
                         {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/orders/title")}>
+                          <tr onClick={() => history.push("/request/title")}>
                             <td>52345634643</td>
                             <td>М-Ломбард</td>
                             <td>Ломбард</td>
@@ -406,7 +405,7 @@ const Request = (props: RequestProps) => {
                       </thead>
                       <tbody>
                         {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/orders/title")}>
+                          <tr onClick={() => history.push("/request/title")}>
                             <td>52345634643</td>
                             <td>М-Ломбард</td>
                             <td>Ломбард</td>

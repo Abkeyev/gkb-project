@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.css";
+
 import { useHistory, Link } from "react-router-dom";
 import api from "../api/Api";
 import { extractKeyAlias, checkInputs } from "../ncalayer/helper";
@@ -11,15 +11,15 @@ interface LoginProps {
   ready: boolean;
 }
 
-const Ecp = (props: LoginProps) => {
+const LoginEcp = (props: LoginProps) => {
   const { state, setState, client, ready } = props;
   const [open, setOpen] = React.useState(false);
   const [key, setKey] = React.useState("");
   const history = useHistory();
 
-  const handleKeyAliasChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleKeyAliasChange = (key: string) => {
     console.log(state.keyAlias);
-    setState({ ...state, keyAlias: extractKeyAlias(e.target.value) });
+    setState({ ...state, keyAlias: extractKeyAlias(key) });
   };
 
   const browseKeys = () => {
@@ -66,17 +66,7 @@ const Ecp = (props: LoginProps) => {
       .then((res) => {})
       .catch((err) => {
         console.error(err);
-        setState({
-          ...state,
-          password: "",
-          index: 0,
-          modal: false,
-          signDocModal: "signerr",
-          keyAlias: "",
-          keys: [""],
-          subjectDN: "",
-          issuerDN: "",
-        });
+        setState({});
       });
   };
   return (
@@ -188,4 +178,4 @@ const Ecp = (props: LoginProps) => {
     </section>
   );
 };
-export default Ecp;
+export default LoginEcp;
