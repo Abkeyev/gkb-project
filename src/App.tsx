@@ -12,6 +12,7 @@ import {
   RequestInner,
   PartnersInner,
   MyOrganization,
+  MyOrganizationInner,
   Sidebar,
   Partners,
 } from "./containers";
@@ -156,7 +157,7 @@ function App() {
             <Route path="/" component={() => <Manager />} exact />
             <Route
               path="/organization"
-              component={() => <MyOrganization />}
+              component={() => <MyOrganization state={state} setState={setState} />}
               exact
             />
             <Route
@@ -180,6 +181,13 @@ function App() {
               path="/request/title"
               component={() => (
                 <RequestInner state={state} setState={setState} />
+              )}
+              exact
+            />
+            <Route
+              path="/organization/title"
+              component={() => (
+                <MyOrganizationInner state={state} setState={setState} />
               )}
               exact
             />

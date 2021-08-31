@@ -392,6 +392,10 @@
   color: #939393;
 }
 
+.header-text-inner .back-breadcrumbs {
+  margin-bottom: 16px;
+}
+
 /* Step Bar */
 .status-bar {
   margin-bottom: 48px;
@@ -493,6 +497,14 @@
   display: block;
   width: calc(100% - 216px);
 }
+.info-list li .right .edit {
+  cursor: pointer;
+}
+.info-list li .right.active-link {
+  cursor: pointer;
+  text-decoration-line: underline;
+  color: #19959C;
+}
 
 .info-list-sec {
   margin-bottom: 0px;
@@ -536,10 +548,30 @@
   font-size: 16px;
   line-height: 20px;
   color: #3f4b60;
+  transition: .3s;
 }
 .files-list li i {
   margin-right: 8px;
 }
+.files-list li span {
+  cursor: pointer;
+}
+.files-list li.active span {
+  text-decoration-line: underline;
+  color: #19959C;
+  transition: .3s;
+}
+.files-list li .trash {
+  margin-right: 0;
+  margin-left: 8px;
+  filter: contrast(0);
+  transition: .3s;
+}
+.files-list li.active .trash {
+  cursor: pointer;
+  filter: unset;
+}
+
 
 .req-inner-footer {
   position: fixed;
@@ -572,6 +604,9 @@
   text-transform: uppercase;
   color: #939393;
   margin-bottom: 6px;
+}
+.modal-files-deleted .files-list li {
+  justify-content: center;
 }
 
 .manager-req .profile,

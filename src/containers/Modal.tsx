@@ -494,7 +494,204 @@ const Modal = (props: ModalProps) => {
             </div>
           </div>
         </div>
-      ) : (
+        ) : state.modalType === 7 ? (
+          <div className="modal modal-large">
+            <div
+              className="modal-backbg"
+              onClick={() => setState({ ...state, isOpenModal: false })}
+            ></div>
+            <div className="modal-dialog">
+              <div className="modal-content fadeInModal animated">
+                <div className="modal-close">
+                  <i className="azla close-icon"></i>
+                </div>
+                <div className="modal-body">
+                  <div className="write-reasons">
+                    <h3 className="text-left title-subhead mb-16">
+                    Юридический адрес
+                    </h3>
+                    <textarea
+                      rows={5}
+                      className="form-control-textarea mb-16"
+                      placeholder="Причина отказа"
+                      value="г. Алматы, ул. Тажибаевой 47, БЦ “Иван”, этаж 24"
+                      onChange={(e) =>
+                        setState({ ...state, declineReason: e.target.value })
+                      }
+                    ></textarea>
+                    <div className="d-flex">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setState({
+                            ...state,
+                            isOpenModal: false,
+                          })
+                        }
+                        className="button btn-secondary mr-16"
+                      >
+                        Отмена
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setState({
+                            ...state,
+                            modalManager: true,
+                            isOpenModal: false,
+                            decline: true,
+                          })
+                        }
+                        className="button btn-primary"
+                      >
+                        Сохранить
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          ) : state.modalType === 8 ? (
+            <div className="modal modal-large">
+              <div
+                className="modal-backbg"
+                onClick={() => setState({ ...state, isOpenModal: false })}
+              ></div>
+              <div className="modal-dialog">
+                <div className="modal-content fadeInModal animated">
+                  <div className="modal-close">
+                    <i className="azla close-icon"></i>
+                  </div>
+                  <div className="modal-body">
+                    <div className="write-reasons">
+                      <h3 className="text-center title-subhead mb-16">
+                        Удалить документ?
+                      </h3>
+                      
+                      <div className="files-added modal-files-deleted">
+                        <ul className="files-list">
+                          <li>
+                            <i className="azla blank-alt-primary-icon"></i>
+                            <span>Устав ТОО “М-Ломбард”.pdf</span>
+                          </li>
+                        </ul>
+                      </div>
+                      
+                      <div className="d-flex justify-content-center">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setState({
+                              ...state,
+                              isOpenModal: false,
+                            })
+                          }
+                          className="button btn-secondary w-160 mr-16"
+                        >
+                          Отмена
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setState({
+                              ...state,
+                              modalManager: true,
+                              isOpenModal: false,
+                              decline: true,
+                            })
+                          }
+                          className="button btn-primary w-160"
+                        >
+                          Удалить
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            ) : state.modalType === 9 ? (
+              <div className="modal modal-large">
+                <div
+                  className="modal-backbg"
+                  onClick={() => setState({ ...state, isOpenModal: false })}
+                ></div>
+                <div className="modal-dialog">
+                  <div className="modal-content fadeInModal animated">
+                    <div className="modal-close">
+                      <i className="azla close-icon"></i>
+                    </div>
+                    <div className="modal-body">
+                      <div className="write-reasons">
+                      <h3 className="text-left title-subhead mb-32">
+                        Редактировать данные
+                      </h3>
+                        <div className="form-wrapper">
+                          <input type="text" value="Султангалиева Камилла Избасарова" />
+                          <label>ФИО</label>
+                        </div>
+                        <div className="form-wrapper">
+                          <input type="text" value="Аналитик" />
+                          <label>Должность</label>
+                        </div>
+                        <div className="form-wrapper">
+                          <input type="text" value="sultangaliyeva.k.i@gmail.com" />
+                          <label>Email</label>
+                        </div>
+                        <div className="form-wrapper">
+                          <input type="text" value="+7 (701) 456-78-90" />
+                          <label>Телефон</label>
+                        </div>
+                        <div className="form-check gkb-checkbox">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              value=""
+                              id="checkMeanNum"
+                              required
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="checkMeanNum"
+                            >Основной номер</label>
+                          </div>
+
+                        
+                        <div className="d-flex mt-16">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setState({
+                                ...state,
+                                modalManager: true,
+                                isOpenModal: false,
+                                decline: true,
+                              })
+                            }
+                            className="button btn-primary mr-16"
+                          >
+                            Сохранить
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setState({
+                                ...state,
+                                isOpenModal: false,
+                              })
+                            }
+                            className="button btn-danger"
+                          >
+                            Удалить пользователя
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
         <div className="modal modal-default">
           <div
             className="modal-backbg"

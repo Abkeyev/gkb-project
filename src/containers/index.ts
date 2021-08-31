@@ -5,6 +5,7 @@ import Main from "./Main";
 import Manager from "./Manager";
 import Modal from "./Modal";
 import MyOrganization from "./MyOrganization";
+import MyOrganizationInner from "./MyOrganizationInner";
 import Partners from "./Pertners";
 import PartnersInner from "./PartnersInner";
 import Request from "./Request";
@@ -19,6 +20,7 @@ export {
   Manager,
   Modal,
   MyOrganization,
+  MyOrganizationInner,
   Partners,
   PartnersInner,
   Request,
