@@ -1,5 +1,6 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { useHistory, Link } from "react-router-dom";
 import "react-tabs/style/react-tabs.css";
 
 const Registration = () => {
@@ -7,134 +8,169 @@ const Registration = () => {
   return (
     <section className="register-page">
       <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
             <form>
+              <div className="logo-image">
+                <img src={
+                        process.env.PUBLIC_URL +
+                        "/logo-image.png"
+                      }/>
+              </div>
               {step === 0 ? (
-                <div className="special-card">
-                  <h1 className="title-main mb-32">Регистрация</h1>
-                  <h3 className="title-subhead mb-16">Данные организации</h3>
+        <div className="row">
+          <div className="col-md-8 offset-md-2">
+                  <h1 className="title-main mb-8">Регистрация</h1>
+                  <div className="step-reg mb-24">
+                    <div className="back-breadcrumbs">
+                      <Link to="/" className="back">
+                        <i className="azla arrow-left-icon"></i> Назад
+                      </Link>
+                    </div>
+                    <span className="step">Шаг 1 - Профиль организации</span>
+                    </div>
+                  <h3 className="title-subhead mb-16">Общие данные</h3>
                   <p className="text-desc">
-                    Пожалуйста добавьте недостающие данные и проверьте
-                    существующие
+                  Пожалуйста добавьте недостающие данные об организации и проверьте существующие
                   </p>
+                  </div>
 
+                  <div className="col-md-6 offset-md-2">
+                  <div className="special-card">
                   <div className="register-input">
-                    <div className="form-group">
-                      <label>Тип клиента</label>
-                      <input
-                        className="form-control"
-                        type="name"
-                        placeholder="Введите логин"
-                      />
+                    <div className="form-group-v">
+                      <label>Тип клиента:</label>
+                      <span>000487320</span>
                     </div>
-                    <div className="form-group">
-                      <label>Полное наименование</label>
-                      <input
-                        className="form-control"
-                        type="name"
-                        placeholder="Введите пароль"
-                      />
+                    <div className="form-group-v">
+                      <label>Полное наименование:</label>
+                      <span>ТОО “М-Ломбард”</span>
                     </div>
-                    <div className="form-group">
-                      <label>Краткое наименование</label>
-                      <input
-                        className="form-control check-icon"
-                        type="name"
-                        placeholder="Введите пароль"
-                      />
+                    <div className="form-group-v">
+                      <label>Краткое наименование:</label>
+                      <span>М-Ломбард</span>
                     </div>
-                    <div className="form-group">
-                      <label>Адрес сайта клиента</label>
-                      <input
-                        className="form-control"
-                        type="name"
-                        placeholder="Введите пароль"
-                      />
+                    <div className="form-group-v">
+                      <label>БИН клиента:</label>
+                      <span>849930046783939442</span>
                     </div>
-                    <div className="form-group">
-                      <label>БИН клиента</label>
-                      <input
-                        className="form-control"
-                        type="number"
-                        placeholder="Введите пароль"
-                      />
+                    <div className="form-group-v">
+                      <label>Выберите сегмент организации:</label>
+                      <select className="form-control-v">
+                        <option>Выберите сегмент</option>
+                      </select>
                     </div>
-                    <div className="form-group">
-                      <label>Дата регистрации в системе</label>
-                      <input
-                        className="form-control"
-                        type="date"
-                        placeholder="Введите пароль"
-                      />
+                    <div className="form-group-v">
+                      <label>Дата регистрации:</label>
+                      <span>12.07.2021</span>
                     </div>
-                    <button className="button btn-primary table-ml disabled">
-                      Далее
-                    </button>
+                    <div className="form-group-v">
+                      <label>Адрес сайта клиента:</label>
+                      <input className="form-control-v" type="text" placeholder="Введите адрес сайта" />
+                    </div>
+
                   </div>
                 </div>
+           </div>
+          <div className="col-md-8 offset-md-2">
+            <div className="special-card">
+                    <h3 className="title-subhead mb-16 mt-32">Документы</h3>
+                    <p className="text-desc">
+                      Пожалуйста прикрепите следующие документы организации
+                    </p>
+                    <div className="reg-file-add mb-32">
+                      <ul>
+                        <li>
+                          <div className="name">
+                            <span className="text">Справка о регистрации/перерегистрации юридического лица</span>
+                            <span className="file-name">spravka_o_registracii.pdf</span>
+                          </div>
+                          <button className="btn-icon delete"><i className="azla size-18 trash-icon-alert mr-8"></i>Удалить файл</button>
+                        </li>
+                        <li>
+                          <div className="name">
+                            <span className="text">Решение учредителя с данными о приеме на работу первого руководителя</span>
+                          </div>
+                          <button className="btn-icon add"><i className="azla size-18 pin-primary-icon mr-8"></i>Прикрепить файл</button>
+                        </li>
+                        <li>
+                          <div className="name">
+                            <span className="text">Приказ о приеме на работу первого руководителя</span>
+                          </div>
+                          <button className="btn-icon add"><i className="azla size-18 pin-primary-icon mr-8"></i>Прикрепить файл</button>
+                        </li>
+                        <li>
+                          <div className="name">
+                            <span className="text">Документ, удостоверяющий личность первого руководителя</span>
+                          </div>
+                          <button className="btn-icon add"><i className="azla size-18 pin-primary-icon mr-8"></i>Прикрепить файл</button>
+                        </li>
+                        <li>
+                          <div className="name">
+                            <span className="text">Устав юрического лица</span>
+                          </div>
+                          <button className="btn-icon add"><i className="azla size-18 pin-primary-icon mr-8"></i>Прикрепить файл</button>
+                        </li>
+                      </ul>
+                    </div>
+                    <button className="button btn-primary table-mr w-160 disabled">
+                      Далее
+                    </button>
+            </div>
+          </div>
+          </div>
               ) : step === 1 ? (
-                <div className="special-card">
-                  <h1 className="title-main mb-32">Регистрация</h1>
-                  <h3 className="title-subhead mb-16">Данные о пользователе</h3>
-                  <p className="text-desc">Пожалуйста проверьте данные</p>
+                <div className="row">
+                  <div className="col-md-8 offset-md-2">
+                          <h1 className="title-main mb-8">Регистрация</h1>
+                          <div className="step-reg mb-24">
+                            <div className="back-breadcrumbs">
+                              <Link to="/" className="back">
+                                <i className="azla arrow-left-icon"></i> Назад
+                              </Link>
+                            </div>
+                            <span className="step">Шаг 2 - Профиль пользователя</span>
+                            </div>
+                          <h3 className="title-subhead mb-16">Данные пользователя</h3>
+                          <p className="text-desc">
+                          Пожалуйста проверьте данные пользователя (уполномоченного лица)
+                          </p>
+                          </div>
 
-                  <div className="register-input">
-                    <div className="form-group">
-                      <label>Наименование клиента</label>
-                      <input
-                        className="form-control"
-                        type="name"
-                        placeholder="Введите логин"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>ИИН клиента</label>
-                      <input
-                        className="form-control"
-                        type="name"
-                        placeholder="Введите пароль"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>ФИО уполномоченого лица</label>
-                      <input
-                        className="form-control check-icon"
-                        type="name"
-                        placeholder="Введите пароль"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Должность уполномоченого лица</label>
-                      <select className="form-control">
-                        <option>Директор</option>
-                        <option>123</option>
-                        <option>123</option>
-                      </select>
-                    </div>
-                    <div className="form-group is-invalid">
-                      <label>Основания для подписи</label>
+                          <div className="col-md-6 offset-md-2">
+                          <div className="special-card">
+                          <div className="register-input">
+                            <div className="form-group-v">
+                              <label>Название организации:</label>
+                              <span>ТОО Астана</span>
+                            </div>
+                            <div className="form-group-v">
+                              <label>ИИН:</label>
+                              <input className="form-control-v" type="text" placeholder="Введите ИИН" />
+                            </div>
+                            <div className="form-group-v">
+                              <label>ФИО уполномоченого лица:</label>
+                              <span>Бузурбаев Канат</span>
+                            </div>
+                            <div className="form-group-v">
+                              <label>Должность уполномоченого лица</label>
+                              <select className="form-control-v">
+                                <option>Выберите должность</option>
+                              </select>
+                            </div>
+                            <div className="form-group-v">
+                              <label>Основания для подписи</label>
+                              <select className="form-control-v">
+                                <option>Выберите основание для подписи</option>
+                              </select>
+                            </div>
 
-                      <select className="form-control">
-                        <option>020749929</option>
-                        <option>123</option>
-                        <option>123</option>
-                      </select>
-                      <div className="invalid-feedback"> Заполните поле</div>
-                    </div>
-                    <div className="form-group">
-                      <label>Дата регистрации в системе</label>
-                      <input
-                        className="form-control"
-                        type="date"
-                        placeholder="Введите пароль"
-                      />
-                    </div>
-                    <button className="button btn-primary table-ml disabled">
-                      Далее
-                    </button>
+                            <div className="form-group-v">
+                              <label>Дата регистрации в системе:</label>
+                              <span>12.07.2021</span>
+                            </div>
+                          </div>
+                        </div>
                   </div>
-                </div>
+                  </div>
               ) : (
                 <div className="special-card">
                   <h1 className="title-main mb-32">
@@ -292,8 +328,6 @@ const Registration = () => {
                 </div>
               )}
             </form>
-          </div>
-        </div>
       </div>
     </section>
   );

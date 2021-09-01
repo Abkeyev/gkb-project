@@ -1503,7 +1503,7 @@ fieldset:disabled .button {
   color: #3f4b60;
   width: 28%;
   margin-right: 24px;
-  white-space: nowrap;
+  /* white-space: nowrap; */
   pointer-events: none;
 }
 .form-control-v {
@@ -1517,6 +1517,7 @@ fieldset:disabled .button {
   color: #3f4b60;
   background-color: #fff;
   background-clip: padding-box;
+  appearance: none;
   border: 1px solid #c8c7cc;
   border-radius: 12px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -1527,6 +1528,13 @@ fieldset:disabled .button {
   border-color: #6fc9ce;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(32, 181, 190, 0.25);
+}
+select.form-control-v {
+  position: relative;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDE1TDEyLjM1MzYgMTUuMzUzNkwxMiAxNS43MDcxTDExLjY0NjQgMTUuMzUzNkwxMiAxNVpNMTguMzUzNiA5LjM1MzU1TDEyLjM1MzYgMTUuMzUzNkwxMS42NDY0IDE0LjY0NjRMMTcuNjQ2NCA4LjY0NjQ1TDE4LjM1MzYgOS4zNTM1NVpNMTEuNjQ2NCAxNS4zNTM2TDUuNjQ2NDUgOS4zNTM1NUw2LjM1MzU1IDguNjQ2NDVMMTIuMzUzNiAxNC42NDY0TDExLjY0NjQgMTUuMzUzNloiIGZpbGw9IiMyMEI1QkUiLz4KPC9zdmc+Cg==");
+  background-repeat: no-repeat;
+  background-position: center right 10px;
+  background-size: 24px;
 }
 
 .invalid-feedback {

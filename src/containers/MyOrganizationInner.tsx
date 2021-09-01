@@ -26,13 +26,13 @@ interface RequestProps {
                     <i className="azla arrow-left-icon"></i> Назад
                   </Link>
                   <div className="breadcrumbs">
-                    <Link to="/organization">Заявки</Link> /{" "}
-                    <span>Заявка №1353</span>
+                    <Link to="/organization">Моя организация</Link> /{" "}
+                    <span>Подключенные услуги</span>
                   </div>
                 </div>
 
                 <h1 className="title-main mb-32">
-                  Заявка №1353 - ТОО “М-Ломбард”
+                Название услуги
                 </h1>
 
               </div>

@@ -17,7 +17,7 @@
   padding: 30vh 0;
 }
 .login-page {
-  padding: 20vh 0;
+  padding: 10vh 0;
 }
 .register-page {
   padding: 10vh 0;
@@ -37,15 +37,86 @@
 .login-input {
   display: grid;
   justify-content: center;
-  margin-top: 48px;
   grid-template-columns: 70%;
 }
 .login-input input {
 }
 
+.logo-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+.login-page .form-group label {
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.login-or {
+  display: block;
+  position: relative;
+  text-align: center;
+}
+.login-or::before {
+  content: "";
+  height: 1px;
+  width: calc(50% - 20px);
+  background: #C8C7CC;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+.login-or:after {
+  content: "";
+  height: 1px;
+  width: calc(50% - 20px);
+  background: #C8C7CC;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+.reg-link p {
+  font-weight: normal;
+  font-size: 16px;
+  text-align: center;
+  color: #3F4B60;
+  margin-bottom: 0;
+}
+.reg-link a {
+  font-weight: normal;
+  font-size: 16px;
+  text-align: center;
+  display: block;
+  text-decoration-line: underline;
+  color: #20B5BE;
+}
+
 /* Register */
 .register-page .title-main {
-  text-align: left;
+  text-align: center;
+}
+.step-reg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.step-reg .back-breadcrumbs {
+  margin-bottom: 0;
+  position: absolute;
+  left: 0;
+}
+.step-reg .step {
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 46px;
+  text-align: center;
+  color: #20B5BE;
 }
 
 /* Sidebar */
@@ -571,6 +642,80 @@
   cursor: pointer;
   filter: unset;
 }
+
+.reg-file-add ul {
+  counter-reset: list;
+  margin-bottom: 0;
+}
+.reg-file-add ul li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0px 12px 56px;
+  position: relative;
+  border-top: 1px solid #C8C7CC;
+}
+.reg-file-add ul li::before {
+  content: counter(list);
+  counter-increment: list;
+  width: 40px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 16px;
+  text-align: center;
+  color: #3F4B60;
+}
+.reg-file-add ul li .name {
+  display: grid;
+}
+.reg-file-add ul li .name .text {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 16px;
+  color: #3F4B60;
+}
+.reg-file-add ul li .name .file-name {
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 20px;
+  color: #939393;
+  margin-top: 4px;
+}
+.reg-file-add ul li .add {
+  background: #EAF6F5;
+  border-radius: 12px;
+  border: none;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 20px;
+  color: #3F4B60;
+  padding: 6px 12px;
+}
+.reg-file-add ul li .delete {
+  background: #F3F3F3;
+  border-radius: 12px;
+  border: none;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 20px;
+  color: #3F4B60;
+  padding: 6px 12px;
+}
+.reg-file-add ul li button {
+  transition: .3s;
+}
+.reg-file-add ul li button:hover {
+  opacity: .6;
+}
+
 
 
 .req-inner-footer {
