@@ -1,9 +1,12 @@
 import { makeAutoObservable } from "mobx";
+import api from "../api/Api";
 
 export default class MainStore {
   logged: boolean = false;
-  loginState: "login" | "ecp" | "" = "";
+  loginState: "login" | "ecp" = "login";
   login: string = "";
+  loginError: boolean = false;
+  loginErrorText: string = "";
   pass: string = "";
   isOpenModal: boolean = false;
   modalType: number = 0;
@@ -16,15 +19,41 @@ export default class MainStore {
   }
 
   logIn = () => {
-    console.log("action");
-    this.logged = true;
+    localStorage.removeItem("userContext");
+    api.client
+      .auth({
+        username: this.login,
+        password: this.pass,
+      })
+      .then((r) => {
+        localStorage.setItem("userContext", JSON.stringify(r));
+        this.logged = true;
+      })
+      .catch((err) => {
+        this.loginError = true;
+        if (err && err.detail) this.loginErrorText = err.detail;
+      });
+  };
+
+  logInEcp = (data: any) => {
+    localStorage.removeItem("userContext");
+    api.client
+      .authEcp(data)
+      .then((r) => {
+        localStorage.setItem("userContext", JSON.stringify(r));
+        this.logged = true;
+      })
+      .catch((err) => {
+        this.loginError = true;
+        if (err && err.detail) this.loginErrorText = err.detail;
+      });
   };
 
   setLogin = (login: string) => {
     this.login = login;
   };
 
-  setLoginState = (loginState: "login" | "ecp" | "") => {
+  setLoginState = (loginState: "login" | "ecp") => {
     this.loginState = loginState;
   };
 

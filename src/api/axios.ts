@@ -14,8 +14,7 @@ export class Server {
     config = config || {};
     config.headers = config.headers || {};
     var userContext = JSON.parse(localStorage.getItem("userContext") || "{}");
-    config.headers.Authorization =
-      "Bearer " + (userContext.token || {}).accessToken;
+    config.headers.Authorization = "Bearer " + (userContext || {}).access;
     config.baseURL = config.baseURL || webConfigEnv.SERVER_URL;
     return axios.get(url, config).then((r) => r?.data);
   }
@@ -23,8 +22,7 @@ export class Server {
     config = config || {};
     config.headers = config.headers || {};
     var userContext = JSON.parse(localStorage.getItem("userContext") || "{}");
-    config.headers.Authorization =
-      "Bearer " + (userContext.token || {}).accessToken;
+    config.headers.Authorization = "Bearer " + (userContext || {}).access;
     config.baseURL = config.baseURL || webConfigEnv.SERVER_URL;
     return axios.delete(url, config).then((r) => r.data);
   }
@@ -32,8 +30,7 @@ export class Server {
     config = config || {};
     config.headers = config.headers || {};
     var userContext = JSON.parse(localStorage.getItem("userContext") || "{}");
-    config.headers.Authorization =
-      "Bearer " + (userContext.token || {}).accessToken;
+    config.headers.Authorization = "Bearer " + (userContext || {}).access;
     config.baseURL = webConfigEnv.SERVER_URL;
     return axios.head(url, config);
   }
@@ -46,9 +43,8 @@ export class Server {
     config = config || {};
     config.headers = config.headers || {};
     var userContext = JSON.parse(localStorage.getItem("userContext") || "{}");
-    if (!!(userContext.token || {}).accessToken) {
-      config.headers.Authorization =
-        "Bearer " + (userContext.token || {}).accessToken;
+    if (!!(userContext || {}).access) {
+      config.headers.Authorization = "Bearer " + (userContext || {}).access;
     }
     config.baseURL = config.baseURL || webConfigEnv.SERVER_URL;
     return axios.post(url, data, config).then((r) => r.data);
@@ -57,8 +53,7 @@ export class Server {
     config = config || {};
     config.headers = config.headers || {};
     var userContext = JSON.parse(localStorage.getItem("userContext") || "{}");
-    config.headers.Authorization =
-      "Bearer " + (userContext.token || {}).accessToken;
+    config.headers.Authorization = "Bearer " + (userContext || {}).access;
     config.baseURL = webConfigEnv.SERVER_URL;
     return axios.put(url, data, config).then((r) => r.data);
   }
@@ -66,8 +61,7 @@ export class Server {
     config = config || {};
     config.headers = config.headers || {};
     var userContext = JSON.parse(localStorage.getItem("userContext") || "{}");
-    config.headers.Authorization =
-      "Bearer " + (userContext.token || {}).accessToken;
+    config.headers.Authorization = "Bearer " + (userContext || {}).access;
     config.baseURL = webConfigEnv.SERVER_URL;
     return axios.patch(url, data, config).then((r) => r.data);
   }

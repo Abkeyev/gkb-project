@@ -58,22 +58,21 @@ const LoginEcp = (props: LoginProps) => {
 
   const login = () => {
     const subjectDN = state.subjectDN;
-    api.client
-      .authEcp({
-        bin: getSubstring(subjectDN, "OU="),
-        full_name: getSubstring(subjectDN, "O="),
-      })
-      .then((res) => {})
-      .catch((err) => {
-        console.error(err);
-        setState({});
-      });
+    mainStore.logInEcp({
+      bin: getSubstring(subjectDN, "OU="),
+      fio: `${getSubstring(subjectDN, "CN=")} ${getSubstring(subjectDN, "G=")}`,
+      name: getSubstring(subjectDN, "O="),
+    });
   };
+
   return (
     <div className="col-md-4 offset-md-4">
       <form>
         <div className="back-breadcrumbs">
-          <div onClick={() => mainStore.setLoginState("")} className="back">
+          <div
+            onClick={() => mainStore.setLoginState("login")}
+            className="back"
+          >
             <i className="azla arrow-left-icon"></i> Назад
           </div>
         </div>
@@ -150,7 +149,7 @@ const LoginEcp = (props: LoginProps) => {
                   </div>
                   <button
                     className="button btn-primary mt-16"
-                    onClick={() => handleKeyAliasClick()}
+                    onClick={() => login()}
                   >
                     Войти
                   </button>
