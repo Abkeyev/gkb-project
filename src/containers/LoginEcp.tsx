@@ -1,13 +1,13 @@
 import React from "react";
-
-import { useHistory, Link } from "react-router-dom";
+import { AppContext } from "../AppContext";
 import api from "../api/Api";
 import { extractKeyAlias, checkInputs } from "../ncalayer/helper";
+import NCALayer from "../ncalayer/ncalayer";
 
 interface LoginProps {
   state: any;
   setState: any;
-  client: any;
+  client: NCALayer;
   ready: boolean;
 }
 
@@ -15,7 +15,7 @@ const LoginEcp = (props: LoginProps) => {
   const { state, setState, client, ready } = props;
   const [open, setOpen] = React.useState(false);
   const [key, setKey] = React.useState("");
-  const history = useHistory();
+  const { mainStore } = React.useContext(AppContext);
 
   const handleKeyAliasChange = (key: string) => {
     console.log(state.keyAlias);
@@ -70,112 +70,96 @@ const LoginEcp = (props: LoginProps) => {
       });
   };
   return (
-    <section className="login-page">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-4 offset-md-4">
-            <form>
-              <div className="back-breadcrumbs">
-                <Link to="/" className="back">
-                  <i className="azla arrow-left-icon"></i> Назад
-                </Link>
-              </div>
-              <div
-                className="special-card"
-                onClick={() => open && setOpen(false)}
-              >
-                <h1 className="title-main">Вход по ЭПЦ</h1>
-                <div className="login-input">
-                  <div className="form-group">
-                    <label>Файл</label>
-                    <button
-                      className="form-control"
-                      onClick={() => browseKeys()}
-                    >
-                      Выберите ключ
-                    </button>
-                  </div>
-                  <div className={`form-group ${!ready ? "is-invalid" : ""}`}>
-                    <label>Пароль</label>
-                    <input
-                      className="form-control"
-                      type="name"
-                      value={state.password}
-                      ref={(input) => {
-                        input !== null && input.focus();
-                      }}
-                      onChange={handlePasswordChange}
-                      placeholder="Введите пароль для хранилища"
-                    />
-                    {!ready && (
-                      <div className="invalid-feedback">
-                        Ошибка при подключении
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    className="button btn-primary mb-16"
-                    onClick={() => handleKeyAliasClick()}
-                  >
-                    Загрузить ключи
-                  </button>
-                  {console.log(props.state)}
-                  {props.state.keys.length > 0 &&
-                    props.state.keys[0] &&
-                    props.state.keys[0] !== "" && (
-                      <div className="form-multiselect mb-0">
-                        <div
-                          className={`multi js-multi-buttons ${
-                            open ? "open" : ""
-                          }`}
-                          onClick={() => setOpen(!open)}
-                        >
-                          {/* При наведении на Input появляется класс open */}
-                          <div className="input-wrapper">
-                            <input
-                              className="multi-input azla form-icon chevron-down-icon"
-                              type="text"
-                              placeholder="Список ключей"
-                              value={key}
-                            />
-                            <label className="label">Ключи</label>
-                          </div>
-                          <div className="multi-menu">
-                            <div className="multi-option option-current">
-                              {props.state.keys.map((v: any, i: number) => {
-                                return (
-                                  <div className="multi-list">
-                                    <span
-                                      className="multi-option-select"
-                                      onClick={() => {
-                                        console.log(v);
-                                        setKey(v);
-                                        handleKeyAliasChange(v);
-                                      }}
-                                    >
-                                      {v}
-                                    </span>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </div>
-                        <button
-                          className="button btn-primary mt-16"
-                          onClick={() => handleKeyAliasClick()}
-                        >
-                          Войти
-                        </button>
-                      </div>
-                    )}
-                </div>
-              </div>
-            </form>
+    <div className="col-md-4 offset-md-4">
+      <form>
+        <div className="back-breadcrumbs">
+          <div onClick={() => mainStore.setLoginState("")} className="back">
+            <i className="azla arrow-left-icon"></i> Назад
           </div>
         </div>
-      </div>
-    </section>
+        <div className="special-card" onClick={() => open && setOpen(false)}>
+          <h1 className="title-main">Вход по ЭПЦ</h1>
+          <div className="login-input">
+            <div className="form-group">
+              <label>Файл</label>
+              <button className="form-control" onClick={() => browseKeys()}>
+                Выберите ключ
+              </button>
+            </div>
+            <div className={`form-group ${!ready ? "is-invalid" : ""}`}>
+              <label>Пароль</label>
+              <input
+                className="form-control"
+                type="name"
+                value={state.password}
+                ref={(input) => {
+                  input !== null && input.focus();
+                }}
+                onChange={handlePasswordChange}
+                placeholder="Введите пароль для хранилища"
+              />
+              {!ready && (
+                <div className="invalid-feedback">Ошибка при подключении</div>
+              )}
+            </div>
+            <button
+              className="button btn-primary mb-16"
+              onClick={() => handleKeyAliasClick()}
+            >
+              Загрузить ключи
+            </button>
+            {console.log(props.state)}
+            {props.state.keys.length > 0 &&
+              props.state.keys[0] &&
+              props.state.keys[0] !== "" && (
+                <div className="form-multiselect mb-0">
+                  <div
+                    className={`multi js-multi-buttons ${open ? "open" : ""}`}
+                    onClick={() => setOpen(!open)}
+                  >
+                    {/* При наведении на Input появляется класс open */}
+                    <div className="input-wrapper">
+                      <input
+                        className="multi-input azla form-icon chevron-down-icon"
+                        type="text"
+                        placeholder="Список ключей"
+                        value={key}
+                      />
+                      <label className="label">Ключи</label>
+                    </div>
+                    <div className="multi-menu">
+                      <div className="multi-option option-current">
+                        {props.state.keys.map((v: any, i: number) => {
+                          return (
+                            <div className="multi-list">
+                              <span
+                                className="multi-option-select"
+                                onClick={() => {
+                                  console.log(v);
+                                  setKey(v);
+                                  handleKeyAliasChange(v);
+                                }}
+                              >
+                                {v}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    className="button btn-primary mt-16"
+                    onClick={() => handleKeyAliasClick()}
+                  >
+                    Войти
+                  </button>
+                </div>
+              )}
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 export default LoginEcp;

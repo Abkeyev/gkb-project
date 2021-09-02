@@ -1,22 +1,19 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
-import AppState from "../ncalayer/state";
+import { AppContext } from "../AppContext";
 import "react-tabs/style/react-tabs.css";
+import { observer } from "mobx-react";
 
-interface RequestProps {
-  state: AppState;
-  setState: any;
-}
-
-const Partners = (props: RequestProps) => {
-  const { state, setState } = props;
+const Partners = observer(() => {
   const [advance, setAdvance] = React.useState(false);
   const [sort, setSort] = React.useState(false);
   const [service, setService] = React.useState(false);
   const [services, setServices] = React.useState<string[]>([]);
   const [sortTitle, setSortTitle] = React.useState("");
+  const [index, setIndex] = React.useState(0);
   const history = useHistory();
+  const { requestStore } = React.useContext(AppContext);
   return (
     <div className="main-body">
       <div className="container">
@@ -32,8 +29,8 @@ const Partners = (props: RequestProps) => {
               </div>
 
               <Tabs
-                selectedIndex={state.tab}
-                onSelect={(index) => setState({ ...state, tab: index })}
+                selectedIndex={requestStore.tabIndexPar}
+                onSelect={(i) => requestStore.setTabIndexPar(i)}
               >
                 <div className="">
                   <TabList>
@@ -363,5 +360,5 @@ const Partners = (props: RequestProps) => {
       </div>
     </div>
   );
-};
+});
 export default Partners;

@@ -1,14 +1,11 @@
-import React from "react";
 import ReactDOM from "react-dom";
-import { HashRouter } from "react-router-dom";
 import "./styles";
+import { AppContext, stores } from "./AppContext";
 import App from "./App";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </React.StrictMode>,
+  <AppContext.Provider value={stores}>
+    <App />
+  </AppContext.Provider>,
   document.getElementById("root")
 );

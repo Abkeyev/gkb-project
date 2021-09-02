@@ -3,19 +3,16 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import AppState from "../ncalayer/state";
 import { Link, useHistory } from "react-router-dom";
+import { observer } from "mobx-react";
+import { AppContext } from "../AppContext";
 
-interface RequestProps {
-  state: AppState;
-  setState: any;
-}
-
-const RequestInner = (props: RequestProps) => {
-  const { state, setState } = props;
+const RequestInner = observer(() => {
   const [tab, setTab] = React.useState(false);
   const [step1, setStep1] = React.useState(false);
   const [step2, setStep2] = React.useState(false);
   const [step3, setStep3] = React.useState(false);
   const history = useHistory();
+  const { mainStore, requestStore } = React.useContext(AppContext);
   return (
     <div className="main-body">
       <div className="container">
@@ -37,10 +34,10 @@ const RequestInner = (props: RequestProps) => {
                   Заявка №1353 - ТОО “М-Ломбард”
                 </h1>
 
-                {state.decline && (
+                {mainStore.decline && (
                   <div className="mess-card alert-mess mb-32">
                     <h5>Заявка отклонена</h5>
-                    <p>Причина: {state.declineReason}</p>
+                    <p>Причина: {mainStore.declineReason}</p>
                   </div>
                 )}
 
@@ -48,23 +45,23 @@ const RequestInner = (props: RequestProps) => {
                   <ul className="step-progressbar">
                     <li
                       className={`step-item ${
-                        state.step === 0
+                        requestStore.step === 0
                           ? "step-item-active"
                           : "step-item-complete"
                       }`}
-                      onClick={() => setState({ ...state, step: 0 })}
+                      onClick={() => requestStore.setStep(0)}
                     >
                       Проверка
                     </li>
                     <li
                       className={`step-item ${
-                        state.step === 1
+                        requestStore.step === 1
                           ? "step-item-active"
-                          : state.step > 1
+                          : requestStore.step > 1
                           ? "step-item-complete"
                           : ""
                       }`}
-                      onClick={() => setState({ ...state, step: 1 })}
+                      onClick={() => requestStore.setStep(1)}
                     >
                       Подписание
                       <br />
@@ -72,13 +69,13 @@ const RequestInner = (props: RequestProps) => {
                     </li>
                     <li
                       className={`step-item ${
-                        state.step === 2
+                        requestStore.step === 2
                           ? "step-item-active"
-                          : state.step > 2
+                          : requestStore.step > 2
                           ? "step-item-complete"
                           : ""
                       }`}
-                      onClick={() => setState({ ...state, step: 2 })}
+                      onClick={() => requestStore.setStep(2)}
                     >
                       Форма
                       <br />
@@ -86,25 +83,25 @@ const RequestInner = (props: RequestProps) => {
                     </li>
                     <li
                       className={`step-item ${
-                        state.step === 3
+                        requestStore.step === 3
                           ? "step-item-active"
-                          : state.step > 3
+                          : requestStore.step > 3
                           ? "step-item-complete"
                           : ""
                       }`}
-                      onClick={() => setState({ ...state, step: 3 })}
+                      onClick={() => requestStore.setStep(3)}
                     >
                       Тестирование
                     </li>
                     <li
                       className={`step-item ${
-                        state.step === 4
+                        requestStore.step === 4
                           ? "step-item-active"
-                          : state.step > 4
+                          : requestStore.step > 4
                           ? "step-item-complete"
                           : ""
                       }`}
-                      onClick={() => setState({ ...state, step: 4 })}
+                      onClick={() => requestStore.setStep(4)}
                     >
                       Готово
                     </li>
@@ -112,7 +109,7 @@ const RequestInner = (props: RequestProps) => {
                 </div>
               </div>
 
-              {state.step === 0 ? (
+              {requestStore.step === 0 ? (
                 <Tabs>
                   <div className="line-hr mb-32">
                     <TabList>
@@ -339,9 +336,9 @@ const RequestInner = (props: RequestProps) => {
                     </div>
                   </TabPanel>
                 </Tabs>
-              ) : state.step === 1 ? (
+              ) : requestStore.step === 1 ? (
                 <div className="req-inner-body">
-                  {state.agreement && (
+                  {requestStore.agreement && (
                     <div className="tab-btn-content mb-32">
                       <h3 className="title-subhead mb-16">
                         Выберите тип договора
@@ -350,35 +347,33 @@ const RequestInner = (props: RequestProps) => {
                       <div className="tab-button mb-24">
                         <span
                           className={
-                            !state.notTypical ? "tab-btn active" : "tab-btn"
+                            !requestStore.notTypical
+                              ? "tab-btn active"
+                              : "tab-btn"
                           }
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              isOpenModal: true,
-                              modalType: 3,
-                            })
-                          }
+                          onClick={() => {
+                            mainStore.setModal(true);
+                            mainStore.setModalType(3);
+                          }}
                         >
                           Типовой
                         </span>
                         <span
                           className={
-                            state.notTypical ? "tab-btn active" : "tab-btn"
+                            requestStore.notTypical
+                              ? "tab-btn active"
+                              : "tab-btn"
                           }
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              isOpenModal: true,
-                              modalType: 3,
-                            })
-                          }
+                          onClick={() => {
+                            mainStore.setModal(true);
+                            mainStore.setModalType(3);
+                          }}
                         >
                           Нетиповой
                         </span>
                       </div>
 
-                      {state.notTypical ? (
+                      {requestStore.notTypical ? (
                         <>
                           <div
                             className={`card-collapse tab-num-2 two-signatory ${
@@ -388,25 +383,27 @@ const RequestInner = (props: RequestProps) => {
                             {/* При сворачивании дается класс "collapsed" */}
                             <div
                               className={`card-collapse-header ${
-                                state.agreeTwoStep === 2 ? "success" : ""
+                                requestStore.agreeTwoStep === 2 ? "success" : ""
                               }`}
                             >
                               {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
                               <div className="collapsing-header">
                                 <h3
                                   className={
-                                    state.agreeTwoStep === 2
+                                    requestStore.agreeTwoStep === 2
                                       ? "title-subhead mb-0 done-success"
                                       : "title-subhead mb-0"
                                   }
                                 >
-                                  {state.agreeTwoStep === 2
+                                  {requestStore.agreeTwoStep === 2
                                     ? "Договор согласован"
                                     : "На согласование: “Договор №314 - вер. 24 от 24 июня"}
                                 </h3>
                                 <span
                                   className="btn-collapse"
-                                  onClick={() => setStep2(!step2)}
+                                  onClick={() =>
+                                    requestStore.setStep2(!requestStore.step2)
+                                  }
                                 >
                                   <i className="azla chevron-up-icon"></i>
                                 </span>
@@ -446,7 +443,7 @@ const RequestInner = (props: RequestProps) => {
                               <div className="collapse-body">
                                 <div className="method-signatory">
                                   <div className="method-signatory-add">
-                                    {state.agreeGroup.map((s) => (
+                                    {requestStore.agreeGroup.map((s) => (
                                       <>
                                         <div className="method-signatory-header">
                                           <div className="left">
@@ -454,19 +451,15 @@ const RequestInner = (props: RequestProps) => {
                                               Согласующие от ГКБ 1
                                             </h4>
                                             <p className="mb-0">
-                                              {state.agreeUsers} участников
-                                              {state.agreeTwoStep === 0 && (
+                                              {requestStore.agreeUsers}{" "}
+                                              участников
+                                              {requestStore.agreeTwoStep ===
+                                                0 && (
                                                 <span
                                                   className="delete"
-                                                  onClick={() =>
-                                                    setState({
-                                                      ...state,
-                                                      agreeGroup:
-                                                        state.agreeGroup.splice(
-                                                          1
-                                                        ),
-                                                    })
-                                                  }
+                                                  onClick={() => {
+                                                    requestStore.removeAgreeGroup();
+                                                  }}
                                                 >
                                                   Удалить группу
                                                 </span>
@@ -501,48 +494,45 @@ const RequestInner = (props: RequestProps) => {
                                         <div className="method-add-user">
                                           <div className="method-add-users">
                                             <ul className="method-list-users">
-                                              {state.agreeUsers.map((s) => (
-                                                <li>
-                                                  <div className="left">
-                                                    <i className="azla arrow-primary-down-up grab"></i>
-                                                    <div className="profile">
-                                                      <img
-                                                        className="ava"
-                                                        src={
-                                                          process.env
-                                                            .PUBLIC_URL +
-                                                          "/images/def-ava.svg"
-                                                        }
-                                                      />
-                                                      <span className="name">
-                                                        Султангалиева К.И
-                                                      </span>
+                                              {requestStore.agreeUsers.map(
+                                                (s) => (
+                                                  <li>
+                                                    <div className="left">
+                                                      <i className="azla arrow-primary-down-up grab"></i>
+                                                      <div className="profile">
+                                                        <img
+                                                          className="ava"
+                                                          src={
+                                                            process.env
+                                                              .PUBLIC_URL +
+                                                            "/images/def-ava.svg"
+                                                          }
+                                                        />
+                                                        <span className="name">
+                                                          Султангалиева К.И
+                                                        </span>
+                                                      </div>
                                                     </div>
-                                                  </div>
-                                                  <span className="position">
-                                                    Директор
-                                                  </span>
-                                                  {state.agreeTwoStep > 0 ? (
-                                                    <span className="btn-status not-active">
-                                                      Не согласовано
+                                                    <span className="position">
+                                                      Директор
                                                     </span>
-                                                  ) : (
-                                                    <i
-                                                      onClick={() =>
-                                                        setState({
-                                                          ...state,
-                                                          agreeUsers:
-                                                            state.agreeUsers.splice(
-                                                              1
-                                                            ),
-                                                        })
-                                                      }
-                                                      className="azla close-red-icon delete-if-icon "
-                                                    ></i>
-                                                  )}
-                                                </li>
-                                              ))}
-                                              {state.agreeTwoStep > 0 &&
+                                                    {requestStore.agreeTwoStep >
+                                                    0 ? (
+                                                      <span className="btn-status not-active">
+                                                        Не согласовано
+                                                      </span>
+                                                    ) : (
+                                                      <i
+                                                        onClick={() =>
+                                                          requestStore.removeAgreeUsers()
+                                                        }
+                                                        className="azla close-red-icon delete-if-icon "
+                                                      ></i>
+                                                    )}
+                                                  </li>
+                                                )
+                                              )}
+                                              {requestStore.agreeTwoStep > 0 &&
                                                 [1, 2, 3].map((s, i) => (
                                                   <li>
                                                     <div className="left">
@@ -571,40 +561,38 @@ const RequestInner = (props: RequestProps) => {
                                                     ) : i === 1 ? (
                                                       <span
                                                         className="btn-status done"
-                                                        onClick={() =>
-                                                          setState({
-                                                            ...state,
-                                                            agreeTwoStep: 2,
-                                                            step2: false,
-                                                            step3: true,
-                                                          })
-                                                        }
+                                                        onClick={() => {
+                                                          requestStore.setAgreeTwoStep(
+                                                            2
+                                                          );
+                                                          requestStore.setStep2(
+                                                            false
+                                                          );
+                                                          requestStore.setStep3(
+                                                            true
+                                                          );
+                                                        }}
                                                       >
                                                         Согласовано
                                                       </span>
                                                     ) : i === 2 ? (
                                                       <span
                                                         className="btn-status canceled"
-                                                        onClick={() =>
-                                                          setState({
-                                                            ...state,
-                                                            isOpenModal: true,
-                                                            modalType: 5,
-                                                          })
-                                                        }
+                                                        onClick={() => {
+                                                          mainStore.setModal(
+                                                            true
+                                                          );
+                                                          mainStore.setModalType(
+                                                            5
+                                                          );
+                                                        }}
                                                       >
                                                         Отклонено
                                                       </span>
                                                     ) : (
                                                       <i
                                                         onClick={() =>
-                                                          setState({
-                                                            ...state,
-                                                            agreeUsers:
-                                                              state.agreeUsers.splice(
-                                                                1
-                                                              ),
-                                                          })
+                                                          requestStore.setAgreeUsers()
                                                         }
                                                         className="azla close-red-icon delete-if-icon "
                                                       ></i>
@@ -613,16 +601,13 @@ const RequestInner = (props: RequestProps) => {
                                                 ))}
                                             </ul>
                                           </div>
-                                          {state.agreeTwoStep === 0 && (
+                                          {requestStore.agreeTwoStep === 0 && (
                                             <span
                                               className="add-btn pad-l-56 pad-b-24"
-                                              onClick={() =>
-                                                setState({
-                                                  ...state,
-                                                  isOpenModal: true,
-                                                  modalType: 4,
-                                                })
-                                              }
+                                              onClick={() => {
+                                                mainStore.setModal(true);
+                                                mainStore.setModalType(4);
+                                              }}
                                             >
                                               <span className="circle">
                                                 <i className="azla plus-primary-icon size-18"></i>
@@ -634,14 +619,11 @@ const RequestInner = (props: RequestProps) => {
                                       </>
                                     ))}
                                   </div>
-                                  {state.agreeTwoStep === 0 && (
+                                  {requestStore.agreeTwoStep === 0 && (
                                     <div
                                       className="method-add-group"
                                       onClick={() =>
-                                        setState({
-                                          ...state,
-                                          agreeGroup: [...state.agreeGroup, 0],
-                                        })
+                                        requestStore.setAgreeGroup()
                                       }
                                     >
                                       <span className="add-btn">
@@ -655,18 +637,18 @@ const RequestInner = (props: RequestProps) => {
                                 </div>
                               </div>
 
-                              {state.agreeTwoStep === 0 && (
+                              {requestStore.agreeTwoStep === 0 && (
                                 <div className="collapse-footer">
                                   <button
                                     type="button"
                                     className={`button btn-primary ${
-                                      state.agreeGroup.length === 0 ||
-                                      state.agreeUsers.length === 0
+                                      requestStore.agreeGroup.length === 0 ||
+                                      requestStore.agreeUsers.length === 0
                                         ? "disabled"
                                         : ""
                                     }`}
                                     onClick={() =>
-                                      setState({ ...state, agreeTwoStep: 1 })
+                                      requestStore.setAgreeTwoStep(1)
                                     }
                                   >
                                     Отправить на подписание
@@ -677,13 +659,16 @@ const RequestInner = (props: RequestProps) => {
                           </div>
                           <div
                             className={`card-collapse tab-num-1 ${
-                              state.agreeTwoStep < 2 || (!step3 && "collapsed")
-                            } ${state.agreeTwoStep < 2 ? "disabled" : ""}`}
+                              requestStore.agreeTwoStep < 2 ||
+                              (!step3 && "collapsed")
+                            } ${
+                              requestStore.agreeTwoStep < 2 ? "disabled" : ""
+                            }`}
                           >
                             {/* При сворачивании дается класс "collapsed" */}
                             <div
                               className={
-                                state.signTwoStep === 3
+                                requestStore.signTwoStep === 3
                                   ? "card-collapse-header success"
                                   : "card-collapse-header"
                               }
@@ -692,13 +677,13 @@ const RequestInner = (props: RequestProps) => {
                               <div className="collapsing-header">
                                 <h3
                                   className={
-                                    state.signTwoStep === 3
+                                    requestStore.signTwoStep === 3
                                       ? "title-subhead mb-0 done-success"
                                       : "title-subhead mb-0"
                                   }
                                 >
                                   {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
-                                  {state.signTwoStep === 3
+                                  {requestStore.signTwoStep === 3
                                     ? "Договор подписан"
                                     : "На подписание: “Договор №314 - вер. 24 от 24 июня"}
                                 </h3>
@@ -765,23 +750,20 @@ const RequestInner = (props: RequestProps) => {
                                     <div className="col-md-6">
                                       <div className="signatory-status">
                                         <p className="desc">Директор</p>
-                                        {state.signTwoStep === 1 ? (
+                                        {requestStore.signTwoStep === 1 ? (
                                           <span
                                             className="btn-status not-active"
                                             onClick={() =>
-                                              setState({
-                                                ...state,
-                                                signTwoStep: 2,
-                                              })
+                                              requestStore.setSignTwoStep(2)
                                             }
                                           >
                                             Не Подписано
                                           </span>
-                                        ) : state.signTwoStep === 2 ? (
+                                        ) : requestStore.signTwoStep === 2 ? (
                                           <span className="btn-status done">
                                             Подписано
                                           </span>
-                                        ) : state.signTwoStep === 3 ? (
+                                        ) : requestStore.signTwoStep === 3 ? (
                                           <span className="btn-status done">
                                             Подписано
                                           </span>
@@ -800,7 +782,7 @@ const RequestInner = (props: RequestProps) => {
                                     Бюро”
                                   </h4>
 
-                                  {state.signTwoUsers.map((s) => (
+                                  {requestStore.signTwoUsers.map((s) => (
                                     <div className="signatory-profile">
                                       <div className="col-md-6">
                                         <div className="profile">
@@ -821,38 +803,29 @@ const RequestInner = (props: RequestProps) => {
                                           <p className="desc">Директор</p>
                                           {/* <i className="azla close-red-icon delete-if-icon"></i> */}
 
-                                          {state.signTwoStep === 1 ? (
+                                          {requestStore.signTwoStep === 1 ? (
                                             <button className="btn-status-signatory btn-icon not-active">
                                               <i className="azla edit-white-icon"></i>
                                               Подписать
                                             </button>
-                                          ) : state.signTwoStep === 2 ? (
+                                          ) : requestStore.signTwoStep === 2 ? (
                                             <button
                                               className="btn-status-signatory btn-icon active"
                                               onClick={() =>
-                                                setState({
-                                                  ...state,
-                                                  signTwoStep: 3,
-                                                })
+                                                requestStore.setSignTwoStep(3)
                                               }
                                             >
                                               <i className="azla edit-white-icon"></i>
                                               Подписать
                                             </button>
-                                          ) : state.signTwoStep === 3 ? (
+                                          ) : requestStore.signTwoStep === 3 ? (
                                             <span className="btn-status done">
                                               Подписано
                                             </span>
                                           ) : (
                                             <i
                                               onClick={() =>
-                                                setState({
-                                                  ...state,
-                                                  agreeUsers:
-                                                    state.signTwoUsers.splice(
-                                                      1
-                                                    ),
-                                                })
+                                                requestStore.setAgreeUsers()
                                               }
                                               className="azla close-red-icon delete-if-icon "
                                             ></i>
@@ -863,17 +836,14 @@ const RequestInner = (props: RequestProps) => {
                                   ))}
 
                                   {/* По дефолту стоит выбор подписанта, после выбора исчезает и добавляется выше дивка, и включается кнопка "Отправить на подписание" */}
-                                  {state.signTwoUsers.length === 0 && (
+                                  {requestStore.signTwoUsers.length === 0 && (
                                     <div className="method-add-group pad-l-0">
                                       <span
                                         className="add-btn"
-                                        onClick={() =>
-                                          setState({
-                                            ...state,
-                                            isOpenModal: true,
-                                            modalType: 6,
-                                          })
-                                        }
+                                        onClick={() => {
+                                          mainStore.setModal(true);
+                                          mainStore.setModalType(6);
+                                        }}
                                       >
                                         <span className="circle">
                                           <i className="azla plus-primary-icon size-18"></i>
@@ -885,17 +855,17 @@ const RequestInner = (props: RequestProps) => {
                                 </div>
                               </div>
 
-                              {state.signTwoStep === 0 && (
+                              {requestStore.signTwoStep === 0 && (
                                 <div className="collapse-footer">
                                   <button
                                     type="button"
                                     className={`button btn-primary ${
-                                      state.signTwoUsers.length === 0
+                                      requestStore.signTwoUsers.length === 0
                                         ? "disabled"
                                         : ""
                                     }`}
                                     onClick={() =>
-                                      setState({ ...state, signTwoStep: 1 })
+                                      requestStore.setSignTwoStep(1)
                                     }
                                   >
                                     Отправить на подписание
@@ -916,7 +886,7 @@ const RequestInner = (props: RequestProps) => {
                           {/* При сворачивании дается класс "collapsed" */}
                           <div
                             className={
-                              state.signStep === 3
+                              requestStore.signStep === 3
                                 ? "card-collapse-header success"
                                 : "card-collapse-header"
                             }
@@ -925,13 +895,13 @@ const RequestInner = (props: RequestProps) => {
                             <div className="collapsing-header">
                               <h3
                                 className={
-                                  state.signStep === 3
+                                  requestStore.signStep === 3
                                     ? "title-subhead mb-0 done-success"
                                     : "title-subhead mb-0"
                                 }
                               >
                                 {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
-                                {state.signStep === 3
+                                {requestStore.signStep === 3
                                   ? "Договор подписан"
                                   : "На подписание: “Договор №314 - вер. 24 от 24 июня"}
                               </h3>
@@ -998,20 +968,20 @@ const RequestInner = (props: RequestProps) => {
                                   <div className="col-md-6">
                                     <div className="signatory-status">
                                       <p className="desc">Директор</p>
-                                      {state.signStep === 1 ? (
+                                      {requestStore.signStep === 1 ? (
                                         <span
                                           className="btn-status not-active"
                                           onClick={() =>
-                                            setState({ ...state, signStep: 2 })
+                                            requestStore.setSignStep(2)
                                           }
                                         >
                                           Не Подписано
                                         </span>
-                                      ) : state.signStep === 2 ? (
+                                      ) : requestStore.signStep === 2 ? (
                                         <span className="btn-status done">
                                           Подписано
                                         </span>
-                                      ) : state.signStep === 3 ? (
+                                      ) : requestStore.signStep === 3 ? (
                                         <span className="btn-status done">
                                           Подписано
                                         </span>
@@ -1050,22 +1020,22 @@ const RequestInner = (props: RequestProps) => {
                                       <p className="desc">Директор</p>
                                       {/* <i className="azla close-red-icon delete-if-icon"></i> */}
 
-                                      {state.signStep === 1 ? (
+                                      {requestStore.signStep === 1 ? (
                                         <button className="btn-status-signatory btn-icon not-active">
                                           <i className="azla edit-white-icon"></i>
                                           Подписать
                                         </button>
-                                      ) : state.signStep === 2 ? (
+                                      ) : requestStore.signStep === 2 ? (
                                         <button
                                           className="btn-status-signatory btn-icon active"
                                           onClick={() =>
-                                            setState({ ...state, signStep: 3 })
+                                            requestStore.setSignStep(3)
                                           }
                                         >
                                           <i className="azla edit-white-icon"></i>
                                           Подписать
                                         </button>
-                                      ) : state.signStep === 3 ? (
+                                      ) : requestStore.signStep === 3 ? (
                                         <span className="btn-status done">
                                           Подписано
                                         </span>
@@ -1078,14 +1048,12 @@ const RequestInner = (props: RequestProps) => {
                               </div>
                             </div>
 
-                            {state.signStep === 0 && (
+                            {requestStore.signStep === 0 && (
                               <div className="collapse-footer">
                                 <button
                                   type="button"
                                   className="button btn-primary"
-                                  onClick={() =>
-                                    setState({ ...state, signStep: 1 })
-                                  }
+                                  onClick={() => requestStore.setSignStep(1)}
                                 >
                                   Отправить на подписание
                                 </button>
@@ -1118,13 +1086,10 @@ const RequestInner = (props: RequestProps) => {
                     <tbody>
                       {[1, 2, 3, 4].map((m) => (
                         <tr
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              isOpenModal: true,
-                              modalType: 2,
-                            })
-                          }
+                          onClick={() => {
+                            mainStore.setModal(true);
+                            mainStore.setModalType(2);
+                          }}
                         >
                           <td>Договор вер. 2.4255</td>
                           <td>24 Июня 2021</td>
@@ -1184,7 +1149,7 @@ const RequestInner = (props: RequestProps) => {
                     </ul>
                   </div>
                 </div>
-              ) : state.step === 2 ? (
+              ) : requestStore.step === 2 ? (
                 <>
                   {[1, 2, 3].map((s) => (
                     <div className="card mb-24 pad-24">
@@ -1273,7 +1238,7 @@ const RequestInner = (props: RequestProps) => {
                     </div>
                   ))}
                 </>
-              ) : state.step === 3 ? (
+              ) : requestStore.step === 3 ? (
                 <>
                   <div className="pad-b-128">
                     <div className="req-inner-body">
@@ -1343,7 +1308,7 @@ const RequestInner = (props: RequestProps) => {
                     </div>
                   </div>
                 </>
-              ) : state.step === 4 ? (
+              ) : requestStore.step === 4 ? (
                 <>
                   <div className="pad-b-128">
                     <div className="done-request">
@@ -1450,7 +1415,7 @@ const RequestInner = (props: RequestProps) => {
 
               <div className="req-inner-footer">
                 <div className="container">
-                  {state.modalManager && state.step === 0 ? (
+                  {mainStore.modalManager && requestStore.step === 0 ? (
                     <div className="manager-req mrl-32">
                       <div className="left">
                         <p>Менеджер заявки</p>
@@ -1463,18 +1428,15 @@ const RequestInner = (props: RequestProps) => {
                         </div>
                       </div>
 
-                      {state.decline ? (
+                      {mainStore.decline ? (
                         <div className="right alert">
                           <p>Заявка отклонена</p>
                           <button
                             className="button btn-secondary"
                             onClick={() => {
-                              setState({
-                                ...state,
-                                declineReason: "",
-                                decline: false,
-                                tab: 3,
-                              });
+                              mainStore.setDecline(false);
+                              mainStore.setDeclineReason("");
+                              requestStore.setTabIndexReq(3);
 
                               history.push("/request");
                             }}
@@ -1488,38 +1450,25 @@ const RequestInner = (props: RequestProps) => {
                           <button
                             className="button btn-secondary mr-8"
                             onClick={() => {
-                              setState({
-                                ...state,
-                                isOpenModal: true,
-                                modalType: 1,
-                              });
+                              mainStore.setModal(true);
+                              mainStore.setModalType(1);
                             }}
                           >
                             Нет
                           </button>
                           <button
                             className="button btn-primary"
-                            onClick={() =>
-                              setState({
-                                ...state,
-                                step: 1,
-                              })
-                            }
+                            onClick={() => requestStore.setStep(1)}
                           >
                             Да, успешно
                           </button>
                         </div>
                       )}
                     </div>
-                  ) : state.step === 0 ? (
+                  ) : requestStore.step === 0 ? (
                     <button
                       type="button"
-                      onClick={() =>
-                        setState({
-                          ...state,
-                          isOpenModal: true,
-                        })
-                      }
+                      onClick={() => mainStore.setModal(true)}
                       className="button btn-primary mrl-32"
                     >
                       Назначить
@@ -1535,5 +1484,5 @@ const RequestInner = (props: RequestProps) => {
       </div>
     </div>
   );
-};
+});
 export default RequestInner;

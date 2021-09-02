@@ -1,18 +1,15 @@
 import React from "react";
+import { AppContext } from "../AppContext";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import AppState from "../ncalayer/state";
 import { Link, useHistory } from "react-router-dom";
+import { observer } from "mobx-react";
 
-interface RequestProps {
-  state: AppState;
-  setState: any;
-}
-
-const PartnersInner = (props: RequestProps) => {
-  const { state, setState } = props;
+const PartnersInner = observer(() => {
   const [tab, setTab] = React.useState(false);
   const history = useHistory();
+  const { mainStore, requestStore } = React.useContext(AppContext);
   return (
     <div className="main-body">
       <div className="container">
@@ -34,10 +31,10 @@ const PartnersInner = (props: RequestProps) => {
                   Заявка №1353 - ТОО “М-Ломбард”
                 </h1>
 
-                {state.decline ? (
+                {mainStore.decline ? (
                   <div className="mess-card alert-mess mb-32">
                     <h5>Заявка отклонена</h5>
-                    <p>Причина: {state.declineReason}</p>
+                    <p>Причина: {mainStore.declineReason}</p>
                   </div>
                 ) : (
                   <div className="mess-card mb-32">
@@ -53,23 +50,23 @@ const PartnersInner = (props: RequestProps) => {
                   <ul className="step-progressbar">
                     <li
                       className={`step-item ${
-                        state.step === 0
+                        requestStore.step === 0
                           ? "step-item-active"
                           : "step-item-complete"
                       }`}
-                      onClick={() => setState({ ...state, step: 0 })}
+                      onClick={() => requestStore.setStep(0)}
                     >
                       Проверка
                     </li>
                     <li
                       className={`step-item ${
-                        state.step === 1
+                        requestStore.step === 1
                           ? "step-item-active"
-                          : state.step > 1
+                          : requestStore.step > 1
                           ? "step-item-complete"
                           : ""
                       }`}
-                      onClick={() => setState({ ...state, step: 1 })}
+                      onClick={() => requestStore.setStep(1)}
                     >
                       Подписание
                       <br />
@@ -77,13 +74,13 @@ const PartnersInner = (props: RequestProps) => {
                     </li>
                     <li
                       className={`step-item ${
-                        state.step === 2
+                        requestStore.step === 2
                           ? "step-item-active"
-                          : state.step > 2
+                          : requestStore.step > 2
                           ? "step-item-complete"
                           : ""
                       }`}
-                      onClick={() => setState({ ...state, step: 2 })}
+                      onClick={() => requestStore.setStep(2)}
                     >
                       Форма
                       <br />
@@ -91,25 +88,25 @@ const PartnersInner = (props: RequestProps) => {
                     </li>
                     <li
                       className={`step-item ${
-                        state.step === 3
+                        requestStore.step === 3
                           ? "step-item-active"
-                          : state.step > 3
+                          : requestStore.step > 3
                           ? "step-item-complete"
                           : ""
                       }`}
-                      onClick={() => setState({ ...state, step: 3 })}
+                      onClick={() => requestStore.setStep(3)}
                     >
                       Тестирование
                     </li>
                     <li
                       className={`step-item ${
-                        state.step === 4
+                        requestStore.step === 4
                           ? "step-item-active"
-                          : state.step > 4
+                          : requestStore.step > 4
                           ? "step-item-complete"
                           : ""
                       }`}
-                      onClick={() => setState({ ...state, step: 4 })}
+                      onClick={() => requestStore.setStep(4)}
                     >
                       Готово
                     </li>
@@ -117,7 +114,7 @@ const PartnersInner = (props: RequestProps) => {
                 </div>
               </div>
 
-              {state.step === 0 ? (
+              {requestStore.step === 0 ? (
                 <Tabs>
                   <div className="line-hr mb-32">
                     <TabList>
@@ -344,9 +341,9 @@ const PartnersInner = (props: RequestProps) => {
                     </div>
                   </TabPanel>
                 </Tabs>
-              ) : state.step === 1 ? (
+              ) : requestStore.step === 1 ? (
                 <div className="req-inner-body">
-                  {state.agreementPar && (
+                  {requestStore.agreementPar && (
                     <div className="tab-btn-content mb-32">
                       <h3 className="title-subhead mb-16">
                         Выберите тип договора
@@ -355,65 +352,63 @@ const PartnersInner = (props: RequestProps) => {
                       <div className="tab-button mb-24">
                         <span
                           className={
-                            !state.notTypical ? "tab-btn active" : "tab-btn"
+                            !requestStore.notTypical
+                              ? "tab-btn active"
+                              : "tab-btn"
                           }
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              isOpenModal: true,
-                              modalType: 3,
-                            })
-                          }
+                          onClick={() => {
+                            mainStore.setModal(true);
+                            mainStore.setModalType(3);
+                          }}
                         >
                           Типовой
                         </span>
                         <span
                           className={
-                            state.notTypical ? "tab-btn active" : "tab-btn"
+                            requestStore.notTypical
+                              ? "tab-btn active"
+                              : "tab-btn"
                           }
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              isOpenModal: true,
-                              modalType: 3,
-                            })
-                          }
+                          onClick={() => {
+                            mainStore.setModal(true);
+                            mainStore.setModalType(3);
+                          }}
                         >
                           Нетиповой
                         </span>
                       </div>
 
-                      {state.notTypical ? (
+                      {requestStore.notTypical ? (
                         <>
                           <div
                             className={`card-collapse tab-num-2 two-signatory ${
-                              state.step2 ? "collapsed" : ""
+                              requestStore.step2 ? "collapsed" : ""
                             }`}
                           >
                             {/* При сворачивании дается класс "collapsed" */}
                             <div
                               className={`card-collapse-header ${
-                                state.agreeParStep === 2 ? "success" : ""
+                                requestStore.agreeParStep === 2 ? "success" : ""
                               }`}
                             >
                               {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
                               <div className="collapsing-header">
                                 <h3
                                   className={
-                                    state.agreeParStep === 2
+                                    requestStore.agreeParStep === 2
                                       ? "title-subhead mb-0 done-success"
                                       : "title-subhead mb-0"
                                   }
                                 >
-                                  {state.agreeParStep === 2
+                                  {requestStore.agreeParStep === 2
                                     ? "Договор согласован"
                                     : "На согласование: “Договор №314 - вер. 24 от 24 июня"}
                                 </h3>
                                 <span
                                   className="btn-collapse"
-                                  onClick={() =>
-                                    setState({ ...state, step2: !state.step2 })
-                                  }
+                                  onClick={() => {
+                                    requestStore.setStep2(!requestStore.step2);
+                                  }}
                                 >
                                   <i className="azla chevron-up-icon"></i>
                                 </span>
@@ -491,7 +486,8 @@ const PartnersInner = (props: RequestProps) => {
                                                   <span className="position">
                                                     Директор
                                                   </span>
-                                                  {state.agreeParStep > 0 ? (
+                                                  {requestStore.agreeParStep >
+                                                  0 ? (
                                                     <span className="btn-status not-active">
                                                       Не согласовано
                                                     </span>
@@ -500,7 +496,7 @@ const PartnersInner = (props: RequestProps) => {
                                                   )}
                                                 </li>
                                               ))}
-                                              {state.agreeParStep > 0 &&
+                                              {requestStore.agreeParStep > 0 &&
                                                 [1, 2, 3].map((s, i) => (
                                                   <li>
                                                     <div className="left">
@@ -529,27 +525,31 @@ const PartnersInner = (props: RequestProps) => {
                                                     ) : i === 1 ? (
                                                       <span
                                                         className="btn-status done"
-                                                        onClick={() =>
-                                                          setState({
-                                                            ...state,
-                                                            agreeParStep: 2,
-                                                            step2: false,
-                                                            step3: true,
-                                                          })
-                                                        }
+                                                        onClick={() => {
+                                                          requestStore.setAgreeParStep(
+                                                            2
+                                                          );
+                                                          requestStore.setStep2(
+                                                            false
+                                                          );
+                                                          requestStore.setStep3(
+                                                            true
+                                                          );
+                                                        }}
                                                       >
                                                         Согласовано
                                                       </span>
                                                     ) : i === 2 ? (
                                                       <span
                                                         className="btn-status canceled"
-                                                        onClick={() =>
-                                                          setState({
-                                                            ...state,
-                                                            isOpenModal: true,
-                                                            modalType: 5,
-                                                          })
-                                                        }
+                                                        onClick={() => {
+                                                          mainStore.setModal(
+                                                            true
+                                                          );
+                                                          mainStore.setModalType(
+                                                            5
+                                                          );
+                                                        }}
                                                       >
                                                         Отклонено
                                                       </span>
@@ -560,16 +560,13 @@ const PartnersInner = (props: RequestProps) => {
                                                 ))}
                                             </ul>
                                           </div>
-                                          {state.agreeParStep === 0 && (
+                                          {requestStore.agreeParStep === 0 && (
                                             <span
                                               className="add-btn pad-l-56 pad-b-24"
-                                              onClick={() =>
-                                                setState({
-                                                  ...state,
-                                                  isOpenModal: true,
-                                                  modalType: 4,
-                                                })
-                                              }
+                                              onClick={() => {
+                                                mainStore.setModal(true);
+                                                mainStore.setModalType(4);
+                                              }}
                                             >
                                               <span className="circle">
                                                 <i className="azla plus-primary-icon size-18"></i>
@@ -581,7 +578,7 @@ const PartnersInner = (props: RequestProps) => {
                                       </>
                                     ))}
                                   </div>
-                                  {state.agreeParStep === 0 && (
+                                  {requestStore.agreeParStep === 0 && (
                                     <div
                                       className="method-add-group"
                                       onClick={() => {}}
@@ -597,18 +594,18 @@ const PartnersInner = (props: RequestProps) => {
                                 </div>
                               </div>
 
-                              {state.agreeParStep === 0 && (
+                              {requestStore.agreeParStep === 0 && (
                                 <div className="collapse-footer">
                                   <button
                                     type="button"
                                     className={`button btn-primary ${
-                                      state.agreeGroup.length === 0 ||
-                                      state.agreeUsers.length === 0
+                                      requestStore.agreeGroup.length === 0 ||
+                                      requestStore.agreeUsers.length === 0
                                         ? "disabled"
                                         : ""
                                     }`}
                                     onClick={() =>
-                                      setState({ ...state, agreeParStep: 1 })
+                                      requestStore.setAgreeParStep(1)
                                     }
                                   >
                                     Отправить на подписание
@@ -619,15 +616,18 @@ const PartnersInner = (props: RequestProps) => {
                           </div>
                           <div
                             className={`card-collapse tab-num-1 ${
-                              state.agreeParStep < 2 || !state.step3
+                              requestStore.agreeParStep < 2 ||
+                              !requestStore.step3
                                 ? "collapsed "
                                 : ""
-                            } ${state.agreeParStep < 2 ? "disabled" : ""}`}
+                            } ${
+                              requestStore.agreeParStep < 2 ? "disabled" : ""
+                            }`}
                           >
                             {/* При сворачивании дается класс "collapsed" */}
                             <div
                               className={
-                                state.signTwoStepPar === 3
+                                requestStore.signTwoStepPar === 3
                                   ? "card-collapse-header success"
                                   : "card-collapse-header"
                               }
@@ -636,21 +636,21 @@ const PartnersInner = (props: RequestProps) => {
                               <div className="collapsing-header">
                                 <h3
                                   className={
-                                    state.signTwoStepPar === 3
+                                    requestStore.signTwoStepPar === 3
                                       ? "title-subhead mb-0 done-success"
                                       : "title-subhead mb-0"
                                   }
                                 >
                                   {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
-                                  {state.signTwoStepPar === 3
+                                  {requestStore.signTwoStepPar === 3
                                     ? "Договор подписан"
                                     : "На подписание: “Договор №314 - вер. 24 от 24 июня"}
                                 </h3>
                                 <span
                                   className="btn-collapse"
-                                  onClick={() =>
-                                    setState({ ...state, step3: !state.step3 })
-                                  }
+                                  onClick={() => {
+                                    requestStore.setStep3(!requestStore.step3);
+                                  }}
                                 >
                                   <i className="azla chevron-up-icon"></i>
                                 </span>
@@ -712,24 +712,25 @@ const PartnersInner = (props: RequestProps) => {
                                       <div className="col-md-6">
                                         <div className="signatory-status">
                                           <p className="desc">Директор</p>
-                                          {state.signTwoStepPar === 1 ? (
+                                          {requestStore.signTwoStepPar === 1 ? (
                                             <button
                                               className="btn-status-signatory btn-icon active"
                                               onClick={() =>
-                                                setState({
-                                                  ...state,
-                                                  signTwoStepPar: 2,
-                                                })
+                                                requestStore.setSignTwoStepPar(
+                                                  2
+                                                )
                                               }
                                             >
                                               <i className="azla edit-white-icon"></i>
                                               Подписать
                                             </button>
-                                          ) : state.signTwoStepPar === 2 ? (
+                                          ) : requestStore.signTwoStepPar ===
+                                            2 ? (
                                             <span className="btn-status done">
                                               Подписано
                                             </span>
-                                          ) : state.signTwoStepPar === 3 ? (
+                                          ) : requestStore.signTwoStepPar ===
+                                            3 ? (
                                             <span className="btn-status done">
                                               Подписано
                                             </span>
@@ -767,23 +768,24 @@ const PartnersInner = (props: RequestProps) => {
                                       <div className="col-md-6">
                                         <div className="signatory-status">
                                           <p className="desc">Директор</p>
-                                          {state.signTwoStepPar === 1 ? (
+                                          {requestStore.signTwoStepPar === 1 ? (
                                             <span className="btn-status not-active">
                                               Не Подписано
                                             </span>
-                                          ) : state.signTwoStepPar === 2 ? (
+                                          ) : requestStore.signTwoStepPar ===
+                                            2 ? (
                                             <span
                                               className="btn-status not-active"
                                               onClick={() =>
-                                                setState({
-                                                  ...state,
-                                                  signTwoStepPar: 3,
-                                                })
+                                                requestStore.setSignTwoStepPar(
+                                                  3
+                                                )
                                               }
                                             >
                                               Не Подписано
                                             </span>
-                                          ) : state.signTwoStepPar === 3 ? (
+                                          ) : requestStore.signTwoStepPar ===
+                                            3 ? (
                                             <span className="btn-status done">
                                               Подписано
                                             </span>
@@ -797,17 +799,17 @@ const PartnersInner = (props: RequestProps) => {
                                 </div>
                               </div>
 
-                              {state.signTwoStepPar === 0 && (
+                              {requestStore.signTwoStepPar === 0 && (
                                 <div className="collapse-footer">
                                   <button
                                     type="button"
                                     className={`button btn-primary ${
-                                      state.signTwoUsers.length === 0
+                                      requestStore.signTwoUsers.length === 0
                                         ? "disabled"
                                         : ""
                                     }`}
                                     onClick={() =>
-                                      setState({ ...state, signTwoStepPar: 1 })
+                                      requestStore.setSignTwoStepPar(1)
                                     }
                                   >
                                     Отправить на подписание
@@ -820,13 +822,13 @@ const PartnersInner = (props: RequestProps) => {
                       ) : (
                         <div
                           className={`card-collapse tab-num-1 ${
-                            state.step1 ? "collapsed" : ""
+                            requestStore.step1 ? "collapsed" : ""
                           }`}
                         >
                           {/* При сворачивании дается класс "collapsed" */}
                           <div
                             className={
-                              state.signStepPar === 3
+                              requestStore.signStepPar === 3
                                 ? "card-collapse-header success"
                                 : "card-collapse-header"
                             }
@@ -835,20 +837,20 @@ const PartnersInner = (props: RequestProps) => {
                             <div className="collapsing-header">
                               <h3
                                 className={
-                                  state.signStepPar === 3
+                                  requestStore.signStepPar === 3
                                     ? "title-subhead mb-0 done-success"
                                     : "title-subhead mb-0"
                                 }
                               >
                                 {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
-                                {state.signStepPar === 3
+                                {requestStore.signStepPar === 3
                                   ? "Договор подписан"
                                   : "На подписание: “Договор №314 - вер. 24 от 24 июня"}
                               </h3>
                               <span
                                 className="btn-collapse"
                                 onClick={() =>
-                                  setState({ ...state, step1: !state.step1 })
+                                  requestStore.setStep1(!requestStore.step1)
                                 }
                               >
                                 <i className="azla chevron-up-icon"></i>
@@ -911,24 +913,21 @@ const PartnersInner = (props: RequestProps) => {
                                     <div className="signatory-status">
                                       <p className="desc">Директор</p>
 
-                                      {state.signStepPar === 1 ? (
+                                      {requestStore.signStepPar === 1 ? (
                                         <button
                                           className="btn-status-signatory btn-icon active"
                                           onClick={() =>
-                                            setState({
-                                              ...state,
-                                              signStepPar: 2,
-                                            })
+                                            requestStore.setSignStepPar(2)
                                           }
                                         >
                                           <i className="azla edit-white-icon"></i>
                                           Подписать
                                         </button>
-                                      ) : state.signStepPar === 2 ? (
+                                      ) : requestStore.signStepPar === 2 ? (
                                         <span className="btn-status done">
                                           Подписано
                                         </span>
-                                      ) : state.signStepPar === 3 ? (
+                                      ) : requestStore.signStepPar === 3 ? (
                                         <span className="btn-status done">
                                           Подписано
                                         </span>
@@ -967,23 +966,20 @@ const PartnersInner = (props: RequestProps) => {
                                       <p className="desc">Директор</p>
                                       {/* <i className="azla close-red-icon delete-if-icon"></i> */}
 
-                                      {state.signStepPar === 1 ? (
+                                      {requestStore.signStepPar === 1 ? (
                                         <span className="btn-status not-active">
                                           Не Подписано
                                         </span>
-                                      ) : state.signStepPar === 2 ? (
+                                      ) : requestStore.signStepPar === 2 ? (
                                         <span
                                           className="btn-status not-active"
                                           onClick={() =>
-                                            setState({
-                                              ...state,
-                                              signStepPar: 3,
-                                            })
+                                            requestStore.setSignStepPar(3)
                                           }
                                         >
                                           Не Подписано
                                         </span>
-                                      ) : state.signStepPar === 3 ? (
+                                      ) : requestStore.signStepPar === 3 ? (
                                         <span className="btn-status done">
                                           Подписано
                                         </span>
@@ -999,13 +995,10 @@ const PartnersInner = (props: RequestProps) => {
                                   <div className="method-add-group pad-l-0">
                                     <span
                                       className="add-btn"
-                                      onClick={() =>
-                                        setState({
-                                          ...state,
-                                          isOpenModal: true,
-                                          modalType: 6,
-                                        })
-                                      }
+                                      onClick={() => {
+                                        mainStore.setModal(true);
+                                        mainStore.setModalType(6);
+                                      }}
                                     >
                                       <span className="circle">
                                         <i className="azla plus-primary-icon size-18"></i>
@@ -1017,14 +1010,12 @@ const PartnersInner = (props: RequestProps) => {
                               </div>
                             </div>
 
-                            {state.signStepPar === 0 && (
+                            {requestStore.signStepPar === 0 && (
                               <div className="collapse-footer">
                                 <button
                                   type="button"
                                   className="button btn-primary"
-                                  onClick={() =>
-                                    setState({ ...state, signStepPar: 1 })
-                                  }
+                                  onClick={() => requestStore.setSignStepPar(1)}
                                 >
                                   Отправить на подписание
                                 </button>
@@ -1057,13 +1048,10 @@ const PartnersInner = (props: RequestProps) => {
                     <tbody>
                       {[1, 2, 3, 4].map((m) => (
                         <tr
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              isOpenModal: true,
-                              modalType: 2,
-                            })
-                          }
+                          onClick={() => {
+                            mainStore.setModal(true);
+                            mainStore.setModalType(2);
+                          }}
                         >
                           <td>Договор вер. 2.4255</td>
                           <td>24 Июня 2021</td>
@@ -1123,7 +1111,7 @@ const PartnersInner = (props: RequestProps) => {
                     </ul>
                   </div>
                 </div>
-              ) : state.step === 2 ? (
+              ) : requestStore.step === 2 ? (
                 <>
                   {[1, 2, 3].map((s) => (
                     <div className="card mb-24 pad-24">
@@ -1212,7 +1200,7 @@ const PartnersInner = (props: RequestProps) => {
                     </div>
                   ))}
                 </>
-              ) : state.step === 3 ? (
+              ) : requestStore.step === 3 ? (
                 <>
                   <div className="pad-b-128">
                     <div className="req-inner-body">
@@ -1282,7 +1270,7 @@ const PartnersInner = (props: RequestProps) => {
                     </div>
                   </div>
                 </>
-              ) : state.step === 4 ? (
+              ) : requestStore.step === 4 ? (
                 <>
                   <div className="pad-b-128">
                     <div className="done-request">
@@ -1389,7 +1377,7 @@ const PartnersInner = (props: RequestProps) => {
 
               <div className="req-inner-footer">
                 <div className="container">
-                  {state.modalManager && state.step === 0 ? (
+                  {mainStore.modalManager && requestStore.step === 0 ? (
                     <div className="manager-req mrl-32">
                       <div className="left">
                         <p>Менеджер заявки</p>
@@ -1402,18 +1390,15 @@ const PartnersInner = (props: RequestProps) => {
                         </div>
                       </div>
 
-                      {state.decline ? (
+                      {mainStore.decline ? (
                         <div className="right alert">
                           <p>Заявка отклонена</p>
                           <button
                             className="button btn-secondary"
                             onClick={() => {
-                              setState({
-                                ...state,
-                                declineReason: "",
-                                decline: false,
-                                tab: 3,
-                              });
+                              mainStore.setDeclineReason("");
+                              mainStore.setDecline(false);
+                              requestStore.setTabIndexPar(3);
 
                               history.push("/partners");
                             }}
@@ -1427,38 +1412,25 @@ const PartnersInner = (props: RequestProps) => {
                           <button
                             className="button btn-secondary mr-8"
                             onClick={() => {
-                              setState({
-                                ...state,
-                                isOpenModal: true,
-                                modalType: 1,
-                              });
+                              mainStore.setModal(true);
+                              mainStore.setModalType(1);
                             }}
                           >
                             Нет
                           </button>
                           <button
                             className="button btn-primary"
-                            onClick={() =>
-                              setState({
-                                ...state,
-                                step: 1,
-                              })
-                            }
+                            onClick={() => requestStore.setStep(1)}
                           >
                             Да, успешно
                           </button>
                         </div>
                       )}
                     </div>
-                  ) : state.step === 3 ? (
+                  ) : requestStore.step === 3 ? (
                     <button
                       type="button"
-                      onClick={() =>
-                        setState({
-                          ...state,
-                          step: 4,
-                        })
-                      }
+                      onClick={() => requestStore.setStep(4)}
                       className="button btn-primary mrl-32"
                     >
                       Подписать акт тестирования
@@ -1474,5 +1446,5 @@ const PartnersInner = (props: RequestProps) => {
       </div>
     </div>
   );
-};
+});
 export default PartnersInner;

@@ -1,22 +1,20 @@
-import LoginEcp from "./LoginEcp";
 import Login from "./Login";
+import LoginEcp from "./LoginEcp";
 import Registration from "./Registration";
-import Main from "./Main";
 import Manager from "./Manager";
 import Modal from "./Modal";
 import MyOrganization from "./MyOrganization";
 import MyOrganizationInner from "./MyOrganizationInner";
-import Partners from "./Pertners";
+import Partners from "./Partners";
 import PartnersInner from "./PartnersInner";
 import Request from "./Request";
 import RequestInner from "./RequestInner";
 import Sidebar from "./Sidebar";
 
 export {
-  LoginEcp,
   Login,
+  LoginEcp,
   Registration,
-  Main,
   Manager,
   Modal,
   MyOrganization,

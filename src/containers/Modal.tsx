@@ -1,29 +1,24 @@
 import React from "react";
-
-import AppState from "../ncalayer/state";
+import { AppContext } from "../AppContext";
 import { useHistory } from "react-router-dom";
+import { observer } from "mobx-react";
 
-interface ModalProps {
-  state: AppState;
-  setState: any;
-}
-
-const Modal = (props: ModalProps) => {
-  const { state, setState } = props;
+const Modal = observer(() => {
   const history = useHistory();
+  const { mainStore, requestStore } = React.useContext(AppContext);
   return (
     <div>
-      {state.modalType === 0 ? (
+      {mainStore.modalType === 0 ? (
         <div className="modal modal-large">
           <div
             className="modal-backbg"
-            onClick={() => setState({ ...state, isOpenModal: false })}
+            onClick={() => mainStore.setModal(false)}
           ></div>
           <div className="modal-dialog">
             <div className="modal-content fadeInModal animated">
               <div
                 className="modal-close"
-                onClick={() => setState({ ...state, isOpenModal: false })}
+                onClick={() => mainStore.setModal(false)}
               >
                 <i className="azla close-icon"></i>
               </div>
@@ -44,11 +39,8 @@ const Modal = (props: ModalProps) => {
                       {[1, 2, 3, 4].map((r) => (
                         <li
                           onClick={() => {
-                            setState({
-                              ...state,
-                              modalManager: true,
-                              isOpenModal: false,
-                            });
+                            mainStore.setModal(false);
+                            mainStore.setModalManager(true);
                           }}
                         >
                           <div className="profile">
@@ -70,11 +62,11 @@ const Modal = (props: ModalProps) => {
             </div>
           </div>
         </div>
-      ) : state.modalType === 1 ? (
+      ) : mainStore.modalType === 1 ? (
         <div className="modal modal-large">
           <div
             className="modal-backbg"
-            onClick={() => setState({ ...state, isOpenModal: false })}
+            onClick={() => mainStore.setModal(false)}
           ></div>
           <div className="modal-dialog">
             <div className="modal-content fadeInModal animated">
@@ -90,34 +82,24 @@ const Modal = (props: ModalProps) => {
                     rows={5}
                     className="form-control-textarea mb-16"
                     placeholder="Причина отказа"
-                    value={state.declineReason}
-                    onChange={(e) =>
-                      setState({ ...state, declineReason: e.target.value })
-                    }
+                    value={mainStore.declineReason}
+                    onChange={(e) => mainStore.setDeclineReason(e.target.value)}
                   ></textarea>
                   <div className="d-flex">
                     <button
                       type="button"
-                      onClick={() =>
-                        setState({
-                          ...state,
-                          modalManager: true,
-                          isOpenModal: false,
-                          decline: true,
-                        })
-                      }
+                      onClick={() => {
+                        mainStore.setModalManager(true);
+                        mainStore.setModal(false);
+                        mainStore.setDecline(true);
+                      }}
                       className="button btn-primary mr-16"
                     >
                       Отправить
                     </button>
                     <button
                       type="button"
-                      onClick={() =>
-                        setState({
-                          ...state,
-                          isOpenModal: false,
-                        })
-                      }
+                      onClick={() => mainStore.setModal(false)}
                       className="button btn-secondary"
                     >
                       Отмена
@@ -128,27 +110,17 @@ const Modal = (props: ModalProps) => {
             </div>
           </div>
         </div>
-      ) : state.modalType === 2 ? (
+      ) : mainStore.modalType === 2 ? (
         <div className="modal modal-large">
           <div
             className="modal-backbg"
-            onClick={() =>
-              setState({
-                ...state,
-                isOpenModal: false,
-              })
-            }
+            onClick={() => mainStore.setModal(false)}
           ></div>
           <div className="modal-dialog">
             <div className="modal-content fadeInModal animated">
               <div
                 className="modal-close"
-                onClick={() =>
-                  setState({
-                    ...state,
-                    isOpenModal: false,
-                  })
-                }
+                onClick={() => mainStore.setModal(false)}
               >
                 <i className="azla close-icon"></i>
               </div>
@@ -191,19 +163,15 @@ const Modal = (props: ModalProps) => {
               <div className="modal-footer">
                 <button
                   type="button"
-                  onClick={() =>
-                    history.location.pathname.includes("request")
-                      ? setState({
-                          ...state,
-                          isOpenModal: false,
-                          agreement: true,
-                        })
-                      : setState({
-                          ...state,
-                          isOpenModal: false,
-                          agreementPar: true,
-                        })
-                  }
+                  onClick={() => {
+                    if (history.location.pathname.includes("request")) {
+                      mainStore.setModal(false);
+                      requestStore.setAgreement(true);
+                    } else {
+                      mainStore.setModal(false);
+                      requestStore.setAgreementPar(true);
+                    }
+                  }}
                   className="button btn-primary table-ml"
                 >
                   {history.location.pathname.includes("request")
@@ -214,27 +182,17 @@ const Modal = (props: ModalProps) => {
             </div>
           </div>
         </div>
-      ) : state.modalType === 3 ? (
+      ) : mainStore.modalType === 3 ? (
         <div className="modal modal-large">
           <div
             className="modal-backbg"
-            onClick={() =>
-              setState({
-                ...state,
-                isOpenModal: false,
-              })
-            }
+            onClick={() => mainStore.setModal(false)}
           ></div>
           <div className="modal-dialog">
             <div className="modal-content fadeInModal animated">
               <div
                 className="modal-close"
-                onClick={() =>
-                  setState({
-                    ...state,
-                    isOpenModal: false,
-                  })
-                }
+                onClick={() => mainStore.setModal(false)}
               >
                 <i className="azla close-icon"></i>
               </div>
@@ -250,20 +208,17 @@ const Modal = (props: ModalProps) => {
                 <div className="btn-alert-close">
                   <button
                     type="button"
-                    onClick={() => setState({ ...state, isOpenModal: false })}
+                    onClick={() => mainStore.setModal(false)}
                     className="button btn-secondary"
                   >
                     Нет
                   </button>
                   <button
                     type="button"
-                    onClick={() =>
-                      setState({
-                        ...state,
-                        isOpenModal: false,
-                        notTypical: !state.notTypical,
-                      })
-                    }
+                    onClick={() => {
+                      mainStore.setModal(false);
+                      requestStore.setNotTypical(!requestStore.notTypical);
+                    }}
                     className="button btn-primary"
                   >
                     Да
@@ -273,27 +228,17 @@ const Modal = (props: ModalProps) => {
             </div>
           </div>
         </div>
-      ) : state.modalType === 4 ? (
+      ) : mainStore.modalType === 4 ? (
         <div className="modal modal-large-xl">
           <div
             className="modal-backbg"
-            onClick={() =>
-              setState({
-                ...state,
-                isOpenModal: false,
-              })
-            }
+            onClick={() => mainStore.setModal(false)}
           ></div>
           <div className="modal-dialog">
             <div className="modal-content fadeInModal animated">
               <div
                 className="modal-close"
-                onClick={() =>
-                  setState({
-                    ...state,
-                    isOpenModal: false,
-                  })
-                }
+                onClick={() => mainStore.setModal(false)}
               >
                 <i className="azla close-icon"></i>
               </div>
@@ -356,13 +301,10 @@ const Modal = (props: ModalProps) => {
                   </button>
                   <button
                     type="button"
-                    onClick={() =>
-                      setState({
-                        ...state,
-                        isOpenModal: false,
-                        agreeUsers: [...state.agreeUsers, 0],
-                      })
-                    }
+                    onClick={() => {
+                      mainStore.setModal(false);
+                      requestStore.setAgreeUsers();
+                    }}
                     className="button btn-primary w-160"
                   >
                     Добавить
@@ -372,27 +314,17 @@ const Modal = (props: ModalProps) => {
             </div>
           </div>
         </div>
-      ) : state.modalType === 5 ? (
+      ) : mainStore.modalType === 5 ? (
         <div className="modal modal-large">
           <div
             className="modal-backbg"
-            onClick={() =>
-              setState({
-                ...state,
-                isOpenModal: false,
-              })
-            }
+            onClick={() => mainStore.setModal(false)}
           ></div>
           <div className="modal-dialog">
             <div className="modal-content fadeInModal animated">
               <div
                 className="modal-close"
-                onClick={() =>
-                  setState({
-                    ...state,
-                    isOpenModal: false,
-                  })
-                }
+                onClick={() => mainStore.setModal(false)}
               >
                 <i className="azla close-icon"></i>
               </div>
@@ -427,27 +359,17 @@ const Modal = (props: ModalProps) => {
             </div>
           </div>
         </div>
-      ) : state.modalType === 6 ? (
+      ) : mainStore.modalType === 6 ? (
         <div className="modal modal-large-xl">
           <div
             className="modal-backbg"
-            onClick={() =>
-              setState({
-                ...state,
-                isOpenModal: false,
-              })
-            }
+            onClick={() => mainStore.setModal(false)}
           ></div>
           <div className="modal-dialog">
             <div className="modal-content fadeInModal animated">
               <div
                 className="modal-close"
-                onClick={() =>
-                  setState({
-                    ...state,
-                    isOpenModal: false,
-                  })
-                }
+                onClick={() => mainStore.setModal(false)}
               >
                 <i className="azla close-icon"></i>
               </div>
@@ -467,13 +389,10 @@ const Modal = (props: ModalProps) => {
                     <ul>
                       {[1, 2, 3, 4].map((r) => (
                         <li
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              isOpenModal: false,
-                              signTwoUsers: [...state.signTwoUsers, 0],
-                            })
-                          }
+                          onClick={() => {
+                            mainStore.setModal(false);
+                            requestStore.setSignTwoUsers();
+                          }}
                         >
                           <div className="profile">
                             <img
@@ -494,213 +413,183 @@ const Modal = (props: ModalProps) => {
             </div>
           </div>
         </div>
-        ) : state.modalType === 7 ? (
-          <div className="modal modal-large">
-            <div
-              className="modal-backbg"
-              onClick={() => setState({ ...state, isOpenModal: false })}
-            ></div>
-            <div className="modal-dialog">
-              <div className="modal-content fadeInModal animated">
-                <div className="modal-close">
-                  <i className="azla close-icon"></i>
-                </div>
-                <div className="modal-body">
-                  <div className="write-reasons">
-                    <h3 className="text-left title-subhead mb-16">
+      ) : mainStore.modalType === 7 ? (
+        <div className="modal modal-large">
+          <div
+            className="modal-backbg"
+            onClick={() => mainStore.setModal(false)}
+          ></div>
+          <div className="modal-dialog">
+            <div className="modal-content fadeInModal animated">
+              <div className="modal-close">
+                <i className="azla close-icon"></i>
+              </div>
+              <div className="modal-body">
+                <div className="write-reasons">
+                  <h3 className="text-left title-subhead mb-16">
                     Юридический адрес
-                    </h3>
-                    <textarea
-                      rows={5}
-                      className="form-control-textarea mb-16"
-                      placeholder="Причина отказа"
-                      value="г. Алматы, ул. Тажибаевой 47, БЦ “Иван”, этаж 24"
-                      onChange={(e) =>
-                        setState({ ...state, declineReason: e.target.value })
-                      }
-                    ></textarea>
-                    <div className="d-flex">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setState({
-                            ...state,
-                            isOpenModal: false,
-                          })
-                        }
-                        className="button btn-secondary mr-16"
-                      >
-                        Отмена
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setState({
-                            ...state,
-                            modalManager: true,
-                            isOpenModal: false,
-                            decline: true,
-                          })
-                        }
-                        className="button btn-primary"
-                      >
-                        Сохранить
-                      </button>
-                    </div>
+                  </h3>
+                  <textarea
+                    rows={5}
+                    className="form-control-textarea mb-16"
+                    placeholder="Причина отказа"
+                    value="г. Алматы, ул. Тажибаевой 47, БЦ “Иван”, этаж 24"
+                    onChange={(e) => mainStore.setDeclineReason(e.target.value)}
+                  ></textarea>
+                  <div className="d-flex">
+                    <button
+                      type="button"
+                      onClick={() => mainStore.setModal(false)}
+                      className="button btn-secondary mr-16"
+                    >
+                      Отмена
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        mainStore.setModalManager(true);
+                        mainStore.setModal(false);
+                        mainStore.setDecline(true);
+                      }}
+                      className="button btn-primary"
+                    >
+                      Сохранить
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          ) : state.modalType === 8 ? (
-            <div className="modal modal-large">
-              <div
-                className="modal-backbg"
-                onClick={() => setState({ ...state, isOpenModal: false })}
-              ></div>
-              <div className="modal-dialog">
-                <div className="modal-content fadeInModal animated">
-                  <div className="modal-close">
-                    <i className="azla close-icon"></i>
+        </div>
+      ) : mainStore.modalType === 8 ? (
+        <div className="modal modal-large">
+          <div
+            className="modal-backbg"
+            onClick={() => mainStore.setModal(false)}
+          ></div>
+          <div className="modal-dialog">
+            <div className="modal-content fadeInModal animated">
+              <div className="modal-close">
+                <i className="azla close-icon"></i>
+              </div>
+              <div className="modal-body">
+                <div className="write-reasons">
+                  <h3 className="text-center title-subhead mb-16">
+                    Удалить документ?
+                  </h3>
+
+                  <div className="files-added modal-files-deleted">
+                    <ul className="files-list">
+                      <li>
+                        <i className="azla blank-alt-primary-icon"></i>
+                        <span>Устав ТОО “М-Ломбард”.pdf</span>
+                      </li>
+                    </ul>
                   </div>
-                  <div className="modal-body">
-                    <div className="write-reasons">
-                      <h3 className="text-center title-subhead mb-16">
-                        Удалить документ?
-                      </h3>
-                      
-                      <div className="files-added modal-files-deleted">
-                        <ul className="files-list">
-                          <li>
-                            <i className="azla blank-alt-primary-icon"></i>
-                            <span>Устав ТОО “М-Ломбард”.pdf</span>
-                          </li>
-                        </ul>
-                      </div>
-                      
-                      <div className="d-flex justify-content-center">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              isOpenModal: false,
-                            })
-                          }
-                          className="button btn-secondary w-160 mr-16"
-                        >
-                          Отмена
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              modalManager: true,
-                              isOpenModal: false,
-                              decline: true,
-                            })
-                          }
-                          className="button btn-primary w-160"
-                        >
-                          Удалить
-                        </button>
-                      </div>
-                    </div>
+
+                  <div className="d-flex justify-content-center">
+                    <button
+                      type="button"
+                      onClick={() => mainStore.setModal(false)}
+                      className="button btn-secondary w-160 mr-16"
+                    >
+                      Отмена
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        mainStore.setModalManager(true);
+                        mainStore.setModal(false);
+                        mainStore.setDecline(true);
+                      }}
+                      className="button btn-primary w-160"
+                    >
+                      Удалить
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
-            ) : state.modalType === 9 ? (
-              <div className="modal modal-large">
-                <div
-                  className="modal-backbg"
-                  onClick={() => setState({ ...state, isOpenModal: false })}
-                ></div>
-                <div className="modal-dialog">
-                  <div className="modal-content fadeInModal animated">
-                    <div className="modal-close">
-                      <i className="azla close-icon"></i>
-                    </div>
-                    <div className="modal-body">
-                      <div className="write-reasons">
-                      <h3 className="text-left title-subhead mb-32">
-                        Редактировать данные
-                      </h3>
-                        <div className="form-wrapper">
-                          <input type="text" value="Султангалиева Камилла Избасарова" />
-                          <label>ФИО</label>
-                        </div>
-                        <div className="form-wrapper">
-                          <input type="text" value="Аналитик" />
-                          <label>Должность</label>
-                        </div>
-                        <div className="form-wrapper">
-                          <input type="text" value="sultangaliyeva.k.i@gmail.com" />
-                          <label>Email</label>
-                        </div>
-                        <div className="form-wrapper">
-                          <input type="text" value="+7 (701) 456-78-90" />
-                          <label>Телефон</label>
-                        </div>
-                        <div className="form-check gkb-checkbox">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="checkMeanNum"
-                              required
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="checkMeanNum"
-                            >Основной номер</label>
-                          </div>
+          </div>
+        </div>
+      ) : mainStore.modalType === 9 ? (
+        <div className="modal modal-large">
+          <div
+            className="modal-backbg"
+            onClick={() => mainStore.setModal(false)}
+          ></div>
+          <div className="modal-dialog">
+            <div className="modal-content fadeInModal animated">
+              <div className="modal-close">
+                <i className="azla close-icon"></i>
+              </div>
+              <div className="modal-body">
+                <div className="write-reasons">
+                  <h3 className="text-left title-subhead mb-32">
+                    Редактировать данные
+                  </h3>
+                  <div className="form-wrapper">
+                    <input
+                      type="text"
+                      value="Султангалиева Камилла Избасарова"
+                    />
+                    <label>ФИО</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" value="Аналитик" />
+                    <label>Должность</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" value="sultangaliyeva.k.i@gmail.com" />
+                    <label>Email</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" value="+7 (701) 456-78-90" />
+                    <label>Телефон</label>
+                  </div>
+                  <div className="form-check gkb-checkbox">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="checkMeanNum"
+                      required
+                    />
+                    <label className="form-check-label" htmlFor="checkMeanNum">
+                      Основной номер
+                    </label>
+                  </div>
 
-                        
-                        <div className="d-flex mt-16">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setState({
-                                ...state,
-                                modalManager: true,
-                                isOpenModal: false,
-                                decline: true,
-                              })
-                            }
-                            className="button btn-primary mr-16"
-                          >
-                            Сохранить
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setState({
-                                ...state,
-                                isOpenModal: false,
-                              })
-                            }
-                            className="button btn-danger"
-                          >
-                            Удалить пользователя
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                  <div className="d-flex mt-16">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        mainStore.setModalManager(true);
+                        mainStore.setModal(false);
+                        mainStore.setDecline(true);
+                      }}
+                      className="button btn-primary mr-16"
+                    >
+                      Сохранить
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => mainStore.setModal(false)}
+                      className="button btn-danger"
+                    >
+                      Удалить пользователя
+                    </button>
                   </div>
                 </div>
               </div>
-            ) : (
+            </div>
+          </div>
+        </div>
+      ) : (
         <div className="modal modal-default">
           <div
             className="modal-backbg"
-            onClick={() =>
-              setState({
-                ...state,
-                isOpenModal: false,
-              })
-            }
+            onClick={() => mainStore.setModal(false)}
           ></div>
           <div className="modal-dialog">
             <div className="modal-content fadeInModal animated">
@@ -720,5 +609,5 @@ const Modal = (props: ModalProps) => {
       )}
     </div>
   );
-};
+});
 export default Modal;

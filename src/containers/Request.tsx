@@ -1,22 +1,20 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
-import AppState from "../ncalayer/state";
 import "react-tabs/style/react-tabs.css";
+import { observer } from "mobx-react";
+import { AppContext } from "../AppContext";
 
-interface RequestProps {
-  state: AppState;
-  setState: any;
-}
-
-const Request = (props: RequestProps) => {
-  const { state, setState } = props;
+const Request = observer(() => {
   const [advance, setAdvance] = React.useState(false);
   const [sort, setSort] = React.useState(false);
+  const [index, setIndex] = React.useState(0);
   const [service, setService] = React.useState(false);
   const [services, setServices] = React.useState<string[]>([]);
   const [sortTitle, setSortTitle] = React.useState("");
   const history = useHistory();
+  const { requestStore } = React.useContext(AppContext);
+
   return (
     <div className="main-body">
       <div className="container">
@@ -32,8 +30,8 @@ const Request = (props: RequestProps) => {
               </div>
 
               <Tabs
-                selectedIndex={state.tab}
-                onSelect={(index) => setState({ ...state, tab: index })}
+                selectedIndex={requestStore.tabIndexReq}
+                onSelect={(i) => requestStore.setTabIndexReq(i)}
               >
                 <div className="">
                   <TabList>
@@ -435,5 +433,5 @@ const Request = (props: RequestProps) => {
       </div>
     </div>
   );
-};
+});
 export default Request;
