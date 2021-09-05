@@ -15,7 +15,7 @@ const Login = observer(() => {
         <div className="special-card">
           <h1 className="title-main mb-24">Вход</h1>
           <div className="login-input">
-            <div className="form-group">
+            <div className="form-group is-invalid">
               <label>Логин</label>
               <input
                 className="form-control"
@@ -24,6 +24,7 @@ const Login = observer(() => {
                 onChange={(e) => mainStore.setLogin(e.target.value)}
                 placeholder="Введите логин"
               />
+              <span className="invalid-feedback">Ошибка</span>
             </div>
             <div className="form-group">
               <label>Пароль</label>

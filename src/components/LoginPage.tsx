@@ -19,7 +19,7 @@ export class LoginPage extends React.Component<LoginProps, {}> {
   }
   render() {
     return (
-      <section className="main-page">
+      <section className="login-page">
         <div className="container">
           <div className="row">
             {this.props.store.loginState === "ecp" ? (
