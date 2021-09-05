@@ -3,8 +3,13 @@ import { baseURL } from "../const";
 
 export class ClientController {
   // Client
+  async auth(data: any): Promise<any> {
+    return server.post(`/login`, data, {
+      baseURL,
+    });
+  }
   async authEcp(data: any): Promise<any> {
-    return server.post(`/auth/ecp`, data, {
+    return server.post(`/user`, data, {
       baseURL,
     });
   }

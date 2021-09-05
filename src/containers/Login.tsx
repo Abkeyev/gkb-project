@@ -15,33 +15,49 @@ const Login = observer(() => {
         <div className="special-card">
           <h1 className="title-main mb-24">Вход</h1>
           <div className="login-input">
+<<<<<<< HEAD
             <div className="form-group is-invalid">
+=======
+            <div
+              className={`form-group ${
+                mainStore.loginError ? "is-invalid" : ""
+              }`}
+            >
+>>>>>>> b0a2ea7da4347c25a113abc23811a4449379bdc3
               <label>Логин</label>
               <input
                 className="form-control"
-                type="login"
+                type="text"
                 value={mainStore.login}
                 onChange={(e) => mainStore.setLogin(e.target.value)}
                 placeholder="Введите логин"
               />
               <span className="invalid-feedback">Ошибка</span>
             </div>
-            <div className="form-group">
+            <div
+              className={`form-group ${
+                mainStore.loginError ? "is-invalid" : ""
+              }`}
+            >
               <label>Пароль</label>
               <input
                 className="form-control"
-                type="name"
+                type="password"
                 value={mainStore.pass}
                 onChange={(e) => mainStore.setPass(e.target.value)}
                 placeholder="Введите пароль"
               />
+              {mainStore.loginError && (
+                <span className="invalid-feedback">
+                  {mainStore.loginErrorText}
+                </span>
+              )}
             </div>
             <button
               className="button btn-primary mt-16 mb-16"
               disabled={mainStore.login.length < 0 || mainStore.pass.length < 0}
               onClick={() => {
                 mainStore.logIn();
-                history.push("/request");
               }}
             >
               Войти
