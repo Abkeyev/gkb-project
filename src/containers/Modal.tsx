@@ -585,6 +585,184 @@ const Modal = observer(() => {
             </div>
           </div>
         </div>
+      ) : mainStore.modalType === 10 ? (
+        <div className="modal modal-large-xl">
+          <div
+            className="modal-backbg"
+            onClick={() => mainStore.setModal(false)}
+          ></div>
+          <div className="modal-dialog">
+            <div className="modal-content fadeInModal animated">
+              <div
+                className="modal-close"
+                onClick={() => mainStore.setModal(false)}
+              >
+                <i className="azla close-icon"></i>
+              </div>
+
+              <div className="modal-body">
+                <div className="paper-signatory">
+                  
+                  <div className="d-flex align-items-center mb-16">
+                    <h3 className="text-left title-subhead mb-0">
+                      Добавить пользователей услуг
+                    </h3>
+                    <button className="button btn-secondary ml-24" onClick={() => {
+                              mainStore.setModal(true);
+                              mainStore.setModalType(11);
+                            }}><i className="azla user-add-primary-icon size-20"></i> Новый пользователь</button>
+                  </div>
+
+                  <div className="search-input">
+                    <input
+                      type="seatch"
+                      className="search-icon"
+                      placeholder="Поиск"
+                    />
+                  </div>
+
+                  <div className="manager-list">
+                    <ul>
+                      {[1, 2, 3, 4].map((r) => (
+                        <li>
+                          <div className="form-check gkb-checkbox">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              value=""
+                              id="invalidCheck"
+                              required
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="invalidCheck"
+                            ></label>
+                          </div>
+                          <div className="profile">
+                            <img
+                              className="ava"
+                              src={
+                                process.env.PUBLIC_URL + "/images/def-ava.svg"
+                              }
+                            />
+                            <span className="name">Султангалиева К.И</span>
+                          </div>
+                          <span className="position">Директор</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="modal-footer d-flex-align-c-spaceb">
+                <p className="text-desc mb-0">Выбрано 1 участника</p>
+                <div className="paper-signatory-footer">
+                  <button
+                    type="button"
+                    className="button btn-secondary w-160 mr-16"
+                  >
+                    Очистить
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      mainStore.setModal(false);
+                      requestStore.setAgreeUsers();
+                    }}
+                    className="button btn-primary w-160"
+                  >
+                    Добавить
+                  </button>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      ) : mainStore.modalType === 11 ? (
+        <div className="modal modal-large">
+          <div
+            className="modal-backbg"
+            onClick={() => mainStore.setModal(false)}
+          ></div>
+          <div className="modal-dialog">
+            <div className="modal-content fadeInModal animated">
+              <div className="modal-close">
+                <i className="azla close-icon"></i>
+              </div>
+              <div className="modal-body">
+                <div className="write-reasons">
+                  <h3 className="text-left title-subhead mb-32">
+                    Добавить пользователя
+                  </h3>
+                  <div className="form-wrapper">
+                    <input
+                      type="text"
+                      placeholder="Введите ФИО"
+                    />
+                    <label>ФИО</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" placeholder="Введите должность" />
+                    <label>Должность</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" placeholder="Введите департамент" />
+                    <label>Департамент</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" placeholder="+7 (_ _ _) _ _ _ - _ _ - _ _" />
+                    <label>Контактный номер</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" placeholder="Введите почту" />
+                    <label>Email</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" placeholder="Первый руководитель" />
+                    <label>Первый руководитель</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" placeholder="Введите заместитель" />
+                    <label>Заместитель</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" placeholder="Введите менеджера" />
+                    <label>Курирующий менеджер</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input type="text" placeholder="Введите контакты менеджера" />
+                    <label>Контакты менеджера</label>
+                  </div>
+                  
+                  
+
+                  <div className="d-flex mt-16">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        mainStore.setModalManager(true);
+                        mainStore.setModal(false);
+                        mainStore.setDecline(true);
+                      }}
+                      className="button btn-primary mr-16"
+                    >
+                      Сохранить
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => mainStore.setModal(false)}
+                      className="button btn-danger"
+                    >
+                      Удалить пользователя
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="modal modal-default">
           <div

@@ -86,7 +86,7 @@ const Sidebar = () => {
               ) : (
                 <>
                   <li>
-                    <Link to="/" className="link-list">
+                    <Link to="/create-request" className="link-list">
                       <i className="azla add-plusRound-icon"></i>
                       <span className="text">Новая заявка</span>
                       <span className="status"></span>

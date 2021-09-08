@@ -10,6 +10,7 @@ import PartnersInner from "./PartnersInner";
 import Request from "./Request";
 import RequestInner from "./RequestInner";
 import Sidebar from "./Sidebar";
+import CreateRequest from "./CreateRequest";
 
 export {
   Login,
@@ -24,4 +25,5 @@ export {
   Request,
   RequestInner,
   Sidebar,
+  CreateRequest,
 };

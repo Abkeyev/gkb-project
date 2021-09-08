@@ -15,6 +15,7 @@ import {
   MyOrganizationInner,
   Sidebar,
   Partners,
+  CreateRequest,
 } from "./containers";
 import { LoginPage, RequestPage } from "./components";
 
@@ -188,6 +189,7 @@ const App = observer(() => {
             component={() => <RequestPage />}
             exact
           />
+          <PrivateRoute path="/create-request" component={() => <CreateRequest />} exact />
           <PrivateRoute path="/partners" component={() => <Partners />} exact />
           <PrivateRoute
             path="/partners/title"

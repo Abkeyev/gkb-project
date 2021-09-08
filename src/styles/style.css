@@ -445,6 +445,7 @@
   font-size: 14px;
   line-height: 20px;
   margin-bottom: 4px;
+  cursor: pointer;
 }
 .back-breadcrumbs .back i {
   margin-right: 8px;
@@ -1187,6 +1188,10 @@
   left: 12px;
   bottom: -32px;
   height: 32px;
+}
+.choose-service {
+  display: flex;
+  align-items: center;
 }
 
 .delete-if-icon {

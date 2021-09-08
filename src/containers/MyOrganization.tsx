@@ -391,7 +391,7 @@ const MyOrganization = observer(() => {
                                     </li>
                                     <li>
                                       <span className="left">
-                                        Основание для подписи::
+                                        Основание для подписи:
                                       </span>
                                       <span className="right">
                                         Доверенность

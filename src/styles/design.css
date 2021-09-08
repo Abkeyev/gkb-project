@@ -232,6 +232,12 @@ textarea {
   text-align: left;
 }
 
+.small-text {
+  font-weight: normal;
+  font-size: 12px;
+  color: #3F4B60;
+}
+
 .btn-s {
   padding: 12px 16px;
   border: 1px solid #20b5be;
@@ -1776,6 +1782,7 @@ select.form-control-v {
   font-size: 16px;
   color: #20b5be;
   text-align: center;
+  transition: .3s;
 }
 .tab-button .tab-btn.active {
   background: #20b5be;

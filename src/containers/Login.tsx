@@ -15,15 +15,11 @@ const Login = observer(() => {
         <div className="special-card">
           <h1 className="title-main mb-24">Вход</h1>
           <div className="login-input">
-<<<<<<< HEAD
-            <div className="form-group is-invalid">
-=======
             <div
               className={`form-group ${
                 mainStore.loginError ? "is-invalid" : ""
               }`}
             >
->>>>>>> b0a2ea7da4347c25a113abc23811a4449379bdc3
               <label>Логин</label>
               <input
                 className="form-control"
