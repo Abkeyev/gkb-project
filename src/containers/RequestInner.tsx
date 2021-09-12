@@ -35,7 +35,7 @@ const RequestInner = observer(() => {
                 </h1>
 
                 {mainStore.decline && (
-                  <div className="mess-card alert-mess mb-32">
+                  <div className="mess-card alert-mess mb-32 col-md-8">
                     <h5>Заявка отклонена</h5>
                     <p>Причина: {mainStore.declineReason}</p>
                   </div>

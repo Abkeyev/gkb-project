@@ -526,6 +526,17 @@ fieldset:disabled .button {
   text-align: left;
 }
 
+.table.td-three tr td:nth-child(1) {
+  width: 20%;
+}
+.table.td-three tr td:nth-child(2), .table.td-three tr td:last-child  {
+  width: 40%;
+}
+.table.td-three thead tr th:last-child,
+.table.td-three td:last-child {
+  text-align: left;
+}
+
 
 /* Table end */
 
@@ -668,6 +679,9 @@ fieldset:disabled .button {
 
 .w-160 {
   width: 160px;
+}
+.w-100 {
+  width: 100%;
 }
 
 /* Grid Layout */
@@ -1354,7 +1368,7 @@ fieldset:disabled .button {
   font-size: 18px;
   color: #3f4b60;
 }
-.title-subhead .number {
+.title-subhead .number, .title-main .number {
   color: #939393;
 }
 .text-desc {
@@ -1926,6 +1940,7 @@ select.form-control-v {
   transition: 0.3s;
   font-size: 18px;
   color: #3f4b60;
+  padding: 12px 24px;
 }
 .react-tabs .react-tabs__tab-list .react-tabs__tab--selected {
   border-color: #20b5be;
@@ -2060,6 +2075,7 @@ select.form-control-v {
   color: #3f4b60;
   cursor: pointer;
   white-space: pre;
+  display: block;
 }
 .multi.open .multi-menu {
   max-height: 100000px;
@@ -2067,6 +2083,14 @@ select.form-control-v {
   visibility: visible;
   opacity: 1;
   transform: translateY(8px);
+}
+.side-r {
+  position: relative;
+}
+.side-r.open .multi-menu{
+  right: 0;
+  left: unset;
+  width: 400px;
 }
 .selected-options {
   margin-top: 0px;

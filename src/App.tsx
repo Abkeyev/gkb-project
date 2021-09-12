@@ -16,6 +16,9 @@ import {
   Sidebar,
   Partners,
   CreateRequest,
+  MyProfile,
+  ManagerOrganization,
+  ManagerOrganizationInner,
 } from "./containers";
 import { LoginPage, RequestPage } from "./components";
 
@@ -190,6 +193,8 @@ const App = observer(() => {
             exact
           />
           <PrivateRoute path="/create-request" component={() => <CreateRequest />} exact />
+          <PrivateRoute path="/profile" component={() => <MyProfile />} exact />
+          <PrivateRoute path="/parthers-page" component={() => <ManagerOrganization />} exact />
           <PrivateRoute path="/partners" component={() => <Partners />} exact />
           <PrivateRoute
             path="/partners/title"
@@ -199,6 +204,11 @@ const App = observer(() => {
           <PrivateRoute
             path="/request/title"
             component={() => <RequestInner />}
+            exact
+          />
+          <PrivateRoute
+            path="/parthers-page/title"
+            component={() => <ManagerOrganizationInner />}
             exact
           />
         </Switch>

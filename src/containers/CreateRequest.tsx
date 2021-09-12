@@ -99,7 +99,11 @@ const CreateRequest = () => {
                                 Пользователи организации с наличием ЭЦП организации
                                 </p>
                             </div>
-                            <button className="btn button btn-primary btn-icon"><i className="azla add-plusRound-icon"></i> Добавить</button>
+                            <button className="btn button btn-primary btn-icon" 
+                            onClick={() => {
+                              mainStore.setModal(true);
+                              mainStore.setModalType(10);
+                            }}><i className="azla add-plusRound-icon"></i> Добавить</button>
                         </div>
 
                         {[1, 2, 3].map((s) => (
@@ -197,10 +201,6 @@ const CreateRequest = () => {
                             <button
                             type="button"
                             className="button btn-primary"
-                            onClick={() => {
-                              mainStore.setModal(true);
-                              mainStore.setModalType(10);
-                            }}
                             >
                             Отправить заявку
                             </button>

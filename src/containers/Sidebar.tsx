@@ -49,7 +49,7 @@ const Sidebar = () => {
                       }`}
                     >
                       <i className="azla blank-alt-icon"></i>
-                      <span className="text">Заявка</span>
+                      <span className="text">Заявки</span>
                       <span className="status"></span>
                     </Link>
                   </li>
@@ -64,7 +64,7 @@ const Sidebar = () => {
                       }`}
                     >
                       <i className="azla user-add-icon"></i>
-                      <span className="text">Контрагент</span>
+                      <span className="text">Контрагенты</span>
                       <span className="status"></span>
                     </Link>
                   </li>
@@ -76,7 +76,7 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/" className="link-list">
+                    <Link to="/profile" className="link-list">
                       <i className="azla user-icon"></i>
                       <span className="text">Мой профиль </span>
                       <span className="status"></span>
@@ -102,7 +102,7 @@ const Sidebar = () => {
                       }`}
                     >
                       <i className="azla blank-alt-icon"></i>
-                      <span className="text">Заявка</span>
+                      <span className="text">Заявки</span>
                       <span className="status"></span>
                     </Link>
                   </li>
@@ -117,12 +117,12 @@ const Sidebar = () => {
                       }`}
                     >
                       <i className="azla user-add-icon"></i>
-                      <span className="text">Контрагент</span>
+                      <span className="text">Контрагенты</span>
                       <span className="status"></span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/" className="link-list">
+                    <Link to="/parthers-page" className="link-list">
                       <i className="azla bookmark-icon"></i>
                       <span className="text">Моя организация</span>
                       <span className="status"></span>

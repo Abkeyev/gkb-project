@@ -11,6 +11,9 @@ import Request from "./Request";
 import RequestInner from "./RequestInner";
 import Sidebar from "./Sidebar";
 import CreateRequest from "./CreateRequest";
+import MyProfile from "./MyProfile";
+import ManagerOrganization from "./ManagerOrganization";
+import ManagerOrganizationInner from "./ManagerOrganizationInner";
 
 export {
   Login,
@@ -26,4 +29,7 @@ export {
   RequestInner,
   Sidebar,
   CreateRequest,
+  MyProfile,
+  ManagerOrganization,
+  ManagerOrganizationInner,
 };
