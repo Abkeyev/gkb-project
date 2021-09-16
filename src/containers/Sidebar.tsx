@@ -1,10 +1,15 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
+import { observer } from "mobx-react-lite";
 
-const Sidebar = () => {
+const Sidebar = observer((props: any) => {
+  const { main, request } = props;
   const [close, setClose] = React.useState(false);
-  const [collapse, setCollapse] = React.useState(false);
   const history = useHistory();
+  React.useEffect(() => {
+    request.getClient(main.clientData.client_id);
+    request.getUser(main.clientData.client_id);
+  }, []);
   return (
     <nav className={`left-sidebar ${close ? "close" : ""}`}>
       {/* className для скрытия боковой модалки "close"*/}
@@ -13,7 +18,10 @@ const Sidebar = () => {
           <div className="avatar">
             <div className="image-inner">
               <div className="image-avatar">
-                <img src={process.env.PUBLIC_URL + "/images/avatar.png"} />
+                <img
+                  alt="avatar"
+                  src={process.env.PUBLIC_URL + "/images/avatar.png"}
+                />
               </div>
               {/* <span className="text">Профиль</span> */}
             </div>
@@ -22,63 +30,80 @@ const Sidebar = () => {
               className="btn-side"
               onClick={() => {
                 setClose(!close);
-                setCollapse(false);
+                // setCollapse(false);
               }}
             >
               <i className="chevron-right"></i>
             </span>
           </div>
-          <div className="user-profile">
-            <span className="name">Султангалиева К.И</span>
-            <span className="bin">БИН 124535262</span>
-            <span className="company">АО “Государственное Кредитное Бюро”</span>
-          </div>
+          {request._getClient && request._getUser && (
+            <div className="user-profile">
+              <span className="name">{request._getUser.full_name}</span>
+              <span className="bin">БИН {request._getClient.bin}</span>
+              <span className="company">{request._getClient.longname}</span>
+            </div>
+          )}
 
           <div className="navigation">
             <ul className="list">
               {/* Если перешли в сам Link то класс дается active */}
-              {history.location.pathname.includes("request") ? (
+              {main.role === "Manager" ? (
                 <>
                   <li>
                     <Link
-                      to="/request"
+                      to="/"
                       className={`link-list ${
+                        history.location.pathname === "/" ||
                         history.location.pathname.includes("request")
                           ? "active"
                           : ""
                       }`}
                     >
                       <i className="azla blank-alt-icon"></i>
-                      <span className="text">Заявка</span>
+                      <span className="text">Заявки</span>
                       <span className="status"></span>
                     </Link>
                   </li>
                   <li className={`dropdown-menu`}>
                     {/* Если нажать на Dropdown то открывает самму сылку и раскрывает список, и класс дается collapse */}
                     <Link
-                      to="/partners"
+                      to="/contractors"
                       className={`link-list ${
-                        history.location.pathname.includes("partners")
+                        history.location.pathname.includes("contractors")
                           ? "active"
                           : ""
                       }`}
                     >
                       <i className="azla user-add-icon"></i>
-                      <span className="text">Контрагент</span>
+                      <span className="text">Контрагенты</span>
                       <span className="status"></span>
                     </Link>
                   </li>
-                  <li>
-                    <Link to="/" className="link-list">
+                  {/* <li>
+                    <Link
+                      to="/users"
+                      className={`link-list ${
+                        history.location.pathname.includes("users")
+                          ? "active"
+                          : ""
+                      }`}
+                    >
                       <i className="azla bookmark-icon"></i>
-                      <span className="text">Пользователи портала </span>
+                      <span className="text">Пользователи портала</span>
                       <span className="status"></span>
                     </Link>
-                  </li>
+                  </li> */}
                   <li>
-                    <Link to="/" className="link-list">
+                    <Link
+                      to="/profile"
+                      className={`link-list ${
+                        history.location.pathname.includes("profile")
+                          ? "active"
+                          : ""
+                      }`}
+                    >
                       <i className="azla user-icon"></i>
-                      <span className="text">Мой профиль </span>
+                      <span className="text">Мой профиль</span>
                       <span className="status"></span>
                     </Link>
                   </li>
@@ -86,7 +111,14 @@ const Sidebar = () => {
               ) : (
                 <>
                   <li>
-                    <Link to="/" className="link-list">
+                    <Link
+                      to="/request-new"
+                      className={`link-list ${
+                        history.location.pathname.includes("request-new")
+                          ? "active"
+                          : ""
+                      }`}
+                    >
                       <i className="azla add-plusRound-icon"></i>
                       <span className="text">Новая заявка</span>
                       <span className="status"></span>
@@ -94,42 +126,42 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <Link
-                      to="/request"
+                      to="/"
                       className={`link-list ${
-                        history.location.pathname.includes("request")
+                        history.location.pathname === "/" ||
+                        history.location.pathname.includes("partner")
                           ? "active"
                           : ""
                       }`}
                     >
                       <i className="azla blank-alt-icon"></i>
-                      <span className="text">Заявка</span>
-                      <span className="status"></span>
-                    </Link>
-                  </li>
-                  <li className={`dropdown-menu`}>
-                    {/* Если нажать на Dropdown то открывает самму сылку и раскрывает список, и класс дается collapse */}
-                    <Link
-                      to="/partners"
-                      className={`link-list ${
-                        history.location.pathname.includes("partners")
-                          ? "active"
-                          : ""
-                      }`}
-                    >
-                      <i className="azla user-add-icon"></i>
-                      <span className="text">Контрагент</span>
+                      <span className="text">Заявки</span>
                       <span className="status"></span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/" className="link-list">
+                    <Link
+                      to="/organization"
+                      className={`link-list ${
+                        history.location.pathname.includes("organization")
+                          ? "active"
+                          : ""
+                      }`}
+                    >
                       <i className="azla bookmark-icon"></i>
                       <span className="text">Моя организация</span>
                       <span className="status"></span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/" className="link-list">
+                    <Link
+                      to="/profile"
+                      className={`link-list ${
+                        history.location.pathname.includes("profile")
+                          ? "active"
+                          : ""
+                      }`}
+                    >
                       <i className="azla user-icon"></i>
                       <span className="text">Мой профиль</span>
                       <span className="status"></span>
@@ -144,5 +176,5 @@ const Sidebar = () => {
       </div>
     </nav>
   );
-};
+});
 export default Sidebar;

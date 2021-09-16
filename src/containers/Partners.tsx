@@ -1,19 +1,24 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
-import { AppContext } from "../AppContext";
+import { Link } from "react-router-dom";
+import { Request } from "../api/Models/ServiceModels";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
 
-const Partners = observer(() => {
+const Partners = observer((props: any) => {
+  const { request } = props;
   const [advance, setAdvance] = React.useState(false);
   const [sort, setSort] = React.useState(false);
   const [service, setService] = React.useState(false);
   const [services, setServices] = React.useState<string[]>([]);
   const [sortTitle, setSortTitle] = React.useState("");
-  const [index, setIndex] = React.useState(0);
   const history = useHistory();
-  const { requestStore } = React.useContext(AppContext);
+
+  React.useEffect(() => {
+    request.getRequests();
+  }, []);
+
   return (
     <div className="main-body">
       <div className="container">
@@ -22,15 +27,19 @@ const Partners = observer(() => {
             <div className="req-manager p-50 pad-b-128">
               <div className="header-text justify-content-between mb-24">
                 <h1 className="title-main">Заявки</h1>
-                {/* <div className="btn button btn-primary btn-icon">
+                <div className="btn button btn-primary btn-icon">
                   <i className="azla add-plusRound-icon"></i>
-                  <span className="text">Новая заявка</span>
-                </div> */}
+                  <Link to="/partner-new" className="text">
+                    Новая заявка
+                  </Link>
+                </div>
               </div>
 
               <Tabs
-                selectedIndex={requestStore.tabIndexPar}
-                onSelect={(i) => requestStore.setTabIndexPar(i)}
+                selectedIndex={request.tabIndexPar}
+                onSelect={(i) => {
+                  request.tabIndexPar = i;
+                }}
               >
                 <div className="">
                   <TabList>
@@ -258,7 +267,10 @@ const Partners = observer(() => {
                 <TabPanel>
                   <div className="tab-content tab-1">
                     <h3 className="title-subhead mb-16">
-                      Найдено <span className="number">32</span>
+                      Найдено{" "}
+                      <span className="number">
+                        {request._getRequests && request._getRequests.length}
+                      </span>
                     </h3>
                     <table className="table req-table">
                       <thead>
@@ -271,13 +283,13 @@ const Partners = observer(() => {
                         </tr>
                       </thead>
                       <tbody>
-                        {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/partners/title")}>
-                            <td>52345634643</td>
-                            <td>М-Ломбард</td>
-                            <td>Ломбард</td>
-                            <td>Кредитная история</td>
-                            <td>12.12.2021</td>
+                        {request._getRequests.map((r: Request) => (
+                          <tr onClick={() => history.push(`/partners/${r.id}`)}>
+                            <td>{r.id}</td>
+                            <td>{r.name_uid}</td>
+                            <td>{r.service_type}</td>
+                            <td>{r.service_category}</td>
+                            <td>{r.reg_date}</td>
                           </tr>
                         ))}
                       </tbody>

@@ -1,14 +1,13 @@
+import React from "react";
 import ReactDOM from "react-dom";
 import "./styles";
-import { AppContext, stores } from "./AppContext";
-import { HashRouter } from "react-router-dom";
+import MainStore from "./stores/MainStore";
+import RequestStore from "./stores/RequestStore";
 import App from "./App";
 
 ReactDOM.render(
-  <HashRouter basename={process.env.PUBLIC_URL}>
-    <AppContext.Provider value={stores}>
-      <App />
-    </AppContext.Provider>
-  </HashRouter>,
+  <React.StrictMode>
+    <App main={MainStore} request={RequestStore} />
+  </React.StrictMode>,
   document.getElementById("root")
 );

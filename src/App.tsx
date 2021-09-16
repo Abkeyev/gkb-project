@@ -1,45 +1,41 @@
 import React from "react";
-import { Route, Router, Switch } from "react-router-dom";
-
+import { Route, Router, Switch, Redirect } from "react-router-dom";
 import {
-  // Main,
-  // Login,
-  // LoginEcp,
   Modal,
   Registration,
-  Manager,
-  Request,
   RequestInner,
+  PartnersNew,
   PartnersInner,
   MyOrganization,
-  MyOrganizationInner,
   Sidebar,
   Partners,
+  Contractors,
+  ServiceInner,
+  ContractorsInner,
+  Profile,
 } from "./containers";
 import { LoginPage, RequestPage } from "./components";
-
-import AppState, { initAppState } from "./ncalayer/state";
-import NCALayer, { MethodName } from "./ncalayer/ncalayer";
-import { extractKeyAlias, isNullOrEmpty } from "./ncalayer/helper";
-import Response, { ValidationType } from "./ncalayer/response";
-import { AppContext } from "./AppContext";
 import PrivateRoute from "./PrivateRoute";
 import history from "./history";
 import { observer } from "mobx-react";
+import NCALayer, { MethodName } from "./ncalayer/ncalayer";
+import { extractKeyAlias, isNullOrEmpty } from "./ncalayer/helper";
+import Response, { ValidationType } from "./ncalayer/response";
+import AppState, { initAppState } from "./ncalayer/state";
 
-const App = observer(() => {
+const App = observer((props: any) => {
+  const { main, request } = props;
   const ws = React.useRef<WebSocket>();
   const [state, setState] = React.useState<AppState>(initAppState());
   const [ready, setReady] = React.useState(false);
-  const { mainStore } = React.useContext(AppContext);
+  const client = new NCALayer(ws.current!);
 
   React.useEffect(() => {
     ws.current = new WebSocket("wss://127.0.0.1:13579/");
-
     ws.current.onopen = (e: any) => {
       // tslint:disable-next-line
       console.log("connection opened");
-      !ready && setReady(true);
+      setReady(true);
     };
 
     ws.current.onclose = (e: any) => {
@@ -52,15 +48,14 @@ const App = observer(() => {
           "connection error: [code]=" + e.code + ", [reason]=" + e.reason
         );
       }
-      ready && setReady(false);
+      setReady(false);
     };
 
     return () => {
       ws.current!.close();
     };
-  }, [state.ready]);
+  }, [setReady]);
 
-  // set onmessage
   React.useEffect(() => {
     const browseKeyStoreCallback = (resp: Response) => {
       if (resp.IsOK()) {
@@ -150,53 +145,109 @@ const App = observer(() => {
     };
   }, [state, setState]);
 
-  // NCALayer client
-  const client = new NCALayer(ws.current!);
-
   return (
     <div className="app-root modal-open">
       <Router history={history}>
-        {mainStore.isOpenModal && <Modal />}
-        {mainStore.logged && <Sidebar />}
+        {main.isOpenModal && <Modal main={main} request={request} />}
+        {main.logged && !window.location.pathname.includes("registration") && (
+          <Sidebar main={main} request={request} />
+        )}
         <Switch>
           <Route
             path="/login"
-            component={() => (
-              <LoginPage
-                state={state}
-                setState={setState}
-                client={client}
-                store={mainStore}
-                ready={ready}
-              />
+            component={() =>
+              main.logged ? (
+                <Redirect to={{ pathname: "/" }} />
+              ) : (
+                <LoginPage
+                  ready={ready}
+                  setState={setState}
+                  state={state}
+                  client={client}
+                  main={main}
+                />
+              )
+            }
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/"
+            component={() =>
+              main.getRole === "Agent" ? (
+                <RequestPage request={request} />
+              ) : (
+                <Partners request={request} />
+              )
+            }
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/partner/:id"
+            component={(props: any) => (
+              <PartnersInner {...props} main={main} request={request} />
             )}
             exact
           />
-          <Route
+          <PrivateRoute
+            main={main}
+            path="/request/:id"
+            component={(props: any) => (
+              <RequestInner {...props} main={main} request={request} />
+            )}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/contractors"
+            component={() => <Contractors request={request} />}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/contractors/:id"
+            component={(props: any) => (
+              <ContractorsInner {...props} main={main} request={request} />
+            )}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/service/:id"
+            component={(props: any) => (
+              <ServiceInner {...props} main={main} request={request} />
+            )}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/profile"
+            component={() => <Profile main={main} request={request} />}
+            exact
+          />
+          <PrivateRoute
+            main={main}
             path="/registration"
-            component={() => <Registration />}
+            component={() => <Registration main={main} request={request} />}
             exact
           />
-          <PrivateRoute path="/" component={() => <Manager />} exact />
           <PrivateRoute
+            main={main}
             path="/organization"
-            component={() => <MyOrganization />}
+            component={() => <MyOrganization main={main} request={request} />}
             exact
           />
           <PrivateRoute
-            path="/request"
-            component={() => <RequestPage />}
-            exact
-          />
-          <PrivateRoute path="/partners" component={() => <Partners />} exact />
-          <PrivateRoute
-            path="/partners/title"
-            component={() => <PartnersInner />}
+            main={main}
+            path="/request-new"
+            component={() => <PartnersNew main={main} request={request} />}
             exact
           />
           <PrivateRoute
-            path="/request/title"
-            component={() => <RequestInner />}
+            main={main}
+            path="/partner-new"
+            component={() => <PartnersNew main={main} request={request} />}
             exact
           />
         </Switch>

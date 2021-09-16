@@ -1,63 +1,55 @@
-import React from "react";
-import { AppContext } from "../AppContext";
 import { observer } from "mobx-react";
-import { Link } from "react-router-dom";
-import history from "../history";
 
-const Login = observer(() => {
-  const { mainStore } = React.useContext(AppContext);
+interface LoginProps {
+  main: any;
+}
+
+const Login = observer((props: LoginProps) => {
+  const { main } = props;
+
   return (
     <div className="col-md-4 offset-md-4">
       <form>
         <div className="logo-image">
-          <img src={process.env.PUBLIC_URL + "/logo-image.png"} />
+          <img alt="logo" src={process.env.PUBLIC_URL + "/logo-image.png"} />
         </div>
         <div className="special-card">
           <h1 className="title-main mb-24">Вход</h1>
           <div className="login-input">
-<<<<<<< HEAD
-            <div className="form-group is-invalid">
-=======
             <div
-              className={`form-group ${
-                mainStore.loginError ? "is-invalid" : ""
-              }`}
+              className={`form-group ${main.loginError ? "is-invalid" : ""}`}
             >
->>>>>>> b0a2ea7da4347c25a113abc23811a4449379bdc3
               <label>Логин</label>
               <input
                 className="form-control"
                 type="text"
-                value={mainStore.login}
-                onChange={(e) => mainStore.setLogin(e.target.value)}
+                value={main.login}
+                onChange={(e) => (main.login = e.target.value)}
                 placeholder="Введите логин"
               />
               <span className="invalid-feedback">Ошибка</span>
             </div>
             <div
-              className={`form-group ${
-                mainStore.loginError ? "is-invalid" : ""
-              }`}
+              className={`form-group ${main.loginError ? "is-invalid" : ""}`}
             >
               <label>Пароль</label>
               <input
                 className="form-control"
                 type="password"
-                value={mainStore.pass}
-                onChange={(e) => mainStore.setPass(e.target.value)}
+                value={main.password}
+                onChange={(e) => (main.password = e.target.value)}
                 placeholder="Введите пароль"
               />
-              {mainStore.loginError && (
-                <span className="invalid-feedback">
-                  {mainStore.loginErrorText}
-                </span>
+              {main.loginError && (
+                <span className="invalid-feedback">{main.loginErrorText}</span>
               )}
             </div>
             <button
               className="button btn-primary mt-16 mb-16"
-              disabled={mainStore.login.length < 0 || mainStore.pass.length < 0}
-              onClick={() => {
-                mainStore.logIn();
+              disabled={main.login.length === 0 && main.password.length === 0}
+              onClick={(e) => {
+                e.preventDefault();
+                main.logIn(main.login, main.password);
               }}
             >
               Войти
@@ -66,16 +58,22 @@ const Login = observer(() => {
 
             <button
               className="button btn-secondary mb-24"
-              disabled={mainStore.login.length < 0 || mainStore.pass.length < 0}
+              disabled={main.login.length < 0 || main.password.length < 0}
               onClick={() => {
-                mainStore.setLoginState("ecp");
+                main.loginState = "ecp";
               }}
             >
               Войти по ЭЦП ЮЛ
             </button>
             <div className="reg-link">
               <p>Еще не зарегистрированы?</p>
-              <Link to="/registration">Зарегистрироваться с ЭЦП ЮЛ</Link>
+              <span
+                onClick={() => {
+                  main.loginState = "ecpr";
+                }}
+              >
+                Зарегистрироваться с ЭЦП ЮЛ
+              </span>
             </div>
           </div>
         </div>

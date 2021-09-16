@@ -1,15 +1,14 @@
 import React from "react";
-import { useHistory } from "react-router";
-import { observer } from "mobx-react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import { observer } from "mobx-react";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import {
   Address,
   AddressTypes,
   AuthPerson,
-  BankDetail,
   Categories,
-  Client,
   ClientService,
   ClientServiceType,
   ClientUser,
@@ -18,36 +17,46 @@ import {
   SigningAuthority,
 } from "../api/Models/ServiceModels";
 
-const MyOrganization = observer((props: any) => {
-  const history = useHistory();
+const ContractorsInner = observer((props: any) => {
   const { main, request } = props;
+  const { id } = props.match.params;
+  const history = useHistory();
 
   React.useEffect(() => {
-    request.getClient(main.clientData.client_id);
-    request.getClientUser(main.clientData.client_id);
+    request.getClient(id);
+    request.getClientUser(id);
     request.getClientService();
     request.getDocumentsCategories();
-    request.getDocuments(main.clientData.client_id);
+    request.getDocuments(id);
     request.getDocCategories();
     request.getClientTypes();
-    request.getAuthPersons(main.clientData.client_id);
-    request.getClientContact(main.clientData.client_id);
-    request.getClientAddress(main.clientData.client_id);
+    request.getAuthPersons(id);
+    request.getClientContact(id);
+    request.getClientAddress(id);
     request.getClientAddressTypes();
-    request.getClientBankDetails(main.clientData.client_id);
+    request.getClientBankDetails(id);
     request.getSigningAuthority();
     request.getPersonStatus();
     request.getClientServiceType();
   }, []);
-
   return (
     <div className="main-body">
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
             <div className="my-organization p-50 pad-b-128">
-              <div className="header-text justify-content-between mb-32">
-                <h1 className="title-main">Моя организация</h1>
+              <div className="header-text-inner justify-content-between mb-32">
+                <div className="back-breadcrumbs">
+                  <Link to="/parthers-page" className="back">
+                    <i className="azla arrow-left-icon"></i> Назад
+                  </Link>
+                  <div className="breadcrumbs">
+                    <Link to="/parthers-page">Контрагенты</Link> /{" "}
+                    <span>ТОО “М-Ломбард”</span>
+                  </div>
+                </div>
+
+                <h1 className="title-main mb-32">ТОО “М-Ломбард”</h1>
               </div>
               <Tabs>
                 <div className="mb-32">
@@ -631,4 +640,4 @@ const MyOrganization = observer((props: any) => {
     </div>
   );
 });
-export default MyOrganization;
+export default ContractorsInner;

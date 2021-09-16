@@ -1,21 +1,19 @@
-import * as React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
-import { AppContext } from "./AppContext";
 
 interface PrivateRouteProps extends RouteProps {
   // tslint:disable-next-line:no-any
   component: any;
+  main: any;
 }
 
 const PrivateRoute = (props: PrivateRouteProps) => {
-  const { component: Component, ...rest } = props;
-  const { mainStore } = React.useContext(AppContext);
+  const { component: Component, main, ...rest } = props;
 
   return (
     <Route
       {...rest}
       render={(routeProps) =>
-        mainStore.logged ? (
+        main.logged ? (
           <Component {...routeProps} />
         ) : (
           <Redirect

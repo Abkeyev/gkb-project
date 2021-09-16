@@ -62,7 +62,7 @@
   content: "";
   height: 1px;
   width: calc(50% - 20px);
-  background: #C8C7CC;
+  background: #c8c7cc;
   position: absolute;
   margin: auto;
   top: 0;
@@ -73,7 +73,7 @@
   content: "";
   height: 1px;
   width: calc(50% - 20px);
-  background: #C8C7CC;
+  background: #c8c7cc;
   position: absolute;
   margin: auto;
   top: 0;
@@ -84,7 +84,7 @@
   font-weight: normal;
   font-size: 16px;
   text-align: center;
-  color: #3F4B60;
+  color: #3f4b60;
   margin-bottom: 0;
 }
 .reg-link a {
@@ -93,7 +93,7 @@
   text-align: center;
   display: block;
   text-decoration-line: underline;
-  color: #20B5BE;
+  color: #20b5be;
 }
 
 /* Register */
@@ -116,7 +116,7 @@
   font-size: 24px;
   line-height: 46px;
   text-align: center;
-  color: #20B5BE;
+  color: #20b5be;
 }
 
 /* Sidebar */
@@ -445,6 +445,7 @@
   font-size: 14px;
   line-height: 20px;
   margin-bottom: 4px;
+  cursor: pointer;
 }
 .back-breadcrumbs .back i {
   margin-right: 8px;
@@ -574,7 +575,7 @@
 .info-list li .right.active-link {
   cursor: pointer;
   text-decoration-line: underline;
-  color: #19959C;
+  color: #19959c;
 }
 
 .info-list-sec {
@@ -619,7 +620,7 @@
   font-size: 16px;
   line-height: 20px;
   color: #3f4b60;
-  transition: .3s;
+  transition: 0.3s;
 }
 .files-list li i {
   margin-right: 8px;
@@ -629,14 +630,14 @@
 }
 .files-list li.active span {
   text-decoration-line: underline;
-  color: #19959C;
-  transition: .3s;
+  color: #19959c;
+  transition: 0.3s;
 }
 .files-list li .trash {
   margin-right: 0;
   margin-left: 8px;
   filter: contrast(0);
-  transition: .3s;
+  transition: 0.3s;
 }
 .files-list li.active .trash {
   cursor: pointer;
@@ -653,7 +654,7 @@
   justify-content: space-between;
   padding: 12px 0px 12px 56px;
   position: relative;
-  border-top: 1px solid #C8C7CC;
+  border-top: 1px solid #c8c7cc;
 }
 .reg-file-add ul li::before {
   content: counter(list);
@@ -671,7 +672,7 @@
   font-size: 16px;
   line-height: 16px;
   text-align: center;
-  color: #3F4B60;
+  color: #3f4b60;
 }
 .reg-file-add ul li .name {
   display: grid;
@@ -680,7 +681,7 @@
   font-weight: normal;
   font-size: 16px;
   line-height: 16px;
-  color: #3F4B60;
+  color: #3f4b60;
 }
 .reg-file-add ul li .name .file-name {
   font-weight: normal;
@@ -690,33 +691,31 @@
   margin-top: 4px;
 }
 .reg-file-add ul li .add {
-  background: #EAF6F5;
+  background: #eaf6f5;
   border-radius: 12px;
   border: none;
   font-weight: normal;
   font-size: 12px;
   line-height: 20px;
-  color: #3F4B60;
+  color: #3f4b60;
   padding: 6px 12px;
 }
 .reg-file-add ul li .delete {
-  background: #F3F3F3;
+  background: #f3f3f3;
   border-radius: 12px;
   border: none;
   font-weight: normal;
   font-size: 12px;
   line-height: 20px;
-  color: #3F4B60;
+  color: #3f4b60;
   padding: 6px 12px;
 }
 .reg-file-add ul li button {
-  transition: .3s;
+  transition: 0.3s;
 }
 .reg-file-add ul li button:hover {
-  opacity: .6;
+  opacity: 0.6;
 }
-
-
 
 .req-inner-footer {
   position: fixed;
@@ -1187,6 +1186,11 @@
   left: 12px;
   bottom: -32px;
   height: 32px;
+}
+
+.choose-service {
+  display: flex;
+  align-items: center;
 }
 
 .delete-if-icon {

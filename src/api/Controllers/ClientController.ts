@@ -9,7 +9,7 @@ export class ClientController {
     });
   }
   async authEcp(data: any): Promise<any> {
-    return server.post(`/user`, data, {
+    return server.post(`/user/auth`, data, {
       baseURL,
     });
   }

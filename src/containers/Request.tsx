@@ -1,19 +1,23 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
-import { AppContext } from "../AppContext";
+import { Request as RequestModel } from "../api/Models/ServiceModels";
 
-const Request = observer(() => {
+const Request = observer((props: any) => {
+  const { request } = props;
   const [advance, setAdvance] = React.useState(false);
   const [sort, setSort] = React.useState(false);
-  const [index, setIndex] = React.useState(0);
   const [service, setService] = React.useState(false);
   const [services, setServices] = React.useState<string[]>([]);
   const [sortTitle, setSortTitle] = React.useState("");
   const history = useHistory();
-  const { requestStore } = React.useContext(AppContext);
+
+  React.useEffect(() => {
+    request.getRequests();
+  }, []);
 
   return (
     <div className="main-body">
@@ -23,15 +27,13 @@ const Request = observer(() => {
             <div className="req-manager p-50 pad-b-128">
               <div className="header-text justify-content-between mb-24">
                 <h1 className="title-main">Заявки</h1>
-                {/* <div className="btn button btn-primary btn-icon">
-                  <i className="azla add-plusRound-icon"></i>
-                  <span className="text">Новая заявка</span>
-                </div> */}
               </div>
 
               <Tabs
-                selectedIndex={requestStore.tabIndexReq}
-                onSelect={(i) => requestStore.setTabIndexReq(i)}
+                selectedIndex={request.tabIndexPar}
+                onSelect={(i) => {
+                  request.tabIndexPar = i;
+                }}
               >
                 <div className="">
                   <TabList>
@@ -41,14 +43,6 @@ const Request = observer(() => {
                     <Tab>В архиве</Tab>
                   </TabList>
                 </div>
-
-                {/* <div className="tab-links ">
-                                    <span className="link active">Нераспределенные</span>
-                                    <span className="link">Мои (3)</span>
-                                    <span className="link">Подписанные</span>
-                                    <span className="link">В архиве</span>
-                                    <span className="bottomLine"></span>
-                                </div> */}
                 <div className="filter mb-24">
                   <div className="row">
                     <div className="col-md-12">
@@ -89,7 +83,7 @@ const Request = observer(() => {
                         </div>
 
                         <div className="form-multiselect mb-0 mr-16">
-                          {/* <ul className="selected-options">
+                          <ul className="selected-options">
                             {services.map((s) => (
                               <li>
                                 <button
@@ -105,7 +99,7 @@ const Request = observer(() => {
                                 </button>
                               </li>
                             ))}
-                          </ul> */}
+                          </ul>
                           <div
                             className={`multi js-multi-buttons ${
                               service ? "open" : ""
@@ -269,7 +263,10 @@ const Request = observer(() => {
                 <TabPanel>
                   <div className="tab-content tab-1">
                     <h3 className="title-subhead mb-16">
-                      Найдено <span className="number">32</span>
+                      Найдено{" "}
+                      <span className="number">
+                        {request._getRequests && request._getRequests.length}
+                      </span>
                     </h3>
                     <table className="table req-table">
                       <thead>
@@ -282,24 +279,29 @@ const Request = observer(() => {
                         </tr>
                       </thead>
                       <tbody>
-                        {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/request/title")}>
-                            <td>52345634643</td>
-                            <td>М-Ломбард</td>
-                            <td>Ломбард</td>
-                            <td>Кредитная история</td>
-                            <td>12.12.2021</td>
+                        {request._getRequests.map((r: RequestModel) => (
+                          <tr onClick={() => history.push(`/request/${r.id}`)}>
+                            <td>{r.id}</td>
+                            <td>{r.name_uid}</td>
+                            <td>{r.service_type}</td>
+                            <td>{r.service_category}</td>
+                            <td>{r.reg_date}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
                 </TabPanel>
-
                 <TabPanel>
                   <div className="tab-content tab-2">
                     <h3 className="title-subhead mb-16">
-                      На подпись <span className="number">32</span>
+                      На подпись{" "}
+                      <span className="number">
+                        {request._getRequests &&
+                          request._getRequests.filter(
+                            (r: RequestModel) => r.request_status === 6
+                          ).length}
+                      </span>
                     </h3>
                     <table className="table req-table">
                       <thead>
@@ -312,22 +314,32 @@ const Request = observer(() => {
                         </tr>
                       </thead>
                       <tbody>
-                        {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/request/title")}>
-                            <td>52345634643</td>
-                            <td>М-Ломбард</td>
-                            <td>Ломбард</td>
-                            <td>Кредитная история</td>
-                            <td>12.12.2021</td>
-                          </tr>
-                        ))}
+                        {request._getRequests
+                          .filter((r: RequestModel) => r.request_status === 6)
+                          .map((r: RequestModel) => (
+                            <tr
+                              onClick={() => history.push(`/request/${r.id}`)}
+                            >
+                              <td>{r.id}</td>
+                              <td>{r.name_uid}</td>
+                              <td>{r.service_type}</td>
+                              <td>{r.service_category}</td>
+                              <td>{r.reg_date}</td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>
 
                   <div className="tab-content tab-2 mt-16">
                     <h3 className="title-subhead mb-16">
-                      Активные <span className="number">62</span>
+                      Активные{" "}
+                      <span className="number">
+                        {request._getRequests &&
+                          request._getRequests.filter(
+                            (r: RequestModel) => r.request_status === 7
+                          ).length}
+                      </span>
                     </h3>
                     <table className="table req-table">
                       <thead>
@@ -340,15 +352,19 @@ const Request = observer(() => {
                         </tr>
                       </thead>
                       <tbody>
-                        {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/request/title")}>
-                            <td>52345634643</td>
-                            <td>М-Ломбард</td>
-                            <td>Ломбард</td>
-                            <td>Кредитная история</td>
-                            <td>12.12.2021</td>
-                          </tr>
-                        ))}
+                        {request._getRequests
+                          .filter((r: RequestModel) => r.request_status === 7)
+                          .map((r: RequestModel) => (
+                            <tr
+                              onClick={() => history.push(`/request/${r.id}`)}
+                            >
+                              <td>{r.id}</td>
+                              <td>{r.name_uid}</td>
+                              <td>{r.service_type}</td>
+                              <td>{r.service_category}</td>
+                              <td>{r.reg_date}</td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>
@@ -357,7 +373,13 @@ const Request = observer(() => {
                 <TabPanel>
                   <div className="tab-content tab-3">
                     <h3 className="title-subhead mb-16">
-                      Подписанные <span className="number">32</span>
+                      Подписанные{" "}
+                      <span className="number">
+                        {request._getRequests &&
+                          request._getRequests.filter(
+                            (r: RequestModel) => r.request_status === 8
+                          ).length}
+                      </span>
                     </h3>
                     <p>
                       Список подписанных заявок контрагентов, которые стали
@@ -374,15 +396,19 @@ const Request = observer(() => {
                         </tr>
                       </thead>
                       <tbody>
-                        {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/request/title")}>
-                            <td>52345634643</td>
-                            <td>М-Ломбард</td>
-                            <td>Ломбард</td>
-                            <td>Кредитная история</td>
-                            <td>12.12.2021</td>
-                          </tr>
-                        ))}
+                        {request._getRequests
+                          .filter((r: RequestModel) => r.request_status === 8)
+                          .map((r: RequestModel) => (
+                            <tr
+                              onClick={() => history.push(`/request/${r.id}`)}
+                            >
+                              <td>{r.id}</td>
+                              <td>{r.name_uid}</td>
+                              <td>{r.service_type}</td>
+                              <td>{r.service_category}</td>
+                              <td>{r.reg_date}</td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>
@@ -402,31 +428,24 @@ const Request = observer(() => {
                         </tr>
                       </thead>
                       <tbody>
-                        {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/request/title")}>
-                            <td>52345634643</td>
-                            <td>М-Ломбард</td>
-                            <td>Ломбард</td>
-                            <td>Кредитная история</td>
-                            <td>12.12.2021</td>
-                          </tr>
-                        ))}
+                        {request._getRequests
+                          .filter((r: RequestModel) => r.request_status === 9)
+                          .map((r: RequestModel) => (
+                            <tr
+                              onClick={() => history.push(`/request/${r.id}`)}
+                            >
+                              <td>{r.id}</td>
+                              <td>{r.name_uid}</td>
+                              <td>{r.service_type}</td>
+                              <td>{r.service_category}</td>
+                              <td>{r.reg_date}</td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>
                 </TabPanel>
               </Tabs>
-
-              <div className="req-inner-footer">
-                <div className="container">
-                  <button
-                    type="button"
-                    className="button btn-primary btn-icon ml-32"
-                  >
-                    <i className="azla add-plusRound-icon"></i> Новая заявка
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>

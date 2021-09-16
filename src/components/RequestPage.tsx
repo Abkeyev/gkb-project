@@ -2,15 +2,14 @@ import * as React from "react";
 import { Request } from "../containers";
 import { observer } from "mobx-react";
 
-export interface RequestProps {}
+export interface RequestProps {
+  request: any;
+}
 
 @observer
 export class RequestPage extends React.Component<RequestProps, {}> {
-  constructor(props: RequestProps) {
-    super(props);
-  }
   render() {
-    return <Request />;
+    return <Request request={this.props.request} />;
   }
 }
 export default RequestPage;

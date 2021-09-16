@@ -127,7 +127,7 @@ a {
   color: #0d6efd;
   text-decoration: underline;
   font-family: "Roboto", sans-serif;
-  transition: .3s;
+  transition: 0.3s;
 }
 a:hover {
   color: #0a58ca;
@@ -164,10 +164,9 @@ textarea {
   line-height: inherit;
 }
 
-
 /* Colors */
 .pre-primary-color {
-  color: #19959C;
+  color: #19959c;
 }
 /* Tabs */
 .tab-links {
@@ -199,7 +198,7 @@ textarea {
   padding: 32px 16px;
   width: 100%;
   position: relative;
-  border-bottom: 1px solid #C8C7CC;
+  border-bottom: 1px solid #c8c7cc;
 }
 /* .filter:before {
   content: "";
@@ -227,9 +226,17 @@ textarea {
   font-weight: bold;
   font-size: 14px;
   line-height: 20px;
+  color: white;
+  text-decoration: none;
 }
 .header-text-inner .title-main {
   text-align: left;
+}
+
+.small-text {
+  font-weight: normal;
+  font-size: 12px;
+  color: #3f4b60;
 }
 
 .btn-s {
@@ -388,7 +395,7 @@ fieldset:disabled .button {
   margin: 16px auto;
 }
 .mrl-24 {
-  margin: 0  24px;
+  margin: 0 24px;
 }
 .mrl-32 {
   margin: 0 32px;
@@ -520,6 +527,17 @@ fieldset:disabled .button {
   text-align: left;
 }
 
+.table.td-three tr td:nth-child(1) {
+  width: 20%;
+}
+.table.td-three tr td:nth-child(2),
+.table.td-three tr td:last-child {
+  width: 40%;
+}
+.table.td-three thead tr th:last-child,
+.table.td-three td:last-child {
+  text-align: left;
+}
 
 /* Table end */
 
@@ -662,6 +680,9 @@ fieldset:disabled .button {
 
 .w-160 {
   width: 160px;
+}
+.w-100 {
+  width: 100%;
 }
 
 /* Grid Layout */
@@ -1322,9 +1343,9 @@ fieldset:disabled .button {
   color: #19959c;
 }
 .btn-danger {
-  border: 1px solid #FF0000;
+  border: 1px solid #ff0000;
   background: transparent;
-  color: #FF0000;
+  color: #ff0000;
 }
 .btn-danger:hover {
   border: 1px solid #be0101;
@@ -1348,7 +1369,8 @@ fieldset:disabled .button {
   font-size: 18px;
   color: #3f4b60;
 }
-.title-subhead .number {
+.title-subhead .number,
+.title-main .number {
   color: #939393;
 }
 .text-desc {
@@ -1586,10 +1608,10 @@ select.form-control-v {
   font-style: normal;
   font-weight: normal;
   font-size: 12px;
-  color: #20B5BE;
+  color: #20b5be;
   cursor: pointer;
   padding: 2px 0;
-  transition: .3s;
+  transition: 0.3s;
 }
 .card-header .title .num {
   font-weight: 500;
@@ -1776,6 +1798,7 @@ select.form-control-v {
   font-size: 16px;
   color: #20b5be;
   text-align: center;
+  transition: 0.3s;
 }
 .tab-button .tab-btn.active {
   background: #20b5be;
@@ -1893,8 +1916,8 @@ select.form-control-v {
 }
 
 .card-collapse.collapsed.disabled {
-  background: #F3F3F3;
-  border-color: #F3F3F3;
+  background: #f3f3f3;
+  border-color: #f3f3f3;
 }
 .card-collapse.collapsed.disabled .card-collapse-header .title-subhead {
   color: #939393;
@@ -1919,6 +1942,7 @@ select.form-control-v {
   transition: 0.3s;
   font-size: 18px;
   color: #3f4b60;
+  padding: 12px 24px;
 }
 .react-tabs .react-tabs__tab-list .react-tabs__tab--selected {
   border-color: #20b5be;
@@ -1936,9 +1960,9 @@ select.form-control-v {
 .mess-card {
   display: inline-block;
   padding: 16px 20px;
-  background: #F9F9F9;
+  background: #f9f9f9;
   border-radius: 16px;
-  color: #3F4B60;
+  color: #3f4b60;
 }
 .alert-mess {
   background: #fff3f3;
@@ -2053,6 +2077,7 @@ select.form-control-v {
   color: #3f4b60;
   cursor: pointer;
   white-space: pre;
+  display: block;
 }
 .multi.open .multi-menu {
   max-height: 100000px;
@@ -2060,6 +2085,14 @@ select.form-control-v {
   visibility: visible;
   opacity: 1;
   transform: translateY(8px);
+}
+.side-r {
+  position: relative;
+}
+.side-r.open .multi-menu {
+  right: 0;
+  left: unset;
+  width: 400px;
 }
 .selected-options {
   margin-top: 0px;
@@ -2102,17 +2135,17 @@ select.form-control-v {
 }
 
 .hov-o {
-  transition: .3s;
+  transition: 0.3s;
 }
 .hov-o:hover {
-  opacity: .6;
+  opacity: 0.6;
 }
 
 .underline {
   position: relative;
 }
 .underline::before {
-  content: '';
+  content: "";
   width: 0px;
   margin: auto;
   position: absolute;
@@ -2120,8 +2153,8 @@ select.form-control-v {
   left: 0;
   right: 0;
   display: block;
-  transition: .3s;
-  border-bottom: 1px solid #20B5BE;
+  transition: 0.3s;
+  border-bottom: 1px solid #20b5be;
 }
 .underline:hover:before {
   width: 100%;
