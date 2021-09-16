@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Route,
-  Router,
-  Switch,
-  Redirect,
-  BrowserRouter,
-} from "react-router-dom";
+import { Route, HashRouter, Switch, Redirect } from "react-router-dom";
 import {
   Modal,
   Registration,
@@ -153,7 +147,7 @@ const App = observer((props: any) => {
 
   return (
     <div className="app-root modal-open">
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <HashRouter>
         {/* <Router history={history}> */}
         {main.isOpenModal && <Modal main={main} request={request} />}
         {main.logged && !window.location.pathname.includes("registration") && (
@@ -259,7 +253,7 @@ const App = observer((props: any) => {
           />
         </Switch>
         {/* </Router> */}
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 });
