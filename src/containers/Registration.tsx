@@ -80,6 +80,7 @@ const Registration = observer((props: any) => {
                           ))}
                         </select>
                       </div>
+                      {console.log("s")}
                       <div className="form-group-v">
                         <label>Дата регистрации:</label>
                         <span>{request._getClient.reg_date}</span>
