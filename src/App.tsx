@@ -154,112 +154,111 @@ const App = observer((props: any) => {
   return (
     <div className="app-root modal-open">
       <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <Router history={history}>
-          {main.isOpenModal && <Modal main={main} request={request} />}
-          {main.logged &&
-            !window.location.pathname.includes("registration") && (
-              <Sidebar main={main} request={request} />
+        {/* <Router history={history}> */}
+        {main.isOpenModal && <Modal main={main} request={request} />}
+        {main.logged && !window.location.pathname.includes("registration") && (
+          <Sidebar main={main} request={request} />
+        )}
+        <Switch>
+          <Route
+            path="/login"
+            component={() =>
+              main.logged ? (
+                <Redirect to={{ pathname: "/" }} />
+              ) : (
+                <LoginPage
+                  ready={ready}
+                  setState={setState}
+                  state={state}
+                  client={client}
+                  main={main}
+                />
+              )
+            }
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/"
+            component={() =>
+              main.getRole === "Agent" ? (
+                <RequestPage request={request} />
+              ) : (
+                <Partners request={request} />
+              )
+            }
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/partner/:id"
+            component={(props: any) => (
+              <PartnersInner {...props} main={main} request={request} />
             )}
-          <Switch>
-            <Route
-              path="/login"
-              component={() =>
-                main.logged ? (
-                  <Redirect to={{ pathname: "/" }} />
-                ) : (
-                  <LoginPage
-                    ready={ready}
-                    setState={setState}
-                    state={state}
-                    client={client}
-                    main={main}
-                  />
-                )
-              }
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/"
-              component={() =>
-                main.getRole === "Agent" ? (
-                  <RequestPage request={request} />
-                ) : (
-                  <Partners request={request} />
-                )
-              }
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/partner/:id"
-              component={(props: any) => (
-                <PartnersInner {...props} main={main} request={request} />
-              )}
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/request/:id"
-              component={(props: any) => (
-                <RequestInner {...props} main={main} request={request} />
-              )}
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/contractors"
-              component={() => <Contractors request={request} />}
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/contractors/:id"
-              component={(props: any) => (
-                <ContractorsInner {...props} main={main} request={request} />
-              )}
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/service/:id"
-              component={(props: any) => (
-                <ServiceInner {...props} main={main} request={request} />
-              )}
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/profile"
-              component={() => <Profile main={main} request={request} />}
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/registration"
-              component={() => <Registration main={main} request={request} />}
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/organization"
-              component={() => <MyOrganization main={main} request={request} />}
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/request-new"
-              component={() => <PartnersNew main={main} request={request} />}
-              exact
-            />
-            <PrivateRoute
-              main={main}
-              path="/partner-new"
-              component={() => <PartnersNew main={main} request={request} />}
-              exact
-            />
-          </Switch>
-        </Router>
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/request/:id"
+            component={(props: any) => (
+              <RequestInner {...props} main={main} request={request} />
+            )}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/contractors"
+            component={() => <Contractors request={request} />}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/contractors/:id"
+            component={(props: any) => (
+              <ContractorsInner {...props} main={main} request={request} />
+            )}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/service/:id"
+            component={(props: any) => (
+              <ServiceInner {...props} main={main} request={request} />
+            )}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/profile"
+            component={() => <Profile main={main} request={request} />}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/registration"
+            component={() => <Registration main={main} request={request} />}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/organization"
+            component={() => <MyOrganization main={main} request={request} />}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/request-new"
+            component={() => <PartnersNew main={main} request={request} />}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/partner-new"
+            component={() => <PartnersNew main={main} request={request} />}
+            exact
+          />
+        </Switch>
+        {/* </Router> */}
       </BrowserRouter>
     </div>
   );
