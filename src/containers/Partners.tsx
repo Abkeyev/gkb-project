@@ -284,7 +284,7 @@ const Partners = observer((props: any) => {
                       </thead>
                       <tbody>
                         {request._getRequests.map((r: Request) => (
-                          <tr onClick={() => history.push(`/partners/${r.id}`)}>
+                          <tr onClick={() => history.push(`/partner/${r.id}`)}>
                             <td>{r.id}</td>
                             <td>{r.name_uid}</td>
                             <td>{r.service_type}</td>
@@ -313,7 +313,7 @@ const Partners = observer((props: any) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {[1, 2, 3, 4].map((m) => (
+                        {/* {[1, 2, 3, 4].map((m) => (
                           <tr onClick={() => history.push("/partners/title")}>
                             <td>52345634643</td>
                             <td>М-Ломбард</td>
@@ -321,7 +321,7 @@ const Partners = observer((props: any) => {
                             <td>Кредитная история</td>
                             <td>12.12.2021</td>
                           </tr>
-                        ))}
+                        ))} */}
                       </tbody>
                     </table>
                   </div>
@@ -341,7 +341,7 @@ const Partners = observer((props: any) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {[1, 2, 3, 4].map((m) => (
+                        {/* {[1, 2, 3, 4].map((m) => (
                           <tr onClick={() => history.push("/partners/title")}>
                             <td>52345634643</td>
                             <td>М-Ломбард</td>
@@ -349,7 +349,7 @@ const Partners = observer((props: any) => {
                             <td>Кредитная история</td>
                             <td>12.12.2021</td>
                           </tr>
-                        ))}
+                        ))} */}
                       </tbody>
                     </table>
                   </div>

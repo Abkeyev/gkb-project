@@ -1,7 +1,11 @@
 import axios from "axios";
 import Cookies from "../utils/cookies";
+import https from "https";
 
 let webConfigEnv = { SERVER_URL: "" };
+const agent = new https.Agent({
+  rejectUnauthorized: false,
+});
 
 export class Server {
   constructor() {
@@ -14,6 +18,7 @@ export class Server {
   public get(url: string, config = {} as any): any {
     config = config || {};
     config.headers = config.headers || {};
+    config.httpsAgent = agent;
     config.headers.Authorization = `Bearer ${Cookies.get("access")}`;
     config.baseURL = config.baseURL || webConfigEnv.SERVER_URL;
     return axios.get(url, config).then((r) => r?.data);
@@ -21,6 +26,7 @@ export class Server {
   public delete(url: string, config = {} as any): any {
     config = config || {};
     config.headers = config.headers || {};
+    config.httpsAgent = agent;
     config.headers.Authorization = `Bearer ${Cookies.get("access")}`;
     config.baseURL = config.baseURL || webConfigEnv.SERVER_URL;
     return axios.delete(url, config).then((r) => r.data);
@@ -28,6 +34,7 @@ export class Server {
   public head(url: string, config = {} as any): any {
     config = config || {};
     config.headers = config.headers || {};
+    config.httpsAgent = agent;
     config.headers.Authorization = `Bearer ${Cookies.get("access")}`;
     config.baseURL = webConfigEnv.SERVER_URL;
     return axios.head(url, config);
@@ -40,6 +47,7 @@ export class Server {
   public post(url: string, data: any, config = {} as any): any {
     config = config || {};
     config.headers = config.headers || {};
+    config.httpsAgent = agent;
     console.log(Cookies.get("access"));
     console.log(!!Cookies.get("access"));
     if (!!Cookies.get("access"))
@@ -50,6 +58,7 @@ export class Server {
   public put(url: string, data: any, config = {} as any): any {
     config = config || {};
     config.headers = config.headers || {};
+    config.httpsAgent = agent;
     config.headers.Authorization = `Bearer ${Cookies.get("access")}`;
     config.baseURL = webConfigEnv.SERVER_URL;
     return axios.put(url, data, config).then((r) => r.data);
@@ -57,6 +66,7 @@ export class Server {
   public patch(url: string, data: any, config = {} as any): any {
     config = config || {};
     config.headers = config.headers || {};
+    config.httpsAgent = agent;
     config.headers.Authorization = `Bearer ${Cookies.get("access")}`;
     config.baseURL = webConfigEnv.SERVER_URL;
     return axios.patch(url, data, config).then((r) => r.data);
