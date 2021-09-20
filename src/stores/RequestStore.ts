@@ -189,6 +189,13 @@ class RequestStore {
     await api.service.addRequest(data);
   }
 
+  async updateUser(id: number, fields: any) {
+    await api.service.updateProfile(id, fields)
+      .then((response: any) => {
+        console.log(response);
+      });
+  }
+
   async getUser(id: string) {
     await api.service.getUser(id).then((r: User) => (this.user = r));
   }
@@ -435,6 +442,7 @@ class RequestStore {
       endRequest: action.bound,
       nextRequest: action.bound,
       setDoc: action.bound,
+      updateUser: action.bound,
       _getRequests: computed,
       _getDocuments: computed,
       _getCategories: computed,
