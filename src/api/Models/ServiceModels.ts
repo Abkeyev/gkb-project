@@ -1,5 +1,5 @@
 export interface Request {
-  id: number;
+  id: string;
   service_category: number;
   name_uid: number;
   reg_date: Date;
@@ -76,9 +76,15 @@ export interface ClientService {
   client_user: number[];
 }
 
-export interface ClientServiceType {
+export interface ServiceCommon {
   id: number;
   name: string;
+}
+
+export interface DocCategory {
+  id: number;
+  name: string;
+  doc_type: number;
 }
 
 export interface Contact {
@@ -113,21 +119,6 @@ export interface BankDetail {
   client: number;
 }
 
-export interface ClientTypes {
-  id: number;
-  name: string;
-}
-
-export interface SigningAuthority {
-  id: number;
-  name: string;
-}
-
-export interface PersonStatus {
-  id: number;
-  name: string;
-}
-
 export interface User {
   id: number;
   full_name: string;
@@ -146,6 +137,7 @@ export interface Documents {
   doc_link: string;
   doc_status: string;
   is_draft: boolean;
+  comments: string;
   is_signed_by_agent: boolean;
   is_signed_by_both: boolean;
   client: number;

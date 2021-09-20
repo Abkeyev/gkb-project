@@ -4,11 +4,12 @@ import "react-tabs/style/react-tabs.css";
 import { Link, useHistory } from "react-router-dom";
 import { observer } from "mobx-react";
 import * as H from "history";
-import api from "../api/Api";
+import moment from "moment";
 import {
   Categories,
   ClientUsers,
   Documents,
+  ServiceCommon,
 } from "../api/Models/ServiceModels";
 
 interface MatchParams {
@@ -41,12 +42,15 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
   const [step, setStep] = React.useState(1);
 
   React.useEffect(() => {
+    request.getClientServiceType();
     request.getRequest(id);
+    request.getRequestStatus();
     request.getDocumentsCategories();
-    request.getDocuments(id);
     request.getDocCategories();
-    request.getClientUsers(id);
-    request.getClient(id);
+    request.getDocuments(main.clientData.client.id);
+    request.getClientUsers(main.clientData.client.id);
+    request.getClientTypes();
+    request.getClient(main.clientData.client.id);
   }, []);
 
   return (
@@ -65,7 +69,7 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
                   </div>
 
                   <h1 className="title-main mb-32">
-                    Заявка №{id} - {request._getClient.longname}
+                    Заявка №{id} - {main.clientData.client.longname}
                   </h1>
 
                   {main.decline ? (
@@ -172,21 +176,27 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
                             <li>
                               <span className="left">Статус заявки:</span>
                               <span className="right">
-                                {request._getRequest.request_status}
+                                {
+                                  request._getRequestStatus.find(
+                                    (t: ServiceCommon) =>
+                                      t.id ===
+                                      request._getRequest.request_status
+                                  )?.name
+                                }
                               </span>
                             </li>
                             <li>
                               <span className="left">Организация:</span>
                               <span className="right">
                                 <span className="pre-primary-color">
-                                  {main._clientData.name}
+                                  {main.clientData.client.longname}
                                 </span>
                               </span>
                             </li>
                             <li>
                               <span className="left">БИН:</span>
                               <span className="right">
-                                {main._clientData.bin}
+                                {main.clientData.client.bin}
                               </span>
                             </li>
                             <li>
@@ -200,7 +210,12 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
                             <li>
                               <span className="left">Тип сервиса:</span>
                               <span className="right">
-                                {request._getRequest.service_type}
+                                {
+                                  request._getClientServiceType.find(
+                                    (t: ServiceCommon) =>
+                                      t.id === request._getRequest.service_type
+                                  )?.name
+                                }
                               </span>
                             </li>
                             <li>
@@ -208,7 +223,9 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
                                 Дата регистрации заявки:
                               </span>
                               <span className="right">
-                                {request._getRequest.reg_date}
+                                {moment(request._getRequest.reg_date).format(
+                                  "MM.DD.YYYY"
+                                )}
                               </span>
                             </li>
                             <li>
@@ -216,7 +233,9 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
                                 Дата исполнения заявки:
                               </span>
                               <span className="right">
-                                {request._getRequest.fulfill_date}
+                                {moment(
+                                  request._getRequest.fulfill_date
+                                ).format("MM.DD.YYYY")}
                               </span>
                             </li>
                           </ul>
@@ -1048,166 +1067,140 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {[1, 2, 3, 4].map((m) => (
-                          <tr
-                            onClick={() => {
-                              main.setModal(true);
-                              main.setModalType(2);
-                            }}
-                          >
-                            <td>Договор вер. 2.4255</td>
-                            <td>24 Июня 2021</td>
-                            <td>Изменили что-то</td>
-                            <td>Султангалиева К.И</td>
-                          </tr>
-                        ))}
+                        {(request._getDocuments as Documents[]).map(
+                          (d: Documents) => (
+                            <tr
+                              onClick={() => {
+                                main.setModal(true);
+                                main.setModalType(2);
+                              }}
+                            >
+                              <td>{d.doc_name}</td>
+                              <td>{d.comments}</td>
+                              <td>{d.comments}</td>
+                              <td>{main.clientData.client.full_name}</td>
+                            </tr>
+                          )
+                        )}
                       </tbody>
                     </table>
 
                     <h3 className="title-subhead mb-16">
                       Документы контрагента
                     </h3>
-                    <h5 className="title-subhead-h5 mb-16">
-                      Организационные документы
-                    </h5>
-
-                    <div className="files-added">
-                      <ul className="files-list">
-                        <li>
-                          <i className="azla blank-alt-primary-icon"></i>
-                          <span>Типовой договор.docx</span>
-                        </li>
-                        <li>
-                          <i className="azla blank-alt-primary-icon"></i>
-                          <span>Типовой договор.docx</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <h5 className="title-subhead-h5 mb-16">
-                      Персональные документы
-                    </h5>
-
-                    <div className="files-added">
-                      <ul className="files-list">
-                        <li>
-                          <i className="azla blank-alt-primary-icon"></i>
-                          <span>Типовой договор.docx</span>
-                        </li>
-                        <li>
-                          <i className="azla blank-alt-primary-icon"></i>
-                          <span>Типовой договор.docx</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <h3 className="title-subhead mb-16">Шаблоны договоров</h3>
-                    <div className="files-added">
-                      <ul className="files-list">
-                        <li>
-                          <i className="azla blank-alt-primary-icon"></i>
-                          <span>Типовой договор.docx</span>
-                        </li>
-                        <li>
-                          <i className="azla blank-alt-primary-icon"></i>
-                          <span>Типовой договор.docx</span>
-                        </li>
-                      </ul>
-                    </div>
+                    {request.getDocCategories().map(
+                      (c: Categories) =>
+                        c.documents.length > 0 && (
+                          <>
+                            <h5 className="title-subhead-h5 mb-16">{c.name}</h5>
+                            <div className="files-added">
+                              <ul className="files-list">
+                                {c.documents.map((d: Documents) => (
+                                  <li>
+                                    <i className="azla blank-alt-primary-icon"></i>
+                                    <span
+                                      onClick={() =>
+                                        request.downloadDocument(
+                                          d.id,
+                                          d.doc_name
+                                        )
+                                      }
+                                    >
+                                      {d.doc_name}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </>
+                        )
+                    )}
                   </div>
                 ) : step === 3 ? (
                   <>
-                    {[1, 2, 3].map((s) => (
-                      <div className="card mb-24 pad-24">
-                        <div className="card-header">
-                          <div className="title">
-                            <h6 className="text">
-                              Султангалиева Камилла Избасарова
-                            </h6>
-                            <span className="num">№1</span>
-                          </div>
-                          <p className="desc">
-                            Аналитик – Департамент финансового анализа – ТОО
-                            “М-Ломбард”
-                          </p>
-                        </div>
-                        <div className="card-body pad-rl-16">
-                          <div className="row">
-                            <div className="col-md-6">
-                              <div className="total-info">
-                                <ul className="info-list">
-                                  <li>
-                                    <span className="left">
-                                      ID пользователя:
-                                    </span>
-                                    <span className="right">64522352</span>
-                                  </li>
-                                  <li>
-                                    <span className="left">
-                                      ИИН сотрудника:
-                                    </span>
-                                    <span className="right">941125352353</span>
-                                  </li>
-                                  <li>
-                                    <span className="left">
-                                      Контактный номер:
-                                    </span>
-                                    <span className="right">
-                                      +7 (705) 1234-56-78
-                                    </span>
-                                  </li>
-                                  <li>
-                                    <span className="left">Email:</span>
-                                    <span className="right">
-                                      sultangaliyeva.k.i@gmail.com
-                                    </span>
-                                  </li>
-                                </ul>
-                              </div>
+                    {request._getClientUsers.map(
+                      (u: ClientUsers, index: number) => (
+                        <div className="card mb-24 pad-24">
+                          <div className="card-header">
+                            <div className="title">
+                              <h6 className="text">{u.full_name}</h6>
+                              <span className="num">№{index + 1}</span>
                             </div>
-                            <div className="col-md-6">
-                              <div className="total-info">
-                                <ul className="info-list">
-                                  <li>
-                                    <span className="left">
-                                      Первый руководитель:
-                                    </span>
-                                    <span className="right">
-                                      Кусаинов Ахан Ермекович
-                                    </span>
-                                  </li>
-                                  <li>
-                                    <span className="left">Заместитель:</span>
-                                    <span className="right">
-                                      Мусаханов Дидар Ерланович
-                                    </span>
-                                  </li>
-                                  <li>
-                                    <span className="left">
-                                      Курирующий менеджер:
-                                    </span>
-                                    <span className="right">
-                                      Константинопольский Александр
-                                      Александрович
-                                    </span>
-                                  </li>
-                                  <li>
-                                    <span className="left">
-                                      Контакты менеджера:
-                                    </span>
-                                    <span className="right">
-                                      +7 (705) 1234-56-78,
-                                      <br />
-                                      alex.const@gmail.com
-                                    </span>
-                                  </li>
-                                </ul>
+                            <p className="desc">{u.department_name}</p>
+                          </div>
+                          <div className="card-body pad-rl-16">
+                            <div className="row">
+                              <div className="col-md-6">
+                                <div className="total-info">
+                                  <ul className="info-list">
+                                    <li>
+                                      <span className="left">
+                                        ID пользователя:
+                                      </span>
+                                      <span className="right">{u.id}</span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        ИИН сотрудника:
+                                      </span>
+                                      <span className="right">{u.iin}</span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Контактный номер:
+                                      </span>
+                                      <span className="right">
+                                        {u.idcard_number}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">Email:</span>
+                                      <span className="right">{u.email}</span>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                              <div className="col-md-6">
+                                <div className="total-info">
+                                  <ul className="info-list">
+                                    <li>
+                                      <span className="left">
+                                        Первый руководитель:
+                                      </span>
+                                      <span className="right">
+                                        {u.first_head_full_name}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">Заместитель:</span>
+                                      <span className="right">
+                                        {u.deputy_head_full_name}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Курирующий менеджер:
+                                      </span>
+                                      <span className="right">
+                                        {u.manager_full_name}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Контакты менеджера:
+                                      </span>
+                                      <span className="right">
+                                        {u.manager_contacts}
+                                      </span>
+                                    </li>
+                                  </ul>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </>
                 ) : step === 4 ? (
                   <>
@@ -1298,45 +1291,73 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
                                 <ul className="info-list">
                                   <li>
                                     <span className="left">Номер заявки:</span>
-                                    <span className="right">41252526</span>
+                                    <span className="right">
+                                      {request._getRequest.id}
+                                    </span>
                                   </li>
                                   <li>
                                     <span className="left">Статус заявки:</span>
-                                    <span className="right">941125352353</span>
+                                    <span className="right">
+                                      {request._getRequest.request_status}
+                                    </span>
                                   </li>
                                   <li>
                                     <span className="left">Организация:</span>
                                     <span className="right">
-                                      ТОО “М-Ломбард”
+                                      {main.clientData.client.longname}
                                     </span>
                                   </li>
                                   <li>
                                     <span className="left">БИН:</span>
-                                    <span className="right">123456789098</span>
+                                    <span className="right">
+                                      {main.clientData.client.bin}
+                                    </span>
                                   </li>
                                   <li>
                                     <span className="left">
                                       Категория деятельности:
                                     </span>
-                                    <span className="right">Ломбарды</span>
+                                    <span className="right">
+                                      {
+                                        request._getClientTypes.find(
+                                          (t: any) =>
+                                            t.id ===
+                                            main.clientData.client.client_type
+                                        )?.name
+                                      }
+                                    </span>
                                   </li>
                                   <li>
                                     <span className="left">Тип сервиса:</span>
                                     <span className="right">
-                                      Изъятие данных
+                                      {
+                                        request._getClientServiceType.find(
+                                          (t: ServiceCommon) =>
+                                            t.id ===
+                                            request._getRequest.service_type
+                                        )?.name
+                                      }
                                     </span>
                                   </li>
                                   <li>
                                     <span className="left">
                                       Дата регистрации заявки:
                                     </span>
-                                    <span className="right">20 Июня 2021</span>
+                                    <span className="right">
+                                      {moment(
+                                        request._getRequest.reg_date
+                                      ).format("MM.DD.YYYY")}
+                                    </span>
                                   </li>
                                   <li>
                                     <span className="left">
                                       Дата исполнения заявки:
                                     </span>
-                                    <span className="right">20 Июня 2021</span>
+                                    <span className="right">
+                                      {moment(
+                                        request._getRequest.fulfill_date
+                                      ).format("MM.DD.YYYY")}
+                                    </span>
                                   </li>
                                 </ul>
                               </div>
@@ -1391,76 +1412,6 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
                 ) : (
                   <></>
                 )}
-                {/* step 0-4 */}
-
-                <div className="req-inner-footer">
-                  <div className="container">
-                    {main.modalManager && request.step === 0 ? (
-                      <div className="manager-req mrl-32">
-                        <div className="left">
-                          <p>Менеджер заявки</p>
-                          <div className="profile">
-                            <img
-                              alt="ava"
-                              className="ava"
-                              src={
-                                process.env.PUBLIC_URL + "/images/def-ava.svg"
-                              }
-                            />
-                            <span className="name">Султангалиева К.И</span>
-                          </div>
-                        </div>
-
-                        {main.decline ? (
-                          <div className="right alert">
-                            <p>Заявка отклонена</p>
-                            <button
-                              className="button btn-secondary"
-                              onClick={() => {
-                                main.setDeclineReason("");
-                                main.setDecline(false);
-                                request.setTabIndexPar(3);
-
-                                history.push("/partners");
-                              }}
-                            >
-                              В архив
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="right">
-                            <p>Первичная проверка прошла успешно?</p>
-                            <button
-                              className="button btn-secondary mr-8"
-                              onClick={() => {
-                                main.setModal(true);
-                                main.setModalType(1);
-                              }}
-                            >
-                              Нет
-                            </button>
-                            <button
-                              className="button btn-primary"
-                              onClick={() => request.setStep(1)}
-                            >
-                              Да, успешно
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    ) : request.step === 3 ? (
-                      <button
-                        type="button"
-                        onClick={() => request.setStep(4)}
-                        className="button btn-primary mrl-32"
-                      >
-                        Подписать акт тестирования
-                      </button>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </div>
               </div>
             </div>
           </div>

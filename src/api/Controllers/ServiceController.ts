@@ -1,5 +1,6 @@
 import { server } from "../axios";
 import { baseURL } from "../const";
+import { Request } from "../Models/ServiceModels";
 
 export class ServiceController {
   // Documents
@@ -13,9 +14,22 @@ export class ServiceController {
       baseURL,
     });
   }
+  async getDocumentTypes(): Promise<any> {
+    return server.get(`/doc/type`, {
+      baseURL,
+    });
+  }
   async downloadDocument(id: string): Promise<any> {
     return server.get(`/download_file/${id}`, {
       baseURL,
+    });
+  }
+  async addDocument(id: string, data: any): Promise<any> {
+    return server.post(`/client_document/${id}`, data, {
+      baseURL,
+      headers: {
+        "Content-Type": `application/x-www-form-urlencoded`,
+      },
     });
   }
   // Client
@@ -36,6 +50,18 @@ export class ServiceController {
     });
   }
 
+  async getPosition(): Promise<any> {
+    return server.get(`/position`, {
+      baseURL,
+    });
+  }
+
+  async getSigningAuth(): Promise<any> {
+    return server.get(`/signing_authority`, {
+      baseURL,
+    });
+  }
+
   async getClient(id: string): Promise<any> {
     return server.get(`/client/${id}`, {
       baseURL,
@@ -44,6 +70,11 @@ export class ServiceController {
   // Client Data
   async getAuthPersons(id: string) {
     return server.get(`/client/${id}/auth_person`, {
+      baseURL,
+    });
+  }
+  async getAuthPerson(id: string) {
+    return server.get(`/client/auth_person/${id}`, {
       baseURL,
     });
   }
@@ -64,6 +95,11 @@ export class ServiceController {
   }
   async getClientServiceType() {
     return server.get(`/service/type`, {
+      baseURL,
+    });
+  }
+  async sendType() {
+    return server.get(`/request_type`, {
       baseURL,
     });
   }
@@ -103,8 +139,28 @@ export class ServiceController {
       baseURL,
     });
   }
+  async getRequestStatus(): Promise<any> {
+    return server.get(`/request/status`, {
+      baseURL,
+    });
+  }
   async getRequest(id: string): Promise<any> {
     return server.get(`/client_request/${id}`, {
+      baseURL,
+    });
+  }
+  async addRequest(data: any): Promise<any> {
+    return server.post(`/client_request`, data, {
+      baseURL,
+    });
+  }
+  async endRequest(request: Request): Promise<any> {
+    return server.put(`/client_request/${request.id}/end_request`, request, {
+      baseURL,
+    });
+  }
+  async nextRequest(request: Request): Promise<any> {
+    return server.put(`/client_request/next_step/${request.id}`, request, {
       baseURL,
     });
   }

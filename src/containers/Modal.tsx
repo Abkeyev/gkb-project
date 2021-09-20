@@ -1,11 +1,21 @@
 import { useHistory } from "react-router-dom";
 import { observer } from "mobx-react";
 import React from "react";
+import { ClientUsers } from "../api/Models/ServiceModels";
 
 const Modal = observer((props: any) => {
   const { main, request } = props;
+  const [users, setUsers] = React.useState<ClientUsers[]>([]);
+  const [fullName, setFullName] = React.useState("");
+  const [position, setPosition] = React.useState("");
+  const [department, setDepartment] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [firstRuk, setFirstRuk] = React.useState("");
+  const [zam, setZam] = React.useState("");
+  const [man, setMan] = React.useState("");
+  const [manCon, setManCon] = React.useState("");
   const history = useHistory();
-  React.useEffect(() => {}, []);
   return (
     <div>
       {main.modalType === 0 ? (
@@ -33,26 +43,28 @@ const Modal = observer((props: any) => {
                   </div>
                   <div className="manager-list">
                     <ul>
-                      {[1, 2, 3, 4].map((r) => (
-                        <li
-                          onClick={() => {
-                            main.setModal(false);
-                            main.setModalManager(true);
-                          }}
-                        >
-                          <div className="profile">
-                            <img
-                              alt="ava"
-                              className="ava"
-                              src={
-                                process.env.PUBLIC_URL + "/images/def-ava.svg"
-                              }
-                            />
-                            <span className="name">Султангалиева К.И</span>
-                          </div>
-                          <span className="position">Менеджер</span>
-                        </li>
-                      ))}
+                      {(request._getClientUser as ClientUsers[]).map(
+                        (r: ClientUsers) => (
+                          <li
+                            onClick={() => {
+                              main.setModal(false);
+                              request.setManUser(r);
+                            }}
+                          >
+                            <div className="profile">
+                              <img
+                                alt="ava"
+                                className="ava"
+                                src={
+                                  process.env.PUBLIC_URL + "/images/def-ava.svg"
+                                }
+                              />
+                              <span className="name">{r.full_name}</span>
+                            </div>
+                            <span className="position">{r.position_name}</span>
+                          </li>
+                        )
+                      )}
                     </ul>
                   </div>
                 </div>
@@ -86,11 +98,11 @@ const Modal = observer((props: any) => {
                   <div className="d-flex">
                     <button
                       type="button"
-                      onClick={() => {
-                        main.setModalManager(true);
-                        main.setModal(false);
-                        main.setDecline(true);
-                      }}
+                      disabled={main.declineReason === ""}
+                      onClick={() =>
+                        request._getRequest &&
+                        request.endRequest(request._getRequest)
+                      }
                       className="button btn-primary mr-16"
                     >
                       Отправить
@@ -122,14 +134,19 @@ const Modal = observer((props: any) => {
               <div className="modal-body">
                 <div className="paper-show">
                   <h3 className="text-left title-subhead mb-16">
-                    Договор версия 2342
+                    {request._getDoc.doc_name}
                   </h3>
                   <div className="file-add mb-32">
-                    <button className="btn-file btn-icon">
+                    <button
+                      className="btn-file btn-icon"
+                      onClick={() =>
+                        request.downloadDocument(request._getDoc.id)
+                      }
+                    >
                       <i className="azla blank-alt-primary-icon"></i>
                       Скачать договор
                     </button>
-                    <p className="info ml-16">Загружено 24 Июня 2021 в 14:46</p>
+                    <p className="info ml-16">Загружено {""}</p>
                   </div>
 
                   <div className="author mb-16">
@@ -140,18 +157,13 @@ const Modal = observer((props: any) => {
                         className="ava"
                         src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
                       />
-                      <span className="name">Султангалиева К.И</span>
+                      <span className="name">{request._getDoc.client}</span>
                     </div>
                   </div>
 
                   <div className="comment mb-32">
                     <h5>Комментарий:</h5>
-                    <p>
-                      Amet minim mollit non deserunt ullamco est sit aliqua
-                      dolor do amet sint. Velit officia consequat duis enim
-                      velit mollit. Exercitation veniam consequat sunt nostrud
-                      amet.
-                    </p>
+                    <p>{request._getDoc.comments}</p>
                   </div>
                 </div>
               </div>
@@ -160,19 +172,12 @@ const Modal = observer((props: any) => {
                 <button
                   type="button"
                   onClick={() => {
-                    if (history.location.pathname.includes("request")) {
-                      main.setModal(false);
-                      request.setAgreement(true);
-                    } else {
-                      main.setModal(false);
-                      request.setAgreementPar(true);
-                    }
+                    main.setModal(false);
+                    request.setAgreementPar(true);
                   }}
                   className="button btn-primary table-ml"
                 >
-                  {history.location.pathname.includes("request")
-                    ? "Отправить на согласование"
-                    : "Далее"}
+                  Отправить на согласование
                 </button>
               </div>
             </div>
@@ -208,10 +213,7 @@ const Modal = observer((props: any) => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
-                      main.setModal(false);
-                      request.setNotTypical(!request.notTypical);
-                    }}
+                    onClick={() => request.sendType()}
                     className="button btn-primary"
                   >
                     Да
@@ -611,44 +613,75 @@ const Modal = observer((props: any) => {
 
                   <div className="manager-list">
                     <ul>
-                      {[1, 2, 3, 4].map((r) => (
-                        <li>
-                          <div className="form-check gkb-checkbox">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="invalidCheck"
-                              required
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="invalidCheck"
-                            ></label>
-                          </div>
-                          <div className="profile">
-                            <img
-                              className="ava"
-                              src={
-                                process.env.PUBLIC_URL + "/images/def-ava.svg"
-                              }
-                            />
-                            <span className="name">Султангалиева К.И</span>
-                          </div>
-                          <span className="position">Директор</span>
-                        </li>
-                      ))}
+                      {(request._getClientUser as ClientUsers[]).map(
+                        (r: ClientUsers) =>
+                          main.usersNew.filter(
+                            (u: ClientUsers) => u.id === r.id
+                          ).length === 0 && (
+                            <li key={r.id}>
+                              <div className="form-check gkb-checkbox">
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  checked={
+                                    users.filter(
+                                      (u: ClientUsers) => u.id === r.id
+                                    ).length > 0
+                                  }
+                                  onChange={() => {
+                                    console.log(
+                                      users.filter(
+                                        (u: ClientUsers) => u.id === r.id
+                                      ).length > 0
+                                    );
+                                    users.filter(
+                                      (u: ClientUsers) => u.id === r.id
+                                    ).length > 0
+                                      ? setUsers([
+                                          ...users.filter(
+                                            (u: ClientUsers) => u.id !== r.id
+                                          ),
+                                        ])
+                                      : setUsers([...users, r]);
+                                  }}
+                                  id={`input${r.id}`}
+                                  required
+                                />
+                                <label
+                                  className="form-check-label"
+                                  htmlFor={`input${r.id}`}
+                                ></label>
+                              </div>
+                              <div className="profile">
+                                <img
+                                  className="ava"
+                                  src={
+                                    process.env.PUBLIC_URL +
+                                    "/images/def-ava.svg"
+                                  }
+                                />
+                                <span className="name">{r.full_name}</span>
+                              </div>
+                              <span className="position">
+                                {r.position_name}
+                              </span>
+                            </li>
+                          )
+                      )}
                     </ul>
                   </div>
                 </div>
               </div>
 
               <div className="modal-footer d-flex-align-c-spaceb">
-                <p className="text-desc mb-0">Выбрано 1 участника</p>
+                <p className="text-desc mb-0">
+                  Выбрано {users.length} участника
+                </p>
                 <div className="paper-signatory-footer">
                   <button
                     type="button"
                     className="button btn-secondary w-160 mr-16"
+                    onClick={() => setUsers([])}
                   >
                     Очистить
                   </button>
@@ -656,7 +689,7 @@ const Modal = observer((props: any) => {
                     type="button"
                     onClick={() => {
                       main.setModal(false);
-                      request.setAgreeUsers();
+                      main.setNewUsers(users);
                     }}
                     className="button btn-primary w-160"
                   >
@@ -676,7 +709,10 @@ const Modal = observer((props: any) => {
           <div className="modal-dialog">
             <div className="modal-content fadeInModal animated">
               <div className="modal-close">
-                <i className="azla close-icon"></i>
+                <i
+                  className="azla close-icon"
+                  onClick={() => main.setModal(false)}
+                ></i>
               </div>
               <div className="modal-body">
                 <div className="write-reasons">
@@ -684,43 +720,82 @@ const Modal = observer((props: any) => {
                     Добавить пользователя
                   </h3>
                   <div className="form-wrapper">
-                    <input type="text" placeholder="Введите ФИО" />
+                    <input
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="Введите ФИО"
+                    />
                     <label>ФИО</label>
-                  </div>
-                  <div className="form-wrapper">
-                    <input type="text" placeholder="Введите должность" />
-                    <label>Должность</label>
-                  </div>
-                  <div className="form-wrapper">
-                    <input type="text" placeholder="Введите департамент" />
-                    <label>Департамент</label>
                   </div>
                   <div className="form-wrapper">
                     <input
                       type="text"
+                      value={position}
+                      onChange={(e) => setPosition(e.target.value)}
+                      placeholder="Введите должность"
+                    />
+                    <label>Должность</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input
+                      type="text"
+                      value={department}
+                      onChange={(e) => setDepartment(e.target.value)}
+                      placeholder="Введите департамент"
+                    />
+                    <label>Департамент</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <input
+                      value={phone}
+                      type="text"
+                      onChange={(e) => setPhone(e.target.value)}
                       placeholder="+7 (_ _ _) _ _ _ - _ _ - _ _"
                     />
                     <label>Контактный номер</label>
                   </div>
                   <div className="form-wrapper">
-                    <input type="text" placeholder="Введите почту" />
+                    <input
+                      type="text"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Введите почту"
+                    />
                     <label>Email</label>
                   </div>
                   <div className="form-wrapper">
-                    <input type="text" placeholder="Первый руководитель" />
+                    <input
+                      type="text"
+                      value={firstRuk}
+                      onChange={(e) => setFirstRuk(e.target.value)}
+                      placeholder="Первый руководитель"
+                    />
                     <label>Первый руководитель</label>
                   </div>
                   <div className="form-wrapper">
-                    <input type="text" placeholder="Введите заместитель" />
+                    <input
+                      type="text"
+                      value={zam}
+                      onChange={(e) => setZam(e.target.value)}
+                      placeholder="Введите заместитель"
+                    />
                     <label>Заместитель</label>
                   </div>
                   <div className="form-wrapper">
-                    <input type="text" placeholder="Введите менеджера" />
+                    <input
+                      type="text"
+                      value={man}
+                      onChange={(e) => setMan(e.target.value)}
+                      placeholder="Введите менеджера"
+                    />
                     <label>Курирующий менеджер</label>
                   </div>
                   <div className="form-wrapper">
                     <input
                       type="text"
+                      value={manCon}
+                      onChange={(e) => setManCon(e.target.value)}
                       placeholder="Введите контакты менеджера"
                     />
                     <label>Контакты менеджера</label>
@@ -729,9 +804,26 @@ const Modal = observer((props: any) => {
                     <button
                       type="button"
                       onClick={() => {
-                        main.setModalManager(true);
-                        main.setModal(false);
-                        main.setDecline(true);
+                        main
+                          .regUser({
+                            client: main.clientData.client.id,
+                            first_head_full_name: firstRuk,
+                            deputy_head_full_name: zam,
+                            manager_full_name: man,
+                            iin: "IIN",
+                            global_ip: "ip",
+                            idcard_number: "idcard",
+                            manager_contacts: manCon,
+                            full_name: fullName,
+                            position_name: position,
+                            department_name: department,
+                            contacts: phone,
+                            email: email,
+                          })
+                          .then(() => {
+                            request.getClientUser(main.clientData.client.id);
+                            main.setModalType(10);
+                          });
                       }}
                       className="button btn-primary mr-16"
                     >

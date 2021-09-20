@@ -1558,6 +1558,9 @@ select.form-control-v {
   background-position: center right 10px;
   background-size: 24px;
 }
+textarea.form-control-v {
+  height: unset;
+}
 
 .invalid-feedback {
   display: none;

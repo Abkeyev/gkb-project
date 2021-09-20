@@ -2,9 +2,10 @@ import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import { Request } from "../api/Models/ServiceModels";
+import { ServiceCommon, Request } from "../api/Models/ServiceModels";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
+import moment from "moment";
 
 const Partners = observer((props: any) => {
   const { request } = props;
@@ -27,12 +28,6 @@ const Partners = observer((props: any) => {
             <div className="req-manager p-50 pad-b-128">
               <div className="header-text justify-content-between mb-24">
                 <h1 className="title-main">Заявки</h1>
-                <div className="btn button btn-primary btn-icon">
-                  <i className="azla add-plusRound-icon"></i>
-                  <Link to="/partner-new" className="text">
-                    Новая заявка
-                  </Link>
-                </div>
               </div>
 
               <Tabs
@@ -287,9 +282,17 @@ const Partners = observer((props: any) => {
                           <tr onClick={() => history.push(`/partner/${r.id}`)}>
                             <td>{r.id}</td>
                             <td>{r.name_uid}</td>
-                            <td>{r.service_type}</td>
-                            <td>{r.service_category}</td>
-                            <td>{r.reg_date}</td>
+                            <td>
+                              {
+                                request._getClientServiceType.find(
+                                  (t: ServiceCommon) => t.id === r.service_type
+                                )?.name
+                              }
+                            </td>
+                            <td>
+                              {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                            </td>
+                            <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -300,7 +303,14 @@ const Partners = observer((props: any) => {
                 <TabPanel>
                   <div className="tab-content tab-2">
                     <h3 className="title-subhead mb-16">
-                      На подпись <span className="number">32</span>
+                      На подпись{" "}
+                      <span className="number">
+                        {
+                          request._getRequests.filter(
+                            (r: Request) => r.request_status === 6
+                          ).length
+                        }
+                      </span>
                     </h3>
                     <table className="table req-table">
                       <thead>
@@ -313,22 +323,42 @@ const Partners = observer((props: any) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {/* {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/partners/title")}>
-                            <td>52345634643</td>
-                            <td>М-Ломбард</td>
-                            <td>Ломбард</td>
-                            <td>Кредитная история</td>
-                            <td>12.12.2021</td>
-                          </tr>
-                        ))} */}
+                        {request._getRequests
+                          .filter((r: Request) => r.request_status === 6)
+                          .map((r: Request) => (
+                            <tr
+                              onClick={() => history.push(`/partner/${r.id}`)}
+                            >
+                              <td>{r.id}</td>
+                              <td>{r.name_uid}</td>
+                              <td>
+                                {
+                                  request._getClientServiceType.find(
+                                    (t: ServiceCommon) =>
+                                      t.id === r.service_type
+                                  )?.name
+                                }
+                              </td>
+                              <td>
+                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                              </td>
+                              <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>
 
                   <div className="tab-content tab-2 mt-16">
                     <h3 className="title-subhead mb-16">
-                      Активные <span className="number">62</span>
+                      Активные{" "}
+                      <span className="number">
+                        {
+                          request._getRequests.filter(
+                            (r: Request) => r.request_status === 7
+                          ).length
+                        }
+                      </span>
                     </h3>
                     <table className="table req-table">
                       <thead>
@@ -341,15 +371,28 @@ const Partners = observer((props: any) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {/* {[1, 2, 3, 4].map((m) => (
-                          <tr onClick={() => history.push("/partners/title")}>
-                            <td>52345634643</td>
-                            <td>М-Ломбард</td>
-                            <td>Ломбард</td>
-                            <td>Кредитная история</td>
-                            <td>12.12.2021</td>
-                          </tr>
-                        ))} */}
+                        {request._getRequests
+                          .filter((r: Request) => r.request_status === 7)
+                          .map((r: Request) => (
+                            <tr
+                              onClick={() => history.push(`/partner/${r.id}`)}
+                            >
+                              <td>{r.id}</td>
+                              <td>{r.name_uid}</td>
+                              <td>
+                                {
+                                  request._getClientServiceType.find(
+                                    (t: ServiceCommon) =>
+                                      t.id === r.service_type
+                                  )?.name
+                                }
+                              </td>
+                              <td>
+                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                              </td>
+                              <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>

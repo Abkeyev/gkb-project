@@ -5,8 +5,8 @@ import { observer } from "mobx-react-lite";
 const Profile = observer((props: any) => {
   const { main, request } = props;
   React.useEffect(() => {
-    request.getClient(main.clientData.client_id);
-    request.getUser(main.clientData.client_id);
+    request.getClient(main.clientData.client.id);
+    request.getUser(main.clientData.client.id);
   }, []);
   return (
     <div className="main-body">

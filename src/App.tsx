@@ -13,8 +13,9 @@ import {
   ServiceInner,
   ContractorsInner,
   Profile,
+  Request,
 } from "./containers";
-import { LoginPage, RequestPage } from "./components";
+import { LoginPage } from "./components";
 import PrivateRoute from "./PrivateRoute";
 import history from "./history";
 import { observer } from "mobx-react";
@@ -148,9 +149,8 @@ const App = observer((props: any) => {
   return (
     <div className="app-root modal-open">
       <HashRouter>
-        {/* <Router history={history}> */}
         {main.isOpenModal && <Modal main={main} request={request} />}
-        {main.logged && !window.location.pathname.includes("registration") && (
+        {main.logged && !main.isReg && (
           <Sidebar main={main} request={request} />
         )}
         <Switch>
@@ -175,10 +175,12 @@ const App = observer((props: any) => {
             main={main}
             path="/"
             component={() =>
-              main.getRole === "Agent" ? (
-                <RequestPage request={request} />
-              ) : (
+              main.getRole === "Agent" && main.isReg ? (
+                <Registration main={main} request={request} />
+              ) : main.getRole === "Agent" ? (
                 <Partners request={request} />
+              ) : (
+                <Request request={request} />
               )
             }
             exact
@@ -229,12 +231,6 @@ const App = observer((props: any) => {
           />
           <PrivateRoute
             main={main}
-            path="/registration"
-            component={() => <Registration main={main} request={request} />}
-            exact
-          />
-          <PrivateRoute
-            main={main}
             path="/organization"
             component={() => <MyOrganization main={main} request={request} />}
             exact
@@ -252,7 +248,6 @@ const App = observer((props: any) => {
             exact
           />
         </Switch>
-        {/* </Router> */}
       </HashRouter>
     </div>
   );

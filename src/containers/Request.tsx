@@ -1,10 +1,13 @@
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
-import { Link } from "react-router-dom";
+import moment from "moment";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
-import { Request as RequestModel } from "../api/Models/ServiceModels";
+import {
+  ServiceCommon,
+  Request as RequestModel,
+} from "../api/Models/ServiceModels";
 
 const Request = observer((props: any) => {
   const { request } = props;
@@ -17,6 +20,7 @@ const Request = observer((props: any) => {
 
   React.useEffect(() => {
     request.getRequests();
+    request.getClientServiceType();
   }, []);
 
   return (
@@ -283,9 +287,17 @@ const Request = observer((props: any) => {
                           <tr onClick={() => history.push(`/request/${r.id}`)}>
                             <td>{r.id}</td>
                             <td>{r.name_uid}</td>
-                            <td>{r.service_type}</td>
-                            <td>{r.service_category}</td>
-                            <td>{r.reg_date}</td>
+                            <td>
+                              {
+                                request._getClientServiceType.find(
+                                  (t: ServiceCommon) => t.id === r.service_type
+                                )?.name
+                              }
+                            </td>
+                            <td>
+                              {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                            </td>
+                            <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -322,9 +334,18 @@ const Request = observer((props: any) => {
                             >
                               <td>{r.id}</td>
                               <td>{r.name_uid}</td>
-                              <td>{r.service_type}</td>
-                              <td>{r.service_category}</td>
-                              <td>{r.reg_date}</td>
+                              <td>
+                                {
+                                  request._getClientServiceType.find(
+                                    (t: ServiceCommon) =>
+                                      t.id === r.service_type
+                                  )?.name
+                                }
+                              </td>
+                              <td>
+                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                              </td>
+                              <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
                             </tr>
                           ))}
                       </tbody>
@@ -362,7 +383,7 @@ const Request = observer((props: any) => {
                               <td>{r.name_uid}</td>
                               <td>{r.service_type}</td>
                               <td>{r.service_category}</td>
-                              <td>{r.reg_date}</td>
+                              <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
                             </tr>
                           ))}
                       </tbody>
@@ -406,7 +427,7 @@ const Request = observer((props: any) => {
                               <td>{r.name_uid}</td>
                               <td>{r.service_type}</td>
                               <td>{r.service_category}</td>
-                              <td>{r.reg_date}</td>
+                              <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
                             </tr>
                           ))}
                       </tbody>
@@ -438,7 +459,7 @@ const Request = observer((props: any) => {
                               <td>{r.name_uid}</td>
                               <td>{r.service_type}</td>
                               <td>{r.service_category}</td>
-                              <td>{r.reg_date}</td>
+                              <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
                             </tr>
                           ))}
                       </tbody>

@@ -10,11 +10,9 @@ import {
   AuthPerson,
   Categories,
   ClientService,
-  ClientServiceType,
   ClientUser,
   Documents,
-  PersonStatus,
-  SigningAuthority,
+  ServiceCommon,
 } from "../api/Models/ServiceModels";
 
 const ContractorsInner = observer((props: any) => {
@@ -378,9 +376,9 @@ const ContractorsInner = observer((props: any) => {
                                       <span className="right">
                                         {
                                           (
-                                            request._getPersonStatus as PersonStatus[]
+                                            request._getPersonStatus as ServiceCommon[]
                                           ).find(
-                                            (s: PersonStatus) =>
+                                            (s: ServiceCommon) =>
                                               s.id === a.person_status
                                           )?.name
                                         }
@@ -393,9 +391,9 @@ const ContractorsInner = observer((props: any) => {
                                       <span className="right">
                                         {
                                           (
-                                            request._getSigningAuthority as SigningAuthority[]
+                                            request._getSigningAuthority as ServiceCommon[]
                                           ).find(
-                                            (s: SigningAuthority) =>
+                                            (s: ServiceCommon) =>
                                               s.id === a.sign_auth
                                           )?.name
                                         }
@@ -486,9 +484,9 @@ const ContractorsInner = observer((props: any) => {
                                         <span className="right">
                                           {
                                             (
-                                              request._getPersonStatus as PersonStatus[]
+                                              request._getPersonStatus as ServiceCommon[]
                                             ).find(
-                                              (s: PersonStatus) =>
+                                              (s: ServiceCommon) =>
                                                 s.id === c.person_status
                                             )?.name
                                           }
@@ -526,7 +524,7 @@ const ContractorsInner = observer((props: any) => {
                               <td>
                                 {
                                   request._getClientServiceType.find(
-                                    (t: ClientServiceType) =>
+                                    (t: ServiceCommon) =>
                                       t.id === c.service_type
                                   )?.name
                                 }
@@ -614,9 +612,9 @@ const ContractorsInner = observer((props: any) => {
                                       <span className="right">
                                         {
                                           (
-                                            request._getPersonStatus as PersonStatus[]
+                                            request._getPersonStatus as ServiceCommon[]
                                           ).find(
-                                            (s: PersonStatus) =>
+                                            (s: ServiceCommon) =>
                                               s.id === c.person_status
                                           )?.name
                                         }

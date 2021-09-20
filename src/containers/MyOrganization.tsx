@@ -7,15 +7,12 @@ import {
   Address,
   AddressTypes,
   AuthPerson,
-  BankDetail,
   Categories,
-  Client,
   ClientService,
-  ClientServiceType,
   ClientUser,
+  ClientUsers,
   Documents,
-  PersonStatus,
-  SigningAuthority,
+  ServiceCommon,
 } from "../api/Models/ServiceModels";
 
 const MyOrganization = observer((props: any) => {
@@ -23,18 +20,18 @@ const MyOrganization = observer((props: any) => {
   const { main, request } = props;
 
   React.useEffect(() => {
-    request.getClient(main.clientData.client_id);
-    request.getClientUser(main.clientData.client_id);
+    request.getClient(main.clientData.client.id);
+    request.getClientUser(main.clientData.client.id);
     request.getClientService();
     request.getDocumentsCategories();
-    request.getDocuments(main.clientData.client_id);
+    request.getDocuments(main.clientData.client.id);
     request.getDocCategories();
     request.getClientTypes();
-    request.getAuthPersons(main.clientData.client_id);
-    request.getClientContact(main.clientData.client_id);
-    request.getClientAddress(main.clientData.client_id);
+    request.getAuthPersons(main.clientData.client.id);
+    request.getClientContact(main.clientData.client.id);
+    request.getClientAddress(main.clientData.client.id);
     request.getClientAddressTypes();
-    request.getClientBankDetails(main.clientData.client_id);
+    request.getClientBankDetails(main.clientData.client.id);
     request.getSigningAuthority();
     request.getPersonStatus();
     request.getClientServiceType();
@@ -62,37 +59,37 @@ const MyOrganization = observer((props: any) => {
                 <div className="req-inner-body pad-b-128">
                   <TabPanel>
                     <h3 className="title-subhead mb-16">Об организации</h3>
-                    {request._getClient && (
+                    {main.clientData.client && (
                       <div className="total-info mb-32">
                         <ul className="info-list">
                           <li>
                             <span className="left">Полное наименование:</span>
                             <span className="right">
-                              {request._getClient.longname}
+                              {main.clientData.client.longname}
                             </span>
                           </li>
                           <li>
                             <span className="left">Краткое наименование:</span>
                             <span className="right">
-                              {request._getClient.name}
+                              {main.clientData.client.name}
                             </span>
                           </li>
                           <li>
                             <span className="left">БИН:</span>
                             <span className="right">
-                              {request._getClient.bin}
+                              {main.clientData.client.bin}
                             </span>
                           </li>
                           <li>
                             <span className="left">Вебсайт:</span>
                             <span className="right d-flex">
                               <a
-                                href={request._getClient.website}
+                                href={main.clientData.client.website}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="pre-primary-color"
                               >
-                                {request._getClient.website}
+                                {main.clientData.client.website}
                               </a>{" "}
                               <span className="edit">
                                 <i className="azla edit-primary-icon ml-8"></i>
@@ -105,7 +102,7 @@ const MyOrganization = observer((props: any) => {
                               {
                                 request._getClientTypes.find(
                                   (t: any) =>
-                                    t.id === request._getClient.client_type
+                                    t.id === main.clientData.client.client_type
                                 )?.name
                               }
                             </span>
@@ -148,18 +145,18 @@ const MyOrganization = observer((props: any) => {
 
                     <div className="total-info mb-32">
                       <ul className="info-list">
-                        <li>
-                          <span className="left">Контакты:</span>
-                          {request._getContacts && request._getContacts[0] && (
+                        {request._getContacts && request._getContacts[0] && (
+                          <li>
+                            <span className="left">Контакты:</span>
+
                             <span className="right d-flex">
                               {request._getContacts[0].phone_number}{" "}
                               <span className="edit">
                                 <i className="azla edit-primary-icon ml-8"></i>
                               </span>
                             </span>
-                          )}
-                          {/* <span>+7 (727) 245-94-94 (рабочий)</span><span>+7 (706) 123-45-67 (моб)</span> */}
-                        </li>
+                          </li>
+                        )}
                         {request.getAddressTypes().length > 0 &&
                           request.getAddressTypes().map(
                             (t: AddressTypes) =>
@@ -337,18 +334,8 @@ const MyOrganization = observer((props: any) => {
                                     <li>
                                       <span className="left">Организация:</span>
                                       <span className="right active-link">
-                                        {request._getClient.longname}
+                                        {main.clientData.client.longname}
                                       </span>
-                                    </li>
-                                    <li>
-                                      <span className="left">Email:</span>
-                                      <span className="right">{""}</span>
-                                    </li>
-                                    <li>
-                                      <span className="left">
-                                        Контактный номер:
-                                      </span>
-                                      <span className="right">{""}</span>
                                     </li>
                                   </ul>
                                 </div>
@@ -369,9 +356,9 @@ const MyOrganization = observer((props: any) => {
                                       <span className="right">
                                         {
                                           (
-                                            request._getPersonStatus as PersonStatus[]
+                                            request._getPersonStatus as ServiceCommon[]
                                           ).find(
-                                            (s: PersonStatus) =>
+                                            (s: ServiceCommon) =>
                                               s.id === a.person_status
                                           )?.name
                                         }
@@ -384,9 +371,9 @@ const MyOrganization = observer((props: any) => {
                                       <span className="right">
                                         {
                                           (
-                                            request._getSigningAuthority as SigningAuthority[]
+                                            request._getSigningAuthority as ServiceCommon[]
                                           ).find(
-                                            (s: SigningAuthority) =>
+                                            (s: ServiceCommon) =>
                                               s.id === a.sign_auth
                                           )?.name
                                         }
@@ -409,13 +396,12 @@ const MyOrganization = observer((props: any) => {
                       <p className="mb-24">
                         Пользователи организации с наличием ЭЦП организации
                       </p>
-
-                      {(request._getClientUser as ClientUser[]).map(
-                        (c: ClientUser) => (
+                      {(request._getClientUser as ClientUsers[]).map(
+                        (u: ClientUsers, index) => (
                           <div className="card mb-24 pad-24">
                             <div className="card-header">
                               <div className="title">
-                                <h6 className="text">{c.full_name}</h6>
+                                <h6 className="text">{u.full_name}</h6>
                                 <span
                                   className="edit-btn underline"
                                   onClick={() => {
@@ -427,7 +413,7 @@ const MyOrganization = observer((props: any) => {
                                   Редактировать
                                 </span>
                               </div>
-                              <p className="desc">{c.position}</p>
+                              <p className="desc">{u.position_name}</p>
                             </div>
                             <div className="card-body pad-rl-16">
                               <div className="row">
@@ -438,25 +424,25 @@ const MyOrganization = observer((props: any) => {
                                         <span className="left">
                                           ID пользователя:
                                         </span>
-                                        <span className="right">{c.id}</span>
+                                        <span className="right">{u.id}</span>
                                       </li>
                                       <li>
                                         <span className="left">
-                                          Организация:
+                                          ИИН сотрудника:
                                         </span>
-                                        <span className="right active-link">
-                                          {request._getClient.longname}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <span className="left">Email:</span>
-                                        <span className="right">{c.email}</span>
+                                        <span className="right">{u.iin}</span>
                                       </li>
                                       <li>
                                         <span className="left">
                                           Контактный номер:
                                         </span>
-                                        <span className="right"></span>
+                                        <span className="right">
+                                          {u.contacts}
+                                        </span>
+                                      </li>
+                                      <li>
+                                        <span className="left">Email:</span>
+                                        <span className="right">{u.email}</span>
                                       </li>
                                     </ul>
                                   </div>
@@ -466,23 +452,34 @@ const MyOrganization = observer((props: any) => {
                                     <ul className="info-list">
                                       <li>
                                         <span className="left">
-                                          Дата регистрации:
+                                          Первый руководитель:
                                         </span>
                                         <span className="right">
-                                          {c.reg_date}
+                                          {u.first_head_full_name}
                                         </span>
                                       </li>
                                       <li>
-                                        <span className="left">Статус:</span>
+                                        <span className="left">
+                                          Заместитель:
+                                        </span>
                                         <span className="right">
-                                          {
-                                            (
-                                              request._getPersonStatus as PersonStatus[]
-                                            ).find(
-                                              (s: PersonStatus) =>
-                                                s.id === c.person_status
-                                            )?.name
-                                          }
+                                          {u.deputy_head_full_name}
+                                        </span>
+                                      </li>
+                                      <li>
+                                        <span className="left">
+                                          Курирующий менеджер:
+                                        </span>
+                                        <span className="right">
+                                          {u.manager_full_name}
+                                        </span>
+                                      </li>
+                                      <li>
+                                        <span className="left">
+                                          Контакты менеджера:
+                                        </span>
+                                        <span className="right">
+                                          {u.manager_contacts}
                                         </span>
                                       </li>
                                     </ul>
@@ -517,7 +514,7 @@ const MyOrganization = observer((props: any) => {
                               <td>
                                 {
                                   request._getClientServiceType.find(
-                                    (t: ClientServiceType) =>
+                                    (t: ServiceCommon) =>
                                       t.id === c.service_type
                                   )?.name
                                 }
@@ -573,7 +570,7 @@ const MyOrganization = observer((props: any) => {
                                     <li>
                                       <span className="left">Организация:</span>
                                       <span className="right active-link">
-                                        {request._getClient.longname}
+                                        {main.clientData.client.longname}
                                       </span>
                                     </li>
                                     <li>
@@ -605,9 +602,9 @@ const MyOrganization = observer((props: any) => {
                                       <span className="right">
                                         {
                                           (
-                                            request._getPersonStatus as PersonStatus[]
+                                            request._getPersonStatus as ServiceCommon[]
                                           ).find(
-                                            (s: PersonStatus) =>
+                                            (s: ServiceCommon) =>
                                               s.id === c.person_status
                                           )?.name
                                         }

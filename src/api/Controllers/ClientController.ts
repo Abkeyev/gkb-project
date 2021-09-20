@@ -13,6 +13,16 @@ export class ClientController {
       baseURL,
     });
   }
+  async regClient(id: string, data: any): Promise<any> {
+    return server.put(`/client/${id}`, data, {
+      baseURL,
+    });
+  }
+  async regAuthPerson(id: string, data: any): Promise<any> {
+    return server.put(`/client/auth_person${id}`, data, {
+      baseURL,
+    });
+  }
   async getClients(): Promise<any> {
     return server.get(`/clients`, {
       baseURL,
@@ -199,6 +209,11 @@ export class ClientController {
   }
   async deleteClientUser(id: string): Promise<any> {
     return server.delete(`/client_users/${id}`, {
+      baseURL,
+    });
+  }
+  async addUser(data: any): Promise<any> {
+    return server.post(`/client/user`, data, {
       baseURL,
     });
   }

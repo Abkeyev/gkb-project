@@ -1,24 +1,50 @@
 import React from "react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { useHistory } from "react-router";
-import { Link } from "react-router-dom";
 import {
-  Request,
   AuthPerson,
-  PersonStatus,
-  SigningAuthority,
+  ClientUsers,
+  ServiceCommon,
 } from "../api/Models/ServiceModels";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
+import FileReaderInput from "react-file-reader-input";
 
 const PartnersNew = observer((props: any) => {
   const { main, request } = props;
-  const [tab, setTab] = React.useState(false);
+  const [tab, setTab] = React.useState("1");
+  const [service, setService] = React.useState("");
+  const [files, setFiles] = React.useState<string[] | []>([]);
+  const [filesTitle, setFilesTitle] = React.useState<string[] | []>([]);
 
   React.useEffect(() => {
     request.getRequests();
-    request.getAuthPersons(main.clientData.client_id);
+    request.getAuthPersons(main.clientData.client.id);
+    request.getClientUser(main.clientData.client.id);
+    request.getClientServiceType();
+    request.getPersonStatus();
+    request.getDocumentsType();
+    request.getDocumentsCategories();
   }, []);
+
+  const handleChange = (e: any, results: any, doc_type: any) => {
+    results.forEach((result: any) => {
+      const [e, file] = result;
+      const res = e.target.result.split(",");
+      if (file.size < 5000000) {
+        setFiles([...files, res[1]]);
+        setFilesTitle([...filesTitle, file.name]);
+        var bodyFormData = new FormData();
+        bodyFormData.append("file", file);
+        bodyFormData.append("doc_category", "2");
+        bodyFormData.append("doc_type", doc_type);
+        bodyFormData.append("is_draft", "true");
+        request
+          .addDocument(main.clientData.client.id, bodyFormData)
+          .then((r: any) => {
+            console.log(r);
+          });
+      }
+    });
+  };
 
   return (
     <div className="main-body">
@@ -34,14 +60,14 @@ const PartnersNew = observer((props: any) => {
                 <div className="choose-service">
                   <div className="tab-button">
                     <span
-                      className={`tab-btn ${!tab ? "active" : ""}`}
-                      onClick={() => setTab(false)}
+                      className={`tab-btn ${tab === "1" ? "active" : ""}`}
+                      onClick={() => setTab("1")}
                     >
                       ЕСБД
                     </span>
                     <span
-                      className={`tab-btn ${tab ? "active" : ""}`}
-                      onClick={() => setTab(true)}
+                      className={`tab-btn ${tab === "2" ? "active" : ""}`}
+                      onClick={() => setTab("2")}
                     >
                       БДКИ
                     </span>
@@ -56,6 +82,19 @@ const PartnersNew = observer((props: any) => {
                   </div>
                 </div>
 
+                <select
+                  value={service}
+                  onChange={(e) => setService(e.target.value)}
+                  className="form-control-v mt-24"
+                >
+                  <option>Выберите сервис ЕСБД</option>
+                  {request._getClientServiceType.map((c: ServiceCommon) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+
                 <div className="special-card">
                   <h3 className="title-subhead mb-16 mt-32">Документы</h3>
                   <p className="text-desc">
@@ -63,58 +102,49 @@ const PartnersNew = observer((props: any) => {
                   </p>
                   <div className="reg-file-add mb-32">
                     <ul>
-                      <li>
-                        <div className="name">
-                          <span className="text">
-                            Справка о регистрации/перерегистрации юридического
-                            лица
-                          </span>
-                          <span className="file-name">
-                            spravka_o_registracii.pdf
-                          </span>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="name">
-                          <span className="text">
-                            Решение учредителя с данными о приеме на работу
-                            первого руководителя
-                          </span>
-                          <span className="file-name">
-                            spravka_o_registracii.pdf
-                          </span>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="name">
-                          <span className="text">
-                            Приказ о приеме на работу первого руководителя
-                          </span>
-                          <span className="file-name">
-                            spravka_o_registracii.pdf
-                          </span>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="name">
-                          <span className="text">
-                            Документ, удостоверяющий личность первого
-                            руководителя
-                          </span>
-                          <span className="file-name">
-                            spravka_o_registracii.pdf
-                          </span>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="name">
-                          <span className="text">Устав юрического лица</span>
-                        </div>
-                        <button className="btn-icon add">
-                          <i className="azla size-18 pin-primary-icon mr-8"></i>
-                          Прикрепить файл
-                        </button>
-                      </li>
+                      {request
+                        .getDocTypes()
+                        .map((t: ServiceCommon, index: number) => (
+                          <li>
+                            <div className="name">
+                              <span className="text">{t.name}</span>
+                              {files[index] && (
+                                <span className="file-name">
+                                  {filesTitle[index]}
+                                </span>
+                              )}
+                            </div>
+                            {files[index] ? (
+                              <button
+                                className="btn-icon delete"
+                                onClick={() => {
+                                  setFiles(
+                                    files.filter((f) => f !== files[index])
+                                  );
+                                  setFilesTitle(
+                                    filesTitle.filter(
+                                      (f) => f !== filesTitle[index]
+                                    )
+                                  );
+                                }}
+                              >
+                                <i className="azla size-18 trash-icon-alert mr-8"></i>
+                                Удалить файл
+                              </button>
+                            ) : (
+                              <FileReaderInput
+                                as="url"
+                                accept="image/jpeg,image/png,image/gif,application/pdf"
+                                onChange={(e, f) => handleChange(e, f, t.id)}
+                              >
+                                <button className="btn-icon add">
+                                  <i className="azla size-18 pin-primary-icon mr-8"></i>
+                                  Прикрепить файл
+                                </button>
+                              </FileReaderInput>
+                            )}
+                          </li>
+                        ))}
                     </ul>
                   </div>
                 </div>
@@ -123,29 +153,31 @@ const PartnersNew = observer((props: any) => {
                   <div className="d-flex-align-c-spaceb mb-32">
                     <div className="d-grid">
                       <h3 className="title-subhead mb-8">
-                        Уполномоченные лица{" "}
-                        <span className="number">
-                          {request._getAuthPersons.length}
-                        </span>
+                        Пользователи услуг{" "}
+                        <span className="number">{main.usersNew.length}</span>
                       </h3>
                       <p>Пользователи организации с наличием ЭЦП организации</p>
                     </div>
-                    <button className="btn button btn-primary btn-icon">
+                    <button
+                      className="btn button btn-primary btn-icon"
+                      onClick={() => {
+                        main.setModal(true);
+                        main.setModalType(10);
+                      }}
+                    >
                       <i className="azla add-plusRound-icon"></i> Добавить
                     </button>
                   </div>
 
-                  {(request._getAuthPersons as AuthPerson[]).map(
-                    (a: AuthPerson) => (
+                  {(main.usersNew as ClientUsers[]).map(
+                    (u: ClientUsers, index) => (
                       <div className="card mb-24 pad-24">
                         <div className="card-header">
                           <div className="title">
-                            <h6 className="text">{a.full_name}</h6>
-                            {/* <span className="num">№1</span> */}
+                            <h6 className="text">{u.full_name}</h6>
+                            <span className="num">№{index + 1}</span>
                           </div>
-                          <p className="desc">
-                            Аналитик – Департамент финансового анализа
-                          </p>
+                          <p className="desc">{u.position_name}</p>
                         </div>
                         <div className="card-body pad-rl-16">
                           <div className="row">
@@ -156,23 +188,23 @@ const PartnersNew = observer((props: any) => {
                                     <span className="left">
                                       ID пользователя:
                                     </span>
-                                    <span className="right">{a.id}</span>
+                                    <span className="right">{u.id}</span>
                                   </li>
                                   <li>
-                                    <span className="left">Организация:</span>
-                                    <span className="right active-link">
-                                      {request._getClient.longname}
+                                    <span className="left">
+                                      ИИН сотрудника:
                                     </span>
-                                  </li>
-                                  <li>
-                                    <span className="left">Email:</span>
-                                    <span className="right">{""}</span>
+                                    <span className="right">{u.iin}</span>
                                   </li>
                                   <li>
                                     <span className="left">
                                       Контактный номер:
                                     </span>
-                                    <span className="right">{""}</span>
+                                    <span className="right">{u.contacts}</span>
+                                  </li>
+                                  <li>
+                                    <span className="left">Email:</span>
+                                    <span className="right">{u.email}</span>
                                   </li>
                                 </ul>
                               </div>
@@ -182,36 +214,32 @@ const PartnersNew = observer((props: any) => {
                                 <ul className="info-list">
                                   <li>
                                     <span className="left">
-                                      Дата регистрации:
+                                      Первый руководитель:
                                     </span>
-                                    <span className="right">{a.reg_date}</span>
+                                    <span className="right">
+                                      {u.first_head_full_name}
+                                    </span>
                                   </li>
                                   <li>
-                                    <span className="left">Статус:</span>
+                                    <span className="left">Заместитель:</span>
                                     <span className="right">
-                                      {
-                                        (
-                                          request._getPersonStatus as PersonStatus[]
-                                        ).find(
-                                          (s: PersonStatus) =>
-                                            s.id === a.person_status
-                                        )?.name
-                                      }
+                                      {u.deputy_head_full_name}
                                     </span>
                                   </li>
                                   <li>
                                     <span className="left">
-                                      Основание для подписи:
+                                      Курирующий менеджер:
                                     </span>
                                     <span className="right">
-                                      {
-                                        (
-                                          request._getSigningAuthority as SigningAuthority[]
-                                        ).find(
-                                          (s: SigningAuthority) =>
-                                            s.id === a.sign_auth
-                                        )?.name
-                                      }
+                                      {u.manager_full_name}
+                                    </span>
+                                  </li>
+                                  <li>
+                                    <span className="left">
+                                      Контакты менеджера:
+                                    </span>
+                                    <span className="right">
+                                      {u.manager_contacts}
                                     </span>
                                   </li>
                                 </ul>
@@ -230,10 +258,21 @@ const PartnersNew = observer((props: any) => {
                     <button
                       type="button"
                       className="button btn-primary"
-                      onClick={() => {
-                        main.setModal(true);
-                        main.setModalType(10);
-                      }}
+                      onClick={() =>
+                        request.addRequest({
+                          client: 1,
+                          service_category: tab,
+                          service_type: service,
+                          client_doc: [],
+                          name_uid: main.clientData.user.id,
+                          fulfill_date: new Date(),
+                          reg_date: new Date(),
+                          client_user: main.usersNew.map(
+                            (u: ClientUsers) => u.id
+                          ),
+                          responsible_user: null,
+                        })
+                      }
                     >
                       Отправить заявку
                     </button>

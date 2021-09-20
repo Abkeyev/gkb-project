@@ -1,5 +1,11 @@
 import { action, makeAutoObservable, runInAction, computed } from "mobx";
 import api from "../api/Api";
+import {
+  AuthPerson,
+  Client,
+  ClientUsers,
+  User,
+} from "../api/Models/ServiceModels";
 import Cookies from "../utils/cookies";
 
 export enum CheckState {
@@ -9,17 +15,15 @@ export enum CheckState {
 }
 
 export interface ClientData {
-  auth_person_id: number | null;
-  client_id: number | null;
-  user_id: number | null;
-  bin: string;
-  fio: string;
-  name: string;
+  auth_person: AuthPerson | null;
+  client: Client | null;
+  user: User | null;
 }
 
 class MainStore {
   logged: boolean = false;
   isReg: boolean = false;
+  clientExist: boolean = false;
   loginState: "login" | "ecp" | "ecpr" = "login";
   loginError: boolean = false;
   loginErrorText: string = "";
@@ -31,6 +35,7 @@ class MainStore {
   key: string = "";
   login: string = "";
   password: string = "";
+  usersNew: ClientUsers[] | [] = [];
 
   private role: string;
   private _clientData: ClientData;
@@ -42,14 +47,14 @@ class MainStore {
     this._refreshToken = null;
     this._accessToken = null;
     this._clientData = {
-      auth_person_id: null,
-      client_id: null,
-      user_id: null,
-      bin: "",
-      fio: "",
-      name: "",
+      auth_person: null,
+      client: null,
+      user: null,
     };
     this.logged = false;
+    this.isReg = false;
+    this.clientExist = false;
+    this.usersNew = [];
     if (
       Cookies.get("refresh") &&
       Cookies.get("refresh").length > 10 &&
@@ -58,9 +63,15 @@ class MainStore {
       Cookies.get("clientData") &&
       Cookies.get("clientData").length > 5 &&
       Cookies.get("role") &&
-      Cookies.get("role").length > 4
+      Cookies.get("role").length > 4 &&
+      Cookies.get("isReg") &&
+      Cookies.get("isReg").length > 3 &&
+      Cookies.get("clientExist") &&
+      Cookies.get("clientExist").length > 3
     ) {
       this.role = Cookies.get("role");
+      this.isReg = Cookies.get("isReg") === "true" ? true : false;
+      this.clientExist = Cookies.get("clientExist") === "true" ? true : false;
       this._refreshToken = Cookies.get("refresh");
       this._accessToken = Cookies.get("access");
       this._clientData = JSON.parse(Cookies.get("clientData"));
@@ -74,7 +85,9 @@ class MainStore {
       loginEcp: action.bound,
       setModal: action.bound,
       setModalType: action.bound,
-      ecpData: computed,
+      regUser: action.bound,
+      setNewUsers: action.bound,
+      setDeclineReason: action.bound,
       clientData: computed,
       refreshToken: computed,
       accessToken: computed,
@@ -88,14 +101,6 @@ class MainStore {
 
   get getRole() {
     return this.role;
-  }
-
-  get ecpData() {
-    return {
-      bin: this._clientData.bin,
-      fio: this._clientData.fio,
-      name: this._clientData.name,
-    };
   }
 
   get refreshToken() {
@@ -126,45 +131,46 @@ class MainStore {
     this.decline = decline;
   }
 
-  setEcpDate = (bin: string, fio: string, name: string) => {
-    this._clientData.bin = bin;
-    this._clientData.fio = fio;
-    this._clientData.name = name;
-  };
+  setNewUsers(users: ClientUsers[]) {
+    console.log(users);
+    this.usersNew = users;
+  }
 
   logout(reload: boolean = false) {
     Cookies.remove("refresh");
     Cookies.remove("access");
     Cookies.remove("clientData");
+    Cookies.remove("role");
+    Cookies.remove("isReg");
+    Cookies.remove("clientExist");
     this._accessToken = null;
     this._refreshToken = null;
     this._clientData = {
-      auth_person_id: null,
-      client_id: null,
-      user_id: null,
-      bin: "",
-      fio: "",
-      name: "",
+      auth_person: null,
+      client: null,
+      user: null,
     };
+    this.isReg = false;
+    this.clientExist = false;
     this.logged = false;
-    if (reload == true) document.location.href = "/login";
+    if (reload == true) document.location.href = "/";
   }
 
   private async setTokens(r: any) {
     this._clientData = {
       ...r.client_data,
-      bin: this._clientData.bin,
-      fio: this._clientData.fio,
-      name: this._clientData.name,
     };
     this.role = r.role;
     this._accessToken = r.token_data.access;
     this._refreshToken = r.token_data.refresh;
-    this.isReg = r.message === "User registration successfull" ? true : false;
+    this.isReg = r.reg_flag;
+    this.clientExist = r.client_exist_flag;
 
     Cookies.set("refresh", r.token_data.refresh, { expires: 7 });
     Cookies.set("access", r.token_data.access, { expires: 7 });
     Cookies.set("role", r.role, { expires: 7 });
+    Cookies.set("isReg", r.reg_flag, { expires: 7 });
+    Cookies.set("clientExist", r.client_exist_flag, { expires: 7 });
     Cookies.set("clientData", await JSON.stringify(this._clientData), {
       expires: 7,
     });
@@ -197,7 +203,6 @@ class MainStore {
       .authEcp({ bin, fio, name })
       .then((r) => {
         runInAction(async () => {
-          await this.setEcpDate(bin, fio, name);
           await this.setTokens(r);
           setTimeout(() => window.location.reload(), 500);
         });
@@ -210,6 +215,18 @@ class MainStore {
           });
         }
       });
+  }
+
+  async regClient(id: string, data: any) {
+    await api.client.regClient(id, data);
+  }
+
+  async regUser(data: any) {
+    await api.client.addUser(data);
+  }
+
+  async regAuthPerson(id: string, data: any) {
+    await api.client.regAuthPerson(id, data);
   }
 }
 

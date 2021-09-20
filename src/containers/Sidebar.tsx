@@ -6,10 +6,7 @@ const Sidebar = observer((props: any) => {
   const { main, request } = props;
   const [close, setClose] = React.useState(false);
   const history = useHistory();
-  React.useEffect(() => {
-    request.getClient(main.clientData.client_id);
-    request.getUser(main.clientData.client_id);
-  }, []);
+  React.useEffect(() => {}, []);
   return (
     <nav className={`left-sidebar ${close ? "close" : ""}`}>
       {/* className для скрытия боковой модалки "close"*/}
@@ -36,11 +33,11 @@ const Sidebar = observer((props: any) => {
               <i className="chevron-right"></i>
             </span>
           </div>
-          {request._getClient && request._getUser && (
+          {main.clientData.user && main.clientData.client && (
             <div className="user-profile">
-              <span className="name">{request._getUser.full_name}</span>
-              <span className="bin">БИН {request._getClient.bin}</span>
-              <span className="company">{request._getClient.longname}</span>
+              <span className="name">{main.clientData.user.full_name}</span>
+              <span className="bin">БИН {main.clientData.client.bin}</span>
+              <span className="company">{main.clientData.client.longname}</span>
             </div>
           )}
 
