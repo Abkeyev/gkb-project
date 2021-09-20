@@ -11,6 +11,7 @@ export interface Request {
   responsible_user: number;
   request_stepper: number;
   client_user: number[];
+  is_model_contract: boolean;
 }
 
 export interface ClientUsers {

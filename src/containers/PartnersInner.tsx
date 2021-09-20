@@ -48,7 +48,7 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
     request.getDocumentsCategories();
     request.getDocCategories();
     request.getDocuments(main.clientData.client.id);
-    request.getClientUsers(main.clientData.client.id);
+    request.getClientUser(main.clientData.client.id);
     request.getClientTypes();
     request.getClient(main.clientData.client.id);
   }, []);
@@ -278,11 +278,11 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
                     <TabPanel>
                       <div className="tab-content tab-1">
                         <h3 className="title-subhead mb-16">
-                          {request._getClientUsers.length} заявленных
+                          {request._getClientUser.length} заявленных
                           пользователей
                         </h3>
 
-                        {request._getClientUsers.map(
+                        {request._getClientUser.map(
                           (u: ClientUsers, index: number) => (
                             <div className="card mb-24 pad-24">
                               <div className="card-header">
@@ -1118,7 +1118,7 @@ const PartnersInner = observer((props: PartnersInnerProps) => {
                   </div>
                 ) : step === 3 ? (
                   <>
-                    {request._getClientUsers.map(
+                    {request._getClientUser.map(
                       (u: ClientUsers, index: number) => (
                         <div className="card mb-24 pad-24">
                           <div className="card-header">

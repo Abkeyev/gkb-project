@@ -17,7 +17,6 @@ import {
 } from "./containers";
 import { LoginPage } from "./components";
 import PrivateRoute from "./PrivateRoute";
-import history from "./history";
 import { observer } from "mobx-react";
 import NCALayer, { MethodName } from "./ncalayer/ncalayer";
 import { extractKeyAlias, isNullOrEmpty } from "./ncalayer/helper";
@@ -56,6 +55,12 @@ const App = observer((props: any) => {
       ws.current!.close();
     };
   }, [setReady]);
+
+  React.useEffect(() => {
+    if (main.logged) {
+      setState({ ...state, keyType: "SIGN" });
+    }
+  }, main.logged);
 
   React.useEffect(() => {
     const browseKeyStoreCallback = (resp: Response) => {
@@ -149,7 +154,15 @@ const App = observer((props: any) => {
   return (
     <div className="app-root modal-open">
       <HashRouter>
-        {main.isOpenModal && <Modal main={main} request={request} />}
+        {main.isOpenModal && (
+          <Modal
+            main={main}
+            setState={setState}
+            state={state}
+            request={request}
+            client={client}
+          />
+        )}
         {main.logged && !main.isReg && (
           <Sidebar main={main} request={request} />
         )}
@@ -175,7 +188,7 @@ const App = observer((props: any) => {
             main={main}
             path="/"
             component={() =>
-              main.getRole === "Agent" && main.isReg ? (
+              true ? (
                 <Registration main={main} request={request} />
               ) : main.getRole === "Agent" ? (
                 <Partners request={request} />

@@ -19,7 +19,7 @@ export class ClientController {
     });
   }
   async regAuthPerson(id: string, data: any): Promise<any> {
-    return server.put(`/client/auth_person${id}`, data, {
+    return server.put(`/client/auth_person/${id}`, data, {
       baseURL,
     });
   }

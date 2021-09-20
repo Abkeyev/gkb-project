@@ -9,7 +9,7 @@ import moment from "moment";
 
 const Registration = observer((props: any) => {
   const { main, request } = props;
-  const [step, setStep] = React.useState(0);
+  const [step, setStep] = React.useState(3);
   const [address, setAddress] = React.useState("");
   const [iin, setIin] = React.useState("");
   const [segment, setSegment] = React.useState("");
@@ -658,9 +658,12 @@ const Registration = observer((props: any) => {
                               client: main.clientData.auth_person.client,
                               position:
                                 position === "other" ? otherPosition : position,
-                              sign_auth: main.clientData.auth_person.sign_auth,
+                              sign_auth: signingAuth,
+                              signing_authority_comment:
+                                signingAuth === "1" ? otherSigningAuth : "",
                               person_status:
                                 main.clientData.auth_person.person_status,
+                              iin: iin,
                             })
                             .then(() => setStep(2))
                         }

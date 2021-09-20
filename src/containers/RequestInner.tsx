@@ -12,10 +12,6 @@ import {
 } from "../api/Models/ServiceModels";
 
 const RequestInner = observer((props: any) => {
-  const [tab, setTab] = React.useState(false);
-  const [step1, setStep1] = React.useState(false);
-  const [step2] = React.useState(false);
-  const [step3, setStep3] = React.useState(false);
   const history = useHistory();
   const { id } = props.match.params;
   const { main, request } = props;
@@ -26,10 +22,11 @@ const RequestInner = observer((props: any) => {
     request.getRequestStatus();
     request.getDocumentsCategories();
     request.getDocCategories();
-    request.getDocuments(main.clientData.client.id);
-    request.getClientUser(main.clientData.client.id);
+    main.clientData.client && request.getDocuments(main.clientData.client.id);
+    main.clientData.client && request.getClientUser(main.clientData.client.id);
     request.getClientTypes();
     request._getRequest &&
+      request._getRequest.responsible_user &&
       request.getClient(request._getRequest.responsible_user);
     request._getRequest && request.getAuthPerson(request._getRequest.client);
   }, []);
@@ -259,11 +256,11 @@ const RequestInner = observer((props: any) => {
                     <TabPanel>
                       <div className="tab-content tab-1">
                         <h3 className="title-subhead mb-16">
-                          {request._getClientUsers.length} заявленных
+                          {request._getClientUser.length} заявленных
                           пользователей
                         </h3>
 
-                        {request._getClientUsers.map(
+                        {request._getClientUser.map(
                           (u: ClientUsers, index: number) => (
                             <div className="card mb-24 pad-24">
                               <div className="card-header">
@@ -364,7 +361,9 @@ const RequestInner = observer((props: any) => {
                         <div className="tab-button mb-24">
                           <span
                             className={
-                              !request.notTypical ? "tab-btn active" : "tab-btn"
+                              request._getRequest.is_model_contract
+                                ? "tab-btn active"
+                                : "tab-btn"
                             }
                             onClick={() => {
                               main.setModal(true);
@@ -375,7 +374,9 @@ const RequestInner = observer((props: any) => {
                           </span>
                           <span
                             className={
-                              request.notTypical ? "tab-btn active" : "tab-btn"
+                              !request._getRequest.is_model_contract
+                                ? "tab-btn active"
+                                : "tab-btn"
                             }
                             onClick={() => {
                               main.setModal(true);
@@ -386,7 +387,7 @@ const RequestInner = observer((props: any) => {
                           </span>
                         </div>
 
-                        {request.notTypical ? (
+                        {!request._getRequest.is_model_contract ? (
                           <>
                             <div
                               className={`card-collapse tab-num-2 two-signatory ${
@@ -721,9 +722,7 @@ const RequestInner = observer((props: any) => {
                                             {request.signTwoStepPar === 1 ? (
                                               <button
                                                 className="btn-status-signatory btn-icon active"
-                                                onClick={() =>
-                                                  request.setSignTwoStepPar(2)
-                                                }
+                                                onClick={() => {}}
                                               >
                                                 <i className="azla edit-white-icon"></i>
                                                 Подписать
@@ -872,7 +871,7 @@ const RequestInner = observer((props: any) => {
                                       Скачать договор
                                     </button>
                                   </div>
-                                  {request.manUser && (
+                                  {request._getClient && (
                                     <div className="col-md-6">
                                       <p className="desc">Менеджер заявки</p>
                                       <div className="profile mt-8">
@@ -885,7 +884,7 @@ const RequestInner = observer((props: any) => {
                                           }
                                         />
                                         <span className="name">
-                                          {request.manUser.full_name}
+                                          {request._getClient.full_name}
                                         </span>
                                       </div>
                                     </div>
@@ -929,9 +928,10 @@ const RequestInner = observer((props: any) => {
                                         {request.signStepPar === 1 ? (
                                           <button
                                             className="btn-status-signatory btn-icon active"
-                                            onClick={() =>
-                                              request.setSignStepPar(2)
-                                            }
+                                            onClick={() => {
+                                              main.setModalType(12);
+                                              main.setModal(true);
+                                            }}
                                           >
                                             <i className="azla edit-white-icon"></i>
                                             Подписать
@@ -953,9 +953,11 @@ const RequestInner = observer((props: any) => {
                                 </div>
 
                                 <div className="collapse-signatory">
-                                  <h4 className="collapse-text">
-                                    Подписант от {request._getClient.longname}
-                                  </h4>
+                                  {request._getClient && (
+                                    <h4 className="collapse-text">
+                                      Подписант от {request._getClient.longname}
+                                    </h4>
+                                  )}
 
                                   <div className="signatory-profile">
                                     <div className="col-md-6">
@@ -1022,12 +1024,12 @@ const RequestInner = observer((props: any) => {
                                 </div>
                               </div>
 
-                              {request.signStepPar === 0 && (
+                              {request.signStepPar === 1 && (
                                 <div className="collapse-footer">
                                   <button
                                     type="button"
                                     className="button btn-primary"
-                                    onClick={() => request.setSignStepPar(1)}
+                                    onClick={() => request.nextRequestStatus()}
                                   >
                                     Отправить на подписание
                                   </button>
@@ -1112,7 +1114,7 @@ const RequestInner = observer((props: any) => {
                   </div>
                 ) : request.step === 3 ? (
                   <>
-                    {request._getClientUsers.map(
+                    {request._getClientUser.map(
                       (u: ClientUsers, index: number) => (
                         <div className="card mb-24 pad-24">
                           <div className="card-header">

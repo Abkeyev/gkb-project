@@ -33,11 +33,6 @@ export class ServiceController {
     });
   }
   // Client
-  async getClientUsers(id: string): Promise<any> {
-    return server.get(`/client/${id}/client_user`, {
-      baseURL,
-    });
-  }
   async getClientTypes(): Promise<any> {
     return server.get(`/client_type`, {
       baseURL,
@@ -106,10 +101,17 @@ export class ServiceController {
       baseURL,
     });
   }
-  async sendType() {
-    return server.get(`/request_type`, {
-      baseURL,
-    });
+  async sendType(request: Request): Promise<any> {
+    return server.put(
+      `/client_request/${request.id}`,
+      {
+        ...request,
+        is_model_contract: !request.is_model_contract,
+      },
+      {
+        baseURL,
+      }
+    );
   }
   async getClientContact(id: string) {
     return server.get(`/client/${id}/contact`, {
@@ -162,13 +164,22 @@ export class ServiceController {
       baseURL,
     });
   }
-  async endRequest(request: Request): Promise<any> {
-    return server.put(`/client_request/${request.id}/end_request`, request, {
+  async endRequest(request: Request, comment: string): Promise<any> {
+    return server.post(
+      `/request/${request.id}/decline`,
+      { comment },
+      {
+        baseURL,
+      }
+    );
+  }
+  async nextRequest(request: Request): Promise<any> {
+    return server.get(`/client_request/next_step/${request.id}`, {
       baseURL,
     });
   }
-  async nextRequest(request: Request): Promise<any> {
-    return server.put(`/client_request/next_step/${request.id}`, request, {
+  async nextRequestStatus(): Promise<any> {
+    return server.post(`/request/next_status`, {
       baseURL,
     });
   }

@@ -1,10 +1,10 @@
-import { useHistory } from "react-router-dom";
+import { checkInputs, extractKeyAlias } from "../ncalayer/helper";
 import { observer } from "mobx-react";
 import React from "react";
 import { ClientUsers } from "../api/Models/ServiceModels";
 
 const Modal = observer((props: any) => {
-  const { main, request } = props;
+  const { main, request, state, setState, client } = props;
   const [users, setUsers] = React.useState<ClientUsers[]>([]);
   const [fullName, setFullName] = React.useState("");
   const [position, setPosition] = React.useState("");
@@ -15,7 +15,56 @@ const Modal = observer((props: any) => {
   const [zam, setZam] = React.useState("");
   const [man, setMan] = React.useState("");
   const [manCon, setManCon] = React.useState("");
-  const history = useHistory();
+  const [declineReason, setDeclineReason] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+
+  const browseKeys = () => {
+    setState({
+      ...state,
+      method: client.BrowseKeyStore(state.alias, "P12", state.path),
+    });
+  };
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, password: e.target.value });
+  };
+
+  const handleKeyAliasClick = () => {
+    const ok = checkInputs({
+      path: state.path,
+      alias: state.alias,
+      password: state.password,
+    });
+    if (ok) {
+      setState({
+        ...state,
+        method: client.GetKeys(
+          state.alias,
+          state.path,
+          state.password,
+          state.keyType
+        ),
+      });
+    }
+  };
+
+  const getSubstring = (text: string, string: string) => {
+    const start = text.indexOf(string) + string.length;
+    return text.substring(start, text.indexOf(",", start));
+  };
+
+  const signDoc = () =>
+    main.loginEcp(
+      getSubstring(state.subjectDN, "SERIALNUMBER=").substr(3),
+      `${getSubstring(state.subjectDN, "CN=")} ${getSubstring(
+        state.subjectDN,
+        "G="
+      )}`,
+      getSubstring(state.subjectDN, "O=").replace(/\\/g, "")
+    );
+
+  const handleKeyAliasChange = (key: string) => {
+    setState({ ...state, keyAlias: extractKeyAlias(key) });
+  };
   return (
     <div>
       {main.modalType === 0 ? (
@@ -92,16 +141,16 @@ const Modal = observer((props: any) => {
                     rows={5}
                     className="form-control-textarea mb-16"
                     placeholder="Причина отказа"
-                    value={main.declineReason}
-                    onChange={(e) => main.setDeclineReason(e.target.value)}
+                    value={declineReason}
+                    onChange={(e) => setDeclineReason(e.target.value)}
                   ></textarea>
                   <div className="d-flex">
                     <button
                       type="button"
-                      disabled={main.declineReason === ""}
+                      disabled={declineReason === ""}
                       onClick={() =>
                         request._getRequest &&
-                        request.endRequest(request._getRequest)
+                        request.endRequest(request._getRequest, declineReason)
                       }
                       className="button btn-primary mr-16"
                     >
@@ -213,7 +262,9 @@ const Modal = observer((props: any) => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => request.sendType()}
+                    onClick={() =>
+                      request.sendType().then(() => main.setModal(false))
+                    }
                     className="button btn-primary"
                   >
                     Да
@@ -836,6 +887,111 @@ const Modal = observer((props: any) => {
                     >
                       Удалить пользователя
                     </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : main.modalType === 12 ? (
+        <div className="modal modal-large">
+          <div
+            className="modal-backbg"
+            onClick={() => main.setModal(false)}
+          ></div>
+          <div className="modal-dialog">
+            <div className="modal-content fadeInModal animated">
+              <div className="modal-close">
+                <i
+                  className="azla close-icon"
+                  onClick={() => main.setModal(false)}
+                ></i>
+              </div>
+              <div className="modal-body">
+                <div className="write-reasons">
+                  <h3 className="text-left title-subhead mb-32">
+                    Подписание документа
+                  </h3>
+                  <div className="form-wrapper">
+                    <button
+                      type="button"
+                      onClick={() => browseKeys()}
+                      className="button btn-primary"
+                    >
+                      Выберите файл
+                    </button>
+                  </div>
+                  <div className="form-wrapper">
+                    <input
+                      type="text"
+                      value={state.password}
+                      ref={(input) => {
+                        input !== null && input.focus();
+                      }}
+                      onChange={handlePasswordChange}
+                      placeholder="Введите пароль для хранилища"
+                    />
+                    <label>Пароль</label>
+                  </div>
+                  <div className="form-wrapper">
+                    <button
+                      className="button btn-primary"
+                      onClick={() => {
+                        handleKeyAliasClick();
+                      }}
+                    >
+                      Загрузить ключи
+                    </button>
+                  </div>
+                  <div className="form-wrapper">
+                    {props.state.keys.length > 0 &&
+                      props.state.keys[0] &&
+                      props.state.keys[0] !== "" && (
+                        <div className="form-multiselect mb-0">
+                          <div
+                            className={`multi js-multi-buttons ${
+                              open ? "open" : ""
+                            }`}
+                            onClick={() => setOpen(!open)}
+                          >
+                            {/* При наведении на Input появляется класс open */}
+                            <div className="input-wrapper">
+                              <input
+                                className="multi-input azla form-icon chevron-down-icon"
+                                type="text"
+                                placeholder="Список ключей"
+                                value={main.key}
+                              />
+                              <label className="label">Ключи</label>
+                            </div>
+                            <div className="multi-menu">
+                              <div className="multi-option option-current">
+                                {props.state.keys.map((v: any, i: number) => {
+                                  return (
+                                    <div className="multi-list">
+                                      <span
+                                        className="multi-option-select"
+                                        onClick={() => {
+                                          main.key = v;
+                                          handleKeyAliasChange(v);
+                                        }}
+                                      >
+                                        {v}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            className="button btn-primary mt-16"
+                            onClick={(e) => signDoc()}
+                          >
+                            Подписать
+                          </button>
+                        </div>
+                      )}
                   </div>
                 </div>
               </div>

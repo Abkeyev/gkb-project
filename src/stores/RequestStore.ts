@@ -44,7 +44,6 @@ class RequestStore {
   private documents: Documents[];
   private doc: Documents | null;
   private request: Request | null;
-  private clientUsers: ClientUsers[];
   private clientTypes: ClientTypes[];
   private clients: Client[];
   private client: Client | null;
@@ -87,9 +86,6 @@ class RequestStore {
   }
   get _getRequest() {
     return this.request;
-  }
-  get _getClientUsers() {
-    return this.clientUsers;
   }
   get _getClientTypes() {
     return this.clientTypes;
@@ -206,12 +202,6 @@ class RequestStore {
       .then((r: Documents[]) => (this.documents = r));
   }
 
-  async getClientUsers(id: string) {
-    await api.service
-      .getClientUsers(id)
-      .then((r: ClientUsers[]) => (this.clientUsers = r));
-  }
-
   async getClientTypes() {
     await api.service
       .getClientTypes()
@@ -320,12 +310,15 @@ class RequestStore {
     });
   }
   async sendType() {
-    await api.service.sendType().then((res) => {
-      this.notTypical = !this.notTypical;
-    });
+    this._getRequest &&
+      (await api.service.sendType(this._getRequest).then((res) => {
+        runInAction(async () => {
+          this._getRequest && (await this.getRequest(this._getRequest.id));
+        });
+      }));
   }
-  async endRequest(request: Request) {
-    await api.service.endRequest(request).then((res) => {
+  async endRequest(request: Request, comment: string) {
+    await api.service.endRequest(request, comment).then((res) => {
       runInAction(async () => {
         await this.getRequest(request.id);
       });
@@ -336,6 +329,11 @@ class RequestStore {
       runInAction(async () => {
         await this.getRequest(request.id);
       });
+    });
+  }
+  async nextRequestStatus() {
+    await api.service.nextRequestStatus().then((res) => {
+      console.log(res);
     });
   }
 
@@ -384,7 +382,6 @@ class RequestStore {
     this.documents = [];
     this.categories = [];
     this.request = null;
-    this.clientUsers = [];
     this.clientTypes = [];
     this.clients = [];
     this.client = null;
@@ -441,6 +438,7 @@ class RequestStore {
       setAgreementPar: action.bound,
       endRequest: action.bound,
       nextRequest: action.bound,
+      nextRequestStatus: action.bound,
       setDoc: action.bound,
       updateUser: action.bound,
       _getRequests: computed,
@@ -448,7 +446,6 @@ class RequestStore {
       _getCategories: computed,
       _getTypes: computed,
       _getRequest: computed,
-      _getClientUsers: computed,
       _getClientTypes: computed,
       _getClients: computed,
       _getClient: computed,
