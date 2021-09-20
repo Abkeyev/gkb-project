@@ -50,6 +50,14 @@ export class ServiceController {
     });
   }
 
+  async updateProfile(id: number, fields: any): Promise<any> {
+    return server.put(`/user/${id}`, {
+      ...fields
+    }, {
+      baseURL
+    });
+  }
+
   async getPosition(): Promise<any> {
     return server.get(`/position`, {
       baseURL,
