@@ -14,14 +14,15 @@ export class Server {
       .get(url, config)
       .then((r) => r?.data)
       .catch((error) => {
-        if (error.response.status === 401) {
+        console.log(error);
+        if (error && error.response && error.response.status === 401) {
           Cookies.remove("refresh");
           Cookies.remove("access");
           Cookies.remove("clientData");
           Cookies.remove("role");
           Cookies.remove("isReg");
           Cookies.remove("clientExist");
-          document.location.href = "/";
+          window.location.replace("/");
         }
       });
   }
@@ -54,14 +55,14 @@ export class Server {
       .post(url, data, config)
       .then((r) => r.data)
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error && error.response && error.response.status === 401) {
           Cookies.remove("refresh");
           Cookies.remove("access");
           Cookies.remove("clientData");
           Cookies.remove("role");
           Cookies.remove("isReg");
           Cookies.remove("clientExist");
-          document.location.href = "/";
+          window.location.replace("/");
         }
       });
   }
@@ -74,14 +75,14 @@ export class Server {
       .put(url, data, config)
       .then((r) => r.data)
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error && error.response && error.response.status === 401) {
           Cookies.remove("refresh");
           Cookies.remove("access");
           Cookies.remove("clientData");
           Cookies.remove("role");
           Cookies.remove("isReg");
           Cookies.remove("clientExist");
-          document.location.href = "/";
+          window.location.replace("/");
         }
       });
   }

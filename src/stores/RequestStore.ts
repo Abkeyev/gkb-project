@@ -15,6 +15,7 @@ import {
   ServiceCommon,
   Agree,
 } from "../api/Models/ServiceModels";
+import { connection, getKeyInfoCall, signWithBase64 } from "../ncaLayer";
 import api from "../api/Api";
 
 class RequestStore {
@@ -39,6 +40,7 @@ class RequestStore {
   agreeUsers: number[] = [];
   agreeGroup: Agree[] = [];
   requestId: number | null = null;
+  base64file: string = "";
 
   private requests: Request[];
   private documents: Documents[];
@@ -515,6 +517,40 @@ class RequestStore {
       link.click();
     });
   }
+  async getAuthKey() {
+    await getKeyInfoCall()
+      .then((res) => {
+        console.log(res);
+        this.getBase64();
+      })
+      .catch((err) => alert(err.message));
+  }
+
+  async getBase64() {
+    this.request &&
+      api.service.downloadFileForSign(this.request.id).then((response: any) => {
+        this.base64file = response;
+      });
+  }
+
+  async signDoc() {
+    if (this.base64file.length) {
+      await signWithBase64(this.base64file)
+        .then((res) => {
+          this.afterNca();
+        })
+        .catch((err) => alert(err.message));
+    } else console.log("no base 64");
+  }
+
+  async afterNca() {
+    this.request &&
+      (await api.service
+        .uploadSignedFile(this.request.id, {
+          signed_file: this.base64file,
+        })
+        .then(() => {}));
+  }
 
   constructor() {
     this.requests = [];
@@ -604,6 +640,8 @@ class RequestStore {
       getManUser: action.bound,
       getUser: action.bound,
       updateRequest: action.bound,
+      getAuthKey: action.bound,
+      signDoc: action.bound,
       _getAllUsers: computed,
       _getClientServiceById: computed,
       _getClientUsersForAdd: computed,

@@ -278,23 +278,27 @@ const Partners = observer((props: any) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {request._getRequests.map((r: Request) => (
-                          <tr onClick={() => history.push(`/partner/${r.id}`)}>
-                            <td>{r.id}</td>
-                            <td>{r.name_uid}</td>
-                            <td>
-                              {
-                                request._getClientServiceType.find(
-                                  (t: ServiceCommon) => t.id === r.service_type
-                                )?.name
-                              }
-                            </td>
-                            <td>
-                              {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                            </td>
-                            <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
-                          </tr>
-                        ))}
+                        {request._getRequests &&
+                          request._getRequests.map((r: Request) => (
+                            <tr
+                              onClick={() => history.push(`/partner/${r.id}`)}
+                            >
+                              <td>{r.id}</td>
+                              <td>{r.name_uid}</td>
+                              <td>
+                                {
+                                  request._getClientServiceType.find(
+                                    (t: ServiceCommon) =>
+                                      t.id === r.service_type
+                                  )?.name
+                                }
+                              </td>
+                              <td>
+                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                              </td>
+                              <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>
@@ -323,28 +327,31 @@ const Partners = observer((props: any) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {request._getRequests
-                          .filter((r: Request) => r.request_status === 6)
-                          .map((r: Request) => (
-                            <tr
-                              onClick={() => history.push(`/partner/${r.id}`)}
-                            >
-                              <td>{r.id}</td>
-                              <td>{r.name_uid}</td>
-                              <td>
-                                {
-                                  request._getClientServiceType.find(
-                                    (t: ServiceCommon) =>
-                                      t.id === r.service_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                              </td>
-                              <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
-                            </tr>
-                          ))}
+                        {request._getRequests &&
+                          request._getRequests
+                            .filter((r: Request) => r.request_status === 6)
+                            .map((r: Request) => (
+                              <tr
+                                onClick={() => history.push(`/partner/${r.id}`)}
+                              >
+                                <td>{r.id}</td>
+                                <td>{r.name_uid}</td>
+                                <td>
+                                  {
+                                    request._getClientServiceType.find(
+                                      (t: ServiceCommon) =>
+                                        t.id === r.service_type
+                                    )?.name
+                                  }
+                                </td>
+                                <td>
+                                  {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                </td>
+                                <td>
+                                  {moment(r.reg_date).format("MM.DD.YYYY")}
+                                </td>
+                              </tr>
+                            ))}
                       </tbody>
                     </table>
                   </div>
@@ -371,28 +378,31 @@ const Partners = observer((props: any) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {request._getRequests
-                          .filter((r: Request) => r.request_status === 7)
-                          .map((r: Request) => (
-                            <tr
-                              onClick={() => history.push(`/partner/${r.id}`)}
-                            >
-                              <td>{r.id}</td>
-                              <td>{r.name_uid}</td>
-                              <td>
-                                {
-                                  request._getClientServiceType.find(
-                                    (t: ServiceCommon) =>
-                                      t.id === r.service_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                              </td>
-                              <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
-                            </tr>
-                          ))}
+                        {request._getRequests &&
+                          request._getRequests
+                            .filter((r: Request) => r.request_status === 7)
+                            .map((r: Request) => (
+                              <tr
+                                onClick={() => history.push(`/partner/${r.id}`)}
+                              >
+                                <td>{r.id}</td>
+                                <td>{r.name_uid}</td>
+                                <td>
+                                  {
+                                    request._getClientServiceType.find(
+                                      (t: ServiceCommon) =>
+                                        t.id === r.service_type
+                                    )?.name
+                                  }
+                                </td>
+                                <td>
+                                  {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                </td>
+                                <td>
+                                  {moment(r.reg_date).format("MM.DD.YYYY")}
+                                </td>
+                              </tr>
+                            ))}
                       </tbody>
                     </table>
                   </div>

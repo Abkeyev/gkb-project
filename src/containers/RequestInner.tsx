@@ -13,6 +13,7 @@ import {
   ServiceCommon,
   User,
 } from "../api/Models/ServiceModels";
+import { connection } from "../ncaLayer";
 
 const RequestInner = observer((props: any) => {
   const history = useHistory();
@@ -20,6 +21,7 @@ const RequestInner = observer((props: any) => {
   const { main, request } = props;
 
   React.useEffect(() => {
+    connection();
     request.getClientServiceType();
     request.getClients();
     request.getUsers();
@@ -919,8 +921,8 @@ const RequestInner = observer((props: any) => {
                                               <button
                                                 className="btn-status-signatory btn-icon active"
                                                 onClick={() => {
-                                                  request.setSignTwoStep(6);
-                                                  request.setStep(3);
+                                                  request.setModal(true);
+                                                  request.setModalType(12);
                                                 }}
                                               >
                                                 <i className="azla edit-white-icon"></i>
@@ -1137,9 +1139,10 @@ const RequestInner = observer((props: any) => {
                                           ) : request.signStep === 2 ? (
                                             <button
                                               className="btn-status-signatory btn-icon active"
-                                              onClick={() =>
-                                                request.setSignStep(3)
-                                              }
+                                              onClick={() => {
+                                                main.setModal(true);
+                                                main.setModalType(12);
+                                              }}
                                             >
                                               <i className="azla edit-white-icon"></i>
                                               Подписать

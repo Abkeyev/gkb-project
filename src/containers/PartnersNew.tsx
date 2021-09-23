@@ -341,7 +341,6 @@ const PartnersNew = observer((props: any) => {
                               (u: ClientUsers) => u.id
                             ),
                             fulfill_date: new Date(),
-                            reg_date: new Date(),
                             responsible_user: null,
                           })
                           .then(() => window.location.replace("/"))

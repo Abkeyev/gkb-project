@@ -1014,85 +1014,20 @@ const Modal = observer((props: any) => {
                   <div className="form-wrapper">
                     <button
                       type="button"
-                      onClick={() => browseKeys()}
+                      onClick={() => request.getAuthKey()}
                       className="button btn-primary"
                     >
                       Выберите ключ
                     </button>
                   </div>
-                  <div className="form-wrapper">
-                    <input
-                      type="text"
-                      value={state.password}
-                      ref={(input) => {
-                        input !== null && input.focus();
-                      }}
-                      onChange={handlePasswordChange}
-                      placeholder="Введите пароль для хранилища"
-                    />
-                    <label>Пароль</label>
-                  </div>
-                  <div className="form-wrapper">
-                    <button
-                      className="button btn-primary"
-                      onClick={() => {
-                        handleKeyAliasClick();
-                      }}
-                    >
-                      Загрузить ключи
-                    </button>
-                  </div>
-                  <div className="form-wrapper">
-                    {props.state.keys.length > 0 &&
-                      props.state.keys[0] &&
-                      props.state.keys[0] !== "" && (
-                        <div className="form-multiselect mb-0">
-                          <div
-                            className={`multi js-multi-buttons ${
-                              open ? "open" : ""
-                            }`}
-                            onClick={() => setOpen(!open)}
-                          >
-                            {/* При наведении на Input появляется класс open */}
-                            <div className="input-wrapper">
-                              <input
-                                className="multi-input azla form-icon chevron-down-icon"
-                                type="text"
-                                placeholder="Список ключей"
-                                value={main.key}
-                              />
-                              <label className="label">Ключи</label>
-                            </div>
-                            <div className="multi-menu">
-                              <div className="multi-option option-current">
-                                {props.state.keys.map((v: any, i: number) => {
-                                  return (
-                                    <div className="multi-list">
-                                      <span
-                                        className="multi-option-select"
-                                        onClick={() => {
-                                          main.key = v;
-                                          handleKeyAliasChange(v);
-                                        }}
-                                      >
-                                        {v}
-                                      </span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          </div>
-                          <button
-                            className="button btn-primary mt-16"
-                            onClick={handleCMSSignatureFromFileClick}
-                          >
-                            Подписать
-                          </button>
-                        </div>
-                      )}
-                  </div>
-                  {state.cmsSignatureSigned}
+                  <button
+                    className="button btn-primary mt-16"
+                    onClick={() =>
+                      request._getDoc && request.signDoc(request._getDoc.id)
+                    }
+                  >
+                    Подписать
+                  </button>
                 </div>
               </div>
             </div>

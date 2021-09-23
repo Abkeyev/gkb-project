@@ -224,6 +224,16 @@ export class ServiceController {
       baseURL,
     });
   }
+  async uploadSignedFile(id: number, data: any): Promise<any> {
+    return server.post(`/request/${id}/upload_signed_file`, data, {
+      baseURL,
+    });
+  }
+  async downloadFileForSign(id: number): Promise<any> {
+    return server.get(`/request/${id}/download_file_for_sign`, {
+      baseURL,
+    });
+  }
   async nextRequestStatus(id: number, userId: number): Promise<any> {
     return server.post(
       `/request/${id}/next_status`,
