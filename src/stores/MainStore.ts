@@ -88,6 +88,7 @@ class MainStore {
       regUser: action.bound,
       setNewUsers: action.bound,
       setDeclineReason: action.bound,
+      finishReg: action.bound,
       clientData: computed,
       refreshToken: computed,
       accessToken: computed,
@@ -174,6 +175,14 @@ class MainStore {
     Cookies.set("clientData", await JSON.stringify(this._clientData), {
       expires: 7,
     });
+  }
+
+  async finishReg() {
+    this.isReg = false;
+    this.clientExist = false;
+    Cookies.set("isReg", false, { expires: 7 });
+    Cookies.set("clientExist", false, { expires: 7 });
+    window.location.reload();
   }
 
   async logIn(username: string, password: string) {

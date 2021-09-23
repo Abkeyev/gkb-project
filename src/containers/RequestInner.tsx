@@ -5,10 +5,13 @@ import { Link, useHistory } from "react-router-dom";
 import { observer } from "mobx-react";
 import moment from "moment";
 import {
+  Agree,
   Categories,
+  Client,
   ClientUsers,
   Documents,
   ServiceCommon,
+  User,
 } from "../api/Models/ServiceModels";
 
 const RequestInner = observer((props: any) => {
@@ -18,17 +21,13 @@ const RequestInner = observer((props: any) => {
 
   React.useEffect(() => {
     request.getClientServiceType();
+    request.getClients();
+    request.getUsers();
     request.getRequest(id);
     request.getRequestStatus();
     request.getDocumentsCategories();
     request.getDocCategories();
-    main.clientData.client && request.getDocuments(main.clientData.client.id);
-    main.clientData.client && request.getClientUser(main.clientData.client.id);
     request.getClientTypes();
-    request._getRequest &&
-      request._getRequest.responsible_user &&
-      request.getClient(request._getRequest.responsible_user);
-    request._getRequest && request.getAuthPerson(request._getRequest.client);
   }, []);
 
   return (
@@ -51,7 +50,9 @@ const RequestInner = observer((props: any) => {
 
                   <h1 className="title-main mb-32">
                     Заявка №{request._getRequest.id} -{" "}
-                    {main.clientData.client.longname}
+                    {request._getClient &&
+                      request._getClient.longname &&
+                      request._getClient.longname}
                   </h1>
 
                   {main.decline && (
@@ -65,7 +66,7 @@ const RequestInner = observer((props: any) => {
                     <ul className="step-progressbar">
                       <li
                         className={`step-item ${
-                          request.step === 1
+                          request.request_stepper === 1
                             ? "step-item-active"
                             : "step-item-complete"
                         }`}
@@ -75,9 +76,9 @@ const RequestInner = observer((props: any) => {
                       </li>
                       <li
                         className={`step-item ${
-                          request.step === 2
+                          request.request_stepper === 2
                             ? "step-item-active"
-                            : request.step > 2
+                            : request.request_stepper > 2
                             ? "step-item-complete"
                             : ""
                         }`}
@@ -89,9 +90,9 @@ const RequestInner = observer((props: any) => {
                       </li>
                       <li
                         className={`step-item ${
-                          request.step === 3
+                          request.request_stepper === 3
                             ? "step-item-active"
-                            : request.step > 3
+                            : request.request_stepper > 3
                             ? "step-item-complete"
                             : ""
                         }`}
@@ -103,9 +104,9 @@ const RequestInner = observer((props: any) => {
                       </li>
                       <li
                         className={`step-item ${
-                          request.step === 4
+                          request.request_stepper === 4
                             ? "step-item-active"
-                            : request.step > 4
+                            : request.request_stepper > 4
                             ? "step-item-complete"
                             : ""
                         }`}
@@ -115,9 +116,9 @@ const RequestInner = observer((props: any) => {
                       </li>
                       <li
                         className={`step-item ${
-                          request.step === 5
+                          request.request_stepper === 5
                             ? "step-item-active"
-                            : request.step > 5
+                            : request.request_stepper > 5
                             ? "step-item-complete"
                             : ""
                         }`}
@@ -152,14 +153,20 @@ const RequestInner = observer((props: any) => {
                             <li>
                               <span className="left">Статус заявки:</span>
                               <span className="right">
-                                {request._getRequest.request_status}
+                                {
+                                  request._getRequestStatus.find(
+                                    (t: ServiceCommon) =>
+                                      t.id ===
+                                      request._getRequest.request_status
+                                  )?.name
+                                }
                               </span>
                             </li>
-                            {request.manUser && (
+                            {request._getManUser && (
                               <li>
                                 <span className="left">Менеджер заявки:</span>
                                 <span className="right d-flex">
-                                  {request.manUser.full_name}{" "}
+                                  {request._getManUser.full_name}{" "}
                                   <span
                                     className="edit"
                                     onClick={() => {
@@ -176,14 +183,15 @@ const RequestInner = observer((props: any) => {
                               <span className="left">Организация:</span>
                               <span className="right">
                                 <span className="pre-primary-color">
-                                  {main.clientData.client.longname}
+                                  {request._getClient &&
+                                    request._getClient.longname}
                                 </span>
                               </span>
                             </li>
                             <li>
                               <span className="left">БИН:</span>
                               <span className="right">
-                                {main.clientData.client.bin}
+                                {request._getClient && request._getClient.bin}
                               </span>
                             </li>
                             <li>
@@ -205,7 +213,9 @@ const RequestInner = observer((props: any) => {
                                 Дата регистрации заявки:
                               </span>
                               <span className="right">
-                                {request._getRequest.reg_date}
+                                {moment(request._getRequest.reg_date).format(
+                                  "MM.DD.YYYY"
+                                )}
                               </span>
                             </li>
                             <li>
@@ -213,7 +223,9 @@ const RequestInner = observer((props: any) => {
                                 Дата исполнения заявки:
                               </span>
                               <span className="right">
-                                {request._getRequest.fulfill_date}
+                                {moment(
+                                  request._getRequest.fulfill_date
+                                ).format("MM.DD.YYYY")}
                               </span>
                             </li>
                           </ul>
@@ -256,11 +268,11 @@ const RequestInner = observer((props: any) => {
                     <TabPanel>
                       <div className="tab-content tab-1">
                         <h3 className="title-subhead mb-16">
-                          {request._getClientUser.length} заявленных
+                          {request._getClientUsers.length} заявленных
                           пользователей
                         </h3>
 
-                        {request._getClientUser.map(
+                        {request._getClientUsers.map(
                           (u: ClientUsers, index: number) => (
                             <div className="card mb-24 pad-24">
                               <div className="card-header">
@@ -352,88 +364,157 @@ const RequestInner = observer((props: any) => {
                   </Tabs>
                 ) : request.step === 2 ? (
                   <div className="req-inner-body">
-                    {request.agreementPar && (
-                      <div className="tab-btn-content mb-32">
-                        <h3 className="title-subhead mb-16">
-                          Выберите тип договора
-                        </h3>
-
-                        <div className="tab-button mb-24">
-                          <span
-                            className={
-                              request._getRequest.is_model_contract
-                                ? "tab-btn active"
-                                : "tab-btn"
-                            }
-                            onClick={() => {
-                              main.setModal(true);
-                              main.setModalType(3);
-                            }}
-                          >
-                            Типовой
-                          </span>
-                          <span
-                            className={
-                              !request._getRequest.is_model_contract
-                                ? "tab-btn active"
-                                : "tab-btn"
-                            }
-                            onClick={() => {
-                              main.setModal(true);
-                              main.setModalType(3);
-                            }}
-                          >
-                            Нетиповой
-                          </span>
-                        </div>
-
-                        {!request._getRequest.is_model_contract ? (
-                          <>
-                            <div
-                              className={`card-collapse tab-num-2 two-signatory ${
-                                request.step2 ? "collapsed" : ""
-                              }`}
+                    <div className="tab-btn-content mb-32">
+                      <h3 className="title-subhead mb-16">
+                        Выберите тип договора
+                      </h3>
+                      <div className="tab-button mb-24">
+                        <span
+                          className={
+                            request._getRequest.is_model_contract
+                              ? "tab-btn active"
+                              : "tab-btn"
+                          }
+                          onClick={() => {
+                            main.setModal(true);
+                            main.setModalType(3);
+                          }}
+                        >
+                          Типовой
+                        </span>
+                        <span
+                          className={
+                            !request._getRequest.is_model_contract
+                              ? "tab-btn active"
+                              : "tab-btn"
+                          }
+                          onClick={() => {
+                            main.setModal(true);
+                            main.setModalType(3);
+                          }}
+                        >
+                          Нетиповой
+                        </span>
+                      </div>
+                      {!request._getRequest.is_model_contract &&
+                      !request.agreementPar ? (
+                        <>
+                          <div className="d-flex-align-c-spaceb mb-32">
+                            <h3 className="title-subhead">
+                              История изменения договора{" "}
+                              <span className="number">
+                                {
+                                  (request._getDocuments as Documents[]).filter(
+                                    (d: Documents) =>
+                                      d.doc_category === 2 &&
+                                      d.doc_type === 3 &&
+                                      d.is_draft
+                                  ).length
+                                }
+                              </span>
+                            </h3>
+                            <label
+                              // type="button"
+                              className="button btn-secondary"
                             >
-                              {/* При сворачивании дается класс "collapsed" */}
-                              <div
-                                className={`card-collapse-header ${
-                                  request.agreeParStep === 2 ? "success" : ""
-                                }`}
-                              >
-                                {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
-                                <div className="collapsing-header">
-                                  <h3
-                                    className={
-                                      request.agreeParStep === 2
-                                        ? "title-subhead mb-0 done-success"
-                                        : "title-subhead mb-0"
-                                    }
-                                  >
-                                    {request.agreeParStep === 2
-                                      ? "Договор согласован"
-                                      : "На согласование: “Договор №314 - вер. 24 от 24 июня"}
-                                  </h3>
-                                  <span
-                                    className="btn-collapse"
+                              <input
+                                type="file"
+                                onClick={(e) =>
+                                  request.addDocument(
+                                    request._getRequest.client,
+                                    e
+                                  )
+                                }
+                                style={{ display: "none" }}
+                              />
+                              Загрузить договор
+                            </label>
+                          </div>
+                          <table className="table req-table">
+                            <thead>
+                              <tr>
+                                <th>Название</th>
+                                <th>Дата загрузки</th>
+                                <th>Комментарий</th>
+                                <th>Автор</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {(request._getDocuments as Documents[])
+                                .filter(
+                                  (d: Documents) =>
+                                    d.doc_category === 2 && d.doc_type === 3
+                                )
+                                .map((d: Documents) => (
+                                  <tr
                                     onClick={() => {
-                                      request.setStep2(!request.step2);
+                                      main.setModal(true);
+                                      main.setModalType(2);
+                                      request.setDoc(d);
                                     }}
                                   >
-                                    <i className="azla chevron-up-icon"></i>
-                                  </span>
-                                </div>
-                                <div className="pad-rl-16 collapse-main">
-                                  <div className="row">
-                                    <div className="col-md-6">
-                                      <p className="desc">Нетиповой договор</p>
-                                      <button
-                                        type="button"
-                                        className="button btn-secondary btn-icon"
-                                      >
-                                        <i className="azla blank-alt-primary-icon"></i>
-                                        Скачать договор
-                                      </button>
-                                    </div>
+                                    <td>{d.doc_name}</td>
+                                    <td>{}</td>
+                                    <td>{d.comments}</td>
+                                    <td>{d.client}</td>
+                                  </tr>
+                                ))}
+                            </tbody>
+                          </table>
+                        </>
+                      ) : request.agreementPar ? (
+                        <>
+                          <div
+                            className={`card-collapse tab-num-2 two-signatory ${
+                              request.signTwoStep > 2 ? "collapsed" : ""
+                            }`}
+                          >
+                            {/* При сворачивании дается класс "collapsed" */}
+                            <div
+                              className={`card-collapse-header ${
+                                request.signTwoStep > 2 ? "success" : ""
+                              }`}
+                            >
+                              {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
+                              <div className="collapsing-header">
+                                <h3
+                                  className={
+                                    request.signTwoStep > 2
+                                      ? "title-subhead mb-0 done-success"
+                                      : "title-subhead mb-0"
+                                  }
+                                >
+                                  {request.signTwoStep > 2
+                                    ? "Договор согласован"
+                                    : "На согласование: “Договор №314 - вер. 24 от 24 июня"}
+                                </h3>
+                                <span
+                                  className="btn-collapse"
+                                  onClick={() => {
+                                    request.setStep2(!request.step2);
+                                  }}
+                                >
+                                  <i className="azla chevron-up-icon"></i>
+                                </span>
+                              </div>
+                              <div className="pad-rl-16 collapse-main">
+                                <div className="row">
+                                  <div className="col-md-6">
+                                    <p className="desc">Нетиповой договор</p>
+                                    <button
+                                      type="button"
+                                      className="button btn-secondary btn-icon"
+                                      onClick={() =>
+                                        request.downloadDocument(
+                                          request._getDoc.id
+                                        )
+                                      }
+                                    >
+                                      <i className="azla blank-alt-primary-icon"></i>
+                                      Скачать договор
+                                    </button>
+                                  </div>
+                                  {request._getManUser && (
                                     <div className="col-md-6">
                                       <p className="desc">Менеджер заявки</p>
                                       <div className="profile mt-8">
@@ -446,19 +527,21 @@ const RequestInner = observer((props: any) => {
                                           }
                                         />
                                         <span className="name">
-                                          Султангалиева К.И
+                                          {request._getManUser.full_name}
                                         </span>
                                       </div>
                                     </div>
-                                  </div>
+                                  )}
                                 </div>
                               </div>
+                            </div>
 
-                              <div className="collapse-content method-main">
-                                <div className="collapse-body">
-                                  <div className="method-signatory">
-                                    <div className="method-signatory-add">
-                                      {[1].map((s) => (
+                            <div className="collapse-content method-main">
+                              <div className="collapse-body">
+                                <div className="method-signatory">
+                                  <div className="method-signatory-add">
+                                    {request.agreeGroup.map(
+                                      (a: Agree, index: number) => (
                                         <>
                                           <div className="method-signatory-header">
                                             <div className="left">
@@ -466,16 +549,66 @@ const RequestInner = observer((props: any) => {
                                                 Согласующие от ГКБ 1
                                               </h4>
                                               <p className="mb-0">
-                                                5 участников · Последовательное
-                                                согласование
+                                                {a.user_name.length} участников
+                                                ·{" "}
+                                                {a.process_type === "Sequential"
+                                                  ? "Последовательное согласование"
+                                                  : "Параллельное согласование"}
                                               </p>
+                                            </div>
+                                            <div className="right">
+                                              <p className="text-desc mb-0 mr-8">
+                                                Метод согласования:
+                                              </p>
+                                              <div className="tab-button">
+                                                <span
+                                                  className={`tab-btn ${
+                                                    a.process_type ===
+                                                    "Sequential"
+                                                      ? "active"
+                                                      : ""
+                                                  }`}
+                                                  onClick={() =>
+                                                    (request.agreeGroup[index] =
+                                                      {
+                                                        ...request.agreeGroup[
+                                                          index
+                                                        ],
+                                                        process_type:
+                                                          "Sequential",
+                                                      })
+                                                  }
+                                                >
+                                                  Последовательный
+                                                </span>
+                                                <span
+                                                  className={`tab-btn ${
+                                                    a.process_type ===
+                                                    "Parallel"
+                                                      ? "active"
+                                                      : ""
+                                                  }`}
+                                                  onClick={() =>
+                                                    (request.agreeGroup[index] =
+                                                      {
+                                                        ...request.agreeGroup[
+                                                          index
+                                                        ],
+                                                        process_type:
+                                                          "Parallel",
+                                                      })
+                                                  }
+                                                >
+                                                  Параллельный
+                                                </span>
+                                              </div>
                                             </div>
                                           </div>
 
                                           <div className="method-add-user">
                                             <div className="method-add-users">
                                               <ul className="method-list-users">
-                                                {[1, 2, 3].map((s) => (
+                                                {a.user_name.map((s) => (
                                                   <li>
                                                     <div className="left">
                                                       <i className="azla arrow-primary-down-up grab"></i>
@@ -490,92 +623,72 @@ const RequestInner = observer((props: any) => {
                                                           }
                                                         />
                                                         <span className="name">
-                                                          Султангалиева К.И
+                                                          {request._getAllUsers &&
+                                                            request._getAllUsers.find(
+                                                              (u: User) =>
+                                                                u.id === s
+                                                            )?.full_name}
                                                         </span>
                                                       </div>
                                                     </div>
                                                     <span className="position">
-                                                      Директор
+                                                      {request._getAllUsers &&
+                                                        request._getAllUsers.find(
+                                                          (u: User) =>
+                                                            u.id === s
+                                                        )?.position}
                                                     </span>
-                                                    {request.agreeParStep >
-                                                    0 ? (
-                                                      <span className="btn-status not-active">
+
+                                                    {request.signTwoStep ===
+                                                    1 ? (
+                                                      <span
+                                                        className="btn-status not-active"
+                                                        onClick={() => {
+                                                          request.setSignTwoStep(
+                                                            2
+                                                          );
+                                                        }}
+                                                      >
                                                         Не согласовано
+                                                      </span>
+                                                    ) : request.signTwoStep ===
+                                                      2 ? (
+                                                      <span
+                                                        className="btn-status done"
+                                                        onClick={() => {
+                                                          request.setSignTwoStep(
+                                                            3
+                                                          );
+                                                        }}
+                                                      >
+                                                        Согласовано
+                                                      </span>
+                                                    ) : request.signTwoStep ===
+                                                      4 ? (
+                                                      <span
+                                                        className="btn-status canceled"
+                                                        onClick={() =>
+                                                          request.setSignTwoStep(
+                                                            4
+                                                          )
+                                                        }
+                                                      >
+                                                        Отклонено
                                                       </span>
                                                     ) : (
                                                       <></>
                                                     )}
                                                   </li>
                                                 ))}
-                                                {request.agreeParStep > 0 &&
-                                                  [1, 2, 3].map((s, i) => (
-                                                    <li>
-                                                      <div className="left">
-                                                        <i className="azla arrow-primary-down-up grab"></i>
-                                                        <div className="profile">
-                                                          <img
-                                                            alt="ava"
-                                                            className="ava"
-                                                            src={
-                                                              process.env
-                                                                .PUBLIC_URL +
-                                                              "/images/def-ava.svg"
-                                                            }
-                                                          />
-                                                          <span className="name">
-                                                            Султангалиева К.И
-                                                          </span>
-                                                        </div>
-                                                      </div>
-                                                      <span className="position">
-                                                        Директор
-                                                      </span>
-                                                      {i === 0 ? (
-                                                        <span className="btn-status not-active">
-                                                          Не согласовано
-                                                        </span>
-                                                      ) : i === 1 ? (
-                                                        <span
-                                                          className="btn-status done"
-                                                          onClick={() => {
-                                                            request.setAgreeParStep(
-                                                              2
-                                                            );
-                                                            request.setStep2(
-                                                              false
-                                                            );
-                                                            request.setStep3(
-                                                              true
-                                                            );
-                                                          }}
-                                                        >
-                                                          Согласовано
-                                                        </span>
-                                                      ) : i === 2 ? (
-                                                        <span
-                                                          className="btn-status canceled"
-                                                          onClick={() => {
-                                                            main.setModal(true);
-                                                            main.setModalType(
-                                                              5
-                                                            );
-                                                          }}
-                                                        >
-                                                          Отклонено
-                                                        </span>
-                                                      ) : (
-                                                        <></>
-                                                      )}
-                                                    </li>
-                                                  ))}
                                               </ul>
                                             </div>
-                                            {request.agreeParStep === 0 && (
+                                            {request.signTwoStep === 0 && (
                                               <span
                                                 className="add-btn pad-l-56 pad-b-24"
                                                 onClick={() => {
                                                   main.setModal(true);
                                                   main.setModalType(4);
+                                                  request.requestId = index;
                                                 }}
                                               >
                                                 <span className="circle">
@@ -586,247 +699,60 @@ const RequestInner = observer((props: any) => {
                                             )}
                                           </div>
                                         </>
-                                      ))}
-                                    </div>
-                                    {request.agreeParStep === 0 && (
-                                      <div
-                                        className="method-add-group"
-                                        onClick={() => {}}
-                                      >
-                                        <span className="add-btn">
-                                          <span className="circle">
-                                            <i className="azla plus-primary-icon size-18"></i>
-                                          </span>
-                                          Добавить группу
-                                        </span>
-                                      </div>
+                                      )
                                     )}
                                   </div>
-                                </div>
-
-                                {request.agreeParStep === 0 && (
-                                  <div className="collapse-footer">
-                                    <button
-                                      type="button"
-                                      className={`button btn-primary ${
-                                        request.agreeGroup.length === 0 ||
-                                        request.agreeUsers.length === 0
-                                          ? "disabled"
-                                          : ""
-                                      }`}
-                                      onClick={() => request.setAgreeParStep(1)}
-                                    >
-                                      Отправить на подписание
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                            <div
-                              className={`card-collapse tab-num-1 ${
-                                request.agreeParStep < 2 || !request.step3
-                                  ? "collapsed "
-                                  : ""
-                              } ${request.agreeParStep < 2 ? "disabled" : ""}`}
-                            >
-                              {/* При сворачивании дается класс "collapsed" */}
-                              <div
-                                className={
-                                  request.signTwoStepPar === 3
-                                    ? "card-collapse-header success"
-                                    : "card-collapse-header"
-                                }
-                              >
-                                {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
-                                <div className="collapsing-header">
-                                  <h3
-                                    className={
-                                      request.signTwoStepPar === 3
-                                        ? "title-subhead mb-0 done-success"
-                                        : "title-subhead mb-0"
-                                    }
-                                  >
-                                    {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
-                                    {request.signTwoStepPar === 3
-                                      ? "Договор подписан"
-                                      : "На подписание: “Договор №314 - вер. 24 от 24 июня"}
-                                  </h3>
-                                  <span
-                                    className="btn-collapse"
-                                    onClick={() => {
-                                      request.setStep3(!request.step3);
-                                    }}
-                                  >
-                                    <i className="azla chevron-up-icon"></i>
-                                  </span>
-                                </div>
-                                <div className="pad-rl-16 collapse-main">
-                                  <div className="row">
-                                    <div className="col-md-6">
-                                      <p className="desc">Типовой договор</p>
-                                      <button
-                                        type="button"
-                                        className="button btn-secondary btn-icon"
-                                      >
-                                        <i className="azla blank-alt-primary-icon"></i>
-                                        Скачать договор
-                                      </button>
-                                    </div>
-                                    <div className="col-md-6">
-                                      <p className="desc">Менеджер заявки</p>
-                                      <div className="profile mt-8">
-                                        <img
-                                          alt="ava"
-                                          className="ava"
-                                          src={
-                                            process.env.PUBLIC_URL +
-                                            "/images/def-ava.svg"
-                                          }
-                                        />
-                                        <span className="name">
-                                          Султангалиева К.И
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="collapse-content">
-                                <div className="collapse-body">
-                                  <div className="collapse-signatory mb-24">
-                                    <h4 className="collapse-text">
-                                      Подписант от ТОО “М-Ломбард”
-                                    </h4>
-
-                                    {[0].map((s) => (
-                                      <div className="signatory-profile">
-                                        <div className="col-md-6">
-                                          <div className="profile">
-                                            <img
-                                              alt="ava"
-                                              className="ava"
-                                              src={
-                                                process.env.PUBLIC_URL +
-                                                "/images/def-ava.svg"
-                                              }
-                                            />
-                                            <span className="name">
-                                              Кусаинов А.Е.
-                                            </span>
-                                          </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                          <div className="signatory-status">
-                                            <p className="desc">Директор</p>
-                                            {request.signTwoStepPar === 1 ? (
-                                              <button
-                                                className="btn-status-signatory btn-icon active"
-                                                onClick={() => {}}
-                                              >
-                                                <i className="azla edit-white-icon"></i>
-                                                Подписать
-                                              </button>
-                                            ) : request.signTwoStepPar === 2 ? (
-                                              <span className="btn-status done">
-                                                Подписано
-                                              </span>
-                                            ) : request.signTwoStepPar === 3 ? (
-                                              <span className="btn-status done">
-                                                Подписано
-                                              </span>
-                                            ) : (
-                                              ""
-                                            )}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-
-                                  <div className="collapse-signatory">
-                                    <h4 className="collapse-text">
-                                      Подписант от АО “Государственное Кредитное
-                                      Бюро”
-                                    </h4>
-
-                                    {[0].map((s) => (
-                                      <div className="signatory-profile">
-                                        <div className="col-md-6">
-                                          <div className="profile">
-                                            <img
-                                              alt="ava"
-                                              className="ava"
-                                              src={
-                                                process.env.PUBLIC_URL +
-                                                "/images/def-ava.svg"
-                                              }
-                                            />
-                                            <span className="name">
-                                              Кусаинов А.Е.
-                                            </span>
-                                          </div>
-                                        </div>
-                                        <div className="col-md-6">
-                                          <div className="signatory-status">
-                                            <p className="desc">Директор</p>
-                                            {request.signTwoStepPar === 1 ? (
-                                              <span className="btn-status not-active">
-                                                Не Подписано
-                                              </span>
-                                            ) : request.signTwoStepPar === 2 ? (
-                                              <span
-                                                className="btn-status not-active"
-                                                onClick={() =>
-                                                  request.setSignTwoStepPar(3)
-                                                }
-                                              >
-                                                Не Подписано
-                                              </span>
-                                            ) : request.signTwoStepPar === 3 ? (
-                                              <span className="btn-status done">
-                                                Подписано
-                                              </span>
-                                            ) : (
-                                              ""
-                                            )}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-
-                                {request.signTwoStepPar === 0 && (
-                                  <div className="collapse-footer">
-                                    <button
-                                      type="button"
-                                      className={`button btn-primary ${
-                                        request.signTwoUsers.length === 0
-                                          ? "disabled"
-                                          : ""
-                                      }`}
+                                  {request.signTwoStep === 0 && (
+                                    <div
+                                      className="method-add-group"
                                       onClick={() =>
-                                        request.setSignTwoStepPar(1)
+                                        (request.agreeGroup = [
+                                          ...request.agreeGroup,
+                                          {
+                                            user_name: [],
+                                            process_type: "Sequential",
+                                            process_number: 0,
+                                          },
+                                        ])
                                       }
                                     >
-                                      Отправить на подписание
-                                    </button>
-                                  </div>
-                                )}
+                                      <span className="add-btn">
+                                        <span className="circle">
+                                          <i className="azla plus-primary-icon size-18"></i>
+                                        </span>
+                                        Добавить группу
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
+
+                              {request.signTwoStep === 0 && (
+                                <div className="collapse-footer">
+                                  <button
+                                    type="button"
+                                    className={`button btn-primary ${
+                                      request.agreeGroup.length < 2
+                                        ? "disabled"
+                                        : ""
+                                    }`}
+                                    onClick={() => request.setSignTwoStep(1)}
+                                  >
+                                    Отправить на согласование
+                                  </button>
+                                </div>
+                              )}
                             </div>
-                          </>
-                        ) : (
+                          </div>
                           <div
                             className={`card-collapse tab-num-1 ${
-                              request.step1 ? "collapsed" : ""
-                            }`}
+                              request.signTwoStep === 6 ? "collapsed " : ""
+                            } ${request.signTwoStep < 3 ? "disabled" : ""}`}
                           >
                             {/* При сворачивании дается класс "collapsed" */}
                             <div
                               className={
-                                request.signStepPar === 3
+                                request.signTwoStep === 6
                                   ? "card-collapse-header success"
                                   : "card-collapse-header"
                               }
@@ -835,29 +761,24 @@ const RequestInner = observer((props: any) => {
                               <div className="collapsing-header">
                                 <h3
                                   className={
-                                    request.signStepPar === 3
+                                    request.signTwoStep === 6
                                       ? "title-subhead mb-0 done-success"
                                       : "title-subhead mb-0"
                                   }
                                 >
                                   {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
-                                  {request.signStepPar === 3
+                                  {request.signTwoStep === 6
                                     ? "Договор подписан"
                                     : "На подписание: “Договор №314 - вер. 24 от 24 июня"}
                                 </h3>
-                                <span
-                                  className="btn-collapse"
-                                  onClick={() =>
-                                    request.setStep1(!request.step1)
-                                  }
-                                >
+                                <span className="btn-collapse">
                                   <i className="azla chevron-up-icon"></i>
                                 </span>
                               </div>
                               <div className="pad-rl-16 collapse-main">
                                 <div className="row">
                                   <div className="col-md-6">
-                                    <p className="desc">Типовой договор</p>
+                                    <p className="desc">Нетиповой договор</p>
                                     <button
                                       type="button"
                                       className="button btn-secondary btn-icon"
@@ -871,7 +792,7 @@ const RequestInner = observer((props: any) => {
                                       Скачать договор
                                     </button>
                                   </div>
-                                  {request._getClient && (
+                                  {request._getManUser && (
                                     <div className="col-md-6">
                                       <p className="desc">Менеджер заявки</p>
                                       <div className="profile mt-8">
@@ -884,7 +805,7 @@ const RequestInner = observer((props: any) => {
                                           }
                                         />
                                         <span className="name">
-                                          {request._getClient.full_name}
+                                          {request._getManUser.full_name}
                                         </span>
                                       </div>
                                     </div>
@@ -895,141 +816,136 @@ const RequestInner = observer((props: any) => {
 
                             <div className="collapse-content">
                               <div className="collapse-body">
-                                <div className="collapse-signatory mb-24">
-                                  <h4 className="collapse-text">
-                                    Подписант от{" "}
-                                    {main.clientData.client.longname}
-                                  </h4>
+                                {request._getManSigner &&
+                                  (request._getManSigner as User) && (
+                                    <div className="collapse-signatory mb-24">
+                                      <h4 className="collapse-text">
+                                        Подписант от{" "}
+                                        {request._getClients &&
+                                          request._getClients.find(
+                                            (t: Client) =>
+                                              t.id ===
+                                              request._getManSigner.client
+                                          )?.longname}
+                                      </h4>
 
-                                  <div className="signatory-profile">
-                                    <div className="col-md-6">
-                                      <div className="profile">
-                                        <img
-                                          alt="ava"
-                                          className="ava"
-                                          src={
-                                            process.env.PUBLIC_URL +
-                                            "/images/def-ava.svg"
-                                          }
-                                        />
-                                        <span className="name">
-                                          {
-                                            main.clientData.auth_person
-                                              .full_name
-                                          }
-                                        </span>
+                                      <div className="signatory-profile">
+                                        <div className="col-md-6">
+                                          <div className="profile">
+                                            <img
+                                              alt="ava"
+                                              className="ava"
+                                              src={
+                                                process.env.PUBLIC_URL +
+                                                "/images/def-ava.svg"
+                                              }
+                                            />
+                                            <span className="name">
+                                              {request._getManSigner.full_name}
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                          <div className="signatory-status">
+                                            <p className="desc">
+                                              {request._getManSigner.position}
+                                            </p>
+                                            {request.signTwoStep === 4 ? (
+                                              <span
+                                                className="btn-status not-active"
+                                                onClick={() =>
+                                                  request.setSignTwoStep(5)
+                                                }
+                                              >
+                                                Не Подписано
+                                              </span>
+                                            ) : request.signTwoStep === 5 ? (
+                                              <span className="btn-status done">
+                                                Подписано
+                                              </span>
+                                            ) : request.signTwoStep === 6 ? (
+                                              <span className="btn-status done">
+                                                Подписано
+                                              </span>
+                                            ) : (
+                                              ""
+                                            )}
+                                          </div>
+                                        </div>
                                       </div>
-                                    </div>
-                                    <div className="col-md-6">
-                                      <div className="signatory-status">
-                                        <p className="desc">
-                                          {main.clientData.auth_person.position}
-                                        </p>
-                                        {request.signStepPar === 1 ? (
-                                          <button
-                                            className="btn-status-signatory btn-icon active"
-                                            onClick={() => {
-                                              main.setModalType(12);
-                                              main.setModal(true);
-                                            }}
-                                          >
-                                            <i className="azla edit-white-icon"></i>
-                                            Подписать
-                                          </button>
-                                        ) : request.signStepPar === 2 ? (
-                                          <span className="btn-status done">
-                                            Подписано
-                                          </span>
-                                        ) : request.signStepPar === 3 ? (
-                                          <span className="btn-status done">
-                                            Подписано
-                                          </span>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="collapse-signatory">
-                                  {request._getClient && (
-                                    <h4 className="collapse-text">
-                                      Подписант от {request._getClient.longname}
-                                    </h4>
-                                  )}
-
-                                  <div className="signatory-profile">
-                                    <div className="col-md-6">
-                                      <div className="profile">
-                                        <img
-                                          alt="ava"
-                                          className="ava"
-                                          src={
-                                            process.env.PUBLIC_URL +
-                                            "/images/def-ava.svg"
-                                          }
-                                        />
-                                        <span className="name">
-                                          Кусаинов А.Е.
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <div className="col-md-6">
-                                      <div className="signatory-status">
-                                        <p className="desc">Директор</p>
-                                        {/* <i className="azla close-red-icon delete-if-icon"></i> */}
-
-                                        {request.signStepPar === 1 ? (
-                                          <span className="btn-status not-active">
-                                            Не Подписано
-                                          </span>
-                                        ) : request.signStepPar === 2 ? (
-                                          <span
-                                            className="btn-status not-active"
-                                            onClick={() =>
-                                              request.setSignStepPar(3)
-                                            }
-                                          >
-                                            Не Подписано
-                                          </span>
-                                        ) : request.signStepPar === 3 ? (
-                                          <span className="btn-status done">
-                                            Подписано
-                                          </span>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  {/* По дефолту стоит выбор подписанта, после выбора исчезает и добавляется выше дивка, и включается кнопка "Отправить на подписание" */}
-                                  {false && (
-                                    <div className="method-add-group pad-l-0">
-                                      <span
-                                        className="add-btn"
-                                        onClick={() => {
-                                          main.setModal(true);
-                                          main.setModalType(6);
-                                        }}
-                                      >
-                                        <span className="circle">
-                                          <i className="azla plus-primary-icon size-18"></i>
-                                        </span>
-                                        Добавить подписанта
-                                      </span>
                                     </div>
                                   )}
-                                </div>
+                                {request._getConSigner &&
+                                  (request._getConSigner as User) && (
+                                    <div className="collapse-signatory">
+                                      <h4 className="collapse-text">
+                                        Подписант от{" "}
+                                        {request._getClients &&
+                                          request._getClients.find(
+                                            (t: Client) =>
+                                              t.id ===
+                                              request._getConSigner.client
+                                          )?.longname}
+                                      </h4>
+                                      <div className="signatory-profile">
+                                        <div className="col-md-6">
+                                          <div className="profile">
+                                            <img
+                                              alt="ava"
+                                              className="ava"
+                                              src={
+                                                process.env.PUBLIC_URL +
+                                                "/images/def-ava.svg"
+                                              }
+                                            />
+                                            <span className="name">
+                                              {request._getConSigner.full_name}
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                          <div className="signatory-status">
+                                            <p className="desc">
+                                              {request._getConSigner.position}
+                                            </p>
+                                            {/* <i className="azla close-red-icon delete-if-icon"></i> */}
+
+                                            {request.signTwoStep === 4 ? (
+                                              <button className="btn-status-signatory btn-icon not-active">
+                                                <i className="azla edit-white-icon"></i>
+                                                Подписать
+                                              </button>
+                                            ) : request.signTwoStep === 5 ? (
+                                              <button
+                                                className="btn-status-signatory btn-icon active"
+                                                onClick={() => {
+                                                  request.setSignTwoStep(6);
+                                                  request.setStep(3);
+                                                }}
+                                              >
+                                                <i className="azla edit-white-icon"></i>
+                                                Подписать
+                                              </button>
+                                            ) : request.signTwoStep === 6 ? (
+                                              <span className="btn-status done">
+                                                Подписано
+                                              </span>
+                                            ) : (
+                                              ""
+                                            )}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
                               </div>
 
-                              {request.signStepPar === 1 && (
+                              {request.signTwoStep === 3 && (
                                 <div className="collapse-footer">
                                   <button
                                     type="button"
-                                    className="button btn-primary"
-                                    onClick={() => request.nextRequestStatus()}
+                                    className={`button btn-primary`}
+                                    onClick={() => request.setSignTwoStep(4)}
                                   >
                                     Отправить на подписание
                                   </button>
@@ -1037,84 +953,288 @@ const RequestInner = observer((props: any) => {
                               )}
                             </div>
                           </div>
-                        )}
-                      </div>
-                    )}
-
-                    <div className="d-flex-align-c-spaceb mb-32">
-                      <h3 className="title-subhead">
-                        История изменения договора{" "}
-                        <span className="number">
-                          {request._getDocuments.length}
-                        </span>
-                      </h3>
-                      <button type="button" className="button btn-secondary">
-                        Загрузить договор
-                      </button>
-                    </div>
-                    <table className="table req-table">
-                      <thead>
-                        <tr>
-                          <th>Название</th>
-                          <th>Дата загрузки</th>
-                          <th>Комментарий</th>
-                          <th>Автор</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(request._getDocuments as Documents[]).map(
-                          (d: Documents) => (
-                            <tr
-                              onClick={() => {
-                                main.setModal(true);
-                                main.setModalType(2);
-                                request.setDoc(d);
-                              }}
-                            >
-                              <td>{d.doc_name}</td>
-                              <td>{d.comments}</td>
-                              <td>{d.comments}</td>
-                              <td>{main.clientData.client.full_name}</td>
-                            </tr>
-                          )
-                        )}
-                      </tbody>
-                    </table>
-
-                    <h3 className="title-subhead mb-16">
-                      Документы контрагента
-                    </h3>
-                    {request.getDocCategories().map(
-                      (c: Categories) =>
-                        c.documents.length > 0 && (
-                          <>
-                            <h5 className="title-subhead-h5 mb-16">{c.name}</h5>
-                            <div className="files-added">
-                              <ul className="files-list">
-                                {c.documents.map((d: Documents) => (
-                                  <li>
-                                    <i className="azla blank-alt-primary-icon"></i>
-                                    <span
-                                      onClick={() =>
-                                        request.downloadDocument(
-                                          d.id,
-                                          d.doc_name
-                                        )
-                                      }
-                                    >
-                                      {d.doc_name}
-                                    </span>
-                                  </li>
-                                ))}
-                              </ul>
+                        </>
+                      ) : (
+                        <div
+                          className={`card-collapse tab-num-1 ${
+                            request.step1 ? "collapsed" : ""
+                          }`}
+                        >
+                          {/* При сворачивании дается класс "collapsed" */}
+                          <div
+                            className={
+                              request.signStep === 3
+                                ? "card-collapse-header success"
+                                : "card-collapse-header"
+                            }
+                          >
+                            {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
+                            <div className="collapsing-header">
+                              <h3
+                                className={
+                                  request.signStep === 3
+                                    ? "title-subhead mb-0 done-success"
+                                    : "title-subhead mb-0"
+                                }
+                              >
+                                {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
+                                {request.signStep === 3
+                                  ? "Договор подписан"
+                                  : "На подписание: “Договор №314 - вер. 24 от 24 июня"}
+                              </h3>
+                              <span
+                                className="btn-collapse"
+                                onClick={() => request.setStep1(!request.step1)}
+                              >
+                                <i className="azla chevron-up-icon"></i>
+                              </span>
                             </div>
-                          </>
-                        )
-                    )}
+                            <div className="pad-rl-16 collapse-main">
+                              <div className="row">
+                                <div className="col-md-6">
+                                  <p className="desc">Типовой договор</p>
+                                  <button
+                                    type="button"
+                                    className="button btn-secondary btn-icon"
+                                    onClick={
+                                      () => {}
+                                      // request._getRequest &&
+                                      // request._getRequest.client_doc.length >
+                                      //   0 &&
+                                      // request._getRequest.client_doc[0] > 0 &&
+                                      // request.downloadDocument(
+                                      //   request._getRequest.client_doc[0]
+                                      // )
+                                    }
+                                  >
+                                    <i className="azla blank-alt-primary-icon"></i>
+                                    Скачать договор
+                                  </button>
+                                </div>
+                                {request._getManUser && (
+                                  <div className="col-md-6">
+                                    <p className="desc">Менеджер заявки</p>
+                                    <div className="profile mt-8">
+                                      <img
+                                        alt="ava"
+                                        className="ava"
+                                        src={
+                                          process.env.PUBLIC_URL +
+                                          "/images/def-ava.svg"
+                                        }
+                                      />
+                                      <span className="name">
+                                        {request._getManUser.full_name}
+                                      </span>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="collapse-content">
+                            <div className="collapse-body">
+                              {request._getManSigner &&
+                                (request._getManSigner as User) && (
+                                  <div className="collapse-signatory mb-24">
+                                    <h4 className="collapse-text">
+                                      Подписант от{" "}
+                                      {request._getClients &&
+                                        request._getClients.find(
+                                          (t: Client) =>
+                                            t.id ===
+                                            request._getManSigner.client
+                                        )?.longname}
+                                    </h4>
+
+                                    <div className="signatory-profile">
+                                      <div className="col-md-6">
+                                        <div className="profile">
+                                          <img
+                                            alt="ava"
+                                            className="ava"
+                                            src={
+                                              process.env.PUBLIC_URL +
+                                              "/images/def-ava.svg"
+                                            }
+                                          />
+                                          <span className="name">
+                                            {request._getManSigner.full_name}
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div className="col-md-6">
+                                        <div className="signatory-status">
+                                          <p className="desc">
+                                            {request._getManSigner.position}
+                                          </p>
+                                          {request.signStep === 1 ? (
+                                            <span
+                                              className="btn-status not-active"
+                                              onClick={() =>
+                                                request.setSignStep(2)
+                                              }
+                                            >
+                                              Не Подписано
+                                            </span>
+                                          ) : request.signStep === 2 ? (
+                                            <span className="btn-status done">
+                                              Подписано
+                                            </span>
+                                          ) : request.signStep === 3 ? (
+                                            <span className="btn-status done">
+                                              Подписано
+                                            </span>
+                                          ) : (
+                                            ""
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              {request._getConSigner ? (
+                                (request._getConSigner as User) && (
+                                  <div className="collapse-signatory">
+                                    <h4 className="collapse-text">
+                                      Подписант от{" "}
+                                      {request._getClients &&
+                                        request._getClients.find(
+                                          (t: Client) =>
+                                            t.id ===
+                                            request._getConSigner.client
+                                        )?.longname}
+                                    </h4>
+                                    <div className="signatory-profile">
+                                      <div className="col-md-6">
+                                        <div className="profile">
+                                          <img
+                                            alt="ava"
+                                            className="ava"
+                                            src={
+                                              process.env.PUBLIC_URL +
+                                              "/images/def-ava.svg"
+                                            }
+                                          />
+                                          <span className="name">
+                                            {request._getConSigner.full_name}
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div className="col-md-6">
+                                        <div className="signatory-status">
+                                          <p className="desc">
+                                            {request._getConSigner.position}
+                                          </p>
+                                          {/* <i className="azla close-red-icon delete-if-icon"></i> */}
+
+                                          {request.signStep === 1 ? (
+                                            <button className="btn-status-signatory btn-icon not-active">
+                                              <i className="azla edit-white-icon"></i>
+                                              Подписать
+                                            </button>
+                                          ) : request.signStep === 2 ? (
+                                            <button
+                                              className="btn-status-signatory btn-icon active"
+                                              onClick={() =>
+                                                request.setSignStep(3)
+                                              }
+                                            >
+                                              <i className="azla edit-white-icon"></i>
+                                              Подписать
+                                            </button>
+                                          ) : request.signStep === 3 ? (
+                                            <span className="btn-status done">
+                                              Подписано
+                                            </span>
+                                          ) : (
+                                            ""
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )
+                              ) : (
+                                <div className="method-add-group pad-l-0">
+                                  <span
+                                    className="add-btn"
+                                    onClick={() => {
+                                      main.setModal(true);
+                                      main.setModalType(6);
+                                    }}
+                                  >
+                                    <span className="circle">
+                                      <i className="azla plus-primary-icon size-18"></i>
+                                    </span>
+                                    Добавить подписанта
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+
+                            {request.signStep === 0 && (
+                              <div className="collapse-footer">
+                                <button
+                                  type="button"
+                                  className={`button btn-primary ${
+                                    request._getConSigner &&
+                                    request._getManSigner
+                                      ? ""
+                                      : "disabled"
+                                  }`}
+                                  onClick={
+                                    () => request.setSignStep(1)
+                                    // request._getDoc &&
+                                    // request.toReview(request._getDoc.id)
+                                  }
+                                >
+                                  Отправить на подписание
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      <h3 className="title-subhead mb-16">
+                        Документы контрагента
+                      </h3>
+                      {request.getDocCategories().map(
+                        (c: Categories) =>
+                          c.documents.length > 0 && (
+                            <>
+                              <h5 className="title-subhead-h5 mb-16">
+                                {c.name}
+                              </h5>
+                              <div className="files-added">
+                                <ul className="files-list">
+                                  {c.documents.map((d: Documents) => (
+                                    <li>
+                                      <i className="azla blank-alt-primary-icon"></i>
+                                      <span
+                                        onClick={() =>
+                                          request.downloadDocument(
+                                            d.id,
+                                            d.doc_name
+                                          )
+                                        }
+                                      >
+                                        {d.doc_name}
+                                      </span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </>
+                          )
+                      )}
+                    </div>
                   </div>
                 ) : request.step === 3 ? (
                   <>
-                    {request._getClientUser.map(
+                    {request._getClientUsers.map(
                       (u: ClientUsers, index: number) => (
                         <div className="card mb-24 pad-24">
                           <div className="card-header">
@@ -1408,11 +1528,10 @@ const RequestInner = observer((props: any) => {
                 ) : (
                   <></>
                 )}
-                {/* step 0-4 */}
-
                 <div className="req-inner-footer">
                   <div className="container">
-                    {request.manUser && request.step === 1 ? (
+                    {request._getManUser &&
+                    request._getRequest.request_stepper === 1 ? (
                       <div className="manager-req mrl-32">
                         <div className="left">
                           <p>Менеджер заявки</p>
@@ -1425,7 +1544,7 @@ const RequestInner = observer((props: any) => {
                               }
                             />
                             <span className="name">
-                              {request.manUser.full_name}
+                              {request._getManUser.full_name}
                             </span>
                           </div>
                         </div>
@@ -1436,11 +1555,9 @@ const RequestInner = observer((props: any) => {
                             <button
                               className="button btn-secondary"
                               onClick={() => {
-                                main.setDecline(false);
-                                main.setDeclineReason("");
-                                request.setTabIndexReq(3);
-
-                                history.push("/request");
+                                main.decline = false;
+                                main.declineReason = "";
+                                history.push("/");
                               }}
                             >
                               В архив
@@ -1469,11 +1586,11 @@ const RequestInner = observer((props: any) => {
                           </div>
                         )}
                       </div>
-                    ) : request.step === 1 ? (
+                    ) : request._getRequest.request_stepper === 1 &&
+                      request.step === 1 ? (
                       <button
                         type="button"
                         onClick={() => {
-                          request.setManUser(null);
                           main.setModalType(0);
                           main.setModal(true);
                         }}

@@ -33,12 +33,7 @@ const LoginEcp = (props: LoginProps) => {
     if (ok) {
       setState({
         ...state,
-        method: client.GetKeys(
-          state.alias,
-          state.path,
-          state.password,
-          state.keyType
-        ),
+        method: client.GetKeys(state.alias, state.path, state.password, "AUTH"),
       });
     }
   };

@@ -515,8 +515,7 @@ const Registration = observer((props: any) => {
                         }
                         onClick={() =>
                           main
-                            .regAuthPerson(main.clientData.client.id, {
-                              full_name: main.clientData.auth_person.name,
+                            .regAuthPerson(main.clientData.auth_person.id, {
                               is_ecp: main.clientData.auth_person.is_ecp,
                               client: main.clientData.auth_person.client,
                               position:
@@ -524,8 +523,9 @@ const Registration = observer((props: any) => {
                               sign_auth: main.clientData.auth_person.sign_auth,
                               person_status:
                                 main.clientData.auth_person.person_status,
+                              full_name: main.clientData.auth_person.full_name,
                             })
-                            .then(() => setStep(2))
+                            .then(() => main.finishReg())
                         }
                       >
                         Завершить регистрацию
@@ -665,7 +665,7 @@ const Registration = observer((props: any) => {
                                 main.clientData.auth_person.person_status,
                               iin: iin,
                             })
-                            .then(() => setStep(2))
+                            .then(() => main.finishReg())
                         }
                       >
                         Завершить регистрацию

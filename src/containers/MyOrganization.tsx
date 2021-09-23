@@ -22,6 +22,7 @@ const MyOrganization = observer((props: any) => {
   React.useEffect(() => {
     request.getClient(main.clientData.client.id);
     request.getClientUser(main.clientData.client.id);
+    request.getClientUsersForAdd(main.clientData.client.id);
     request.getClientService();
     request.getDocumentsCategories();
     request.getDocuments(main.clientData.client.id);
@@ -390,13 +391,13 @@ const MyOrganization = observer((props: any) => {
                       <h3 className="title-subhead mb-8">
                         Пользователи{" "}
                         <span className="number">
-                          {request._getClientUser.length}
+                          {request._getClientUsersForAdd.length}
                         </span>
                       </h3>
                       <p className="mb-24">
                         Пользователи организации с наличием ЭЦП организации
                       </p>
-                      {(request._getClientUser as ClientUsers[]).map(
+                      {(request._getClientUsersForAdd as ClientUsers[]).map(
                         (u: ClientUsers, index) => (
                           <div className="card mb-24 pad-24">
                             <div className="card-header">
@@ -492,6 +493,7 @@ const MyOrganization = observer((props: any) => {
                       )}
                     </div>
                   </TabPanel>
+
                   <TabPanel>
                     <div className="tab-content tab-4">
                       <h3 className="title-subhead mb-16">
@@ -537,7 +539,7 @@ const MyOrganization = observer((props: any) => {
                       БДКИ и ЕСБД
                     </p>
 
-                    {(request._getClientUser as ClientUser[]).map(
+                    {(request._getClientUsersForAdd as ClientUser[]).map(
                       (c: ClientUser) => (
                         <div className="card mb-24 pad-24">
                           <div className="card-header">

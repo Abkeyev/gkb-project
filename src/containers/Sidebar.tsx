@@ -6,9 +6,9 @@ const Sidebar = observer((props: any) => {
   const { main, request } = props;
   const [close, setClose] = React.useState(false);
   const history = useHistory();
-  React.useEffect(() => {}, []);
   return (
     <nav className={`left-sidebar ${close ? "close" : ""}`}>
+      {console.log(history)}
       {/* className для скрытия боковой модалки "close"*/}
       <div className="container-sidebar">
         <div className="row-sidebar">
@@ -50,10 +50,7 @@ const Sidebar = observer((props: any) => {
                     <Link
                       to="/"
                       className={`link-list ${
-                        history.location.pathname === "/" ||
-                        history.location.pathname.includes("request")
-                          ? "active"
-                          : ""
+                        history.location.pathname === "/" ? "active" : ""
                       }`}
                     >
                       <i className="azla blank-alt-icon"></i>
@@ -125,10 +122,7 @@ const Sidebar = observer((props: any) => {
                     <Link
                       to="/"
                       className={`link-list ${
-                        history.location.pathname === "/" ||
-                        history.location.pathname.includes("partner")
-                          ? "active"
-                          : ""
+                        history.location.pathname === "/" ? "active" : ""
                       }`}
                     >
                       <i className="azla blank-alt-icon"></i>

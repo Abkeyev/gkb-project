@@ -17,6 +17,7 @@ import {
 } from "./containers";
 import { LoginPage } from "./components";
 import PrivateRoute from "./PrivateRoute";
+import history from "./history";
 import { observer } from "mobx-react";
 import NCALayer, { MethodName } from "./ncalayer/ncalayer";
 import { extractKeyAlias, isNullOrEmpty } from "./ncalayer/helper";
@@ -57,12 +58,6 @@ const App = observer((props: any) => {
   }, [setReady]);
 
   React.useEffect(() => {
-    if (main.logged) {
-      setState({ ...state, keyType: "SIGN" });
-    }
-  }, main.logged);
-
-  React.useEffect(() => {
     const browseKeyStoreCallback = (resp: Response) => {
       if (resp.IsOK()) {
         setState({ ...state, path: resp.GetResult() });
@@ -73,6 +68,17 @@ const App = observer((props: any) => {
       if (resp.IsOK()) {
         setState({ ...state, cmsFilePath: resp.GetResult() });
       }
+    };
+
+    const createCMSSignatureCallback = (resp: Response) => {
+      if (resp.IsOK()) {
+        setState({ ...state, cmsSignatureSigned: resp.GetResult() });
+        return;
+      }
+
+      resp.HandleError(
+        ValidationType.Password && ValidationType.PasswordAttemps
+      );
     };
 
     const getKeysCallback = (resp: Response) => {
@@ -144,6 +150,10 @@ const App = observer((props: any) => {
           case MethodName.GetSubjectDN:
             getSubjectDNCallback(resp);
             break;
+          case MethodName.CreateCMSSignature:
+            createCMSSignatureCallback(resp);
+            break;
+            break;
           default:
             break;
         }
@@ -159,8 +169,8 @@ const App = observer((props: any) => {
             main={main}
             setState={setState}
             state={state}
-            request={request}
             client={client}
+            request={request}
           />
         )}
         {main.logged && !main.isReg && (
@@ -188,10 +198,10 @@ const App = observer((props: any) => {
             main={main}
             path="/"
             component={() =>
-              true ? (
+              main.getRole === "Agent" && main.isReg ? (
                 <Registration main={main} request={request} />
               ) : main.getRole === "Agent" ? (
-                <Partners request={request} />
+                <Partners request={request} main={main} />
               ) : (
                 <Request request={request} />
               )
@@ -210,7 +220,14 @@ const App = observer((props: any) => {
             main={main}
             path="/request/:id"
             component={(props: any) => (
-              <RequestInner {...props} main={main} request={request} />
+              <RequestInner
+                setState={setState}
+                state={state}
+                client={client}
+                {...props}
+                main={main}
+                request={request}
+              />
             )}
             exact
           />

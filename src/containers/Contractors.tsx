@@ -130,7 +130,7 @@ const Contractors = observer((props: any) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {request._getClients.map((c: Client) => (
+                    {request._getClient.map((c: Client) => (
                       <tr onClick={() => history.push(`/contractors/${c.id}`)}>
                         <td>{c.bin}</td>
                         <td>{c.longname}</td>

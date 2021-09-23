@@ -1,21 +1,31 @@
 export interface Request {
-  id: string;
+  id: number;
   service_category: number;
   name_uid: number;
   reg_date: Date;
   fulfill_date: Date;
   client_data: Client;
   service_type: number;
-  client_doc: number;
+  client: number;
+  client_doc: number[];
   request_status: number;
   responsible_user: number;
   request_stepper: number;
   client_user: number[];
+  client_comment: string;
   is_model_contract: boolean;
+  counterparty_signer_user: number;
+  manager_signer_user: number;
+}
+
+export interface Agree {
+  user_name: number[];
+  process_type: "Sequential" | "Parallel";
+  process_number: number;
 }
 
 export interface ClientUsers {
-  id: string;
+  id: number;
   first_head_full_name: string;
   deputy_head_full_name: string;
   manager_full_name: string;
@@ -32,7 +42,7 @@ export interface ClientUsers {
 }
 
 export interface Client {
-  id: string;
+  id: number;
   longname: string;
   name: string;
   website: string;
@@ -133,7 +143,7 @@ export interface User {
 }
 
 export interface Documents {
-  id: string;
+  id: number;
   doc_name: string;
   doc_link: string;
   doc_status: string;
@@ -148,7 +158,7 @@ export interface Documents {
 }
 
 export interface Categories {
-  id: string;
+  id: number;
   name: string;
   doc_type: string;
   documents: Documents[];

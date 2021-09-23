@@ -13,6 +13,7 @@ import {
   BankDetail,
   ClientService,
   ServiceCommon,
+  Agree,
 } from "../api/Models/ServiceModels";
 import api from "../api/Api";
 
@@ -31,14 +32,13 @@ class RequestStore {
   step1status: boolean = false;
   step2status: boolean = false;
   signStep: number = 0;
-  signStepPar: number = 1;
   agreeTwoStep: number = 0;
-  agreeParStep: number = 1;
+  agreeParStep: number = 0;
   signTwoStep: number = 0;
-  signTwoStepPar: number = 1;
   signTwoUsers: number[] = [];
   agreeUsers: number[] = [];
-  agreeGroup: number[] = [0];
+  agreeGroup: Agree[] = [];
+  requestId: number | null = null;
 
   private requests: Request[];
   private documents: Documents[];
@@ -46,8 +46,11 @@ class RequestStore {
   private request: Request | null;
   private clientTypes: ClientTypes[];
   private clients: Client[];
+  private clientUsers: Client[];
+  private clientUsersForAdd: ClientUsers[] | [];
   private client: Client | null;
-  private authPersons: AuthPerson[];
+  private someClient: Client | null;
+  private authPersons: AuthPerson[] | [];
   private authPerson: AuthPerson | null;
   private contacts: Contact[];
   private address: Address[];
@@ -55,19 +58,34 @@ class RequestStore {
   private bankDetails: BankDetail[];
   private signingAuthority: ServiceCommon[] | [];
   private personStatus: ServiceCommon[] | [];
-  private manUser: ClientUsers | null;
+  private manUser: User | null;
+  private conSigner: User | null;
+  private manSigner: User | null;
   private clientUser: ClientUsers[] | [];
   private clientService: ClientService[] | [];
+  private clientServiceById: ClientService | null;
   private user: User | null;
+  private users: User[] | [];
+  private allUsers: User[] | [];
   private clientServiceType: ServiceCommon[] | [];
   private position: ServiceCommon[] | [];
   private signingAuth: ServiceCommon[] | [];
   private types: ServiceCommon[] | [];
   private categories: Categories[] | [];
   private requestStatus: ServiceCommon[] | [];
+  private signers: any[] | [];
 
   get _getRequests() {
     return this.requests;
+  }
+  get _getClientUsersForAdd() {
+    return this.clientUsersForAdd;
+  }
+  get _getAllUsers() {
+    return this.allUsers;
+  }
+  get _getSigners() {
+    return this.signers;
   }
   get _getSigningAuthority() {
     return this.signingAuthority;
@@ -93,6 +111,9 @@ class RequestStore {
   get _getClients() {
     return this.clients;
   }
+  get _getSomeClient() {
+    return this.someClient;
+  }
   get _getClient() {
     return this.client;
   }
@@ -117,11 +138,17 @@ class RequestStore {
   get _getClientService() {
     return this.clientService;
   }
+  get _getClientServiceById() {
+    return this.clientServiceById;
+  }
   get _getClientServiceType() {
     return this.clientServiceType;
   }
   get _getUser() {
     return this.user;
+  }
+  get _getUsers() {
+    return this.users;
   }
   get _getPosition() {
     return this.position;
@@ -138,9 +165,18 @@ class RequestStore {
   get _getAuthPerson() {
     return this.manUser;
   }
+  get _getConSigner() {
+    return this.conSigner;
+  }
+  get _getManSigner() {
+    return this.manSigner;
+  }
+  get _getClientUsers() {
+    return this.clientUsers;
+  }
 
-  setManUser(manUser: ClientUsers | null) {
-    this.manUser = manUser;
+  setManUser(manUser: User | null) {
+    if (manUser) this.manUser = manUser;
   }
 
   setStep(step: number) {
@@ -149,6 +185,10 @@ class RequestStore {
 
   setSignStep(step: number) {
     this.signStep = step;
+  }
+
+  setSignTwoStep(signTwoStep: number) {
+    this.signTwoStep = signTwoStep;
   }
 
   setNotTypical(notTypical: boolean) {
@@ -163,16 +203,36 @@ class RequestStore {
     this.agreementPar = agreementPar;
   }
 
-  setAgreeUsers() {
-    this.agreeUsers = [...this.agreeUsers, 1];
-  }
-
   async getRequests() {
     await api.service.getRequests().then((r: Request[]) => (this.requests = r));
   }
 
-  async getRequest(id: string) {
-    await api.service.getRequest(id).then((r: Request) => (this.request = r));
+  async getMineRequest(id: number) {
+    await api.service
+      .getMineRequest(id)
+      .then((r: Request[]) => (this.requests = r));
+  }
+
+  async getRequest(id: number) {
+    this.manUser = null;
+    await api.service.getRequest(id).then((r: Request) => {
+      r.client && this.getClient(r.client);
+      r.responsible_user && this.getManUser(r.responsible_user);
+      r.counterparty_signer_user &&
+        this.getConSigner(r.counterparty_signer_user);
+      r.manager_signer_user && this.getManSigner(r.manager_signer_user);
+      r.client && this.getSigners(r.client);
+      r.client && this.getClientAllUsers(r.client);
+      r.client_user && this.getClientUsers(r.client_user);
+      r.client_doc.length > 0 && this.getClientDocs(r.client_doc);
+      this.request = r;
+    });
+  }
+
+  async getClientUsersForAdd(id: number) {
+    await api.service
+      .getClientUsersForAdd(id)
+      .then((res) => (this.clientUsersForAdd = res));
   }
 
   async getRequestStatus() {
@@ -186,17 +246,26 @@ class RequestStore {
   }
 
   async updateUser(id: number, fields: any) {
-    await api.service.updateProfile(id, fields)
-      .then((response: any) => {
-        console.log(response);
-      });
+    await api.service.updateProfile(id, fields).then((response: any) => {
+      console.log(response);
+    });
   }
 
-  async getUser(id: string) {
+  async getUser(id: number) {
     await api.service.getUser(id).then((r: User) => (this.user = r));
   }
 
-  async getDocuments(id: string) {
+  async getUsers() {
+    await api.service.getUsers().then((r: User[]) => (this.allUsers = r));
+  }
+
+  async getSigners(id: number) {
+    await api.service
+      .getSigners(id)
+      .then((signers: any[]) => (this.signers = signers));
+  }
+
+  async getDocuments(id: number) {
     await api.service
       .getDocuments(id)
       .then((r: Documents[]) => (this.documents = r));
@@ -218,29 +287,45 @@ class RequestStore {
     await api.service.getClients().then((r: Client[]) => (this.clients = r));
   }
 
-  async getClient(id: string) {
+  async getClient(id: number) {
     await api.service.getClient(id).then((r: Client) => (this.client = r));
   }
 
-  async getAuthPersons(id: string) {
+  async getManUser(id: number) {
+    await api.service.getUser(id).then((r: User) => (this.manUser = r));
+  }
+
+  async getConSigner(id: number) {
+    await api.service.getUser(id).then((u: User) => (this.conSigner = u));
+  }
+
+  async getManSigner(id: number) {
+    await api.service.getUser(id).then((u: User) => (this.manSigner = u));
+  }
+
+  async getSomeClient(id: number) {
+    await api.service.getClient(id).then((r: Client) => r);
+  }
+
+  async getAuthPersons(id: number) {
     await api.service
       .getAuthPersons(id)
       .then((r: AuthPerson[]) => (this.authPersons = r));
   }
 
-  async getAuthPerson(id: string) {
+  async getAuthPerson(id: number) {
     await api.service
       .getAuthPerson(id)
       .then((r: AuthPerson) => (this.authPerson = r));
   }
 
-  async getClientContact(id: string) {
+  async getClientContact(id: number) {
     await api.service
       .getClientContact(id)
       .then((r: Contact[]) => (this.contacts = r));
   }
 
-  async getClientAddress(id: string) {
+  async getClientAddress(id: number) {
     await api.service
       .getClientAddress(id)
       .then((r: Address[]) => (this.address = r));
@@ -252,7 +337,7 @@ class RequestStore {
       .then((r: AddressTypes[]) => (this.addressTypes = r));
   }
 
-  async getClientBankDetails(id: string) {
+  async getClientBankDetails(id: number) {
     await api.service
       .getClientBankDetails(id)
       .then((r: BankDetail[]) => (this.bankDetails = r));
@@ -276,8 +361,8 @@ class RequestStore {
     });
   }
 
-  async addDocument(id: string, data: any) {
-    await api.service.addDocument(id, data);
+  async addDocument(id: number, data: any) {
+    await api.service.addDocument(id, data.target.files[0]);
   }
 
   async getPersonStatus() {
@@ -286,7 +371,40 @@ class RequestStore {
     });
   }
 
-  async getClientUser(id: string) {
+  async getClientAllUsers(id: number) {
+    await api.service.getClientUsers(id).then((res) => {
+      this.users = res;
+    });
+  }
+
+  async getClientDocs(ids: number[]) {
+    let docs: Documents[] = [];
+    let promises: any[] = [];
+    await ids.map((id: number) =>
+      promises.push(
+        api.service.getDocument(id).then((res) => {
+          docs.push(res);
+        })
+      )
+    );
+    Promise.all(promises).then(() => (this.documents = docs));
+  }
+
+  async getClientUsers(ids: number[]) {
+    let users: Client[] = [];
+    let promises: any[] = [];
+    (await (ids.length > 0)) &&
+      ids.map((id: number) =>
+        promises.push(
+          api.service.getClientUser(id).then((res: Client) => {
+            users.push(res);
+          })
+        )
+      );
+    Promise.all(promises).then(() => (this.clientUsers = users));
+  }
+
+  async getClientUser(id: number) {
     await api.service.getClientUser(id).then((res) => {
       this.clientUser = res;
     });
@@ -295,6 +413,13 @@ class RequestStore {
   async getClientService() {
     await api.service.getClientService().then((res) => {
       this.clientService = res;
+    });
+  }
+
+  async getClientServiceById(id: number) {
+    await api.service.getClientServiceById(id).then((res) => {
+      this.clientServiceById = res;
+      res.client && this.getClientUsersForAdd(res.client);
     });
   }
 
@@ -331,9 +456,23 @@ class RequestStore {
       });
     });
   }
-  async nextRequestStatus() {
-    await api.service.nextRequestStatus().then((res) => {
-      console.log(res);
+  async nextRequestStatus(id: number) {
+    this._getRequest &&
+      (await api.service
+        .nextRequestStatus(this._getRequest.id, id)
+        .then((res) => {
+          console.log(res);
+        }));
+  }
+  async updateRequest(data: any) {
+    this._getRequest &&
+      (await api.service.updateRequest(this._getRequest, data).then((res) => {
+        this.request = res;
+      }));
+  }
+  async toReview(id: number) {
+    await api.service.toReview(id).then((res) => {
+      this.request = res;
     });
   }
 
@@ -366,7 +505,7 @@ class RequestStore {
     }));
   }
 
-  async downloadDocument(id: string, fileName: string) {
+  async downloadDocument(id: number, fileName: string) {
     await api.service.downloadDocument(id).then((r) => {
       const url = window.URL.createObjectURL(new Blob([r.data]));
       const link = document.createElement("a");
@@ -385,7 +524,9 @@ class RequestStore {
     this.clientTypes = [];
     this.clients = [];
     this.client = null;
+    this.someClient = null;
     this.authPersons = [];
+    this.clientUsersForAdd = [];
     this.authPerson = null;
     this.contacts = [];
     this.address = [];
@@ -395,17 +536,25 @@ class RequestStore {
     this.personStatus = [];
     this.clientUser = [];
     this.clientService = [];
+    this.clientServiceById = null;
     this.clientServiceType = [];
     this.user = null;
+    this.users = [];
+    this.allUsers = [];
     this.position = [];
     this.signingAuth = [];
     this.types = [];
     this.requestStatus = [];
     this.manUser = null;
     this.doc = null;
+    this.signers = [];
+    this.conSigner = null;
+    this.manSigner = null;
+    this.clientUsers = [];
 
     makeAutoObservable(this, {
       getRequests: action.bound,
+      getMineRequest: action.bound,
       getRequest: action.bound,
       getDocuments: action.bound,
       getDocumentsCategories: action.bound,
@@ -415,6 +564,7 @@ class RequestStore {
       getAddressTypes: action.bound,
       getClientTypes: action.bound,
       getClient: action.bound,
+      getSomeClient: action.bound,
       getAuthPersons: action.bound,
       getAuthPerson: action.bound,
       getClientAddress: action.bound,
@@ -425,6 +575,7 @@ class RequestStore {
       getPersonStatus: action.bound,
       getClientUser: action.bound,
       getClientService: action.bound,
+      getClientServiceById: action.bound,
       getClientServiceType: action.bound,
       getPosition: action.bound,
       getSigningAuth: action.bound,
@@ -441,6 +592,24 @@ class RequestStore {
       nextRequestStatus: action.bound,
       setDoc: action.bound,
       updateUser: action.bound,
+      getClientUsers: action.bound,
+      getClientDocs: action.bound,
+      getSigners: action.bound,
+      getUsers: action.bound,
+      getClientAllUsers: action.bound,
+      getClientUsersForAdd: action.bound,
+      getConSigner: action.bound,
+      getManSigner: action.bound,
+      getClients: action.bound,
+      getManUser: action.bound,
+      getUser: action.bound,
+      updateRequest: action.bound,
+      _getAllUsers: computed,
+      _getClientServiceById: computed,
+      _getClientUsersForAdd: computed,
+      _getDoc: computed,
+      _getUser: computed,
+      _getSigners: computed,
       _getRequests: computed,
       _getDocuments: computed,
       _getCategories: computed,
@@ -449,6 +618,7 @@ class RequestStore {
       _getClientTypes: computed,
       _getClients: computed,
       _getClient: computed,
+      _getSomeClient: computed,
       _getAuthPersons: computed,
       _getAuthPerson: computed,
       _getContacts: computed,
@@ -462,6 +632,11 @@ class RequestStore {
       _getPosition: computed,
       _getSigningAuth: computed,
       _getRequestStatus: computed,
+      _getManUser: computed,
+      _getConSigner: computed,
+      _getManSigner: computed,
+      _getClientUsers: computed,
+      _getUsers: computed,
     });
   }
 }

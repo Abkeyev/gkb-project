@@ -8,7 +8,7 @@ import { observer } from "mobx-react";
 import moment from "moment";
 
 const Partners = observer((props: any) => {
-  const { request } = props;
+  const { request, main } = props;
   const [advance, setAdvance] = React.useState(false);
   const [sort, setSort] = React.useState(false);
   const [service, setService] = React.useState(false);
@@ -401,12 +401,14 @@ const Partners = observer((props: any) => {
 
               <div className="req-inner-footer">
                 <div className="container">
-                  <button
-                    type="button"
-                    className="button btn-primary btn-icon ml-32"
-                  >
-                    <i className="azla add-plusRound-icon"></i> Новая заявка
-                  </button>
+                  <Link to="/request-new">
+                    <button
+                      type="button"
+                      className="button btn-primary btn-icon ml-32"
+                    >
+                      <i className="azla add-plusRound-icon"></i> Новая заявка
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>

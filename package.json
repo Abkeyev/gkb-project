@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@seithq/ncalayer": "^1.1.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -19,6 +20,7 @@
     "mobx": "^6.3.2",
     "mobx-react": "^7.2.0",
     "moment": "^2.29.1",
+    "ncalayer-js-client": "^1.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-file-reader-input": "^2.0.0",

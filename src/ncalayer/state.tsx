@@ -17,6 +17,7 @@ interface AppState {
   subjectDN: string;
   // cms signature form file
   cmsFilePath: string;
+  cmsSignatureSigned: string;
   cmsFileSignatureFlag: boolean;
   cmsFileSignatureSigned: string;
   cmsFileSignatureValid: CheckState;
@@ -30,12 +31,13 @@ export const initAppState = (): AppState => {
     alias: "PKCS12",
     path: "",
     password: "",
-    keyType: "AUTH",
+    keyType: "",
     keyAlias: "",
     keys: [""],
     subjectDN: "",
     // cms signature form file
     cmsFilePath: "",
+    cmsSignatureSigned: "",
     cmsFileSignatureFlag: false,
     cmsFileSignatureSigned: "",
     cmsFileSignatureValid: CheckState.NotValidated,

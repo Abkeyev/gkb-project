@@ -7,6 +7,7 @@ import { observer } from "mobx-react";
 import {
   ServiceCommon,
   Request as RequestModel,
+  Client,
 } from "../api/Models/ServiceModels";
 
 const Request = observer((props: any) => {
@@ -14,13 +15,16 @@ const Request = observer((props: any) => {
   const [advance, setAdvance] = React.useState(false);
   const [sort, setSort] = React.useState(false);
   const [service, setService] = React.useState(false);
-  const [services, setServices] = React.useState<string[]>([]);
+  const [services, setServices] = React.useState<number[]>([]);
+  const [searchService, setSearchService] = React.useState<string>("");
   const [sortTitle, setSortTitle] = React.useState("");
   const history = useHistory();
 
   React.useEffect(() => {
     request.getRequests();
+    request.getClients();
     request.getClientServiceType();
+    request.getClientTypes();
   }, []);
 
   return (
@@ -73,7 +77,6 @@ const Request = observer((props: any) => {
                       }`}
                       onClick={() => {
                         sort && setSort(false);
-                        service && setService(false);
                       }}
                     >
                       {/* Класс "view" добавляется при нажатии "Расширенный поиск" */}
@@ -87,23 +90,6 @@ const Request = observer((props: any) => {
                         </div>
 
                         <div className="form-multiselect mb-0 mr-16">
-                          <ul className="selected-options">
-                            {services.map((s) => (
-                              <li>
-                                <button
-                                  className="remove-option"
-                                  onClick={() =>
-                                    setServices([
-                                      ...services.filter((ss) => ss !== s),
-                                    ])
-                                  }
-                                  type="button"
-                                >
-                                  {s}
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
                           <div
                             className={`multi js-multi-buttons ${
                               service ? "open" : ""
@@ -116,7 +102,7 @@ const Request = observer((props: any) => {
                                 placeholder="Выберите тип сервиса"
                                 onClick={(e) => {
                                   e.preventDefault();
-                                  setService(true);
+                                  setService(!service);
                                 }}
                               />
                               <label className="label">Тип сервиса</label>
@@ -127,72 +113,49 @@ const Request = observer((props: any) => {
                                   type="search"
                                   className="azla form-icon search-icon"
                                   placeholder="Поиск"
+                                  value={searchService}
+                                  onChange={(e) =>
+                                    setSearchService(e.target.value)
+                                  }
                                 />
                               </div>
-
-                              <div className="multi-option option-current">
-                                <div className="multi-list">
-                                  <div className="form-check gkb-checkbox">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      checked={services.includes("Сервис 1")}
-                                      onClick={() =>
-                                        !services.includes("Сервис 1")
-                                          ? setServices([
-                                              ...services,
-                                              "Сервис 1",
-                                            ])
-                                          : services.filter(
-                                              (s) => s !== "Сервис 1"
-                                            )
-                                      }
-                                      id="invalidCheck"
-                                      required
-                                    />
-                                    <label
-                                      className="form-check-label"
-                                      htmlFor="invalidCheck"
-                                    >
-                                      Сервис 1
-                                    </label>
-                                    <div className="invalid-feedback">
-                                      Ошибка
+                              {request._getClientServiceType
+                                .filter((f: ServiceCommon) =>
+                                  f.name.includes(searchService)
+                                )
+                                .map((t: ServiceCommon, index: number) => (
+                                  <div className="multi-option option-current">
+                                    <div className="multi-list">
+                                      <div className="form-check gkb-checkbox">
+                                        <input
+                                          className="form-check-input"
+                                          type="checkbox"
+                                          checked={services.includes(t.id)}
+                                          onClick={() => {
+                                            !services.includes(t.id)
+                                              ? setServices([...services, t.id])
+                                              : setServices([
+                                                  ...services.filter(
+                                                    (s) => s !== t.id
+                                                  ),
+                                                ]);
+                                          }}
+                                          id={`serviceCheck${t.id}`}
+                                          required
+                                        />
+                                        <label
+                                          className="form-check-label"
+                                          htmlFor={`serviceCheck${t.id}`}
+                                        >
+                                          {t.name}
+                                        </label>
+                                        <div className="invalid-feedback">
+                                          Ошибка
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-
-                                <div className="multi-list">
-                                  <div className="form-check gkb-checkbox">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      checked={services.includes("Сервис 2")}
-                                      onClick={() =>
-                                        !services.includes("Сервис 2")
-                                          ? setServices([
-                                              ...services,
-                                              "Сервис 2",
-                                            ])
-                                          : services.filter(
-                                              (s) => s !== "Сервис 2"
-                                            )
-                                      }
-                                      id="invalidCheck1"
-                                      required
-                                    />
-                                    <label
-                                      className="form-check-label"
-                                      htmlFor="invalidCheck1"
-                                    >
-                                      Сервис 1
-                                    </label>
-                                    <div className="invalid-feedback">
-                                      Ошибка
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                                ))}
                             </div>
                           </div>
                         </div>
@@ -285,12 +248,26 @@ const Request = observer((props: any) => {
                       <tbody>
                         {request._getRequests.map((r: RequestModel) => (
                           <tr onClick={() => history.push(`/request/${r.id}`)}>
-                            <td>{r.id}</td>
-                            <td>{r.name_uid}</td>
+                            <td>
+                              {request._getClients &&
+                                request._getClients.find(
+                                  (t: Client) => t.id === r.client
+                                )?.bin}
+                            </td>
+                            <td>
+                              {request._getClients &&
+                                request._getClients.find(
+                                  (t: Client) => t.id === r.client
+                                )?.longname}
+                            </td>
                             <td>
                               {
-                                request._getClientServiceType.find(
-                                  (t: ServiceCommon) => t.id === r.service_type
+                                request._getClientTypes.find(
+                                  (t: any) =>
+                                    t.id ===
+                                    request._getClients.find(
+                                      (t: Client) => t.id === r.client
+                                    )?.client_type
                                 )?.name
                               }
                             </td>

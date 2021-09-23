@@ -3,6 +3,7 @@ export enum MethodName {
   BrowseKeyStore = "browseKeyStore",
   ShowFileChooser = "showFileChooser",
   GetKeys = "getKeys",
+  CreateCMSSignature = "createCMSSignature",
   GetSubjectDN = "getSubjectDN",
 }
 
@@ -50,6 +51,21 @@ export default class NCALayer {
     const data: Payload = {
       method: MethodName.GetKeys,
       args: [storageName, storagePath, password, type],
+    };
+    return this.send(data);
+  }
+
+  public CreateCMSSignature(
+    storageName: string,
+    storagePath: string,
+    keyAlias: string,
+    password: string,
+    filePath: string,
+    attached: boolean
+  ): MethodName {
+    const data: Payload = {
+      method: MethodName.CreateCMSSignature,
+      args: [storageName, storagePath, keyAlias, password, filePath, attached],
     };
     return this.send(data);
   }

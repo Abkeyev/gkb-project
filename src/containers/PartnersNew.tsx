@@ -6,7 +6,6 @@ import {
 } from "../api/Models/ServiceModels";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
-import FileReaderInput from "react-file-reader-input";
 
 const PartnersNew = observer((props: any) => {
   const { main, request } = props;
@@ -18,7 +17,7 @@ const PartnersNew = observer((props: any) => {
   React.useEffect(() => {
     request.getRequests();
     request.getAuthPersons(main.clientData.client.id);
-    request.getClientUser(main.clientData.client.id);
+    request.getClientUsersForAdd(main.clientData.client.id);
     request.getClientServiceType();
     request.getPersonStatus();
     request.getDocumentsType();
@@ -102,6 +101,76 @@ const PartnersNew = observer((props: any) => {
                   </p>
                   <div className="reg-file-add mb-32">
                     <ul>
+                      <li>
+                        <div className="name">
+                          <span className="text">
+                            Справка о регистрации/перерегистрации юридического
+                            лица
+                          </span>
+                        </div>
+                        <button className="btn-icon add">
+                          <i className="azla size-18 pin-primary-icon mr-8"></i>
+                          Прикрепить файл
+                        </button>
+                      </li>
+                      <li>
+                        <div className="name">
+                          <span className="text">
+                            Решение учредителя с данными о приеме на работу
+                            первого руководителя
+                          </span>
+                        </div>
+                        <button className="btn-icon add">
+                          <i className="azla size-18 pin-primary-icon mr-8"></i>
+                          Прикрепить файл
+                        </button>
+                      </li>
+                      <li>
+                        <div className="name">
+                          <span className="text">
+                            Приказ о приеме на работу первого руководителя
+                          </span>
+                        </div>
+                        <button className="btn-icon add">
+                          <i className="azla size-18 pin-primary-icon mr-8"></i>
+                          Прикрепить файл
+                        </button>
+                      </li>
+                      <li>
+                        <div className="name">
+                          <span className="text">
+                            Документ, удостоверяющий личность первого
+                            руководителя
+                          </span>
+                          {/* <span className="file-name">
+                            spravka_o_registracii.pdf
+                          </span> */}
+                        </div>
+                        <button className="btn-icon add">
+                          <i className="azla size-18 pin-primary-icon mr-8"></i>
+                          Прикрепить файл
+                        </button>
+                      </li>
+                      <li>
+                        <div className="name">
+                          <span className="text">Устав юрического лица</span>
+                        </div>
+                        <button className="btn-icon add">
+                          <i className="azla size-18 pin-primary-icon mr-8"></i>
+                          Прикрепить файл
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* <div className="special-card">
+                  <h3 className="title-subhead mb-16 mt-32">Документы</h3>
+                  <p className="text-desc">
+                    Пожалуйста прикрепите следующие документы организации
+                  </p>
+                  <div className="reg-file-add mb-32">
+                    <ul>
                       {request
                         .getDocTypes()
                         .map((t: ServiceCommon, index: number) => (
@@ -147,7 +216,7 @@ const PartnersNew = observer((props: any) => {
                         ))}
                     </ul>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="create-page-docs">
                   <div className="d-flex-align-c-spaceb mb-32">
@@ -259,19 +328,23 @@ const PartnersNew = observer((props: any) => {
                       type="button"
                       className="button btn-primary"
                       onClick={() =>
-                        request.addRequest({
-                          client: 1,
-                          service_category: tab,
-                          service_type: service,
-                          client_doc: [],
-                          name_uid: main.clientData.user.id,
-                          fulfill_date: new Date(),
-                          reg_date: new Date(),
-                          client_user: main.usersNew.map(
-                            (u: ClientUsers) => u.id
-                          ),
-                          responsible_user: null,
-                        })
+                        request
+                          .addRequest({
+                            client: main.clientData.client.id,
+                            service_category: tab,
+                            service_type: service,
+                            client_doc: [],
+                            request_status: 6,
+                            request_stepper: 1,
+                            name_uid: main.clientData.user.id,
+                            client_user: main.usersNew.map(
+                              (u: ClientUsers) => u.id
+                            ),
+                            fulfill_date: new Date(),
+                            reg_date: new Date(),
+                            responsible_user: null,
+                          })
+                          .then(() => window.location.replace("/"))
                       }
                     >
                       Отправить заявку

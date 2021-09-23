@@ -4,8 +4,13 @@ import { Request } from "../Models/ServiceModels";
 
 export class ServiceController {
   // Documents
-  async getDocuments(id: string): Promise<any> {
+  async getDocuments(id: number): Promise<any> {
     return server.get(`/client_document/${id}`, {
+      baseURL,
+    });
+  }
+  async getDocument(id: number): Promise<any> {
+    return server.get(`/client/document/${id}`, {
       baseURL,
     });
   }
@@ -19,16 +24,16 @@ export class ServiceController {
       baseURL,
     });
   }
-  async downloadDocument(id: string): Promise<any> {
+  async downloadDocument(id: number): Promise<any> {
     return server.get(`/download_file/${id}`, {
       baseURL,
     });
   }
-  async addDocument(id: string, data: any): Promise<any> {
+  async addDocument(id: number, data: any): Promise<any> {
     return server.post(`/client_document/${id}`, data, {
       baseURL,
       headers: {
-        "Content-Type": `application/x-www-form-urlencoded`,
+        "Content-Type": `multipart/form-data`,
       },
     });
   }
@@ -46,11 +51,15 @@ export class ServiceController {
   }
 
   async updateProfile(id: number, fields: any): Promise<any> {
-    return server.put(`/user/${id}`, {
-      ...fields
-    }, {
-      baseURL
-    });
+    return server.put(
+      `/user/${id}`,
+      {
+        ...fields,
+      },
+      {
+        baseURL,
+      }
+    );
   }
 
   async getPosition(): Promise<any> {
@@ -65,34 +74,54 @@ export class ServiceController {
     });
   }
 
-  async getClient(id: string): Promise<any> {
+  async getClient(id: number): Promise<any> {
     return server.get(`/client/${id}`, {
       baseURL,
     });
   }
   // Client Data
-  async getAuthPersons(id: string) {
+  async getAuthPersons(id: number) {
     return server.get(`/client/${id}/auth_person`, {
       baseURL,
     });
   }
-  async getAuthPerson(id: string) {
+  async getAuthPerson(id: number) {
     return server.get(`/client/auth_person/${id}`, {
       baseURL,
     });
   }
-  async getUser(id: string) {
+  async getClientUsers(id: number) {
+    return server.get(`/user/client/${id}`, {
+      baseURL,
+    });
+  }
+  async getUser(id: number) {
     return server.get(`/user/${id}`, {
       baseURL,
     });
   }
-  async getClientUser(id: string) {
+  async getUsers() {
+    return server.get(`/user`, {
+      baseURL,
+    });
+  }
+  async getClientUser(id: number) {
+    return server.get(`/client/user/${id}`, {
+      baseURL,
+    });
+  }
+  async getClientUsersForAdd(id: number) {
     return server.get(`/client/${id}/user`, {
       baseURL,
     });
   }
   async getClientService() {
     return server.get(`/client_service`, {
+      baseURL,
+    });
+  }
+  async getClientServiceById(id: number) {
+    return server.get(`/client_service/${id}`, {
       baseURL,
     });
   }
@@ -113,12 +142,24 @@ export class ServiceController {
       }
     );
   }
-  async getClientContact(id: string) {
+  async updateRequest(request: Request, data: object): Promise<any> {
+    return server.put(
+      `/client_request/${request.id}`,
+      {
+        ...request,
+        ...data,
+      },
+      {
+        baseURL,
+      }
+    );
+  }
+  async getClientContact(id: number) {
     return server.get(`/client/${id}/contact`, {
       baseURL,
     });
   }
-  async getClientAddress(id: string) {
+  async getClientAddress(id: number) {
     return server.get(`/client/${id}/address`, {
       baseURL,
     });
@@ -128,7 +169,7 @@ export class ServiceController {
       baseURL,
     });
   }
-  async getClientBankDetails(id: string) {
+  async getClientBankDetails(id: number) {
     return server.get(`/client/${id}/bank_details`, {
       baseURL,
     });
@@ -154,8 +195,13 @@ export class ServiceController {
       baseURL,
     });
   }
-  async getRequest(id: string): Promise<any> {
+  async getRequest(id: number): Promise<any> {
     return server.get(`/client_request/${id}`, {
+      baseURL,
+    });
+  }
+  async getMineRequest(id: number): Promise<any> {
+    return server.get(`/request/mine/${id}`, {
       baseURL,
     });
   }
@@ -178,8 +224,24 @@ export class ServiceController {
       baseURL,
     });
   }
-  async nextRequestStatus(): Promise<any> {
-    return server.post(`/request/next_status`, {
+  async nextRequestStatus(id: number, userId: number): Promise<any> {
+    return server.post(
+      `/request/${id}/next_status`,
+      {
+        responsible_user: userId,
+      },
+      {
+        baseURL,
+      }
+    );
+  }
+  async toReview(id: number): Promise<any> {
+    return server.get(`/request/to_sign/${id}`, {
+      baseURL,
+    });
+  }
+  async getSigners(id: number): Promise<any> {
+    return server.get(`/user/signing_auth/${id}`, {
       baseURL,
     });
   }

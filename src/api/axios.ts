@@ -10,7 +10,20 @@ export class Server {
     config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${Cookies.get("access")}`;
     config.baseURL = config.baseURL;
-    return axios.get(url, config).then((r) => r?.data);
+    return axios
+      .get(url, config)
+      .then((r) => r?.data)
+      .catch((error) => {
+        if (error.response.status === 401) {
+          Cookies.remove("refresh");
+          Cookies.remove("access");
+          Cookies.remove("clientData");
+          Cookies.remove("role");
+          Cookies.remove("isReg");
+          Cookies.remove("clientExist");
+          document.location.href = "/";
+        }
+      });
   }
   public delete(url: string, config = {} as any): any {
     config = config || {};
@@ -37,14 +50,40 @@ export class Server {
     if (!!Cookies.get("access"))
       config.headers.Authorization = `Bearer ${Cookies.get("access")}`;
     config.baseURL = config.baseURL;
-    return axios.post(url, data, config).then((r) => r.data);
+    return axios
+      .post(url, data, config)
+      .then((r) => r.data)
+      .catch((error) => {
+        if (error.response.status === 401) {
+          Cookies.remove("refresh");
+          Cookies.remove("access");
+          Cookies.remove("clientData");
+          Cookies.remove("role");
+          Cookies.remove("isReg");
+          Cookies.remove("clientExist");
+          document.location.href = "/";
+        }
+      });
   }
   public put(url: string, data: any, config = {} as any): any {
     config = config || {};
     config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${Cookies.get("access")}`;
     config.baseURL = config.baseURL;
-    return axios.put(url, data, config).then((r) => r.data);
+    return axios
+      .put(url, data, config)
+      .then((r) => r.data)
+      .catch((error) => {
+        if (error.response.status === 401) {
+          Cookies.remove("refresh");
+          Cookies.remove("access");
+          Cookies.remove("clientData");
+          Cookies.remove("role");
+          Cookies.remove("isReg");
+          Cookies.remove("clientExist");
+          document.location.href = "/";
+        }
+      });
   }
   public patch(url: string, data: any, config = {} as any): any {
     config = config || {};

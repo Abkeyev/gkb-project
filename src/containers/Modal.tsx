@@ -1,11 +1,24 @@
-import { checkInputs, extractKeyAlias } from "../ncalayer/helper";
+import {
+  checkInputs,
+  extractKeyAlias,
+  ValidationType,
+  handleError,
+} from "../ncalayer/helper";
 import { observer } from "mobx-react";
 import React from "react";
-import { ClientUsers } from "../api/Models/ServiceModels";
+import {
+  Client,
+  ClientUser,
+  ClientUsers,
+  User,
+} from "../api/Models/ServiceModels";
+import { CheckState } from "../ncalayer/state";
+import { Response } from "@seithq/ncalayer";
 
 const Modal = observer((props: any) => {
   const { main, request, state, setState, client } = props;
-  const [users, setUsers] = React.useState<ClientUsers[]>([]);
+  const [users, setUsers] = React.useState<User[]>([]);
+  const [user, setUser] = React.useState<number[]>([]);
   const [fullName, setFullName] = React.useState("");
   const [position, setPosition] = React.useState("");
   const [department, setDepartment] = React.useState("");
@@ -15,6 +28,7 @@ const Modal = observer((props: any) => {
   const [zam, setZam] = React.useState("");
   const [man, setMan] = React.useState("");
   const [manCon, setManCon] = React.useState("");
+  const [search, setSearch] = React.useState("");
   const [declineReason, setDeclineReason] = React.useState("");
   const [open, setOpen] = React.useState(false);
 
@@ -37,15 +51,14 @@ const Modal = observer((props: any) => {
     if (ok) {
       setState({
         ...state,
-        method: client.GetKeys(
-          state.alias,
-          state.path,
-          state.password,
-          state.keyType
-        ),
+        method: client.GetKeys(state.alias, state.path, state.password, "SIGN"),
       });
     }
   };
+
+  React.useEffect(() => {
+    main.role === "Manager" && request.getSigners();
+  }, []);
 
   const getSubstring = (text: string, string: string) => {
     const start = text.indexOf(string) + string.length;
@@ -65,6 +78,46 @@ const Modal = observer((props: any) => {
   const handleKeyAliasChange = (key: string) => {
     setState({ ...state, keyAlias: extractKeyAlias(key) });
   };
+
+  const handleCMSSignatureFromFileClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const ok = checkInputs({
+      path: state.path,
+      alias: state.alias,
+      password: state.password,
+      keyAlias: state.keyAlias,
+    });
+    if (ok) {
+      client.CreateCMSSignature(
+        state.alias,
+        state.path,
+        state.keyAlias,
+        state.password,
+        "base64",
+        state.cmsFileSignatureFlag,
+        (resp: Response) => {
+          if (resp.isOk()) {
+            console.log(resp, "рес1п");
+            request.setState({
+              ...state,
+              method: client.method,
+              cmsFileSignatureSigned: resp.getResult(),
+              cmsFileSignatureValid: CheckState.NotValidated,
+              cmsFileSignatureMessage: "Не проверено",
+            });
+            return;
+          }
+
+          handleError(
+            resp,
+            ValidationType.Password && ValidationType.PasswordAttemps
+          );
+        }
+      );
+    }
+  };
+
   return (
     <div>
       {main.modalType === 0 ? (
@@ -85,35 +138,47 @@ const Modal = observer((props: any) => {
                   </h3>
                   <div className="search-input">
                     <input
-                      type="seatch"
+                      type="text"
                       className="search-icon"
                       placeholder="Поиск"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
                     />
                   </div>
                   <div className="manager-list">
                     <ul>
-                      {(request._getClientUser as ClientUsers[]).map(
-                        (r: ClientUsers) => (
-                          <li
-                            onClick={() => {
-                              main.setModal(false);
-                              request.setManUser(r);
-                            }}
-                          >
-                            <div className="profile">
-                              <img
-                                alt="ava"
-                                className="ava"
-                                src={
-                                  process.env.PUBLIC_URL + "/images/def-ava.svg"
-                                }
-                              />
-                              <span className="name">{r.full_name}</span>
-                            </div>
-                            <span className="position">{r.position_name}</span>
-                          </li>
-                        )
-                      )}
+                      {request._getSigners &&
+                        (request._getSigners as User[])
+                          .filter((f: User) => f.full_name.includes(search))
+                          .map((r: User) => (
+                            <li
+                              onClick={() => {
+                                request
+                                  .nextRequestStatus(r.id)
+                                  .then((res: any) => {
+                                    main.setModal(false);
+                                    request.setManUser(r);
+                                  })
+                                  .catch((err: any) => {
+                                    main.setModal(false);
+                                    console.log(err);
+                                  });
+                              }}
+                            >
+                              <div className="profile">
+                                <img
+                                  alt="ava"
+                                  className="ava"
+                                  src={
+                                    process.env.PUBLIC_URL +
+                                    "/images/def-ava.svg"
+                                  }
+                                />
+                                <span className="name">{r.full_name}</span>
+                              </div>
+                              <span className="position">{r.position}</span>
+                            </li>
+                          ))}
                     </ul>
                   </div>
                 </div>
@@ -150,7 +215,13 @@ const Modal = observer((props: any) => {
                       disabled={declineReason === ""}
                       onClick={() =>
                         request._getRequest &&
-                        request.endRequest(request._getRequest, declineReason)
+                        request
+                          .endRequest(request._getRequest, declineReason)
+                          .then(() => {
+                            main.decline = true;
+                            main.declineReason = declineReason;
+                            main.setModal(false);
+                          })
                       }
                       className="button btn-primary mr-16"
                     >
@@ -226,7 +297,7 @@ const Modal = observer((props: any) => {
                   }}
                   className="button btn-primary table-ml"
                 >
-                  Отправить на согласование
+                  Приступить к согласованию
                 </button>
               </div>
             </div>
@@ -301,19 +372,26 @@ const Modal = observer((props: any) => {
 
                   <div className="manager-list">
                     <ul>
-                      {[1].map((r) => (
+                      {request._getUsers.map((c: User) => (
                         <li>
                           <div className="form-check gkb-checkbox">
                             <input
                               className="form-check-input"
                               type="checkbox"
-                              value=""
-                              id="invalidCheck"
+                              defaultChecked={user.includes(c.id)}
+                              id={`invalidCheck${c.id}`}
+                              onClick={() => {
+                                !user.includes(c.id)
+                                  ? setUser([...user, c.id])
+                                  : setUser([
+                                      ...user.filter((s) => s !== c.id),
+                                    ]);
+                              }}
                               required
                             />
                             <label
                               className="form-check-label"
-                              htmlFor="invalidCheck"
+                              htmlFor={`invalidCheck${c.id}`}
                             ></label>
                           </div>
                           <div className="profile">
@@ -324,9 +402,9 @@ const Modal = observer((props: any) => {
                                 process.env.PUBLIC_URL + "/images/def-ava.svg"
                               }
                             />
-                            <span className="name">Султангалиева К.И</span>
+                            <span className="name">{c.full_name}</span>
                           </div>
-                          <span className="position">Менеджер</span>
+                          <span className="position">{c.position}</span>
                         </li>
                       ))}
                     </ul>
@@ -335,11 +413,14 @@ const Modal = observer((props: any) => {
               </div>
 
               <div className="modal-footer d-flex-align-c-spaceb">
-                <p className="text-desc mb-0">Выбрано 1 участника</p>
+                <p className="text-desc mb-0">
+                  Выбрано {user.length} участника
+                </p>
                 <div className="paper-signatory-footer">
                   <button
                     type="button"
                     className="button btn-secondary w-160 mr-16"
+                    onClick={() => setUser([])}
                   >
                     Очистить
                   </button>
@@ -347,7 +428,18 @@ const Modal = observer((props: any) => {
                     type="button"
                     onClick={() => {
                       main.setModal(false);
-                      request.setAgreeUsers();
+                      console.log(
+                        request.requestId,
+                        "request.requestIdrequest.requestId"
+                      );
+                      if (request.requestId !== null)
+                        request.agreeGroup[request.requestId] = {
+                          ...request.agreeGroup[request.requestId],
+                          user_name: [
+                            ...request.agreeGroup[request.requestId].user_name,
+                            ...user,
+                          ],
+                        };
                     }}
                     className="button btn-primary w-160"
                   >
@@ -426,26 +518,33 @@ const Modal = observer((props: any) => {
                   </div>
                   <div className="manager-list">
                     <ul>
-                      {[1, 2, 3, 4].map((r) => (
-                        <li
-                          onClick={() => {
-                            main.setModal(false);
-                            request.setSignTwoUsers();
-                          }}
-                        >
-                          <div className="profile">
-                            <img
-                              alt="ava"
-                              className="ava"
-                              src={
-                                process.env.PUBLIC_URL + "/images/def-ava.svg"
+                      {request._getSigners &&
+                        (request._getSigners as User[])
+                          .filter((f: User) => f.full_name.includes(search))
+                          .map((r: User) => (
+                            <li
+                              onClick={() =>
+                                request
+                                  .updateRequest({
+                                    manager_signer_user: r.id,
+                                  })
+                                  .then((r: any) => main.setModal(false))
                               }
-                            />
-                            <span className="name">Султангалиева К.И</span>
-                          </div>
-                          <span className="position">Менеджер</span>
-                        </li>
-                      ))}
+                            >
+                              <div className="profile">
+                                <img
+                                  alt="ava"
+                                  className="ava"
+                                  src={
+                                    process.env.PUBLIC_URL +
+                                    "/images/def-ava.svg"
+                                  }
+                                />
+                                <span className="name">{r.full_name}</span>
+                              </div>
+                              <span className="position">{r.position}</span>
+                            </li>
+                          ))}
                     </ul>
                   </div>
                 </div>
@@ -656,69 +755,74 @@ const Modal = observer((props: any) => {
 
                   <div className="search-input">
                     <input
-                      type="seatch"
+                      type="text"
                       className="search-icon"
                       placeholder="Поиск"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
                     />
                   </div>
 
                   <div className="manager-list">
                     <ul>
-                      {(request._getClientUser as ClientUsers[]).map(
-                        (r: ClientUsers) =>
-                          main.usersNew.filter(
-                            (u: ClientUsers) => u.id === r.id
-                          ).length === 0 && (
-                            <li key={r.id}>
-                              <div className="form-check gkb-checkbox">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  checked={
-                                    users.filter(
-                                      (u: ClientUsers) => u.id === r.id
-                                    ).length > 0
-                                  }
-                                  onChange={() => {
-                                    console.log(
-                                      users.filter(
-                                        (u: ClientUsers) => u.id === r.id
-                                      ).length > 0
-                                    );
-                                    users.filter(
-                                      (u: ClientUsers) => u.id === r.id
-                                    ).length > 0
-                                      ? setUsers([
-                                          ...users.filter(
-                                            (u: ClientUsers) => u.id !== r.id
-                                          ),
-                                        ])
-                                      : setUsers([...users, r]);
-                                  }}
-                                  id={`input${r.id}`}
-                                  required
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor={`input${r.id}`}
-                                ></label>
-                              </div>
-                              <div className="profile">
-                                <img
-                                  className="ava"
-                                  src={
-                                    process.env.PUBLIC_URL +
-                                    "/images/def-ava.svg"
-                                  }
-                                />
-                                <span className="name">{r.full_name}</span>
-                              </div>
-                              <span className="position">
-                                {r.position_name}
-                              </span>
-                            </li>
+                      {request._getClientUsersForAdd &&
+                        (request._getClientUsersForAdd as ClientUser[])
+                          .filter((f: ClientUser) =>
+                            f.full_name.includes(search)
                           )
-                      )}
+                          .map(
+                            (r: ClientUser) =>
+                              main.usersNew.filter(
+                                (u: ClientUser) => u.id === r.id
+                              ).length === 0 && (
+                                <li key={r.id}>
+                                  <div className="form-check gkb-checkbox">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      checked={
+                                        users.filter(
+                                          (u: ClientUser) => u.id === r.id
+                                        ).length > 0
+                                      }
+                                      onChange={() => {
+                                        console.log(
+                                          users.filter(
+                                            (u: ClientUser) => u.id === r.id
+                                          ).length > 0
+                                        );
+                                        users.filter(
+                                          (u: ClientUser) => u.id === r.id
+                                        ).length > 0
+                                          ? setUsers([
+                                              ...users.filter(
+                                                (u: ClientUser) => u.id !== r.id
+                                              ),
+                                            ])
+                                          : setUsers([...users, r]);
+                                      }}
+                                      id={`input${r.id}`}
+                                      required
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor={`input${r.id}`}
+                                    ></label>
+                                  </div>
+                                  <div className="profile">
+                                    <img
+                                      className="ava"
+                                      src={
+                                        process.env.PUBLIC_URL +
+                                        "/images/def-ava.svg"
+                                      }
+                                    />
+                                    <span className="name">{r.full_name}</span>
+                                  </div>
+                                  <span className="position">{r.position}</span>
+                                </li>
+                              )
+                          )}
                     </ul>
                   </div>
                 </div>
@@ -855,26 +959,21 @@ const Modal = observer((props: any) => {
                     <button
                       type="button"
                       onClick={() => {
-                        main
-                          .regUser({
-                            client: main.clientData.client.id,
-                            first_head_full_name: firstRuk,
-                            deputy_head_full_name: zam,
-                            manager_full_name: man,
-                            iin: "IIN",
-                            global_ip: "ip",
-                            idcard_number: "idcard",
-                            manager_contacts: manCon,
-                            full_name: fullName,
-                            position_name: position,
-                            department_name: department,
-                            contacts: phone,
-                            email: email,
-                          })
-                          .then(() => {
-                            request.getClientUser(main.clientData.client.id);
-                            main.setModalType(10);
-                          });
+                        main.regUser({
+                          client: main.clientData.client.id,
+                          first_head_full_name: firstRuk,
+                          deputy_head_full_name: zam,
+                          manager_full_name: man,
+                          iin: "IIN",
+                          global_ip: "ip",
+                          idcard_number: "idcard",
+                          manager_contacts: manCon,
+                          full_name: fullName,
+                          position_name: position,
+                          department_name: department,
+                          contacts: phone,
+                          email: email,
+                        });
                       }}
                       className="button btn-primary mr-16"
                     >
@@ -918,7 +1017,7 @@ const Modal = observer((props: any) => {
                       onClick={() => browseKeys()}
                       className="button btn-primary"
                     >
-                      Выберите файл
+                      Выберите ключ
                     </button>
                   </div>
                   <div className="form-wrapper">
@@ -986,13 +1085,14 @@ const Modal = observer((props: any) => {
                           </div>
                           <button
                             className="button btn-primary mt-16"
-                            onClick={(e) => signDoc()}
+                            onClick={handleCMSSignatureFromFileClick}
                           >
                             Подписать
                           </button>
                         </div>
                       )}
                   </div>
+                  {state.cmsSignatureSigned}
                 </div>
               </div>
             </div>
