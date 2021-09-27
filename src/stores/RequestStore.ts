@@ -14,8 +14,10 @@ import {
   ClientService,
   ServiceCommon,
   Agree,
+  AgreeResult,
+  Result,
 } from "../api/Models/ServiceModels";
-import { connection, getKeyInfoCall, signWithBase64 } from "../ncaLayer";
+import { signWithBase64 } from "../ncaLayer";
 import api from "../api/Api";
 
 class RequestStore {
@@ -41,23 +43,28 @@ class RequestStore {
   agreeGroup: Agree[] = [];
   requestId: number | null = null;
   base64file: string = "";
+  service: string = "";
+  data: any | null = null;
 
-  private requests: Request[];
-  private documents: Documents[];
+  private requests: Request[] | [];
+  private reviews: AgreeResult[] | [];
+  private mineRequests: Request[] | [];
+  private documents: Documents[] | [];
   private doc: Documents | null;
   private request: Request | null;
   private clientTypes: ClientTypes[];
   private clients: Client[];
-  private clientUsers: Client[];
+  private clientUsers: Client[] | [];
+  private clientDocs: Documents[] | [];
   private clientUsersForAdd: ClientUsers[] | [];
   private client: Client | null;
   private someClient: Client | null;
   private authPersons: AuthPerson[] | [];
   private authPerson: AuthPerson | null;
-  private contacts: Contact[];
-  private address: Address[];
-  private addressTypes: AddressTypes[];
-  private bankDetails: BankDetail[];
+  private contacts: Contact[] | [];
+  private address: Address[] | [];
+  private addressTypes: AddressTypes[] | [];
+  private bankDetails: BankDetail[] | [];
   private signingAuthority: ServiceCommon[] | [];
   private personStatus: ServiceCommon[] | [];
   private manUser: User | null;
@@ -79,6 +86,12 @@ class RequestStore {
 
   get _getRequests() {
     return this.requests;
+  }
+  get _getReviews() {
+    return this.reviews;
+  }
+  get _getMineRequests() {
+    return this.mineRequests;
   }
   get _getClientUsersForAdd() {
     return this.clientUsersForAdd;
@@ -176,6 +189,32 @@ class RequestStore {
   get _getClientUsers() {
     return this.clientUsers;
   }
+  get _getClientDocs() {
+    return this.clientDocs;
+  }
+
+  get getAgreeStatus() {
+    let temp = true;
+    if (this.reviews.length === 0) {
+      return false;
+    } else {
+      this.reviews.map((r: AgreeResult) =>
+        r.review_data.map((u: Result) => {
+          if (!u.is_approved) temp = false;
+        })
+      );
+    }
+    return temp;
+  }
+
+  get getLastVersion() {
+    let lastVersion = 1;
+    this._getDocuments &&
+      this._getDocuments.map((d: Documents) => {
+        if (d.version > lastVersion) lastVersion = d.version;
+      });
+    return lastVersion;
+  }
 
   setManUser(manUser: User | null) {
     if (manUser) this.manUser = manUser;
@@ -205,28 +244,44 @@ class RequestStore {
     this.agreementPar = agreementPar;
   }
 
+  setManSigner(manSigner: User | null) {
+    this.manSigner = manSigner;
+  }
+
   async getRequests() {
     await api.service.getRequests().then((r: Request[]) => (this.requests = r));
+  }
+
+  async getClientRequests(id: number) {
+    await api.service
+      .getClientRequests(id)
+      .then((r: Request[]) => (this.requests = r));
   }
 
   async getMineRequest(id: number) {
     await api.service
       .getMineRequest(id)
-      .then((r: Request[]) => (this.requests = r));
+      .then((r: Request[]) => (this.mineRequests = r));
   }
 
   async getRequest(id: number) {
     this.manUser = null;
     await api.service.getRequest(id).then((r: Request) => {
-      r.client && this.getClient(r.client);
+      r.client && this.getClient(r.client.id);
       r.responsible_user && this.getManUser(r.responsible_user);
       r.counterparty_signer_user &&
         this.getConSigner(r.counterparty_signer_user);
       r.manager_signer_user && this.getManSigner(r.manager_signer_user);
-      r.client && this.getSigners(r.client);
-      r.client && this.getClientAllUsers(r.client);
+      r.client && this.getSigners(r.client.id);
+      !r.is_model_contract && this.getReview(r.id);
+      r.client && this.getClientAllUsers(r.client.id);
       r.client_user && this.getClientUsers(r.client_user);
-      r.client_doc.length > 0 && this.getClientDocs(r.client_doc);
+      r.client_doc && this.getClientDocs(r.client_doc);
+      this.getDocContracts(id);
+      console.log(r.request_stepper);
+      if (r.request_stepper !== null && r.request_stepper > 1) {
+        this.setStep(r.request_stepper);
+      }
       this.request = r;
     });
   }
@@ -244,7 +299,7 @@ class RequestStore {
   }
 
   async addRequest(data: any) {
-    await api.service.addRequest(data);
+    await api.service.addRequest(data).catch((err) => console.error(err));
   }
 
   async updateUser(id: number, fields: any) {
@@ -364,7 +419,7 @@ class RequestStore {
   }
 
   async addDocument(id: number, data: any) {
-    await api.service.addDocument(id, data.target.files[0]);
+    await api.service.addDocument(id, data);
   }
 
   async getPersonStatus() {
@@ -379,17 +434,10 @@ class RequestStore {
     });
   }
 
-  async getClientDocs(ids: number[]) {
-    let docs: Documents[] = [];
-    let promises: any[] = [];
-    await ids.map((id: number) =>
-      promises.push(
-        api.service.getDocument(id).then((res) => {
-          docs.push(res);
-        })
-      )
-    );
-    Promise.all(promises).then(() => (this.documents = docs));
+  async getDocContracts(id: number) {
+    api.service.getContracts(id).then((res) => {
+      this.documents = res;
+    });
   }
 
   async getClientUsers(ids: number[]) {
@@ -404,6 +452,20 @@ class RequestStore {
         )
       );
     Promise.all(promises).then(() => (this.clientUsers = users));
+  }
+
+  async getClientDocs(ids: number[]) {
+    let docs: Documents[] = [];
+    let promises: any[] = [];
+    (await (ids.length > 0)) &&
+      ids.map((id: number) =>
+        promises.push(
+          api.service.getDocument(id).then((res: Documents) => {
+            docs.push(res);
+          })
+        )
+      );
+    Promise.all(promises).then(() => (this.clientDocs = docs));
   }
 
   async getClientUser(id: number) {
@@ -421,7 +483,7 @@ class RequestStore {
   async getClientServiceById(id: number) {
     await api.service.getClientServiceById(id).then((res) => {
       this.clientServiceById = res;
-      res.client && this.getClientUsersForAdd(res.client);
+      res.client && this.getClientUsersForAdd(res.client.id);
     });
   }
 
@@ -451,10 +513,12 @@ class RequestStore {
       });
     });
   }
-  async nextRequest(request: Request) {
+  async nextRequest(request: Request, isFirst: boolean = false) {
     await api.service.nextRequest(request).then((res) => {
       runInAction(async () => {
         await this.getRequest(request.id);
+        console.log(res);
+        isFirst && res && this.setDoc(res);
       });
     });
   }
@@ -472,13 +536,50 @@ class RequestStore {
         this.request = res;
       }));
   }
-  async toReview(id: number) {
-    await api.service.toReview(id).then((res) => {
-      this.request = res;
+  async toSign(isType: boolean) {
+    if (isType) {
+      this._getDocuments[0] &&
+        this._getRequest &&
+        (await api.service
+          .toSign(this._getDocuments[0].id, this._getRequest.id)
+          .then(() => {
+            runInAction(async () => {
+              this._getRequest && (await this.getRequest(this._getRequest.id));
+            });
+          }));
+    } else {
+      this._getDoc &&
+        this._getRequest &&
+        (await api.service
+          .toSign(this._getDoc.id, this._getRequest.id)
+          .then(() => {
+            runInAction(async () => {
+              this._getRequest && (await this.getRequest(this._getRequest.id));
+            });
+          }));
+    }
+  }
+  async toReview(id: number, data: any) {
+    await api.service.toReview(id, data).then((res) => {
+      runInAction(async () => {
+        this._getRequest && (await this.getRequest(id));
+      });
+    });
+  }
+  async getReview(id: number) {
+    await api.service.getReview(id).then((res) => {
+      this.reviews = res;
+    });
+  }
+  async addReview(id: number, data: any) {
+    await api.service.addReview(id, data).then((res) => {
+      runInAction(async () => {
+        await this.getReview(id);
+      });
     });
   }
 
-  setDoc(doc: Documents) {
+  async setDoc(doc: Documents) {
     this.doc = doc;
   }
 
@@ -512,25 +613,23 @@ class RequestStore {
       const url = window.URL.createObjectURL(new Blob([r.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", fileName);
+      link.setAttribute("download", "fileName.docx");
       document.body.appendChild(link);
       link.click();
     });
   }
-  async getAuthKey() {
-    await getKeyInfoCall()
-      .then((res) => {
-        console.log(res);
-        this.getBase64();
-      })
-      .catch((err) => alert(err.message));
-  }
 
   async getBase64() {
     this.request &&
-      api.service.downloadFileForSign(this.request.id).then((response: any) => {
-        this.base64file = response;
-      });
+      (await api.service
+        .downloadFileForSign(this.request.id)
+        .then((response: any) => {
+          runInAction(async () => {
+            if (response.base64) {
+              await this.signDoc();
+            }
+          });
+        }));
   }
 
   async signDoc() {
@@ -549,11 +648,17 @@ class RequestStore {
         .uploadSignedFile(this.request.id, {
           signed_file: this.base64file,
         })
-        .then(() => {}));
+        .then(() => {
+          this.request! == null &&
+            runInAction(async () => {
+              if (this.request) this.getReview(this.request.id);
+            });
+        }));
   }
 
   constructor() {
     this.requests = [];
+    this.mineRequests = [];
     this.documents = [];
     this.categories = [];
     this.request = null;
@@ -587,9 +692,12 @@ class RequestStore {
     this.conSigner = null;
     this.manSigner = null;
     this.clientUsers = [];
+    this.clientDocs = [];
+    this.reviews = [];
 
     makeAutoObservable(this, {
       getRequests: action.bound,
+      getClientRequests: action.bound,
       getMineRequest: action.bound,
       getRequest: action.bound,
       getDocuments: action.bound,
@@ -600,6 +708,8 @@ class RequestStore {
       getAddressTypes: action.bound,
       getClientTypes: action.bound,
       getClient: action.bound,
+      getReview: action.bound,
+      addReview: action.bound,
       getSomeClient: action.bound,
       getAuthPersons: action.bound,
       getAuthPerson: action.bound,
@@ -640,8 +750,9 @@ class RequestStore {
       getManUser: action.bound,
       getUser: action.bound,
       updateRequest: action.bound,
-      getAuthKey: action.bound,
       signDoc: action.bound,
+      setManSigner: action.bound,
+      toSign: action.bound,
       _getAllUsers: computed,
       _getClientServiceById: computed,
       _getClientUsersForAdd: computed,
@@ -664,6 +775,7 @@ class RequestStore {
       _getBankDetails: computed,
       _getSigningAuthority: computed,
       _getPersonStatus: computed,
+      _getClientDocs: computed,
       _getClientUser: computed,
       _getClientService: computed,
       _getClientServiceType: computed,
@@ -675,6 +787,10 @@ class RequestStore {
       _getManSigner: computed,
       _getClientUsers: computed,
       _getUsers: computed,
+      _getReviews: computed,
+      _getMineRequests: computed,
+      getAgreeStatus: computed,
+      getLastVersion: computed,
     });
   }
 }

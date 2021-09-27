@@ -17,7 +17,7 @@ const Partners = observer((props: any) => {
   const history = useHistory();
 
   React.useEffect(() => {
-    request.getRequests();
+    request.getClientRequests(main.clientData.client.id);
   }, []);
 
   return (
@@ -283,8 +283,8 @@ const Partners = observer((props: any) => {
                             <tr
                               onClick={() => history.push(`/partner/${r.id}`)}
                             >
-                              <td>{r.id}</td>
-                              <td>{r.name_uid}</td>
+                              <td>{r.client.bin}</td>
+                              <td>{r.client.longname}</td>
                               <td>
                                 {
                                   request._getClientServiceType.find(
@@ -311,7 +311,7 @@ const Partners = observer((props: any) => {
                       <span className="number">
                         {
                           request._getRequests.filter(
-                            (r: Request) => r.request_status === 6
+                            (r: Request) => r.request_status === 11
                           ).length
                         }
                       </span>
@@ -329,7 +329,7 @@ const Partners = observer((props: any) => {
                       <tbody>
                         {request._getRequests &&
                           request._getRequests
-                            .filter((r: Request) => r.request_status === 6)
+                            .filter((r: Request) => r.request_status === 11)
                             .map((r: Request) => (
                               <tr
                                 onClick={() => history.push(`/partner/${r.id}`)}
@@ -362,7 +362,7 @@ const Partners = observer((props: any) => {
                       <span className="number">
                         {
                           request._getRequests.filter(
-                            (r: Request) => r.request_status === 7
+                            (r: Request) => r.request_status === 12
                           ).length
                         }
                       </span>
@@ -380,7 +380,7 @@ const Partners = observer((props: any) => {
                       <tbody>
                         {request._getRequests &&
                           request._getRequests
-                            .filter((r: Request) => r.request_status === 7)
+                            .filter((r: Request) => r.request_status === 12)
                             .map((r: Request) => (
                               <tr
                                 onClick={() => history.push(`/partner/${r.id}`)}

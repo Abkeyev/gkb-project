@@ -7,6 +7,7 @@ import {
   User,
 } from "../api/Models/ServiceModels";
 import Cookies from "../utils/cookies";
+import { getKeyInfoCall } from "../ncaLayer";
 
 export enum CheckState {
   NotValidated = "notValidated",
@@ -82,7 +83,6 @@ class MainStore {
     makeAutoObservable(this, {
       logIn: action.bound,
       logout: action.bound,
-      loginEcp: action.bound,
       setModal: action.bound,
       setModalType: action.bound,
       regUser: action.bound,
@@ -133,8 +133,7 @@ class MainStore {
   }
 
   setNewUsers(users: ClientUsers[]) {
-    console.log(users);
-    this.usersNew = users;
+    this.usersNew = [...this.usersNew, ...users];
   }
 
   logout(reload: boolean = false) {
@@ -206,24 +205,42 @@ class MainStore {
         }
       });
   }
-
-  async loginEcp(bin: string, fio: string, name: string) {
-    await api.client
-      .authEcp({ bin, fio, name })
-      .then((r) => {
+  async getAuthKey() {
+    await getKeyInfoCall()
+      .then((res) => {
         runInAction(async () => {
-          await this.setTokens(r);
-          setTimeout(() => window.location.reload(), 500);
+          console.log(res);
+          await api.client
+            .authEcp({
+              bin: this.getSubstring(res.subjectDn, "SERIALNUMBER=").substr(3),
+              fio: `${this.getSubstring(
+                res.subjectDn,
+                "CN="
+              )} ${this.getSubstring(res.subjectDn, "G=")}`,
+              name: this.getSubstring(res.subjectDn, "O=").replace(/\\/g, ""),
+            })
+            .then((r) => {
+              runInAction(async () => {
+                await this.setTokens(r);
+                setTimeout(() => window.location.reload(), 500);
+              });
+            })
+            .catch((err) => {
+              if (err && err.detail) {
+                runInAction(async () => {
+                  this.loginError = true;
+                  this.loginErrorText = err.detail;
+                });
+              }
+            });
         });
       })
-      .catch((err) => {
-        if (err && err.detail) {
-          runInAction(async () => {
-            this.loginError = true;
-            this.loginErrorText = err.detail;
-          });
-        }
-      });
+      .catch((err) => alert(err.message));
+  }
+
+  getSubstring(text: string, string: string) {
+    const start = text.indexOf(string) + string.length;
+    return text.substring(start, text.indexOf(",", start));
   }
 
   async regClient(id: string, data: any) {

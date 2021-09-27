@@ -46,9 +46,9 @@ const ContractorsInner = observer((props: any) => {
             <div className="my-organization p-50 pad-b-128">
               <div className="header-text-inner justify-content-between mb-32">
                 <div className="back-breadcrumbs">
-                  <Link to="/contractors" className="back">
+                  <div onClick={() => history.goBack()} className="back">
                     <i className="azla arrow-left-icon"></i> Назад
-                  </Link>
+                  </div>
                   <div className="breadcrumbs">
                     <Link to="/contractors">Контрагенты</Link> /{" "}
                     <span>ТОО “М-Ломбард”</span>

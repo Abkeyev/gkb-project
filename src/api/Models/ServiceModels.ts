@@ -1,18 +1,17 @@
 export interface Request {
   id: number;
+  client: Client;
+  client_comment: string;
+  client_doc: number[];
+  client_user: number[];
   service_category: number;
   name_uid: number;
   reg_date: Date;
   fulfill_date: Date;
-  client_data: Client;
   service_type: number;
-  client: number;
-  client_doc: number[];
   request_status: number;
   responsible_user: number;
   request_stepper: number;
-  client_user: number[];
-  client_comment: string;
   is_model_contract: boolean;
   counterparty_signer_user: number;
   manager_signer_user: number;
@@ -22,6 +21,17 @@ export interface Agree {
   user_name: number[];
   process_type: "Sequential" | "Parallel";
   process_number: number;
+}
+
+export interface AgreeResult {
+  review_data: Result[];
+  process_type: "Sequential" | "Parallel";
+  process_number: number;
+}
+
+export interface Result {
+  is_approved: boolean | null;
+  user_id: number;
 }
 
 export interface ClientUsers {
@@ -155,6 +165,7 @@ export interface Documents {
   doc_category: number;
   doc_type: number;
   service_type: number;
+  version: number;
 }
 
 export interface Categories {

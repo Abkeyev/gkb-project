@@ -11,7 +11,7 @@ import {
 } from "../api/Models/ServiceModels";
 
 const Request = observer((props: any) => {
-  const { request } = props;
+  const { request, main } = props;
   const [advance, setAdvance] = React.useState(false);
   const [sort, setSort] = React.useState(false);
   const [service, setService] = React.useState(false);
@@ -22,6 +22,7 @@ const Request = observer((props: any) => {
 
   React.useEffect(() => {
     request.getRequests();
+    request.getMineRequest(main.clientData.user.id);
     request.getClients();
     request.getClientServiceType();
     request.getClientTypes();
@@ -43,7 +44,7 @@ const Request = observer((props: any) => {
                   request.tabIndexPar = i;
                 }}
               >
-                <div className="">
+                <div>
                   <TabList>
                     <Tab>Нераспределенные</Tab>
                     <Tab>Мои</Tab>
@@ -232,63 +233,6 @@ const Request = observer((props: any) => {
                     <h3 className="title-subhead mb-16">
                       Найдено{" "}
                       <span className="number">
-                        {request._getRequests && request._getRequests.length}
-                      </span>
-                    </h3>
-                    <table className="table req-table">
-                      <thead>
-                        <tr>
-                          <th>БИН</th>
-                          <th>Организации</th>
-                          <th>Категория деятельности</th>
-                          <th>Сервис</th>
-                          <th>Дата поступления</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {request._getRequests &&
-                          request._getRequests.map((r: RequestModel) => (
-                            <tr
-                              onClick={() => history.push(`/request/${r.id}`)}
-                            >
-                              <td>
-                                {request._getClients &&
-                                  request._getClients.find(
-                                    (t: Client) => t.id === r.client
-                                  )?.bin}
-                              </td>
-                              <td>
-                                {request._getClients &&
-                                  request._getClients.find(
-                                    (t: Client) => t.id === r.client
-                                  )?.longname}
-                              </td>
-                              <td>
-                                {
-                                  request._getClientTypes.find(
-                                    (t: any) =>
-                                      t.id ===
-                                      request._getClients.find(
-                                        (t: Client) => t.id === r.client
-                                      )?.client_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                              </td>
-                              <td>{moment(r.reg_date).format("MM.DD.YYYY")}</td>
-                            </tr>
-                          ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </TabPanel>
-                <TabPanel>
-                  <div className="tab-content tab-2">
-                    <h3 className="title-subhead mb-16">
-                      На подпись{" "}
-                      <span className="number">
                         {request._getRequests &&
                           request._getRequests.filter(
                             (r: RequestModel) => r.request_status === 6
@@ -313,8 +257,61 @@ const Request = observer((props: any) => {
                               <tr
                                 onClick={() => history.push(`/request/${r.id}`)}
                               >
-                                <td>{r.id}</td>
-                                <td>{r.name_uid}</td>
+                                <td>{r.client.bin}</td>
+                                <td>{r.client.longname}</td>
+                                <td>
+                                  {
+                                    request._getClientServiceType.find(
+                                      (t: ServiceCommon) =>
+                                        t.id === r.service_type
+                                    )?.name
+                                  }
+                                </td>
+                                <td>
+                                  {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                </td>
+                                <td>
+                                  {moment(r.reg_date).format("MM.DD.YYYY")}
+                                </td>
+                              </tr>
+                            ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <div className="tab-content tab-2">
+                    <h3 className="title-subhead mb-16">
+                      На подпись{" "}
+                      <span className="number">
+                        {request._getMineRequests &&
+                          request._getMineRequests.filter(
+                            (r: RequestModel) => r.request_status === 12
+                          ).length}
+                      </span>
+                    </h3>
+                    <table className="table req-table">
+                      <thead>
+                        <tr>
+                          <th>БИН</th>
+                          <th>Организации</th>
+                          <th>Категория деятельности</th>
+                          <th>Сервис</th>
+                          <th>Дата поступления</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {request._getMineRequests &&
+                          request._getMineRequests
+                            .filter(
+                              (r: RequestModel) => r.request_status === 12
+                            )
+                            .map((r: RequestModel) => (
+                              <tr
+                                onClick={() => history.push(`/request/${r.id}`)}
+                              >
+                                <td>{r.client.bin}</td>
+                                <td>{r.client.longname}</td>
                                 <td>
                                   {
                                     request._getClientServiceType.find(
@@ -339,9 +336,12 @@ const Request = observer((props: any) => {
                     <h3 className="title-subhead mb-16">
                       Активные{" "}
                       <span className="number">
-                        {request._getRequests &&
-                          request._getRequests.filter(
-                            (r: RequestModel) => r.request_status === 7
+                        {request._getMineRequests &&
+                          request._getMineRequests.filter(
+                            (r: RequestModel) =>
+                              r.request_status !== null &&
+                              r.request_status !== 9 &&
+                              r.request_status !== 10
                           ).length}
                       </span>
                     </h3>
@@ -356,17 +356,31 @@ const Request = observer((props: any) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {request._getRequests &&
-                          request._getRequests
-                            .filter((r: RequestModel) => r.request_status === 7)
+                        {request._getMineRequests &&
+                          request._getMineRequests
+                            .filter(
+                              (r: RequestModel) =>
+                                r.request_status !== null &&
+                                r.request_status !== 9 &&
+                                r.request_status !== 10
+                            )
                             .map((r: RequestModel) => (
                               <tr
                                 onClick={() => history.push(`/request/${r.id}`)}
                               >
-                                <td>{r.id}</td>
-                                <td>{r.name_uid}</td>
-                                <td>{r.service_type}</td>
-                                <td>{r.service_category}</td>
+                                <td>{r.client.bin}</td>
+                                <td>{r.client.longname}</td>
+                                <td>
+                                  {
+                                    request._getClientServiceType.find(
+                                      (t: ServiceCommon) =>
+                                        t.id === r.service_type
+                                    )?.name
+                                  }
+                                </td>
+                                <td>
+                                  {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                </td>
                                 <td>
                                   {moment(r.reg_date).format("MM.DD.YYYY")}
                                 </td>
@@ -376,7 +390,6 @@ const Request = observer((props: any) => {
                     </table>
                   </div>
                 </TabPanel>
-
                 <TabPanel>
                   <div className="tab-content tab-3">
                     <h3 className="title-subhead mb-16">
@@ -384,7 +397,7 @@ const Request = observer((props: any) => {
                       <span className="number">
                         {request._getRequests &&
                           request._getRequests.filter(
-                            (r: RequestModel) => r.request_status === 8
+                            (r: RequestModel) => r.request_status === 11
                           ).length}
                       </span>
                     </h3>
@@ -405,15 +418,26 @@ const Request = observer((props: any) => {
                       <tbody>
                         {request._getRequests &&
                           request._getRequests
-                            .filter((r: RequestModel) => r.request_status === 8)
+                            .filter(
+                              (r: RequestModel) => r.request_status === 11
+                            )
                             .map((r: RequestModel) => (
                               <tr
                                 onClick={() => history.push(`/request/${r.id}`)}
                               >
-                                <td>{r.id}</td>
-                                <td>{r.name_uid}</td>
-                                <td>{r.service_type}</td>
-                                <td>{r.service_category}</td>
+                                <td>{r.client.bin}</td>
+                                <td>{r.client.longname}</td>
+                                <td>
+                                  {
+                                    request._getClientServiceType.find(
+                                      (t: ServiceCommon) =>
+                                        t.id === r.service_type
+                                    )?.name
+                                  }
+                                </td>
+                                <td>
+                                  {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                </td>
                                 <td>
                                   {moment(r.reg_date).format("MM.DD.YYYY")}
                                 </td>
@@ -423,7 +447,6 @@ const Request = observer((props: any) => {
                     </table>
                   </div>
                 </TabPanel>
-
                 <TabPanel>
                   <div className="tab-content tab-4">
                     <h3 className="title-subhead mb-16">В архиве</h3>
@@ -445,10 +468,19 @@ const Request = observer((props: any) => {
                               <tr
                                 onClick={() => history.push(`/request/${r.id}`)}
                               >
-                                <td>{r.id}</td>
-                                <td>{r.name_uid}</td>
-                                <td>{r.service_type}</td>
-                                <td>{r.service_category}</td>
+                                <td>{r.client.bin}</td>
+                                <td>{r.client.longname}</td>
+                                <td>
+                                  {
+                                    request._getClientServiceType.find(
+                                      (t: ServiceCommon) =>
+                                        t.id === r.service_type
+                                    )?.name
+                                  }
+                                </td>
+                                <td>
+                                  {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                </td>
                                 <td>
                                   {moment(r.reg_date).format("MM.DD.YYYY")}
                                 </td>

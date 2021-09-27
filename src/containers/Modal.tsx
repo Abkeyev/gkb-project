@@ -30,35 +30,8 @@ const Modal = observer((props: any) => {
   const [manCon, setManCon] = React.useState("");
   const [search, setSearch] = React.useState("");
   const [declineReason, setDeclineReason] = React.useState("");
-  const [open, setOpen] = React.useState(false);
-
-  const browseKeys = () => {
-    setState({
-      ...state,
-      method: client.BrowseKeyStore(state.alias, "P12", state.path),
-    });
-  };
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, password: e.target.value });
-  };
-
-  const handleKeyAliasClick = () => {
-    const ok = checkInputs({
-      path: state.path,
-      alias: state.alias,
-      password: state.password,
-    });
-    if (ok) {
-      setState({
-        ...state,
-        method: client.GetKeys(state.alias, state.path, state.password, "SIGN"),
-      });
-    }
-  };
-
-  React.useEffect(() => {
-    main.role === "Manager" && request.getSigners();
-  }, []);
+  const [comment, setComment] = React.useState("");
+  const [file, setFile] = React.useState<any | null>(null);
 
   const getSubstring = (text: string, string: string) => {
     const start = text.indexOf(string) + string.length;
@@ -149,7 +122,11 @@ const Modal = observer((props: any) => {
                     <ul>
                       {request._getSigners &&
                         (request._getSigners as User[])
-                          .filter((f: User) => f.full_name.includes(search))
+                          .filter((f: User) =>
+                            f.full_name
+                              .toLowerCase()
+                              .includes(search.toLowerCase())
+                          )
                           .map((r: User) => (
                             <li
                               onClick={() => {
@@ -251,50 +228,63 @@ const Modal = observer((props: any) => {
               <div className="modal-close" onClick={() => main.setModal(false)}>
                 <i className="azla close-icon"></i>
               </div>
-              <div className="modal-body">
-                <div className="paper-show">
-                  <h3 className="text-left title-subhead mb-16">
-                    {request._getDoc.doc_name}
-                  </h3>
-                  <div className="file-add mb-32">
-                    <button
-                      className="btn-file btn-icon"
-                      onClick={() =>
-                        request.downloadDocument(request._getDoc.id)
-                      }
-                    >
-                      <i className="azla blank-alt-primary-icon"></i>
-                      Скачать договор
-                    </button>
-                    <p className="info ml-16">Загружено {""}</p>
-                  </div>
+              {request._getDoc && (
+                <div className="modal-body">
+                  <div className="paper-show">
+                    <h3 className="text-left title-subhead mb-16">
+                      {request._getDoc.doc_name}
+                    </h3>
+                    <div className="file-add mb-32">
+                      <button
+                        className="btn-file btn-icon"
+                        onClick={() =>
+                          request.downloadDocument(request._getDoc.id)
+                        }
+                      >
+                        <i className="azla blank-alt-primary-icon"></i>
+                        Скачать договор
+                      </button>
+                      <p className="info ml-16">Загружено {""}</p>
+                    </div>
 
-                  <div className="author mb-16">
-                    <h5 className="mr-16">Автор:</h5>
-                    <div className="profile">
-                      <img
-                        alt="ava"
-                        className="ava"
-                        src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
-                      />
-                      <span className="name">{request._getDoc.client}</span>
+                    <div className="author mb-16">
+                      <h5 className="mr-16">Автор:</h5>
+                      <div className="profile">
+                        <img
+                          alt="ava"
+                          className="ava"
+                          src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                        />
+                        <span className="name">
+                          {request._getClients &&
+                            request._getClients.find(
+                              (t: Client) => t.id === request._getDoc.client
+                            )?.longname}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="comment mb-32">
+                      <h5>Комментарий:</h5>
+                      <p>{request._getDoc.comments}</p>
                     </div>
                   </div>
-
-                  <div className="comment mb-32">
-                    <h5>Комментарий:</h5>
-                    <p>{request._getDoc.comments}</p>
-                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="modal-footer">
                 <button
                   type="button"
-                  onClick={() => {
-                    main.setModal(false);
-                    request.setAgreementPar(true);
-                  }}
+                  onClick={() =>
+                    request
+                      .updateRequest({
+                        request_status: 13,
+                        client: request._getRequest.client.id,
+                      })
+                      .then(() => {
+                        main.setModal(false);
+                      })
+                  }
                   className="button btn-primary table-ml"
                 >
                   Приступить к согласованию
@@ -364,49 +354,69 @@ const Modal = observer((props: any) => {
 
                   <div className="search-input">
                     <input
-                      type="seatch"
+                      type="text"
                       className="search-icon"
+                      defaultValue={search}
+                      onChange={(e) => setSearch(e.target.value)}
                       placeholder="Поиск"
                     />
                   </div>
 
                   <div className="manager-list">
                     <ul>
-                      {request._getUsers.map((c: User) => (
-                        <li>
-                          <div className="form-check gkb-checkbox">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              defaultChecked={user.includes(c.id)}
-                              id={`invalidCheck${c.id}`}
-                              onClick={() => {
-                                !user.includes(c.id)
-                                  ? setUser([...user, c.id])
-                                  : setUser([
-                                      ...user.filter((s) => s !== c.id),
-                                    ]);
-                              }}
-                              required
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor={`invalidCheck${c.id}`}
-                            ></label>
-                          </div>
-                          <div className="profile">
-                            <img
-                              alt="ava"
-                              className="ava"
-                              src={
-                                process.env.PUBLIC_URL + "/images/def-ava.svg"
-                              }
-                            />
-                            <span className="name">{c.full_name}</span>
-                          </div>
-                          <span className="position">{c.position}</span>
-                        </li>
-                      ))}
+                      {request._getUsers
+                        .filter((f: User) =>
+                          f.full_name
+                            .toLowerCase()
+                            .includes(search.toLowerCase())
+                        )
+                        .map(
+                          (c: User) =>
+                            !request.agreeGroup[
+                              request.requestId
+                            ].user_name.includes(c.id) && (
+                              <li>
+                                <div className="form-check gkb-checkbox">
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    checked={user.includes(c.id)}
+                                    defaultChecked={user.includes(c.id)}
+                                    id={`invalidCheck${c.id}`}
+                                    onClick={() => {
+                                      !user.includes(c.id)
+                                        ? setUser([...user, c.id])
+                                        : setUser([
+                                            ...user.filter((s) => s !== c.id),
+                                          ]);
+                                    }}
+                                    required
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor={`invalidCheck${c.id}`}
+                                  ></label>
+                                </div>
+                                <div className="profile">
+                                  <img
+                                    alt="ava"
+                                    className="ava"
+                                    src={
+                                      process.env.PUBLIC_URL +
+                                      "/images/def-ava.svg"
+                                    }
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor={`invalidCheck${c.id}`}
+                                  >
+                                    <span className="name">{c.full_name}</span>
+                                  </label>
+                                </div>
+                                <span className="position">{c.position}</span>
+                              </li>
+                            )
+                        )}
                     </ul>
                   </div>
                 </div>
@@ -428,10 +438,6 @@ const Modal = observer((props: any) => {
                     type="button"
                     onClick={() => {
                       main.setModal(false);
-                      console.log(
-                        request.requestId,
-                        "request.requestIdrequest.requestId"
-                      );
                       if (request.requestId !== null)
                         request.agreeGroup[request.requestId] = {
                           ...request.agreeGroup[request.requestId],
@@ -511,22 +517,29 @@ const Modal = observer((props: any) => {
                   </h3>
                   <div className="search-input">
                     <input
-                      type="seatch"
+                      type="text"
                       className="search-icon"
                       placeholder="Поиск"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
                     />
                   </div>
                   <div className="manager-list">
                     <ul>
                       {request._getSigners &&
                         (request._getSigners as User[])
-                          .filter((f: User) => f.full_name.includes(search))
+                          .filter((f: User) =>
+                            f.full_name
+                              .toLowerCase()
+                              .includes(search.toLowerCase())
+                          )
                           .map((r: User) => (
                             <li
                               onClick={() =>
                                 request
                                   .updateRequest({
                                     manager_signer_user: r.id,
+                                    client: request._getRequest.client.id,
                                   })
                                   .then((r: any) => main.setModal(false))
                               }
@@ -817,7 +830,14 @@ const Modal = observer((props: any) => {
                                         "/images/def-ava.svg"
                                       }
                                     />
-                                    <span className="name">{r.full_name}</span>
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor={`input${r.id}`}
+                                    >
+                                      <span className="name">
+                                        {r.full_name}
+                                      </span>
+                                    </label>
                                   </div>
                                   <span className="position">{r.position}</span>
                                 </li>
@@ -959,21 +979,23 @@ const Modal = observer((props: any) => {
                     <button
                       type="button"
                       onClick={() => {
-                        main.regUser({
-                          client: main.clientData.client.id,
-                          first_head_full_name: firstRuk,
-                          deputy_head_full_name: zam,
-                          manager_full_name: man,
-                          iin: "IIN",
-                          global_ip: "ip",
-                          idcard_number: "idcard",
-                          manager_contacts: manCon,
-                          full_name: fullName,
-                          position_name: position,
-                          department_name: department,
-                          contacts: phone,
-                          email: email,
-                        });
+                        main
+                          .regUser({
+                            client: main.clientData.client.id,
+                            first_head_full_name: firstRuk,
+                            deputy_head_full_name: zam,
+                            manager_full_name: man,
+                            iin: "IIN",
+                            global_ip: "ip",
+                            idcard_number: "idcard",
+                            manager_contacts: manCon,
+                            full_name: fullName,
+                            position_name: position,
+                            department_name: department,
+                            contacts: phone,
+                            email: email,
+                          })
+                          .then(() => main.setModal(false));
                       }}
                       className="button btn-primary mr-16"
                     >
@@ -992,43 +1014,195 @@ const Modal = observer((props: any) => {
             </div>
           </div>
         </div>
-      ) : main.modalType === 12 ? (
-        <div className="modal modal-large">
+      ) : main.modalType === 13 ? (
+        <div className="modal modal-large-xl">
           <div
             className="modal-backbg"
             onClick={() => main.setModal(false)}
           ></div>
           <div className="modal-dialog">
             <div className="modal-content fadeInModal animated">
-              <div className="modal-close">
-                <i
-                  className="azla close-icon"
-                  onClick={() => main.setModal(false)}
-                ></i>
+              <div className="modal-close" onClick={() => main.setModal(false)}>
+                <i className="azla close-icon"></i>
               </div>
               <div className="modal-body">
-                <div className="write-reasons">
-                  <h3 className="text-left title-subhead mb-32">
-                    Подписание документа
+                <div className="add-manager">
+                  <h3 className="text-left title-subhead">
+                    Выберите подписанта
                   </h3>
-                  <div className="form-wrapper">
-                    <button
-                      type="button"
-                      onClick={() => request.getAuthKey()}
-                      className="button btn-primary"
-                    >
-                      Выберите ключ
-                    </button>
+                  <div className="search-input">
+                    <input
+                      type="text"
+                      className="search-icon"
+                      placeholder="Поиск"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
                   </div>
-                  <button
-                    className="button btn-primary mt-16"
-                    onClick={() =>
-                      request._getDoc && request.signDoc(request._getDoc.id)
-                    }
-                  >
-                    Подписать
-                  </button>
+                  <div className="manager-list">
+                    <ul>
+                      {request._getSigners &&
+                        (request._getSigners as User[])
+                          .filter((f: User) =>
+                            f.full_name
+                              .toLowerCase()
+                              .includes(search.toLowerCase())
+                          )
+                          .map((r: User) => (
+                            <li
+                              onClick={() =>
+                                request.data &&
+                                request
+                                  .addRequest({
+                                    ...request.data,
+                                    counterparty_signer_user: r.id,
+                                  })
+                                  .then(() => window.location.replace("/"))
+                              }
+                            >
+                              <div className="profile">
+                                <img
+                                  alt="ava"
+                                  className="ava"
+                                  src={
+                                    process.env.PUBLIC_URL +
+                                    "/images/def-ava.svg"
+                                  }
+                                />
+                                <span className="name">{r.full_name}</span>
+                              </div>
+                              <span className="position">{r.position}</span>
+                            </li>
+                          ))}
+                    </ul>
+                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : main.modalType === 14 ? (
+        <div className="modal modal-large-xl">
+          <div
+            className="modal-backbg"
+            onClick={() => main.setModal(false)}
+          ></div>
+          <div className="modal-dialog">
+            <div className="modal-content fadeInModal animated">
+              <div className="modal-close" onClick={() => main.setModal(false)}>
+                <i className="azla close-icon"></i>
+              </div>
+              <div className="modal-body">
+                <div className="paper-show">
+                  <h3 className="text-left title-subhead mb-16">
+                    Прикрепить документ
+                  </h3>
+                  <div className="file-add mb-16">
+                    <label
+                      // type="button"
+                      className="button btn-secondary"
+                    >
+                      <input
+                        type="file"
+                        onChange={(e) =>
+                          e &&
+                          e.target &&
+                          e.target.files &&
+                          e.target.files[0] &&
+                          setFile(e.target.files[0])
+                        }
+                        style={{ display: "none" }}
+                      />
+                      Добавить файл
+                    </label>
+
+                    {file !== null && (
+                      <div className="file-added">
+                        <div className="file-added-text">
+                          <i className="azla blank-alt-primary-icon mr-8"></i>
+                          <span>{file.name}</span>
+                        </div>
+                        <button
+                          type="button"
+                          className="btn-icon button delete-btn"
+                          onClick={() => setFile(null)}
+                        >
+                          <i className="azla trash-icon-alert"></i> Удалить
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="author mb-16">
+                    <h5 className="mr-16">Автор:</h5>
+                    <div className="profile">
+                      <img
+                        alt="ava"
+                        className="ava"
+                        src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
+                      />
+                      <span className="name">
+                        {request._getAllUsers &&
+                          request._getAllUsers.find(
+                            (u: User) => u.id === main.clientData.user.id
+                          )?.full_name}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="comment mb-8">
+                    <textarea
+                      rows={5}
+                      className="form-control-textarea mb-0"
+                      placeholder="Комментарий к документу"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (request.clientDocs && request.clientDocs[0]) {
+                      var bodyFormData = new FormData();
+                      bodyFormData.append("file", file);
+                      bodyFormData.append("comments", comment);
+                      bodyFormData.append(
+                        "doc_category",
+                        request.clientDocs[0].doc_category.toString()
+                      );
+                      bodyFormData.append(
+                        "doc_type",
+                        request.clientDocs[0].doc_type.toString()
+                      );
+                      bodyFormData.append(
+                        "service_type",
+                        request.clientDocs[0].service_type.toString()
+                      );
+                      bodyFormData.append(
+                        "is_draft",
+                        request.clientDocs[0].is_draft.toString()
+                      );
+                      bodyFormData.append(
+                        "version",
+                        (request.clientDocs[0].version + 1).toString()
+                      );
+                      request
+                        .addDocument(main.clientData.client.id, bodyFormData)
+                        .then(() => {
+                          main.setModal(false);
+                          setFile(null);
+                          setComment("");
+                        });
+                    }
+                  }}
+                  className="button btn-primary table-ml"
+                >
+                  Подтвердить
+                </button>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AuthPerson,
+  ClientUser,
   ClientUsers,
   ServiceCommon,
 } from "../api/Models/ServiceModels";
@@ -10,7 +11,6 @@ import { observer } from "mobx-react";
 const PartnersNew = observer((props: any) => {
   const { main, request } = props;
   const [tab, setTab] = React.useState("1");
-  const [service, setService] = React.useState("");
   const [files, setFiles] = React.useState<string[] | []>([]);
   const [filesTitle, setFilesTitle] = React.useState<string[] | []>([]);
 
@@ -18,6 +18,7 @@ const PartnersNew = observer((props: any) => {
     request.getRequests();
     request.getAuthPersons(main.clientData.client.id);
     request.getClientUsersForAdd(main.clientData.client.id);
+    request.getSigners(main.clientData.client.id);
     request.getClientServiceType();
     request.getPersonStatus();
     request.getDocumentsType();
@@ -82,8 +83,8 @@ const PartnersNew = observer((props: any) => {
                 </div>
 
                 <select
-                  value={service}
-                  onChange={(e) => setService(e.target.value)}
+                  value={request.service}
+                  onChange={(e) => (request.service = e.target.value)}
                   className="form-control-v mt-24"
                 >
                   <option>Выберите сервис ЕСБД</option>
@@ -327,24 +328,24 @@ const PartnersNew = observer((props: any) => {
                     <button
                       type="button"
                       className="button btn-primary"
-                      onClick={() =>
-                        request
-                          .addRequest({
-                            client: main.clientData.client.id,
-                            service_category: tab,
-                            service_type: service,
-                            client_doc: [],
-                            request_status: 6,
-                            request_stepper: 1,
-                            name_uid: main.clientData.user.id,
-                            client_user: main.usersNew.map(
-                              (u: ClientUsers) => u.id
-                            ),
-                            fulfill_date: new Date(),
-                            responsible_user: null,
-                          })
-                          .then(() => window.location.replace("/"))
+                      disabled={
+                        request.service === "" || main.usersNew.length === 0
                       }
+                      onClick={() => {
+                        main.setModal(true);
+                        main.setModalType(13);
+                        request.data = {
+                          client: main.clientData.client.id,
+                          service_category: tab,
+                          service_type: request.service,
+                          client_doc: [],
+                          client_user: main.usersNew.map(
+                            (u: ClientUser) => u.id
+                          ),
+                          request_status: 6,
+                          request_stepper: 1,
+                        };
+                      }}
                     >
                       Отправить заявку
                     </button>

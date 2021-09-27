@@ -5,6 +5,7 @@ import { observer } from "mobx-react";
 
 export interface LoginProps {
   main: any;
+  request: any;
   state: any;
   setState: any;
   client: NCALayer;
@@ -20,13 +21,7 @@ export class LoginPage extends React.Component<LoginProps, {}> {
           <div className="row">
             {this.props.main.loginState === "ecp" ||
             this.props.main.loginState === "ecpr" ? (
-              <LoginEcp
-                main={this.props.main}
-                state={this.props.state}
-                setState={this.props.setState}
-                client={this.props.client}
-                ready={this.props.ready}
-              />
+              <LoginEcp main={this.props.main} />
             ) : (
               <Login main={this.props.main} />
             )}

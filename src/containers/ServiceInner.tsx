@@ -1,6 +1,6 @@
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import {
@@ -12,8 +12,9 @@ import {
 } from "../api/Models/ServiceModels";
 
 const ServiceInner = observer((props: any) => {
+  const history = useHistory();
   const { id } = props.match.params;
-  const { request, main } = props;
+  const { request } = props;
 
   React.useEffect(() => {
     request.getClients();
@@ -30,9 +31,9 @@ const ServiceInner = observer((props: any) => {
               <div className="my-organization p-50 pad-b-128">
                 <div className="header-text-inner justify-content-between mb-32">
                   <div className="back-breadcrumbs">
-                    <Link to="/organization" className="back">
+                    <div onClick={() => history.goBack()} className="back">
                       <i className="azla arrow-left-icon"></i> Назад
-                    </Link>
+                    </div>
                     <div className="breadcrumbs">
                       <Link to="/organization">Моя организация</Link> /{" "}
                       <span>Подключенные услуги</span>

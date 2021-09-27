@@ -17,12 +17,12 @@ import {
 } from "./containers";
 import { LoginPage } from "./components";
 import PrivateRoute from "./PrivateRoute";
-import history from "./history";
 import { observer } from "mobx-react";
 import NCALayer, { MethodName } from "./ncalayer/ncalayer";
 import { extractKeyAlias, isNullOrEmpty } from "./ncalayer/helper";
 import Response, { ValidationType } from "./ncalayer/response";
 import AppState, { initAppState } from "./ncalayer/state";
+import { connection } from "./ncaLayer";
 
 const App = observer((props: any) => {
   const { main, request } = props;
@@ -32,6 +32,7 @@ const App = observer((props: any) => {
   const client = new NCALayer(ws.current!);
 
   React.useEffect(() => {
+    connection();
     ws.current = new WebSocket("wss://127.0.0.1:13579/");
     ws.current.onopen = (e: any) => {
       // tslint:disable-next-line
@@ -184,6 +185,7 @@ const App = observer((props: any) => {
                 <Redirect to={{ pathname: "/" }} />
               ) : (
                 <LoginPage
+                  request={request}
                   ready={ready}
                   setState={setState}
                   state={state}
@@ -203,7 +205,7 @@ const App = observer((props: any) => {
               ) : main.getRole === "Agent" ? (
                 <Partners request={request} main={main} />
               ) : (
-                <Request request={request} />
+                <Request request={request} main={main} />
               )
             }
             exact
