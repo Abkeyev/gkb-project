@@ -1098,25 +1098,25 @@ const Modal = observer((props: any) => {
                     Прикрепить документ
                   </h3>
                   <div className="file-add mb-16">
-                    <label
-                      // type="button"
-                      className="button btn-secondary"
-                    >
-                      <input
-                        type="file"
-                        onChange={(e) =>
-                          e &&
-                          e.target &&
-                          e.target.files &&
-                          e.target.files[0] &&
-                          setFile(e.target.files[0])
-                        }
-                        style={{ display: "none" }}
-                      />
-                      Добавить файл
-                    </label>
-
-                    {file !== null && (
+                    {file === null ? (
+                      <label
+                        // type="button"
+                        className="button btn-secondary"
+                      >
+                        <input
+                          type="file"
+                          onChange={(e) =>
+                            e &&
+                            e.target &&
+                            e.target.files &&
+                            e.target.files[0] &&
+                            setFile(e.target.files[0])
+                          }
+                          style={{ display: "none" }}
+                        />
+                        Добавить файл
+                      </label>
+                    ) : (
                       <div className="file-added">
                         <div className="file-added-text">
                           <i className="azla blank-alt-primary-icon mr-8"></i>

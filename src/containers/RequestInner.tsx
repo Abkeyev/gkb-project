@@ -659,8 +659,6 @@ const RequestInner = observer((props: any) => {
                           </div>
                         </div>
                       ) : !request._getRequest.is_model_contract &&
-                        request._getDocuments &&
-                        request._getDocuments[0] &&
                         request._getDoc ? (
                         <>
                           <div
@@ -670,19 +668,21 @@ const RequestInner = observer((props: any) => {
                           >
                             <div
                               className={`card-collapse-header ${
-                                request.getAgreeStatus ? "success" : ""
+                                request._getDoc.is_signed_by_both
+                                  ? "success"
+                                  : ""
                               }`}
                             >
                               {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
                               <div className="collapsing-header">
                                 <h3
                                   className={
-                                    request.getAgreeStatus
+                                    request._getDoc.is_signed_by_both
                                       ? "title-subhead mb-0 done-success"
                                       : "title-subhead mb-0"
                                   }
                                 >
-                                  {request.getAgreeStatus
+                                  {request._getDoc.is_signed_by_both
                                     ? "Договор согласован"
                                     : `На согласование: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}
                                 </h3>

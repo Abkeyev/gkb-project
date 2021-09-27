@@ -626,15 +626,15 @@ class RequestStore {
         .then((response: any) => {
           runInAction(async () => {
             if (response.base64) {
-              await this.signDoc();
+              await this.signDoc(response.base64);
             }
           });
         }));
   }
 
-  async signDoc() {
-    if (this.base64file.length) {
-      await signWithBase64(this.base64file)
+  async signDoc(base64: string) {
+    if (base64.length) {
+      await signWithBase64(base64)
         .then((res) => {
           this.afterNca();
         })
@@ -649,10 +649,9 @@ class RequestStore {
           signed_file: this.base64file,
         })
         .then(() => {
-          this.request! == null &&
-            runInAction(async () => {
-              if (this.request) this.getReview(this.request.id);
-            });
+          runInAction(async () => {
+            this.request && this.getReview(this.request.id);
+          });
         }));
   }
 

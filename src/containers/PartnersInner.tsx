@@ -520,14 +520,7 @@ const PartnersInner = observer((props: any) => {
                                             <button
                                               className="btn-status-signatory btn-icon active"
                                               onClick={() =>
-                                                request._getDocuments[0] &&
-                                                request
-                                                  .signDoc(
-                                                    request._getDocuments[0].id
-                                                  )
-                                                  .then(() =>
-                                                    main.setModal(false)
-                                                  )
+                                                request.getBase64()
                                               }
                                             >
                                               <i className="azla edit-white-icon"></i>
