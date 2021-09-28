@@ -411,13 +411,11 @@ const Partners = observer((props: any) => {
 
               <div className="req-inner-footer">
                 <div className="container">
-                  <Link to="/request-new">
-                    <button
-                      type="button"
-                      className="button btn-primary btn-icon ml-32"
-                    >
-                      <i className="azla add-plusRound-icon"></i> Новая заявка
-                    </button>
+                  <Link
+                    to="/request-new"
+                    className="button btn-primary btn-icon ml-32 d-inline-flex"
+                  >
+                    <i className="azla add-plusRound-icon"></i> Новая заявка
                   </Link>
                 </div>
               </div>

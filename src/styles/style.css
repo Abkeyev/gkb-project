@@ -87,13 +87,14 @@
   color: #3f4b60;
   margin-bottom: 0;
 }
-.reg-link a {
+.reg-link .link {
   font-weight: normal;
   font-size: 16px;
   text-align: center;
   display: block;
   text-decoration-line: underline;
   color: #20b5be;
+  cursor: pointer;
 }
 
 /* Register */
@@ -210,7 +211,7 @@
 .user-profile .company {
   color: white;
   display: block;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 .user-profile .name {
   font-weight: 500;
@@ -491,6 +492,7 @@
   color: #939393;
   transition: 0.3s;
   cursor: pointer;
+  user-select: none;
 }
 .step-item:before {
   width: 24px;
@@ -809,8 +811,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 8px;
   border-bottom: 1px solid #e0e6ef;
+  padding: 14px 8px;
 }
 .manager-list ul li:last-child {
   border-bottom: unset;
@@ -1193,6 +1195,14 @@
 }
 .paper-signatory .gkb-checkbox {
   margin-bottom: 0;
+  width: 100%;
+}
+.paper-signatory .manager-list ul li .profile {
+  user-select: none;
+  padding: 14px 8px;
+}
+.paper-signatory .manager-list ul li {
+  padding: 0;
 }
 .paper-signatory-footer {
 }

@@ -483,7 +483,7 @@ class RequestStore {
   async getClientServiceById(id: number) {
     await api.service.getClientServiceById(id).then((res) => {
       this.clientServiceById = res;
-      res.client && this.getClientUsersForAdd(res.client.id);
+      res.client && this.getClientUsersForAdd(res.client);
     });
   }
 
@@ -502,6 +502,9 @@ class RequestStore {
     this._getRequest &&
       (await api.service.sendType(this._getRequest).then((res) => {
         runInAction(async () => {
+          this._getRequest &&
+            this._getRequest.is_model_contract &&
+            this.setDoc(null);
           this._getRequest && (await this.getRequest(this._getRequest.id));
         });
       }));
@@ -562,7 +565,7 @@ class RequestStore {
   async toReview(id: number, data: any) {
     await api.service.toReview(id, data).then((res) => {
       runInAction(async () => {
-        this._getRequest && (await this.getRequest(id));
+        await this.getRequest(id);
       });
     });
   }
@@ -579,7 +582,7 @@ class RequestStore {
     });
   }
 
-  async setDoc(doc: Documents) {
+  async setDoc(doc: Documents | null) {
     this.doc = doc;
   }
 
@@ -650,7 +653,7 @@ class RequestStore {
         })
         .then(() => {
           runInAction(async () => {
-            this.request && this.getReview(this.request.id);
+            this.request && this.getRequest(this.request.id);
           });
         }));
   }

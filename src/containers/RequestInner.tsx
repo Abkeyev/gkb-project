@@ -677,12 +677,12 @@ const RequestInner = observer((props: any) => {
                               <div className="collapsing-header">
                                 <h3
                                   className={
-                                    request._getDoc.is_signed_by_both
+                                    request._getRequest.request_status === 14
                                       ? "title-subhead mb-0 done-success"
                                       : "title-subhead mb-0"
                                   }
                                 >
-                                  {request._getDoc.is_signed_by_both
+                                  {request._getRequest.request_status === 14
                                     ? "Договор согласован"
                                     : `На согласование: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}
                                 </h3>
@@ -966,82 +966,87 @@ const RequestInner = observer((props: any) => {
                                                   </ul>
                                                 </div>
                                                 {request._getRequest
-                                                  .request_status === 7 && (
-                                                  <span
-                                                    className="add-btn pad-l-56 pad-b-24"
-                                                    onClick={() => {
-                                                      main.setModal(true);
-                                                      main.setModalType(4);
-                                                      request.requestId = index;
-                                                    }}
-                                                  >
-                                                    <span className="circle">
-                                                      <i className="azla plus-primary-icon size-18"></i>
+                                                  .request_status === 13 &&
+                                                  request._getReviews.length ===
+                                                    0 && (
+                                                    <span
+                                                      className="add-btn pad-l-56 pad-b-24"
+                                                      onClick={() => {
+                                                        main.setModal(true);
+                                                        main.setModalType(4);
+                                                        request.requestId =
+                                                          index;
+                                                      }}
+                                                    >
+                                                      <span className="circle">
+                                                        <i className="azla plus-primary-icon size-18"></i>
+                                                      </span>
+                                                      Участники согласования
                                                     </span>
-                                                    Участники согласования
-                                                  </span>
-                                                )}
+                                                  )}
                                               </div>
                                             </>
                                           )
                                         )}
                                   </div>
-                                  {request._getRequest.request_status === 7 && (
-                                    <div
-                                      className="method-add-group"
-                                      onClick={() =>
-                                        (request.agreeGroup = [
-                                          ...request.agreeGroup,
-                                          {
-                                            user_name: [],
-                                            process_type: "Sequential",
-                                            process_number:
-                                              request.agreeGroup.length + 1,
-                                          },
-                                        ])
-                                      }
-                                    >
-                                      <span className="add-btn">
-                                        <span className="circle">
-                                          <i className="azla plus-primary-icon size-18"></i>
+                                  {request._getRequest.request_status === 13 &&
+                                    request._getReviews.length === 0 && (
+                                      <div
+                                        className="method-add-group"
+                                        onClick={() =>
+                                          (request.agreeGroup = [
+                                            ...request.agreeGroup,
+                                            {
+                                              user_name: [],
+                                              process_type: "Sequential",
+                                              process_number:
+                                                request.agreeGroup.length + 1,
+                                            },
+                                          ])
+                                        }
+                                      >
+                                        <span className="add-btn">
+                                          <span className="circle">
+                                            <i className="azla plus-primary-icon size-18"></i>
+                                          </span>
+                                          Добавить группу
                                         </span>
-                                        Добавить группу
-                                      </span>
-                                    </div>
-                                  )}
+                                      </div>
+                                    )}
                                 </div>
                               </div>
 
-                              {request._getRequest.request_status === 7 && (
-                                <div className="collapse-footer">
-                                  <button
-                                    type="button"
-                                    className={`button btn-primary`}
-                                    disabled={
-                                      request.agreeGroup.filter(
-                                        (g: Agree) => g.user_name.length > 0
-                                      ).length < 1
-                                    }
-                                    onClick={() =>
-                                      request.toReview(
-                                        request._getRequest.id,
-                                        request.agreeGroup
-                                      )
-                                    }
-                                  >
-                                    Отправить на согласование
-                                  </button>
-                                </div>
-                              )}
+                              {request._getRequest.request_status === 13 &&
+                                request._getReviews.length === 0 && (
+                                  <div className="collapse-footer">
+                                    <button
+                                      type="button"
+                                      className={`button btn-primary`}
+                                      disabled={
+                                        request.agreeGroup.filter(
+                                          (g: Agree) => g.user_name.length > 0
+                                        ).length < 1
+                                      }
+                                      onClick={() =>
+                                        request.toReview(
+                                          request._getRequest.id,
+                                          request.agreeGroup
+                                        )
+                                      }
+                                    >
+                                      Отправить на согласование
+                                    </button>
+                                  </div>
+                                )}
                             </div>
                           </div>
                           <div
                             className={`card-collapse tab-num-1 ${
                               !signNotType ? "collapsed " : ""
                             } ${
-                              request._getRequest.request_status !== 14
-                                ? "disabled"
-                                : ""
+                              request._getRequest.request_status === 14
+                                ? ""
+                                : "disabled"
                             }`}
                           >
                             {/* При сворачивании дается класс "collapsed" */}
@@ -1276,20 +1281,22 @@ const RequestInner = observer((props: any) => {
                                   </div>
                                 )}
                               </div>
-                              <div className="collapse-footer">
-                                <button
-                                  type="button"
-                                  className={`button btn-primary ${
-                                    request._getConSigner &&
-                                    request._getManSigner
-                                      ? ""
-                                      : "disabled"
-                                  }`}
-                                  onClick={() => request.toSign()}
-                                >
-                                  Отправить на подписание
-                                </button>
-                              </div>
+                              {request._getRequest.request_status === 14 && (
+                                <div className="collapse-footer">
+                                  <button
+                                    type="button"
+                                    className={`button btn-primary ${
+                                      request._getConSigner &&
+                                      request._getManSigner
+                                        ? ""
+                                        : "disabled"
+                                    }`}
+                                    onClick={() => request.toSign()}
+                                  >
+                                    Отправить на подписание
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </>
@@ -1327,9 +1334,15 @@ const RequestInner = observer((props: any) => {
                                 (d: Documents) => (
                                   <tr
                                     onClick={() => {
-                                      main.setModal(true);
-                                      main.setModalType(2);
-                                      request.setDoc(d);
+                                      if (
+                                        request._getRequest.request_status !== 7
+                                      ) {
+                                        request.setDoc(d);
+                                      } else {
+                                        main.setModal(true);
+                                        main.setModalType(2);
+                                        request.setDoc(d);
+                                      }
                                     }}
                                   >
                                     <td>{d.doc_name}</td>
@@ -1739,7 +1752,7 @@ const RequestInner = observer((props: any) => {
                               onClick={() =>
                                 request
                                   .nextRequest(request._getRequest, true)
-                                  .then(() => request.setStep(request.step + 1))
+                                  .then(() => request.setStep(2))
                               }
                             >
                               Да, успешно

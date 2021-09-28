@@ -376,42 +376,40 @@ const Modal = observer((props: any) => {
                               request.requestId
                             ].user_name.includes(c.id) && (
                               <li>
-                                <div className="form-check gkb-checkbox">
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    checked={user.includes(c.id)}
-                                    defaultChecked={user.includes(c.id)}
-                                    id={`invalidCheck${c.id}`}
-                                    onClick={() => {
-                                      !user.includes(c.id)
-                                        ? setUser([...user, c.id])
-                                        : setUser([
-                                            ...user.filter((s) => s !== c.id),
-                                          ]);
-                                    }}
-                                    required
-                                  />
-                                  <label
-                                    className="form-check-label"
-                                    htmlFor={`invalidCheck${c.id}`}
-                                  ></label>
-                                </div>
                                 <div className="profile">
-                                  <img
-                                    alt="ava"
-                                    className="ava"
-                                    src={
-                                      process.env.PUBLIC_URL +
-                                      "/images/def-ava.svg"
-                                    }
-                                  />
-                                  <label
-                                    className="form-check-label"
-                                    htmlFor={`invalidCheck${c.id}`}
-                                  >
-                                    <span className="name">{c.full_name}</span>
-                                  </label>
+                                  <div className="form-check gkb-checkbox">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      checked={user.includes(c.id)}
+                                      defaultChecked={user.includes(c.id)}
+                                      id={`invalidCheck${c.id}`}
+                                      onClick={() => {
+                                        !user.includes(c.id)
+                                          ? setUser([...user, c.id])
+                                          : setUser([
+                                              ...user.filter((s) => s !== c.id),
+                                            ]);
+                                      }}
+                                      required
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor={`invalidCheck${c.id}`}
+                                    >
+                                      <img
+                                        alt="ava"
+                                        className="ava"
+                                        src={
+                                          process.env.PUBLIC_URL +
+                                          "/images/def-ava.svg"
+                                        }
+                                      />
+                                      <span className="name">
+                                        {c.full_name}
+                                      </span>
+                                    </label>
+                                  </div>
                                 </div>
                                 <span className="position">{c.position}</span>
                               </li>
@@ -789,55 +787,52 @@ const Modal = observer((props: any) => {
                                 (u: ClientUser) => u.id === r.id
                               ).length === 0 && (
                                 <li key={r.id}>
-                                  <div className="form-check gkb-checkbox">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      checked={
-                                        users.filter(
-                                          (u: ClientUser) => u.id === r.id
-                                        ).length > 0
-                                      }
-                                      onChange={() => {
-                                        console.log(
+                                  <div className="profile">
+                                    <div className="form-check gkb-checkbox">
+                                      <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={
                                           users.filter(
                                             (u: ClientUser) => u.id === r.id
                                           ).length > 0
-                                        );
-                                        users.filter(
-                                          (u: ClientUser) => u.id === r.id
-                                        ).length > 0
-                                          ? setUsers([
-                                              ...users.filter(
-                                                (u: ClientUser) => u.id !== r.id
-                                              ),
-                                            ])
-                                          : setUsers([...users, r]);
-                                      }}
-                                      id={`input${r.id}`}
-                                      required
-                                    />
-                                    <label
-                                      className="form-check-label"
-                                      htmlFor={`input${r.id}`}
-                                    ></label>
-                                  </div>
-                                  <div className="profile">
-                                    <img
-                                      className="ava"
-                                      src={
-                                        process.env.PUBLIC_URL +
-                                        "/images/def-ava.svg"
-                                      }
-                                    />
-                                    <label
-                                      className="form-check-label"
-                                      htmlFor={`input${r.id}`}
-                                    >
-                                      <span className="name">
-                                        {r.full_name}
-                                      </span>
-                                    </label>
+                                        }
+                                        onChange={() => {
+                                          console.log(
+                                            users.filter(
+                                              (u: ClientUser) => u.id === r.id
+                                            ).length > 0
+                                          );
+                                          users.filter(
+                                            (u: ClientUser) => u.id === r.id
+                                          ).length > 0
+                                            ? setUsers([
+                                                ...users.filter(
+                                                  (u: ClientUser) =>
+                                                    u.id !== r.id
+                                                ),
+                                              ])
+                                            : setUsers([...users, r]);
+                                        }}
+                                        id={`input${r.id}`}
+                                        required
+                                      />
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor={`input${r.id}`}
+                                      >
+                                        <img
+                                          className="ava"
+                                          src={
+                                            process.env.PUBLIC_URL +
+                                            "/images/def-ava.svg"
+                                          }
+                                        />
+                                        <span className="name">
+                                          {r.full_name}
+                                        </span>
+                                      </label>
+                                    </div>
                                   </div>
                                   <span className="position">{r.position}</span>
                                 </li>

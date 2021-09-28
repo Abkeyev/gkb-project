@@ -4,7 +4,6 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import Modal from "../components/Modal";
 import ModalFooter from "../components/ModalFooter";
-import { useEffect } from "react";
 
 const Profile = observer((props: any) => {
   const { main, request } = props;
@@ -12,91 +11,56 @@ const Profile = observer((props: any) => {
   const setModalOpened = (val: any) => {
     setModal(null);
     setOpened(val);
-  }
+  };
   const [modalOpened, setOpened]: any = useState(true);
   const [modal, setModal]: any = useState(null);
+  const [email, setEmail] = useState("");
 
-  useEffect(() => {
-    
-  }, [modalOpened, modal])
-
-  const dolzhnostModal = (
-    <Modal title="Редактирование должности" modalOpened={modalOpened} setModalOpened={(val: any) => setModalOpened(val)}>
-        <div className="form-wrapper">
-          <input type="text" value="Аналитик" />
-          <label>Должность</label>
-        </div>
-        <ModalFooter>
-          <div className="d-flex">
-            <button
-              type="button"
-              className="button btn-secondary mr-16"
-              onClick={() => setModalOpened(false)}
-            >
-              Отмена
-            </button>
-            <button
-              type="button"
-              className="button btn-primary"
-              onClick={() => request.updateUser(main.clientData.client.id, {email: "asdadsasd@asd.asd"})}
-            >
-              Сохранить
-            </button>
-          </div>
-        </ModalFooter>
-    </Modal>
-  );
+  React.useEffect(() => {
+    console.log(email, "email");
+  }, [email]);
 
   const emailModal = (
-    <Modal title="Профайл" modalOpened={modalOpened} setModalOpened={(val: any) => setModalOpened(val)}>
+    <Modal
+      title="Профайл"
+      modalOpened={modalOpened}
+      setModalOpened={(val: any) => setModalOpened(val)}
+    >
       <div className="form-wrapper">
-        <input type="email" defaultValue={request?._getUser?.email} />
+        <input
+          type="email"
+          defaultValue={request._getUser?.email}
+          onChange={(e) => {
+            e.preventDefault();
+            console.log(e.target.value);
+            setEmail(e.target.value);
+          }}
+        />
         <label>E-mail</label>
       </div>
       <ModalFooter>
         <div className="d-flex">
-            <button
-              type="button"
-              className="button btn-secondary mr-16"
-              onClick={() => setModalOpened(false)}
-            >
-              Отмена
-            </button>
-            <button
-              type="button"
-              className="button btn-primary"
-              onClick={() => request.updateUser(main.clientData.client.id, {email: "asdadsasd@asd.asd"})}
-            >
-              Сохранить
-            </button>
-          </div>
-      </ModalFooter>
-    </Modal>
-  );
-
-  const roleModal = (
-    <Modal title="Профайл" modalOpened={modalOpened} setModalOpened={(val: any) => setModalOpened(val)}>
-      <div className="form-wrapper">
-        <input type="text" defaultValue={request?._getUser?.role} />
-        <label>Роль</label>
-      </div>
-      <ModalFooter>
-        <div className="d-flex">
-            <button
-              type="button"
-              className="button btn-secondary mr-16"
-              onClick={() => setModalOpened(false)}
-            >
-              Отмена
-            </button>
-            <button
-              type="button"
-              className="button btn-primary"
-              onClick={() => request.updateUser(main.clientData.client.id, {email: "asdadsasd@asd.asd"})}
-            >
-              Сохранить
-            </button>
-          </div>
+          <button
+            type="button"
+            className="button btn-secondary mr-16"
+            onClick={() => setModalOpened(false)}
+          >
+            Отмена
+          </button>
+          <button
+            type="button"
+            className="button btn-primary"
+            onClick={(e) => {
+              e.preventDefault();
+              console.log(email);
+              request.updateUser(main.clientData.client.id, {
+                email: email,
+              });
+            }}
+          >
+            Сохранить
+          </button>
+        </div>
       </ModalFooter>
     </Modal>
   );
@@ -128,22 +92,29 @@ const Profile = observer((props: any) => {
                           <span className="left">Должность:</span>
                           <span className="right d-flex">
                             {request._getUser.position}{" "}
-                            <span className="edit" onClick={() => {
-                              setOpened(true);
-                              setModal(dolzhnostModal);
-                            }}>
+                            {/* <span
+                              className="edit"
+                              onClick={() => {
+                                setOpened(true);
+                                setModal(dolzhnostModal);
+                              }}
+                            >
                               <i className="azla edit-primary-icon ml-8"></i>
-                            </span>
+                            </span> */}
                           </span>
                         </li>
                         <li>
                           <span className="left">Email:</span>
                           <span className="right d-flex">
                             {request._getUser.email}{" "}
-                            <span className="edit" onClick={() => {
-                              setOpened(true);
-                              setModal(emailModal);
-                            }}>
+                            <span
+                              className="edit"
+                              onClick={() => {
+                                // setEmail(request._getUser.email);
+                                setOpened(true);
+                                setModal(emailModal);
+                              }}
+                            >
                               <i className="azla edit-primary-icon ml-8"></i>
                             </span>
                           </span>
@@ -157,20 +128,15 @@ const Profile = observer((props: any) => {
                         <li>
                           <span className="left">Роль:</span>
                           <span className="right d-flex">
-                            {request._getUser.position}{" "}
-                            <span className="edit" onClick={() => {
-                              setOpened(true);
-                              setModal(roleModal);
-                            }}>
-                              <i className="azla edit-primary-icon ml-8"></i>
-                            </span>
+                            {request._getUser.position}
                           </span>
                         </li>
                         <li>
                           <span className="left">Организация:</span>
                           <span className="right d-flex">
                             <a href="#" className="pre-primary-color">
-                              {request._getClient && request._getClient.longname}{" "}
+                              {request._getClient &&
+                                request._getClient.longname}{" "}
                             </a>
                           </span>
                         </li>

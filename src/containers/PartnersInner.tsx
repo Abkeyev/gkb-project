@@ -599,7 +599,9 @@ const PartnersInner = observer((props: any) => {
                             </div>
                           </div>
                         </div>
-                      ) : (
+                      ) : !request._getRequest.is_model_contract &&
+                        request._getDocuments &&
+                        request._getDocuments[0] ? (
                         <>
                           <div
                             className={`card-collapse tab-num-2 two-signatory ${
@@ -623,10 +625,11 @@ const PartnersInner = observer((props: any) => {
                                   {request.getAgreeStatus
                                     ? "Договор согласован"
                                     : `На согласование: Договор №${
-                                        request._getDoc && request._getDoc.id
+                                        request._getDocuments[0] &&
+                                        request._getDocuments[0].id
                                       } - вер. ${
-                                        request._getDoc &&
-                                        request._getDoc.version
+                                        request._getDocuments[0] &&
+                                        request._getDocuments[0].version
                                       }`}
                                 </h3>
                                 <span
@@ -644,9 +647,9 @@ const PartnersInner = observer((props: any) => {
                                       type="button"
                                       className="button btn-secondary btn-icon"
                                       onClick={() =>
-                                        request._getDoc &&
+                                        request._getDocuments[0] &&
                                         request.downloadDocument(
-                                          request._getDoc.id
+                                          request._getDocuments[0].id
                                         )
                                       }
                                     >
@@ -793,8 +796,7 @@ const PartnersInner = observer((props: any) => {
                                 : ""
                             } ${
                               request._getRequest.request_status === 13 ||
-                              request._getRequest.request_status === 7 ||
-                              request._getRequest.request_status === 6
+                              request._getRequest.request_status === 14
                                 ? "disabled"
                                 : ""
                             }`}
@@ -820,10 +822,11 @@ const PartnersInner = observer((props: any) => {
                                   {request._getRequest.request_stepper > 2
                                     ? "Договор подписан"
                                     : `На подписание: Договор №${
-                                        request._getDoc && request._getDoc.id
+                                        request._getDocuments[0] &&
+                                        request._getDocuments[0].id
                                       } - вер. ${
-                                        request._getDoc &&
-                                        request._getDoc.version
+                                        request._getDocuments[0] &&
+                                        request._getDocuments[0].version
                                       }`}
                                 </h3>
                                 <span
@@ -846,9 +849,9 @@ const PartnersInner = observer((props: any) => {
                                       type="button"
                                       className="button btn-secondary btn-icon"
                                       onClick={() =>
-                                        request._getDoc &&
+                                        request._getDocuments[0] &&
                                         request.downloadDocument(
-                                          request._getDoc.id
+                                          request._getDocuments[0].id
                                         )
                                       }
                                     >
@@ -876,7 +879,7 @@ const PartnersInner = observer((props: any) => {
                                   )}
                                 </div>
                               </div>
-                            </div>{" "}
+                            </div>
                             <div className="collapse-content">
                               <div className="collapse-body">
                                 {request._getConSigner &&
@@ -914,25 +917,20 @@ const PartnersInner = observer((props: any) => {
                                             </p>
                                             {request._getRequest
                                               .request_status === 11 &&
-                                            request._getDoc &&
-                                            !request._getDoc
+                                            request._getDocuments[0] &&
+                                            !request._getDocuments[0]
                                               .is_signed_by_agent ? (
                                               <button
                                                 className="btn-status-signatory btn-icon active"
                                                 onClick={() =>
-                                                  request._getDoc &&
-                                                  request
-                                                    .signDoc(request._getDoc.id)
-                                                    .then(() =>
-                                                      main.setModal(false)
-                                                    )
+                                                  request.getBase64()
                                                 }
                                               >
                                                 <i className="azla edit-white-icon"></i>
                                                 Подписать
                                               </button>
-                                            ) : request._getDoc &&
-                                              request._getDoc
+                                            ) : request._getDocuments[0] &&
+                                              request._getDocuments[0]
                                                 .is_signed_by_agent ? (
                                               <span className="btn-status done">
                                                 Подписано
@@ -948,7 +946,7 @@ const PartnersInner = observer((props: any) => {
                                       </div>
                                     </div>
                                   )}
-                                {request._getManSigner ? (
+                                {request._getManSigner &&
                                   (request._getManSigner as User) && (
                                     <div className="collapse-signatory">
                                       <h4 className="collapse-text">
@@ -982,14 +980,14 @@ const PartnersInner = observer((props: any) => {
                                             <p className="desc">
                                               {request._getManSigner.position}
                                             </p>
-                                            {request._getDoc &&
-                                            request._getDoc
+                                            {request._getDocuments[0] &&
+                                            request._getDocuments[0]
                                               .is_signed_by_both ? (
                                               <span className="btn-status done">
                                                 Подписано
                                               </span>
-                                            ) : request._getDoc &&
-                                              !request._getDoc
+                                            ) : request._getDocuments[0] &&
+                                              !request._getDocuments[0]
                                                 .is_signed_by_both ? (
                                               <span className="btn-status not-active">
                                                 Не Подписано
@@ -1001,27 +999,13 @@ const PartnersInner = observer((props: any) => {
                                         </div>
                                       </div>
                                     </div>
-                                  )
-                                ) : (
-                                  <div className="method-add-group pad-l-0">
-                                    <span
-                                      className="add-btn"
-                                      onClick={() => {
-                                        main.setModal(true);
-                                        main.setModalType(6);
-                                      }}
-                                    >
-                                      <span className="circle">
-                                        <i className="azla plus-primary-icon size-18"></i>
-                                      </span>
-                                      Добавить подписанта
-                                    </span>
-                                  </div>
-                                )}
+                                  )}
                               </div>
                             </div>
                           </div>
                         </>
+                      ) : (
+                        ""
                       )}
                       <div className="d-flex-align-c-spaceb mb-32">
                         <h3 className="title-subhead">
@@ -1074,7 +1058,6 @@ const PartnersInner = observer((props: any) => {
                           )}
                         </tbody>
                       </table>
-
                       <h3 className="title-subhead mb-16">
                         Документы контрагента
                       </h3>

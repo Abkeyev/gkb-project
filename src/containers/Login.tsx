@@ -68,6 +68,7 @@ const Login = observer((props: LoginProps) => {
             <div className="reg-link">
               <p>Еще не зарегистрированы?</p>
               <span
+                className="link"
                 onClick={() => {
                   main.loginState = "ecpr";
                 }}
