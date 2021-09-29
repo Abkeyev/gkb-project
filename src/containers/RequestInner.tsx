@@ -61,7 +61,8 @@ const RequestInner = observer((props: any) => {
                       request._getClient.longname}
                   </h1>
 
-                  {request._getRequest.request_status === 10 && (
+                  {(request._getRequest.request_status === 10 ||
+                    request._getRequest.request_status === 9) && (
                     <div className="mess-card alert-mess mb-32 col-md-8">
                       <h5>Заявка отклонена</h5>
                       <p>Причина: {request._getRequest.client_comment}</p>
@@ -189,15 +190,20 @@ const RequestInner = observer((props: any) => {
                                 <span className="left">Менеджер заявки:</span>
                                 <span className="right d-flex">
                                   {request._getManUser.full_name}{" "}
-                                  <span
-                                    className="edit"
-                                    onClick={() => {
-                                      main.setModalType(0);
-                                      main.setModal(true);
-                                    }}
-                                  >
-                                    <i className="azla edit-primary-icon ml-8"></i>
-                                  </span>
+                                  {request._getRequest.request_stepper === 1 &&
+                                    request._getRequest.request_status !== 9 &&
+                                    request._getRequest.request_status !==
+                                      10 && (
+                                      <span
+                                        className="edit"
+                                        onClick={() => {
+                                          main.setModalType(0);
+                                          main.setModal(true);
+                                        }}
+                                      >
+                                        <i className="azla edit-primary-icon ml-8"></i>
+                                      </span>
+                                    )}
                                 </span>
                               </li>
                             )}
@@ -260,7 +266,7 @@ const RequestInner = observer((props: any) => {
                                 {request._getRequest.fulfill_date
                                   ? moment(
                                       request._getRequest.fulfill_date
-                                    ).format("MM.DD.YYYY")
+                                    ).format("DD.MM.YYYY")
                                   : "-"}
                               </span>
                             </li>
@@ -432,9 +438,16 @@ const RequestInner = observer((props: any) => {
                           Нетиповой
                         </span>
                       </div>
+                      {console.log(
+                        request._getClientDocs,
+                        "request._getClientDocs"
+                      )}
                       {request._getRequest.is_model_contract &&
-                      request._getDocuments &&
-                      request._getDocuments[0] ? (
+                      request._getClientDocs &&
+                      request._getClientDocs.length > 0 &&
+                      request._getClientDocs[
+                        request._getClientDocs.length - 1
+                      ] ? (
                         <div
                           className={`card-collapse tab-num-1 ${
                             (!signType &&
@@ -464,7 +477,15 @@ const RequestInner = observer((props: any) => {
                                 {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
                                 {request._getRequest.request_stepper === 3
                                   ? "Договор подписан"
-                                  : `На подписание: Договор №${request._getDocuments[0].id} - вер. ${request._getDocuments[0].version}`}
+                                  : `На подписание: Договор №${
+                                      request._getClientDocs[
+                                        request._getClientDocs.length - 1
+                                      ].id
+                                    } - вер. ${
+                                      request._getClientDocs[
+                                        request._getClientDocs.length - 1
+                                      ].version
+                                    }`}
                               </h3>
                               <span
                                 className="btn-collapse"
@@ -481,9 +502,13 @@ const RequestInner = observer((props: any) => {
                                     type="button"
                                     className="button btn-secondary btn-icon"
                                     onClick={() =>
-                                      request._getDocuments[0] &&
+                                      request._getClientDocs[
+                                        request._getClientDocs.length - 1
+                                      ] &&
                                       request.downloadDocument(
-                                        request._getDocuments[0].id
+                                        request._getClientDocs[
+                                          request._getClientDocs.length - 1
+                                        ].id
                                       )
                                     }
                                   >
@@ -548,17 +573,20 @@ const RequestInner = observer((props: any) => {
                                           <p className="desc">
                                             {request._getConSigner.position}
                                           </p>
-                                          {request._getDocuments[0]
-                                            .is_signed_by_both ||
-                                          request._getDocuments[0]
-                                            .is_signed_by_agent ? (
+                                          {request._getClientDocs[
+                                            request._getClientDocs.length - 1
+                                          ].is_signed_by_both ||
+                                          request._getClientDocs[
+                                            request._getClientDocs.length - 1
+                                          ].is_signed_by_agent ? (
                                             <span className="btn-status done">
                                               Подписано
                                             </span>
                                           ) : request._getRequest
                                               .request_status === 11 &&
-                                            !request._getDocuments[0]
-                                              .is_signed_by_agent ? (
+                                            !request._getClientDocs[
+                                              request._getClientDocs.length - 1
+                                            ].is_signed_by_agent ? (
                                             <span className="btn-status not-active">
                                               Не Подписано
                                             </span>
@@ -602,8 +630,9 @@ const RequestInner = observer((props: any) => {
                                         <p className="desc">
                                           {request._getManSigner.position}
                                         </p>
-                                        {request._getDocuments[0]
-                                          .is_signed_by_both ? (
+                                        {request._getClientDocs[
+                                          request._getClientDocs.length - 1
+                                        ].is_signed_by_both ? (
                                           <span className="btn-status done">
                                             Подписано
                                           </span>
@@ -613,9 +642,7 @@ const RequestInner = observer((props: any) => {
                                             className="btn-status-signatory btn-icon active"
                                             onClick={() =>
                                               request
-                                                .nextRequest(
-                                                  request._getRequest
-                                                )
+                                                .signDocGkb(true)
                                                 .then(() => {
                                                   setSignType(true);
                                                 })
@@ -663,12 +690,21 @@ const RequestInner = observer((props: any) => {
                         <>
                           <div
                             className={`card-collapse tab-num-2 two-signatory ${
-                              !agreeNotType ? "collapsed" : ""
+                              !agreeNotType ||
+                              request._getRequest.request_status === 14 ||
+                              (request._getReviews.length > 0 &&
+                                (request._getRequest.request_status === 11 ||
+                                  request._getRequest.request_status === 12))
+                                ? "collapsed"
+                                : ""
                             }`}
                           >
                             <div
                               className={`card-collapse-header ${
-                                request._getDoc.is_signed_by_both
+                                request._getRequest.request_status === 14 ||
+                                (request._getReviews.length > 0 &&
+                                  (request._getRequest.request_status === 11 ||
+                                    request._getRequest.request_status === 12))
                                   ? "success"
                                   : ""
                               }`}
@@ -677,12 +713,22 @@ const RequestInner = observer((props: any) => {
                               <div className="collapsing-header">
                                 <h3
                                   className={
-                                    request._getRequest.request_status === 14
+                                    request._getRequest.request_status === 14 ||
+                                    (request._getReviews.length > 0 &&
+                                      (request._getRequest.request_status ===
+                                        11 ||
+                                        request._getRequest.request_status ===
+                                          12))
                                       ? "title-subhead mb-0 done-success"
                                       : "title-subhead mb-0"
                                   }
                                 >
-                                  {request._getRequest.request_status === 14
+                                  {request._getRequest.request_status === 14 ||
+                                  (request._getReviews.length > 0 &&
+                                    (request._getRequest.request_status ===
+                                      11 ||
+                                      request._getRequest.request_status ===
+                                        12))
                                     ? "Договор согласован"
                                     : `На согласование: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}
                                 </h3>
@@ -826,7 +872,12 @@ const RequestInner = observer((props: any) => {
                                                               Согласовано
                                                             </span>
                                                           ) : (
-                                                            <span className="btn-status not-active">
+                                                            <span
+                                                              onClick={() =>
+                                                                request.sendReviews()
+                                                              }
+                                                              className="btn-status not-active"
+                                                            >
                                                               Не согласовано
                                                             </span>
                                                           )}
@@ -1120,7 +1171,7 @@ const RequestInner = observer((props: any) => {
                                   )}
                                 </div>
                               </div>
-                            </div>{" "}
+                            </div>
                             <div className="collapse-content">
                               <div className="collapse-body">
                                 {request._getConSigner &&
@@ -1221,9 +1272,7 @@ const RequestInner = observer((props: any) => {
                                                 className="btn-status-signatory btn-icon active"
                                                 onClick={() =>
                                                   request
-                                                    .nextRequest(
-                                                      request._getRequest
-                                                    )
+                                                    .signDocGkb()
                                                     .then(() => {
                                                       setAgreeNotType(false);
                                                       setSignNotType(true);
@@ -1301,12 +1350,15 @@ const RequestInner = observer((props: any) => {
                           </div>
                         </>
                       ) : (
+                        ""
+                      )}
+                      {!request._getRequest.is_model_contract && (
                         <>
                           <div className="d-flex-align-c-spaceb mb-32">
                             <h3 className="title-subhead">
                               История изменения договора{" "}
                               <span className="number">
-                                {(request._getDocuments as Documents[]).length}
+                                {(request._getClientDocs as Documents[]).length}
                               </span>
                             </h3>
                             <button
@@ -1330,17 +1382,17 @@ const RequestInner = observer((props: any) => {
                               </tr>
                             </thead>
                             <tbody>
-                              {(request._getDocuments as Documents[]).map(
+                              {(request._getClientDocs as Documents[]).map(
                                 (d: Documents) => (
                                   <tr
                                     onClick={() => {
                                       if (
-                                        request._getRequest.request_status !== 7
+                                        request._getRequest.request_status === 7
                                       ) {
-                                        request.setDoc(d);
-                                      } else {
                                         main.setModal(true);
                                         main.setModalType(2);
+                                        request.setTempDoc(d);
+                                      } else {
                                         request.setDoc(d);
                                       }
                                     }}
@@ -1627,7 +1679,7 @@ const RequestInner = observer((props: any) => {
                                     <span className="right">
                                       {moment(
                                         request._getRequest.reg_date
-                                      ).format("MM.DD.YYYY")}
+                                      ).format("DD.MM.YYYY")}
                                     </span>
                                   </li>
                                   <li>
@@ -1637,7 +1689,7 @@ const RequestInner = observer((props: any) => {
                                     <span className="right">
                                       {moment(
                                         request._getRequest.fulfill_date
-                                      ).format("MM.DD.YYYY")}
+                                      ).format("DD.MM.YYYY")}
                                     </span>
                                   </li>
                                 </ul>
@@ -1696,7 +1748,9 @@ const RequestInner = observer((props: any) => {
                 <div className="req-inner-footer">
                   <div className="container">
                     {request._getManUser &&
-                    request._getRequest.request_stepper === 1 ? (
+                    request._getRequest.request_stepper === 1 &&
+                    request._getRequest.request_status !== 9 &&
+                    request._getRequest.request_status !== 10 ? (
                       <div className="manager-req mrl-32">
                         <div className="left">
                           <p>Менеджер заявки</p>
@@ -1714,7 +1768,9 @@ const RequestInner = observer((props: any) => {
                           </div>
                         </div>
 
-                        {request._getRequest.request_status === 10 ? (
+                        {request._getRequest.request_status === 9 ? (
+                          <></>
+                        ) : request._getRequest.request_status === 10 ? (
                           <div className="right alert">
                             <p>Заявка отклонена</p>
                             <button
@@ -1761,6 +1817,8 @@ const RequestInner = observer((props: any) => {
                         )}
                       </div>
                     ) : request._getRequest.request_stepper === 1 &&
+                      request._getRequest.request_status !== 9 &&
+                      request._getRequest.request_status !== 10 &&
                       request.step === 1 ? (
                       <button
                         type="button"

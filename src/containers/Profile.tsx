@@ -2,68 +2,12 @@ import React from "react";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import Modal from "../components/Modal";
-import ModalFooter from "../components/ModalFooter";
+import { Link } from "react-router-dom";
+import moment from "moment";
 
 const Profile = observer((props: any) => {
   const { main, request } = props;
-
-  const setModalOpened = (val: any) => {
-    setModal(null);
-    setOpened(val);
-  };
-  const [modalOpened, setOpened]: any = useState(true);
   const [modal, setModal]: any = useState(null);
-  const [email, setEmail] = useState("");
-
-  React.useEffect(() => {
-    console.log(email, "email");
-  }, [email]);
-
-  const emailModal = (
-    <Modal
-      title="Профайл"
-      modalOpened={modalOpened}
-      setModalOpened={(val: any) => setModalOpened(val)}
-    >
-      <div className="form-wrapper">
-        <input
-          type="email"
-          defaultValue={request._getUser?.email}
-          onChange={(e) => {
-            e.preventDefault();
-            console.log(e.target.value);
-            setEmail(e.target.value);
-          }}
-        />
-        <label>E-mail</label>
-      </div>
-      <ModalFooter>
-        <div className="d-flex">
-          <button
-            type="button"
-            className="button btn-secondary mr-16"
-            onClick={() => setModalOpened(false)}
-          >
-            Отмена
-          </button>
-          <button
-            type="button"
-            className="button btn-primary"
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(email);
-              request.updateUser(main.clientData.client.id, {
-                email: email,
-              });
-            }}
-          >
-            Сохранить
-          </button>
-        </div>
-      </ModalFooter>
-    </Modal>
-  );
 
   React.useEffect(() => {
     request.getClient(main.clientData.client.id);
@@ -110,9 +54,8 @@ const Profile = observer((props: any) => {
                             <span
                               className="edit"
                               onClick={() => {
-                                // setEmail(request._getUser.email);
-                                setOpened(true);
-                                setModal(emailModal);
+                                main.setModal(true);
+                                main.setModalType(15);
                               }}
                             >
                               <i className="azla edit-primary-icon ml-8"></i>
@@ -122,7 +65,9 @@ const Profile = observer((props: any) => {
                         <li>
                           <span className="left">Дата регистрации:</span>
                           <span className="right d-flex">
-                            {request._getUser.reg_date}
+                            {moment(request._getUser.reg_date).format(
+                              "DD.MM.YYYY"
+                            )}
                           </span>
                         </li>
                         <li>
@@ -134,10 +79,13 @@ const Profile = observer((props: any) => {
                         <li>
                           <span className="left">Организация:</span>
                           <span className="right d-flex">
-                            <a href="#" className="pre-primary-color">
+                            <Link
+                              to={`/contractors/${request._getUser.client}`}
+                              className="pre-primary-color"
+                            >
                               {request._getClient &&
                                 request._getClient.longname}{" "}
-                            </a>
+                            </Link>
                           </span>
                         </li>
                       </ul>

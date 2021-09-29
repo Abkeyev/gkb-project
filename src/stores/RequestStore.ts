@@ -51,6 +51,7 @@ class RequestStore {
   private mineRequests: Request[] | [];
   private documents: Documents[] | [];
   private doc: Documents | null;
+  private tempDoc: Documents | null;
   private request: Request | null;
   private clientTypes: ClientTypes[];
   private clients: Client[];
@@ -110,6 +111,9 @@ class RequestStore {
   }
   get _getDoc() {
     return this.doc;
+  }
+  get _getTempDoc() {
+    return this.tempDoc;
   }
   get _getCategories() {
     return this.categories;
@@ -192,6 +196,9 @@ class RequestStore {
   get _getClientDocs() {
     return this.clientDocs;
   }
+  get _getClientAddress() {
+    return this.address;
+  }
 
   get getAgreeStatus() {
     let temp = true;
@@ -249,7 +256,11 @@ class RequestStore {
   }
 
   async getRequests() {
-    await api.service.getRequests().then((r: Request[]) => (this.requests = r));
+    await api.service.getRequests().then((r: Request[]) => {
+      this.requests = r;
+      this.request = null;
+      this.setStep(1);
+    });
   }
 
   async getClientRequests(id: number) {
@@ -277,7 +288,6 @@ class RequestStore {
       r.client && this.getClientAllUsers(r.client.id);
       r.client_user && this.getClientUsers(r.client_user);
       r.client_doc && this.getClientDocs(r.client_doc);
-      this.getDocContracts(id);
       console.log(r.request_stepper);
       if (r.request_stepper !== null && r.request_stepper > 1) {
         this.setStep(r.request_stepper);
@@ -303,8 +313,8 @@ class RequestStore {
   }
 
   async updateUser(id: number, fields: any) {
-    await api.service.updateProfile(id, fields).then((response: any) => {
-      console.log(response);
+    await api.service.updateProfile(id, fields).then(() => {
+      this.getUser(id);
     });
   }
 
@@ -434,12 +444,6 @@ class RequestStore {
     });
   }
 
-  async getDocContracts(id: number) {
-    api.service.getContracts(id).then((res) => {
-      this.documents = res;
-    });
-  }
-
   async getClientUsers(ids: number[]) {
     let users: Client[] = [];
     let promises: any[] = [];
@@ -502,9 +506,10 @@ class RequestStore {
     this._getRequest &&
       (await api.service.sendType(this._getRequest).then((res) => {
         runInAction(async () => {
-          this._getRequest &&
-            this._getRequest.is_model_contract &&
+          if (this._getRequest && this._getRequest.is_model_contract) {
             this.setDoc(null);
+            this.setTempDoc(null);
+          }
           this._getRequest && (await this.getRequest(this._getRequest.id));
         });
       }));
@@ -541,10 +546,14 @@ class RequestStore {
   }
   async toSign(isType: boolean) {
     if (isType) {
-      this._getDocuments[0] &&
+      this._getClientDocs &&
+        this._getClientDocs[this._getClientDocs.length - 1] &&
         this._getRequest &&
         (await api.service
-          .toSign(this._getDocuments[0].id, this._getRequest.id)
+          .toSign(
+            this._getClientDocs[this._getClientDocs.length - 1].id,
+            this._getRequest.id
+          )
           .then(() => {
             runInAction(async () => {
               this._getRequest && (await this.getRequest(this._getRequest.id));
@@ -555,6 +564,33 @@ class RequestStore {
         this._getRequest &&
         (await api.service
           .toSign(this._getDoc.id, this._getRequest.id)
+          .then(() => {
+            runInAction(async () => {
+              this._getRequest && (await this.getRequest(this._getRequest.id));
+            });
+          }));
+    }
+  }
+  async signDocGkb(isType: boolean) {
+    if (isType) {
+      this._getClientDocs &&
+        this._getClientDocs[this._getClientDocs.length - 1] &&
+        this._getRequest &&
+        (await api.service
+          .signDoc(
+            this._getClientDocs[this._getClientDocs.length - 1].id,
+            this._getRequest.id
+          )
+          .then(() => {
+            runInAction(async () => {
+              this._getRequest && (await this.getRequest(this._getRequest.id));
+            });
+          }));
+    } else {
+      this._getDoc &&
+        this._getRequest &&
+        (await api.service
+          .signDoc(this._getDoc.id, this._getRequest.id)
           .then(() => {
             runInAction(async () => {
               this._getRequest && (await this.getRequest(this._getRequest.id));
@@ -574,7 +610,7 @@ class RequestStore {
       this.reviews = res;
     });
   }
-  async addReview(id: number, data: any) {
+  async addReview(id: number, data: Result) {
     await api.service.addReview(id, data).then((res) => {
       runInAction(async () => {
         await this.getReview(id);
@@ -582,8 +618,24 @@ class RequestStore {
     });
   }
 
+  async sendReviews() {
+    this.reviews.map((r: AgreeResult) => {
+      r.review_data.map(
+        (d: Result) =>
+          this._getRequest &&
+          this.addReview(this._getRequest.id, {
+            user_id: d.user_id,
+            is_approved: true,
+          })
+      );
+    });
+  }
+
   async setDoc(doc: Documents | null) {
     this.doc = doc;
+  }
+  async setTempDoc(tempDoc: Documents | null) {
+    this.tempDoc = tempDoc;
   }
 
   getDocTypes() {
@@ -690,6 +742,7 @@ class RequestStore {
     this.requestStatus = [];
     this.manUser = null;
     this.doc = null;
+    this.tempDoc = null;
     this.signers = [];
     this.conSigner = null;
     this.manSigner = null;
@@ -739,6 +792,7 @@ class RequestStore {
       nextRequest: action.bound,
       nextRequestStatus: action.bound,
       setDoc: action.bound,
+      setTempDoc: action.bound,
       updateUser: action.bound,
       getClientUsers: action.bound,
       getClientDocs: action.bound,
@@ -773,6 +827,7 @@ class RequestStore {
       _getAuthPersons: computed,
       _getAuthPerson: computed,
       _getContacts: computed,
+      _getClientAddress: computed,
       _getAddress: computed,
       _getBankDetails: computed,
       _getSigningAuthority: computed,

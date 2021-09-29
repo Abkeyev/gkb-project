@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 
 const Sidebar = observer((props: any) => {
@@ -47,37 +47,34 @@ const Sidebar = observer((props: any) => {
               {main.role === "Manager" ? (
                 <>
                   <li>
-                    <Link
+                    <NavLink
                       to="/"
-                      className={`link-list ${
-                        history.location.pathname === "/" ? "active" : ""
-                      }`}
+                      className="link-list"
+                      activeClassName="link-list active"
+                      exact
                     >
                       <i className="azla blank-alt-icon"></i>
                       <span className="text">Заявки</span>
                       <span className="status"></span>
-                    </Link>
+                    </NavLink>
                   </li>
                   <li className={`dropdown-menu`}>
                     {/* Если нажать на Dropdown то открывает самму сылку и раскрывает список, и класс дается collapse */}
-                    <Link
+                    <NavLink
                       to="/contractors"
-                      className={`link-list ${
-                        history.location.pathname.includes("contractors")
-                          ? "active"
-                          : ""
-                      }`}
+                      className="link-list"
+                      activeClassName="link-list active"
                     >
                       <i className="azla user-add-icon"></i>
                       <span className="text">Контрагенты</span>
                       <span className="status"></span>
-                    </Link>
+                    </NavLink>
                   </li>
                   {/* <li>
-                    <Link
+                    <NavLink
                       to="/users"
                       className={`link-list ${
-                        history.location.pathname.includes("users")
+                        window.location.hash.includes("users")
                           ? "active"
                           : ""
                       }`}
@@ -85,56 +82,49 @@ const Sidebar = observer((props: any) => {
                       <i className="azla bookmark-icon"></i>
                       <span className="text">Пользователи портала</span>
                       <span className="status"></span>
-                    </Link>
+                    </NavLink>
                   </li> */}
                   <li>
-                    <Link
+                    <NavLink
                       to="/profile"
-                      className={`link-list ${
-                        history.location.pathname.includes("profile")
-                          ? "active"
-                          : ""
-                      }`}
+                      className="link-list"
+                      activeClassName="link-list active"
                     >
                       <i className="azla user-icon"></i>
                       <span className="text">Мой профиль</span>
                       <span className="status"></span>
-                    </Link>
+                    </NavLink>
                   </li>
                 </>
               ) : (
                 <>
                   <li>
-                    <Link
+                    <NavLink
                       to="/request-new"
-                      className={`link-list ${
-                        history.location.pathname.includes("request-new")
-                          ? "active"
-                          : ""
-                      }`}
+                      className="link-list"
+                      activeClassName="link-list active"
                     >
                       <i className="azla add-plusRound-icon"></i>
                       <span className="text">Новая заявка</span>
                       <span className="status"></span>
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
+                    <NavLink
                       to="/"
-                      className={`link-list ${
-                        history.location.pathname === "/" ? "active" : ""
-                      }`}
+                      className="link-list"
+                      activeClassName="link-list active"
                     >
                       <i className="azla blank-alt-icon"></i>
                       <span className="text">Заявки</span>
                       <span className="status"></span>
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
+                    <NavLink
                       to="/organization"
                       className={`link-list ${
-                        history.location.pathname.includes("organization")
+                        window.location.hash.includes("organization")
                           ? "active"
                           : ""
                       }`}
@@ -142,25 +132,22 @@ const Sidebar = observer((props: any) => {
                       <i className="azla bookmark-icon"></i>
                       <span className="text">Моя организация</span>
                       <span className="status"></span>
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <Link
+                    <NavLink
                       to="/profile"
-                      className={`link-list ${
-                        history.location.pathname.includes("profile")
-                          ? "active"
-                          : ""
-                      }`}
+                      className="link-list"
+                      activeClassName="link-list active"
                     >
                       <i className="azla user-icon"></i>
                       <span className="text">Мой профиль</span>
                       <span className="status"></span>
-                    </Link>
+                    </NavLink>
                   </li>
                 </>
               )}
-              {/* <li><Link to="/" className="link-list"><i className="azla pin-icon"></i> <span className="text">Адреса </span> <span className="status"></span></Link></li> */}
+              {/* <li><NavLink to="/" className="link-list"><i className="azla pin-icon"></i> <span className="text">Адреса </span> <span className="status"></span></NavLink></li> */}
             </ul>
           </div>
         </div>

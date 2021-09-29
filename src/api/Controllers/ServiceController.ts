@@ -4,11 +4,6 @@ import { Request } from "../Models/ServiceModels";
 
 export class ServiceController {
   // ДОКУМЕНТЫ
-  async getContracts(id: number): Promise<any> {
-    return server.get(`/request/${id}/document`, {
-      baseURL,
-    });
-  }
   async getDocuments(id: number): Promise<any> {
     return server.get(`/client_document/${id}`, {
       baseURL,
@@ -260,6 +255,11 @@ export class ServiceController {
       baseURL,
     });
   }
+  async signDoc(id: number, request_id: number): Promise<any> {
+    return server.get(`/doc/${id}/sign?request_id=${request_id}`, {
+      baseURL,
+    });
+  }
   // ПРОЦЕСС СОГЛАСОВАНИЯ
   async toReview(id: number, data: any): Promise<any> {
     return server.post(
@@ -271,9 +271,13 @@ export class ServiceController {
     );
   }
   async addReview(id: number, data: any): Promise<any> {
-    return server.post(`/request/user_review/${id}`, data, {
-      baseURL,
-    });
+    return server.post(
+      `/request/user_review/${id}`,
+      { data },
+      {
+        baseURL,
+      }
+    );
   }
   async getReview(id: number): Promise<any> {
     return server.get(`/request/review_result/${id}`, {

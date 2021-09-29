@@ -836,6 +836,7 @@
   font-weight: normal;
   font-size: 14px;
   color: #3f4b60;
+  width: calc(100% - 84px);
 }
 .manager-list ul li .position {
   font-weight: normal;

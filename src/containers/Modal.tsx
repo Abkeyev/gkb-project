@@ -16,7 +16,7 @@ import { CheckState } from "../ncalayer/state";
 import { Response } from "@seithq/ncalayer";
 
 const Modal = observer((props: any) => {
-  const { main, request, state, setState, client } = props;
+  const { main, request } = props;
   const [users, setUsers] = React.useState<User[]>([]);
   const [user, setUser] = React.useState<number[]>([]);
   const [fullName, setFullName] = React.useState("");
@@ -32,64 +32,6 @@ const Modal = observer((props: any) => {
   const [declineReason, setDeclineReason] = React.useState("");
   const [comment, setComment] = React.useState("");
   const [file, setFile] = React.useState<any | null>(null);
-
-  const getSubstring = (text: string, string: string) => {
-    const start = text.indexOf(string) + string.length;
-    return text.substring(start, text.indexOf(",", start));
-  };
-
-  const signDoc = () =>
-    main.loginEcp(
-      getSubstring(state.subjectDN, "SERIALNUMBER=").substr(3),
-      `${getSubstring(state.subjectDN, "CN=")} ${getSubstring(
-        state.subjectDN,
-        "G="
-      )}`,
-      getSubstring(state.subjectDN, "O=").replace(/\\/g, "")
-    );
-
-  const handleKeyAliasChange = (key: string) => {
-    setState({ ...state, keyAlias: extractKeyAlias(key) });
-  };
-
-  const handleCMSSignatureFromFileClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    const ok = checkInputs({
-      path: state.path,
-      alias: state.alias,
-      password: state.password,
-      keyAlias: state.keyAlias,
-    });
-    if (ok) {
-      client.CreateCMSSignature(
-        state.alias,
-        state.path,
-        state.keyAlias,
-        state.password,
-        "base64",
-        state.cmsFileSignatureFlag,
-        (resp: Response) => {
-          if (resp.isOk()) {
-            console.log(resp, "рес1п");
-            request.setState({
-              ...state,
-              method: client.method,
-              cmsFileSignatureSigned: resp.getResult(),
-              cmsFileSignatureValid: CheckState.NotValidated,
-              cmsFileSignatureMessage: "Не проверено",
-            });
-            return;
-          }
-
-          handleError(
-            resp,
-            ValidationType.Password && ValidationType.PasswordAttemps
-          );
-        }
-      );
-    }
-  };
 
   return (
     <div>
@@ -228,17 +170,17 @@ const Modal = observer((props: any) => {
               <div className="modal-close" onClick={() => main.setModal(false)}>
                 <i className="azla close-icon"></i>
               </div>
-              {request._getDoc && (
+              {request._getTempDoc && (
                 <div className="modal-body">
                   <div className="paper-show">
                     <h3 className="text-left title-subhead mb-16">
-                      {request._getDoc.doc_name}
+                      {request._getTempDoc.doc_name}
                     </h3>
                     <div className="file-add mb-32">
                       <button
                         className="btn-file btn-icon"
                         onClick={() =>
-                          request.downloadDocument(request._getDoc.id)
+                          request.downloadDocument(request._getTempDoc.id)
                         }
                       >
                         <i className="azla blank-alt-primary-icon"></i>
@@ -258,7 +200,7 @@ const Modal = observer((props: any) => {
                         <span className="name">
                           {request._getClients &&
                             request._getClients.find(
-                              (t: Client) => t.id === request._getDoc.client
+                              (t: Client) => t.id === request._getTempDoc.client
                             )?.longname}
                         </span>
                       </div>
@@ -266,30 +208,34 @@ const Modal = observer((props: any) => {
 
                     <div className="comment mb-32">
                       <h5>Комментарий:</h5>
-                      <p>{request._getDoc.comments}</p>
+                      <p>{request._getTempDoc.comments}</p>
                     </div>
                   </div>
                 </div>
               )}
 
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  onClick={() =>
-                    request
-                      .updateRequest({
-                        request_status: 13,
-                        client: request._getRequest.client.id,
-                      })
-                      .then(() => {
-                        main.setModal(false);
-                      })
-                  }
-                  className="button btn-primary table-ml"
-                >
-                  Приступить к согласованию
-                </button>
-              </div>
+              {main.role === "Manager" && (
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      request
+                        .updateRequest({
+                          request_status: 13,
+                          client: request._getRequest.client.id,
+                        })
+                        .then(() => {
+                          main.setModal(false);
+                          request.setTempDoc &&
+                            request.setDoc(request._getTempDoc);
+                        })
+                    }
+                    className="button btn-primary table-ml"
+                  >
+                    Приступить к согласованию
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1198,6 +1144,63 @@ const Modal = observer((props: any) => {
                 >
                   Подтвердить
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : main.modalType === 15 ? (
+        <div className="modal modal-large-xl">
+          <div
+            className="modal-backbg"
+            onClick={() => main.setModal(false)}
+          ></div>
+          <div className="modal-dialog">
+            <div className="modal-content fadeInModal animated">
+              <div className="modal-close" onClick={() => main.setModal(false)}>
+                <i className="azla close-icon"></i>
+              </div>
+              <div className="modal-body">
+                <div className="paper-signatory">
+                  <h3 className="text-left title-subhead mb-16">Профайл</h3>
+                </div>
+                <div className="form-wrapper">
+                  <input
+                    type="email"
+                    defaultValue={request._getUser?.email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
+                  />
+                  <label>E-mail</label>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <div className="d-flex">
+                  <button
+                    type="button"
+                    className="button btn-secondary mr-16"
+                    onClick={() => main.setModal(false)}
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    type="button"
+                    className="button btn-primary"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      request
+                        .updateUser(main.clientData.client.id, {
+                          email: email,
+                        })
+                        .then(() => {
+                          main.setModal(false);
+                          setEmail("");
+                        });
+                    }}
+                  >
+                    Сохранить
+                  </button>
+                </div>
               </div>
             </div>
           </div>

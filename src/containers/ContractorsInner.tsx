@@ -12,9 +12,11 @@ import {
   ClientService,
   ClientUser,
   ClientUsers,
+  Contact,
   Documents,
   ServiceCommon,
 } from "../api/Models/ServiceModels";
+import moment from "moment";
 
 const ContractorsInner = observer((props: any) => {
   const { main, request } = props;
@@ -101,10 +103,7 @@ const ContractorsInner = observer((props: any) => {
                                 className="pre-primary-color"
                               >
                                 {request._getClient.website}
-                              </a>{" "}
-                              <span className="edit">
-                                <i className="azla edit-primary-icon ml-8"></i>
-                              </span>
+                              </a>
                             </span>
                           </li>
                           <li>
@@ -126,10 +125,7 @@ const ContractorsInner = observer((props: any) => {
                                     Уполномоченное лицо:
                                   </span>
                                   <span className="right d-flex">
-                                    {request._getAuthPersons[0].full_name}{" "}
-                                    <span className="edit">
-                                      <i className="azla edit-primary-icon ml-8"></i>
-                                    </span>
+                                    {request._getAuthPersons[0].full_name}
                                   </span>
                                 </li>
                                 <li>
@@ -137,7 +133,9 @@ const ContractorsInner = observer((props: any) => {
                                     Дата регистрации:
                                   </span>
                                   <span className="right">
-                                    {request._getAuthPersons[0].reg_date}
+                                    {moment(
+                                      request._getAuthPersons[0].reg_date
+                                    ).format("DD.MM.YYYY")}
                                   </span>
                                 </li>
                               </>
@@ -145,7 +143,7 @@ const ContractorsInner = observer((props: any) => {
                           <li>
                             <span className="left">ОКЭД:</span>
                             <span className="right">
-                              90.3.1 - Финансовая деятельность
+                              {request._getClient.oked}
                             </span>
                           </li>
                         </ul>
@@ -156,63 +154,82 @@ const ContractorsInner = observer((props: any) => {
 
                     <div className="total-info mb-32">
                       <ul className="info-list">
-                        <li>
-                          <span className="left">Контакты:</span>
-                          {request._getContacts && request._getContacts[0] && (
-                            <span className="right d-flex">
-                              {request._getContacts[0].phone_number}{" "}
-                              <span className="edit">
-                                <i className="azla edit-primary-icon ml-8"></i>
-                              </span>
-                            </span>
-                          )}
-                          {/* <span>+7 (727) 245-94-94 (рабочий)</span><span>+7 (706) 123-45-67 (моб)</span> */}
-                        </li>
+                        {request._getContacts &&
+                          request._getContacts
+                            .filter((c: Contact) => c.is_main)
+                            .map((c: Contact, index: number) => (
+                              <li>
+                                <span className="left">
+                                  {index === 0 && "Контакты:"}
+                                </span>
+                                <span className="right d-flex">
+                                  {c.phone_number}
+                                  {/* {c.type} */}
+                                </span>
+                              </li>
+                            ))}
                         {request.getAddressTypes().length > 0 &&
                           request.getAddressTypes().map(
                             (t: AddressTypes) =>
                               t.address.length > 0 &&
                               t.address.map((a: Address) => (
-                                <>
-                                  <li>
-                                    <span className="left">{t.name}:</span>
-                                    <span className="right d-flex">
-                                      {a.full_address}{" "}
-                                      <span className="edit">
-                                        <i className="azla edit-primary-icon ml-8"></i>
-                                      </span>
-                                    </span>
-                                  </li>
-                                  <li>
-                                    <span className="left">Улица:</span>
-                                    <span className="right d-flex">
-                                      {a.street}{" "}
-                                      <span className="edit">
-                                        <i className="azla edit-primary-icon ml-8"></i>
-                                      </span>
-                                    </span>
-                                  </li>
-                                  <li>
-                                    <span className="left">Дом/здание:</span>
-                                    <span className="right d-flex">
-                                      {a.building}{" "}
-                                      <span className="edit">
-                                        <i className="azla edit-primary-icon ml-8"></i>
-                                      </span>
-                                    </span>
-                                  </li>
-                                </>
+                                <li>
+                                  <span className="left">{t.name}:</span>
+                                  <span className="right d-flex">
+                                    {a.full_address}
+                                  </span>
+                                </li>
                               ))
                           )}
-                        {/* <li>
-                          <span className="left">Индекс:</span>
-                          <span className="right d-flex">
-                            050042{" "}
-                            <span className="edit">
-                              <i className="azla edit-primary-icon ml-8"></i>
-                            </span>
-                          </span>
-                        </li>
+
+                        {request._getClientAddress &&
+                          request._getClientAddress
+                            .filter((a: Address) => a.id === 2)
+                            .map((c: Address) => (
+                              <>
+                                <li>
+                                  <span className="left">Полный адрес:</span>
+                                  <span className="right d-flex">
+                                    {c.full_address}
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">Индекс:</span>
+                                  <span className="right d-flex">{c.kato}</span>
+                                </li>
+                                {/* <li>
+                                  <span className="left">Область:</span>
+                                  <span className="right d-flex">
+                                    {}
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">Район:</span>
+                                  <span className="right d-flex">
+                                    {}
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">Город:</span>
+                                  <span className="right d-flex">
+                                    {}
+                                  </span>
+                                </li> */}
+                                <li>
+                                  <span className="left">Улица:</span>
+                                  <span className="right d-flex">
+                                    {c.street}
+                                  </span>
+                                </li>
+                                <li>
+                                  <span className="left">Дом/здание:</span>
+                                  <span className="right d-flex">
+                                    {c.building}
+                                  </span>
+                                </li>
+                              </>
+                            ))}
+                        {/* 
                         <li>
                           <span className="left">Область:</span>
                           <span className="right d-flex">
@@ -255,19 +272,13 @@ const ContractorsInner = observer((props: any) => {
                               <li>
                                 <span className="left">ИИК:</span>
                                 <span className="right d-flex">
-                                  {request._getBankDetails[0].iik}{" "}
-                                  <span className="edit">
-                                    <i className="azla edit-primary-icon ml-8"></i>
-                                  </span>
+                                  {request._getBankDetails[0].iik}
                                 </span>
                               </li>
                               <li>
                                 <span className="left">БИК:</span>
                                 <span className="right d-flex">
-                                  {request._getBankDetails[0].bik}{" "}
-                                  <span className="edit">
-                                    <i className="azla edit-primary-icon ml-8"></i>
-                                  </span>
+                                  {request._getBankDetails[0].bik}
                                 </span>
                               </li>
                             </ul>
@@ -345,7 +356,9 @@ const ContractorsInner = observer((props: any) => {
                                     <li>
                                       <span className="left">Организация:</span>
                                       <span className="right active-link">
-                                        {request._getClient.longname}
+                                        <Link to={`/contractors/${a.client}`}>
+                                          {request._getClient.longname}
+                                        </Link>
                                       </span>
                                     </li>
                                     <li>
@@ -369,7 +382,9 @@ const ContractorsInner = observer((props: any) => {
                                         Дата регистрации:
                                       </span>
                                       <span className="right">
-                                        {a.reg_date}
+                                        {moment(a.reg_date).format(
+                                          "DD.MM.YYYY"
+                                        )}
                                       </span>
                                     </li>
                                     <li>
@@ -536,8 +551,10 @@ const ContractorsInner = observer((props: any) => {
                               <td>
                                 {c.service_category === 1 ? "БДКИ" : "ЕСБД"}
                               </td>
-                              <td>{c.date_from}</td>
-                              <td>{c.date_to}</td>
+                              <td>
+                                {moment(c.date_from).format("DD.MM.YYYY")}
+                              </td>
+                              <td>{moment(c.date_to).format("DD.MM.YYYY")}</td>
                             </tr>
                           ))}
                         </tbody>
