@@ -1,6 +1,6 @@
 import { server } from "../axios";
 import { baseURL } from "../const";
-import { Request } from "../Models/ServiceModels";
+import { Documents, Request } from "../Models/ServiceModels";
 
 export class ServiceController {
   // ДОКУМЕНТЫ
@@ -11,6 +11,11 @@ export class ServiceController {
   }
   async getDocument(id: number): Promise<any> {
     return server.get(`/client/document/${id}`, {
+      baseURL,
+    });
+  }
+  async getDogovor(id: number): Promise<any> {
+    return server.get(`/request/${id}/document`, {
       baseURL,
     });
   }
@@ -30,8 +35,26 @@ export class ServiceController {
       baseURL,
     });
   }
+  async downloadKeys(doc: Documents): Promise<any> {
+    return server.get(
+      `/request/${doc.id}/keys/download?doc_type=${doc.doc_type}`,
+      {
+        responseType: "blob",
+        baseURL,
+      }
+    );
+  }
+
   async addDocument(id: number, data: any): Promise<any> {
     return server.post(`/client_document/${id}`, data, {
+      baseURL,
+      headers: {
+        "Content-Type": `multipart/form-data`,
+      },
+    });
+  }
+  async uploadKeys(id: number, data: any): Promise<any> {
+    return server.post(`/request/${id}/keys/upload`, data, {
       baseURL,
       headers: {
         "Content-Type": `multipart/form-data`,
@@ -78,6 +101,11 @@ export class ServiceController {
   }
   async getClientService() {
     return server.get(`/client_service`, {
+      baseURL,
+    });
+  }
+  async getClientServices(id: number) {
+    return server.get(`/client/${id}/service`, {
       baseURL,
     });
   }
@@ -233,6 +261,11 @@ export class ServiceController {
         baseURL,
       }
     );
+  }
+  async getServiceDesk(): Promise<any> {
+    return server.get(`/service_desk/dashboard`, {
+      baseURL,
+    });
   }
   async nextRequest(request: Request): Promise<any> {
     return server.get(`/client_request/next_step/${request.id}`, {

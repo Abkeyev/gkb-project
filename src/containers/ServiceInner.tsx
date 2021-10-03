@@ -14,10 +14,11 @@ import {
 const ServiceInner = observer((props: any) => {
   const history = useHistory();
   const { id } = props.match.params;
-  const { request } = props;
+  const { request, main } = props;
 
   React.useEffect(() => {
     request.getClients();
+    request.getDocuments(main.clientData.client.id);
     request.getClientServiceType();
     request.getClientServiceById(id);
   }, []);
@@ -40,7 +41,14 @@ const ServiceInner = observer((props: any) => {
                     </div>
                   </div>
 
-                  <h1 className="title-main mb-32">Название услуги</h1>
+                  <h1 className="title-main mb-32">
+                    {
+                      request._getClientServiceType.find(
+                        (t: ServiceCommon) =>
+                          t.id === request._getClientServiceById.service_type
+                      )?.name
+                    }
+                  </h1>
                 </div>
                 <Tabs>
                   <div className="mb-32">
@@ -54,18 +62,6 @@ const ServiceInner = observer((props: any) => {
                       <h3 className="title-subhead mb-16">Общие данные</h3>
                       <div className="total-info mb-32">
                         <ul className="info-list">
-                          <li>
-                            <span className="left">Название услуги:</span>
-                            <span className="right">
-                              {
-                                request._getClientServiceType.find(
-                                  (t: ServiceCommon) =>
-                                    t.id ===
-                                    request._getClientServiceById.service_type
-                                )?.name
-                              }
-                            </span>
-                          </li>
                           <li>
                             <span className="left">Клиент:</span>
                             <span className="right">
@@ -113,36 +109,18 @@ const ServiceInner = observer((props: any) => {
                       </div>
 
                       <h3 className="title-subhead mb-16">Документы</h3>
-
-                      {request.getDocCategories().map(
-                        (c: Categories) =>
-                          c.documents.length > 0 && (
-                            <>
-                              <h5 className="title-subhead-h5 mb-16">
-                                {c.name}
-                              </h5>
-                              <div className="files-added">
-                                <ul className="files-list">
-                                  {c.documents.map((d: Documents) => (
-                                    <li>
-                                      <i className="azla blank-alt-primary-icon"></i>
-                                      <span
-                                        onClick={() =>
-                                          request.downloadDocument(
-                                            d.id,
-                                            d.doc_name
-                                          )
-                                        }
-                                      >
-                                        {d.doc_name}
-                                      </span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </>
-                          )
-                      )}
+                      <div className="files-added">
+                        <ul className="files-list">
+                          {request._getDocuments.map((d: Documents) => (
+                            <li>
+                              <i className="azla blank-alt-primary-icon"></i>
+                              <span onClick={() => request.downloadDocument(d)}>
+                                {d.doc_name}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </TabPanel>
 
                     <TabPanel>
@@ -150,11 +128,11 @@ const ServiceInner = observer((props: any) => {
                         <h3 className="title-subhead mb-8">
                           Пользователи услуг{" "}
                           <span className="number">
-                            {request._getClientUsersForAdd.length}
+                            {request._getServiceUsers.length}
                           </span>
                         </h3>
 
-                        {request._getClientUsersForAdd.map(
+                        {request._getServiceUsers.map(
                           (c: ClientUsers, index: number) => (
                             <div className="card mb-24 pad-24">
                               <div className="card-header">

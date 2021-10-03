@@ -30,6 +30,7 @@ class MainStore {
   loginErrorText: string = "";
   isOpenModal: boolean = false;
   modalType: number = 0;
+  modalTypeEdit: number = 0;
   modalManager: boolean = false;
   decline: boolean = false;
   declineReason: string = "";
@@ -118,6 +119,10 @@ class MainStore {
 
   setModalType(type: number) {
     this.modalType = type;
+  }
+
+  setModalTypeEdit(type: number) {
+    this.modalTypeEdit = type;
   }
 
   setModalManager(modalManager: boolean) {

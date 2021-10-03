@@ -17,6 +17,27 @@ export interface Request {
   manager_signer_user: number;
 }
 
+export interface ServiceDesk {
+  full_name: string;
+  iin: string;
+  idcard_number: string;
+  position_name: string;
+  department_name: string;
+  contacts: string;
+  email: string;
+  global_ip: string;
+  first_head_full_name: string;
+  deputy_head_full_name: string;
+  manager_full_name: string;
+  service_category: string;
+  service_type: string;
+  date_from: string;
+  date_to: string;
+  client_name: string;
+  bin: string;
+  client_type: string;
+}
+
 export interface Agree {
   user_name: number[];
   process_type: "Sequential" | "Parallel";
@@ -114,6 +135,7 @@ export interface Contact {
   is_main: boolean;
   client: number;
   client_auth_person: number;
+  phone_type: string;
 }
 
 export interface Address {
@@ -146,7 +168,7 @@ export interface User {
   email: string;
   reg_date: string;
   client: number;
-  client_auth_person: number;
+  client_auth_person: AuthPerson;
   position: number | null;
   person_status: number;
   user_auth: number;

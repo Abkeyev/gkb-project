@@ -10,6 +10,7 @@ import {
   Client,
   ClientUser,
   ClientUsers,
+  ServiceCommon,
   User,
 } from "../api/Models/ServiceModels";
 import { CheckState } from "../ncalayer/state";
@@ -17,7 +18,7 @@ import { Response } from "@seithq/ncalayer";
 
 const Modal = observer((props: any) => {
   const { main, request } = props;
-  const [users, setUsers] = React.useState<User[]>([]);
+  const [users, setUsers] = React.useState<ClientUser[]>([]);
   const [user, setUser] = React.useState<number[]>([]);
   const [fullName, setFullName] = React.useState("");
   const [position, setPosition] = React.useState("");
@@ -32,6 +33,8 @@ const Modal = observer((props: any) => {
   const [declineReason, setDeclineReason] = React.useState("");
   const [comment, setComment] = React.useState("");
   const [file, setFile] = React.useState<any | null>(null);
+  const [testKey, setTestKey] = React.useState<any | null>(null);
+  const [key, setKey] = React.useState<any | null>(null);
 
   return (
     <div>
@@ -119,12 +122,18 @@ const Modal = observer((props: any) => {
               <div className="modal-body">
                 <div className="write-reasons">
                   <h3 className="text-left title-subhead mb-16">
-                    Укажите причину
+                    {main.role === "Manager"
+                      ? "Укажите причину"
+                      : "Отклонить заявку"}
                   </h3>
                   <textarea
                     rows={5}
                     className="form-control-textarea mb-16"
-                    placeholder="Причина отказа"
+                    placeholder={
+                      main.role === "Manager"
+                        ? "Причина отказа"
+                        : "Укажите причину"
+                    }
                     value={declineReason}
                     onChange={(e) => setDeclineReason(e.target.value)}
                   ></textarea>
@@ -180,7 +189,7 @@ const Modal = observer((props: any) => {
                       <button
                         className="btn-file btn-icon"
                         onClick={() =>
-                          request.downloadDocument(request._getTempDoc.id)
+                          request.downloadDocument(request._getTempDoc)
                         }
                       >
                         <i className="azla blank-alt-primary-icon"></i>
@@ -1107,37 +1116,52 @@ const Modal = observer((props: any) => {
                 <button
                   type="button"
                   onClick={() => {
-                    if (request.clientDocs && request.clientDocs[0]) {
+                    if (
+                      request._getDogovors &&
+                      request._getDogovors[request._getDogovors.length - 1]
+                    ) {
                       var bodyFormData = new FormData();
                       bodyFormData.append("file", file);
                       bodyFormData.append("comments", comment);
                       bodyFormData.append(
                         "doc_category",
-                        request.clientDocs[0].doc_category.toString()
+                        request._getDogovors[
+                          request._getDogovors.length - 1
+                        ].doc_category.toString()
                       );
                       bodyFormData.append(
                         "doc_type",
-                        request.clientDocs[0].doc_type.toString()
+                        request._getDogovors[
+                          request._getDogovors.length - 1
+                        ].doc_type.toString()
                       );
                       bodyFormData.append(
                         "service_type",
-                        request.clientDocs[0].service_type.toString()
+                        request._getDogovors[
+                          request._getDogovors.length - 1
+                        ].service_type.toString()
                       );
                       bodyFormData.append(
                         "is_draft",
-                        request.clientDocs[0].is_draft.toString()
+                        request._getDogovors[
+                          request._getDogovors.length - 1
+                        ].is_draft.toString()
                       );
                       bodyFormData.append(
                         "version",
-                        (request.clientDocs[0].version + 1).toString()
+                        (
+                          request._getDogovors[request._getDogovors.length - 1]
+                            .version + 1
+                        ).toString()
                       );
-                      request
-                        .addDocument(main.clientData.client.id, bodyFormData)
-                        .then(() => {
-                          main.setModal(false);
-                          setFile(null);
-                          setComment("");
-                        });
+                      request._getRequest &&
+                        request
+                          .addDocument(request._getRequest.id, bodyFormData)
+                          .then(() => {
+                            main.setModal(false);
+                            setFile(null);
+                            setComment("");
+                          });
                     }
                   }}
                   className="button btn-primary table-ml"
@@ -1161,17 +1185,38 @@ const Modal = observer((props: any) => {
               </div>
               <div className="modal-body">
                 <div className="paper-signatory">
-                  <h3 className="text-left title-subhead mb-16">Профайл</h3>
+                  <h3 className="text-left title-subhead mb-16">
+                    Редактирование данных
+                  </h3>
                 </div>
                 <div className="form-wrapper">
-                  <input
-                    type="email"
-                    defaultValue={request._getUser?.email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
-                  />
-                  <label>E-mail</label>
+                  {main.modalTypeEdit === 0 ? (
+                    <>
+                      <input
+                        type="email"
+                        defaultValue={request._getUser?.email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                        }}
+                      />
+                      <label>E-mail</label>
+                    </>
+                  ) : main.modalTypeEdit === 1 ? (
+                    <select
+                      defaultValue={request._getUser.position}
+                      onChange={(e) => setPosition(e.target.value)}
+                      className="form-control-v"
+                    >
+                      <option>Выберите должность</option>
+                      {request._getPosition.map((c: ServiceCommon) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
               <div className="modal-footer">
@@ -1188,10 +1233,14 @@ const Modal = observer((props: any) => {
                     className="button btn-primary"
                     onClick={(e) => {
                       e.preventDefault();
+                      let data =
+                        main.modalTypeEdit === 0
+                          ? { email }
+                          : main.modalTypeEdit === 1
+                          ? { position }
+                          : "";
                       request
-                        .updateUser(main.clientData.client.id, {
-                          email: email,
-                        })
+                        .updateUser(main.clientData.client.id, data)
                         .then(() => {
                           main.setModal(false);
                           setEmail("");
@@ -1201,6 +1250,101 @@ const Modal = observer((props: any) => {
                     Сохранить
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : main.modalType === 16 ? (
+        <div className="modal modal-large-xl">
+          <div
+            className="modal-backbg"
+            onClick={() => main.setModal(false)}
+          ></div>
+          <div className="modal-dialog">
+            <div className="modal-content fadeInModal animated">
+              <div className="modal-close" onClick={() => main.setModal(false)}>
+                <i className="azla close-icon"></i>
+              </div>
+              <div className="modal-body">
+                <div className="paper-show">
+                  <h3 className="text-left title-subhead mb-16">
+                    Ключи доступа
+                  </h3>
+                  <div className="file-add mb-16">
+                    {(main.modalTypeEdit === 1 && testKey === null) ||
+                    (main.modalTypeEdit === 2 && key === null) ? (
+                      <label
+                        // type="button"
+                        className="button btn-secondary"
+                      >
+                        <input
+                          type="file"
+                          onChange={(e) =>
+                            e &&
+                            e.target &&
+                            e.target.files &&
+                            e.target.files[0] &&
+                            (main.modalTypeEdit === 1
+                              ? setTestKey(e.target.files[0])
+                              : setKey(e.target.files[0]))
+                          }
+                          style={{ display: "none" }}
+                        />
+                        Добавить{" "}
+                        {main.modalTypeEdit === 1 ? "тестовый" : "боевой"} ключ
+                      </label>
+                    ) : (
+                      <div className="file-added">
+                        <div className="file-added-text">
+                          <i className="azla blank-alt-primary-icon mr-8"></i>
+                          <span>
+                            {main.modalTypeEdit === 1 ? testKey.name : key.name}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          className="btn-icon button delete-btn"
+                          onClick={() =>
+                            main.modalTypeEdit === 1
+                              ? setTestKey(null)
+                              : setKey(null)
+                          }
+                        >
+                          <i className="azla trash-icon-alert"></i> Удалить
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  onClick={() => {
+                    var bodyFormData = new FormData();
+                    bodyFormData.append(
+                      "file",
+                      main.modalTypeEdit === 1 ? testKey : key
+                    );
+                    bodyFormData.append(
+                      "doc_type",
+                      main.modalTypeEdit === 1 ? "11" : "12"
+                    );
+                    request._getRequest &&
+                      request
+                        .addKey(request._getRequest.id, bodyFormData)
+                        .then(() => {
+                          main.setModal(false);
+                          setKey(null);
+                          setTestKey(null);
+                        })
+                        .catch(() => "");
+                  }}
+                  className="button btn-primary table-ml"
+                >
+                  Подтвердить
+                </button>
               </div>
             </div>
           </div>

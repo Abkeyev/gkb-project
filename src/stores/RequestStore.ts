@@ -1,4 +1,4 @@
-import { action, computed, makeAutoObservable, runInAction } from "mobx";
+import { action, computed, makeAutoObservable, runInAction, toJS } from "mobx";
 import {
   Request,
   Documents,
@@ -16,9 +16,12 @@ import {
   Agree,
   AgreeResult,
   Result,
+  ServiceDesk,
+  ClientUser,
 } from "../api/Models/ServiceModels";
 import { signWithBase64 } from "../ncaLayer";
 import api from "../api/Api";
+import { downloadBlob } from "../utils/utils";
 
 class RequestStore {
   // custom
@@ -39,23 +42,34 @@ class RequestStore {
   agreeParStep: number = 0;
   signTwoStep: number = 0;
   signTwoUsers: number[] = [];
+  addedFiles: number[] = [];
   agreeUsers: number[] = [];
   agreeGroup: Agree[] = [];
   requestId: number | null = null;
   base64file: string = "";
   service: string = "";
   data: any | null = null;
+  signType: boolean = true;
+  signNotType: boolean = false;
+  agreeNotType: boolean = true;
+  testKey: Documents | null = null;
+  prodKey: Documents | null = null;
+  mainDoc: Documents | null = null;
+  testAct: Documents | null = null;
+  testProt: Documents | null = null;
 
   private requests: Request[] | [];
   private reviews: AgreeResult[] | [];
   private mineRequests: Request[] | [];
   private documents: Documents[] | [];
+  private dogovors: Documents[] | [];
   private doc: Documents | null;
   private tempDoc: Documents | null;
   private request: Request | null;
   private clientTypes: ClientTypes[];
   private clients: Client[];
   private clientUsers: Client[] | [];
+  private serviceUsers: ClientUsers[] | [];
   private clientDocs: Documents[] | [];
   private clientUsersForAdd: ClientUsers[] | [];
   private client: Client | null;
@@ -84,9 +98,16 @@ class RequestStore {
   private categories: Categories[] | [];
   private requestStatus: ServiceCommon[] | [];
   private signers: any[] | [];
+  private serviceDesk: ServiceDesk[] | [];
 
   get _getRequests() {
     return this.requests;
+  }
+  get _getDogovors() {
+    return this.dogovors;
+  }
+  get _getServiceDesk() {
+    return this.serviceDesk;
   }
   get _getReviews() {
     return this.reviews;
@@ -96,6 +117,9 @@ class RequestStore {
   }
   get _getClientUsersForAdd() {
     return this.clientUsersForAdd;
+  }
+  get _getServiceUsers() {
+    return this.serviceUsers;
   }
   get _getAllUsers() {
     return this.allUsers;
@@ -263,6 +287,12 @@ class RequestStore {
     });
   }
 
+  async getServiceDesk() {
+    await api.service.getServiceDesk().then((r: ServiceDesk[]) => {
+      this.serviceDesk = r;
+    });
+  }
+
   async getClientRequests(id: number) {
     await api.service
       .getClientRequests(id)
@@ -273,6 +303,18 @@ class RequestStore {
     await api.service
       .getMineRequest(id)
       .then((r: Request[]) => (this.mineRequests = r));
+  }
+
+  async getDogovor(id: number) {
+    await api.service
+      .getDogovor(id)
+      .then((d: Documents[]) => (this.dogovors = d));
+  }
+
+  async downloadSignedFile(id: number) {
+    await api.service
+      .downloadSignedFile(id)
+      .then((r: Documents) => (this.mainDoc = r));
   }
 
   async getRequest(id: number) {
@@ -287,10 +329,20 @@ class RequestStore {
       !r.is_model_contract && this.getReview(r.id);
       r.client && this.getClientAllUsers(r.client.id);
       r.client_user && this.getClientUsers(r.client_user);
-      r.client_doc && this.getClientDocs(r.client_doc);
-      console.log(r.request_stepper);
-      if (r.request_stepper !== null && r.request_stepper > 1) {
-        this.setStep(r.request_stepper);
+      r.client_doc && this.getClientDocs(r.client_doc, r);
+      this.getDogovor(id);
+      r.request_stepper > 1 && this.setStep(r.request_stepper);
+      if (
+        r.request_status === 11 ||
+        r.request_status === 12 ||
+        r.request_status === 14
+      ) {
+        this.agreeNotType = false;
+        this.signNotType = true;
+      } else {
+        this.signType = true;
+        this.agreeNotType = true;
+        this.signNotType = false;
       }
       this.request = r;
     });
@@ -428,8 +480,18 @@ class RequestStore {
     });
   }
 
-  async addDocument(id: number, data: any) {
-    await api.service.addDocument(id, data);
+  async addDocument(id: number, data: any, flag: boolean = false) {
+    await api.service.addDocument(id, data).then((r) => {
+      if (r && r.id) this.addedFiles = [...this.addedFiles, r.id];
+    });
+  }
+
+  async addKey(id: number, data: any) {
+    await api.service.uploadKeys(id, data).then((r) => {
+      runInAction(async () => {
+        await this.getRequest(id);
+      });
+    });
   }
 
   async getPersonStatus() {
@@ -458,13 +520,45 @@ class RequestStore {
     Promise.all(promises).then(() => (this.clientUsers = users));
   }
 
-  async getClientDocs(ids: number[]) {
-    let docs: Documents[] = [];
+  async getServiceUsers(ids: number[]) {
+    let users: ClientUsers[] = [];
     let promises: any[] = [];
     (await (ids.length > 0)) &&
       ids.map((id: number) =>
         promises.push(
+          api.service.getClientUser(id).then((res: ClientUsers) => {
+            users.push(res);
+          })
+        )
+      );
+    Promise.all(promises).then(() => (this.serviceUsers = users));
+  }
+
+  async getClientDocs(ids: number[], r: Request | null = null) {
+    let docs: Documents[] = [];
+    let promises: any[] = [];
+    (await (ids.length > 0)) &&
+      ids.map((id: number, index: number) =>
+        promises.push(
           api.service.getDocument(id).then((res: Documents) => {
+            if (res.doc_type === 11) {
+              this.testKey = res;
+            } else if (res.doc_type === 12) {
+              this.prodKey = res;
+            } else if (res.doc_type === 13) {
+              this.testAct = res;
+            } else if (res.doc_type === 14) {
+              this.testProt = res;
+            }
+            if (r) {
+              if (r.request_stepper > 2 && index === ids.length - 1)
+                this.downloadSignedFile(r.id);
+              else {
+                if (index === ids.length - 1) {
+                  this.mainDoc = res;
+                }
+              }
+            }
             docs.push(res);
           })
         )
@@ -484,10 +578,17 @@ class RequestStore {
     });
   }
 
+  async getClientServices(id: number) {
+    await api.service.getClientServices(id).then((res) => {
+      this.clientService = res;
+    });
+  }
+
   async getClientServiceById(id: number) {
     await api.service.getClientServiceById(id).then((res) => {
       this.clientServiceById = res;
-      res.client && this.getClientUsersForAdd(res.client);
+      res.client_user && this.getServiceUsers(res.client_user);
+      res.client_doc && this.getClientDocs(res.client_doc);
     });
   }
 
@@ -525,8 +626,11 @@ class RequestStore {
     await api.service.nextRequest(request).then((res) => {
       runInAction(async () => {
         await this.getRequest(request.id);
-        console.log(res);
         isFirst && res && this.setDoc(res);
+        this.prodKey = null;
+        this.testKey = null;
+        this.testAct = null;
+        this.testProt = null;
       });
     });
   }
@@ -546,14 +650,10 @@ class RequestStore {
   }
   async toSign(isType: boolean) {
     if (isType) {
-      this._getClientDocs &&
-        this._getClientDocs[this._getClientDocs.length - 1] &&
+      this.mainDoc &&
         this._getRequest &&
         (await api.service
-          .toSign(
-            this._getClientDocs[this._getClientDocs.length - 1].id,
-            this._getRequest.id
-          )
+          .toSign(this.mainDoc.id, this._getRequest.id)
           .then(() => {
             runInAction(async () => {
               this._getRequest && (await this.getRequest(this._getRequest.id));
@@ -573,14 +673,10 @@ class RequestStore {
   }
   async signDocGkb(isType: boolean) {
     if (isType) {
-      this._getClientDocs &&
-        this._getClientDocs[this._getClientDocs.length - 1] &&
+      this.mainDoc &&
         this._getRequest &&
         (await api.service
-          .signDoc(
-            this._getClientDocs[this._getClientDocs.length - 1].id,
-            this._getRequest.id
-          )
+          .signDoc(this.mainDoc.id, this._getRequest.id)
           .then(() => {
             runInAction(async () => {
               this._getRequest && (await this.getRequest(this._getRequest.id));
@@ -614,6 +710,7 @@ class RequestStore {
     await api.service.addReview(id, data).then((res) => {
       runInAction(async () => {
         await this.getReview(id);
+        await this.getRequest(id);
       });
     });
   }
@@ -663,14 +760,21 @@ class RequestStore {
     }));
   }
 
-  async downloadDocument(id: number, fileName: string) {
-    await api.service.downloadDocument(id).then((r) => {
-      const url = window.URL.createObjectURL(new Blob([r.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "fileName.docx");
-      document.body.appendChild(link);
-      link.click();
+  async downloadDocument(doc: Documents) {
+    await api.service.downloadDocument(doc.id).then((r) => {
+      const blob = new Blob([r]);
+      if (blob) {
+        downloadBlob(blob, doc.doc_name);
+      }
+    });
+  }
+
+  async downloadKeys(doc: Documents) {
+    await api.service.downloadKeys(doc).then((r) => {
+      const blob = new Blob([r]);
+      if (blob) {
+        downloadBlob(blob, doc.doc_name);
+      }
     });
   }
 
@@ -714,6 +818,7 @@ class RequestStore {
     this.requests = [];
     this.mineRequests = [];
     this.documents = [];
+    this.dogovors = [];
     this.categories = [];
     this.request = null;
     this.clientTypes = [];
@@ -749,6 +854,8 @@ class RequestStore {
     this.clientUsers = [];
     this.clientDocs = [];
     this.reviews = [];
+    this.serviceDesk = [];
+    this.serviceUsers = [];
 
     makeAutoObservable(this, {
       getRequests: action.bound,
@@ -809,11 +916,17 @@ class RequestStore {
       signDoc: action.bound,
       setManSigner: action.bound,
       toSign: action.bound,
+      getServiceDesk: action.bound,
+      getDogovor: action.bound,
+      getServiceUsers: action.bound,
+      addKey: action.bound,
       _getAllUsers: computed,
       _getClientServiceById: computed,
       _getClientUsersForAdd: computed,
       _getDoc: computed,
       _getUser: computed,
+      _getDogovors: computed,
+      _getTempDoc: computed,
       _getSigners: computed,
       _getRequests: computed,
       _getDocuments: computed,
@@ -846,6 +959,8 @@ class RequestStore {
       _getUsers: computed,
       _getReviews: computed,
       _getMineRequests: computed,
+      _getServiceDesk: computed,
+      _getServiceUsers: computed,
       getAgreeStatus: computed,
       getLastVersion: computed,
     });

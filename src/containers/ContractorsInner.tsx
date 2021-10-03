@@ -3,19 +3,21 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
 import { useHistory } from "react-router";
-import { Link } from "react-router-dom";
 import {
   Address,
   AddressTypes,
   AuthPerson,
   Categories,
+  Client,
   ClientService,
   ClientUser,
   ClientUsers,
   Contact,
   Documents,
   ServiceCommon,
+  User,
 } from "../api/Models/ServiceModels";
+import { Link } from "react-router-dom";
 import moment from "moment";
 
 const ContractorsInner = observer((props: any) => {
@@ -25,8 +27,10 @@ const ContractorsInner = observer((props: any) => {
 
   React.useEffect(() => {
     request.getClient(id);
-    request.getClientUser(id);
-    request.getClientService();
+    request.getClientAllUsers(id);
+    request.getClients();
+    request.getClientServices(main.clientData.client.id);
+    request.getClientUsersForAdd(main.clientData.client.id);
     request.getDocumentsCategories();
     request.getDocuments(id);
     request.getDocCategories();
@@ -46,19 +50,23 @@ const ContractorsInner = observer((props: any) => {
         <div className="row">
           <div className="col-lg-12">
             <div className="my-organization p-50 pad-b-128">
-              <div className="header-text-inner justify-content-between mb-32">
-                <div className="back-breadcrumbs">
-                  <div onClick={() => history.goBack()} className="back">
-                    <i className="azla arrow-left-icon"></i> Назад
+              {request._getClient && (
+                <div className="header-text-inner justify-content-between mb-32">
+                  <div className="back-breadcrumbs">
+                    <div onClick={() => history.goBack()} className="back">
+                      <i className="azla arrow-left-icon"></i> Назад
+                    </div>
+                    <div className="breadcrumbs">
+                      <Link to="/contractors">Контрагенты</Link> /{" "}
+                      <span>{request._getClient.longname}</span>
+                    </div>
                   </div>
-                  <div className="breadcrumbs">
-                    <Link to="/contractors">Контрагенты</Link> /{" "}
-                    <span>ТОО “М-Ломбард”</span>
-                  </div>
-                </div>
 
-                <h1 className="title-main mb-32">ТОО “М-Ломбард”</h1>
-              </div>
+                  <h1 className="title-main mb-32">
+                    {request._getClient.longname}
+                  </h1>
+                </div>
+              )}
               <Tabs>
                 <div className="mb-32">
                   <TabList>
@@ -163,8 +171,7 @@ const ContractorsInner = observer((props: any) => {
                                   {index === 0 && "Контакты:"}
                                 </span>
                                 <span className="right d-flex">
-                                  {c.phone_number}
-                                  {/* {c.type} */}
+                                  {c.phone_number} ({c.phone_type})
                                 </span>
                               </li>
                             ))}
@@ -302,10 +309,7 @@ const ContractorsInner = observer((props: any) => {
                                     <i className="azla blank-alt-primary-icon"></i>
                                     <span
                                       onClick={() =>
-                                        request.downloadDocument(
-                                          d.id,
-                                          d.doc_name
-                                        )
+                                        request.downloadDocument(d)
                                       }
                                     >
                                       {d.doc_name}
@@ -324,201 +328,222 @@ const ContractorsInner = observer((props: any) => {
                       <h3 className="title-subhead mb-8">
                         Уполномоченные лица{" "}
                         <span className="number">
-                          {request._getAuthPersons.length}
+                          {
+                            request._getUsers.filter(
+                              (u: User) => u.client_auth_person
+                            ).length
+                          }
                         </span>
                       </h3>
                       <p className="mb-24">
                         Пользователи организации с наличием ЭЦП организации
                       </p>
 
-                      {request._getAuthPersons.map((a: AuthPerson) => (
-                        <div className="card mb-24 pad-24">
-                          <div className="card-header">
-                            <div className="title">
-                              <h6 className="text">{a.full_name}</h6>
-                              {/* <span className="num">№1</span> */}
-                            </div>
-                            <p className="desc">
-                              Аналитик – Департамент финансового анализа
-                            </p>
-                          </div>
-                          <div className="card-body pad-rl-16">
-                            <div className="row">
-                              <div className="col-md-6">
-                                <div className="total-info">
-                                  <ul className="info-list">
-                                    <li>
-                                      <span className="left">
-                                        ID пользователя:
-                                      </span>
-                                      <span className="right">{a.id}</span>
-                                    </li>
-                                    <li>
-                                      <span className="left">Организация:</span>
-                                      <span className="right active-link">
-                                        <Link to={`/contractors/${a.client}`}>
-                                          {request._getClient.longname}
-                                        </Link>
-                                      </span>
-                                    </li>
-                                    <li>
-                                      <span className="left">Email:</span>
-                                      <span className="right">{""}</span>
-                                    </li>
-                                    <li>
-                                      <span className="left">
-                                        Контактный номер:
-                                      </span>
-                                      <span className="right">{""}</span>
-                                    </li>
-                                  </ul>
+                      {request._getUsers
+                        .filter((u: User) => u.client_auth_person)
+                        .map(
+                          (a: User) =>
+                            a.client_auth_person && (
+                              <div className="card mb-24 pad-24">
+                                <div className="card-header">
+                                  <div className="title">
+                                    <h6 className="text">{a.full_name}</h6>
+                                  </div>
+                                  <p className="desc">
+                                    {a.client_auth_person.position}
+                                  </p>
+                                </div>
+                                <div className="card-body pad-rl-16">
+                                  <div className="row">
+                                    <div className="col-md-6">
+                                      <div className="total-info">
+                                        <ul className="info-list">
+                                          <li>
+                                            <span className="left">
+                                              ID пользователя:
+                                            </span>
+                                            <span className="right">
+                                              {a.id}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Организация:
+                                            </span>
+                                            <span className="right active-link">
+                                              <Link
+                                                to={`/contractors/${a.client}`}
+                                              >
+                                                {request._getClients &&
+                                                  request._getClients.find(
+                                                    (t: Client) =>
+                                                      t.id === a.client
+                                                  )?.longname}
+                                              </Link>
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">Email:</span>
+                                            <span className="right">
+                                              {a.email}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Контактный номер:
+                                            </span>
+                                            <span className="right">{""}</span>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                      <div className="total-info">
+                                        <ul className="info-list">
+                                          <li>
+                                            <span className="left">
+                                              Дата регистрации:
+                                            </span>
+                                            <span className="right">
+                                              {moment(a.reg_date).format(
+                                                "DD.MM.YYYY"
+                                              )}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Статус:
+                                            </span>
+                                            <span className="right">
+                                              {
+                                                (
+                                                  request._getPersonStatus as ServiceCommon[]
+                                                ).find(
+                                                  (s: ServiceCommon) =>
+                                                    s.id === a.person_status
+                                                )?.name
+                                              }
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Основание для подписи:
+                                            </span>
+                                            <span className="right">
+                                              {
+                                                (
+                                                  request._getSigningAuthority as ServiceCommon[]
+                                                ).find(
+                                                  (s: ServiceCommon) =>
+                                                    s.id ===
+                                                    a.client_auth_person
+                                                      .sign_auth
+                                                )?.name
+                                              }
+                                            </span>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <div className="col-md-6">
-                                <div className="total-info">
-                                  <ul className="info-list">
-                                    <li>
-                                      <span className="left">
-                                        Дата регистрации:
-                                      </span>
-                                      <span className="right">
-                                        {moment(a.reg_date).format(
-                                          "DD.MM.YYYY"
-                                        )}
-                                      </span>
-                                    </li>
-                                    <li>
-                                      <span className="left">Статус:</span>
-                                      <span className="right">
-                                        {
-                                          (
-                                            request._getPersonStatus as ServiceCommon[]
-                                          ).find(
-                                            (s: ServiceCommon) =>
-                                              s.id === a.person_status
-                                          )?.name
-                                        }
-                                      </span>
-                                    </li>
-                                    <li>
-                                      <span className="left">
-                                        Основание для подписи:
-                                      </span>
-                                      <span className="right">
-                                        {
-                                          (
-                                            request._getSigningAuthority as ServiceCommon[]
-                                          ).find(
-                                            (s: ServiceCommon) =>
-                                              s.id === a.sign_auth
-                                          )?.name
-                                        }
-                                      </span>
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                            )
+                        )}
 
                       <h3 className="title-subhead mb-8">
                         Пользователи{" "}
                         <span className="number">
-                          {request._getClientUsersForAdd.length}
+                          {
+                            request._getUsers.filter(
+                              (u: User) => u.client_auth_person === null
+                            ).length
+                          }
                         </span>
                       </h3>
                       <p className="mb-24">
                         Пользователи организации с наличием ЭЦП организации
                       </p>
 
-                      {request._getClientUsersForAdd &&
-                        request._getClientUsersForAdd.map(
-                          (c: ClientUsers, index: number) => (
-                            <div className="card mb-24 pad-24">
-                              <div className="card-header">
-                                <div className="title">
-                                  <h6 className="text">{c.full_name}</h6>
-                                  <span
-                                    className="edit-btn underline"
-                                    onClick={() => {
-                                      main.setModal(true);
-                                      main.setModalType(9);
-                                    }}
-                                  >
-                                    <i className="azla edit-primary-icon mr-8"></i>{" "}
-                                    Редактировать
-                                  </span>
-                                </div>
-                                <p className="desc">{c.position_name}</p>
+                      {request._getUsers
+                        .filter((u: User) => u.client_auth_person === null)
+                        .map((a: User) => (
+                          <div className="card mb-24 pad-24">
+                            <div className="card-header">
+                              <div className="title">
+                                <h6 className="text">{a.full_name}</h6>
                               </div>
-                              <div className="card-body pad-rl-16">
-                                <div className="row">
-                                  <div className="col-md-6">
-                                    <div className="total-info">
-                                      <ul className="info-list">
-                                        <li>
-                                          <span className="left">
-                                            ID пользователя:
-                                          </span>
-                                          <span className="right">{c.id}</span>
-                                        </li>
-                                        <li>
-                                          <span className="left">
-                                            Организация:
-                                          </span>
-                                          <span className="right active-link">
-                                            {request._getClient.longname}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <span className="left">Email:</span>
-                                          <span className="right">
-                                            {c.email}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <span className="left">
-                                            Контактный номер:
-                                          </span>
-                                          <span className="right"></span>
-                                        </li>
-                                      </ul>
-                                    </div>
+                            </div>
+                            <div className="card-body pad-rl-16">
+                              <div className="row">
+                                <div className="col-md-6">
+                                  <div className="total-info">
+                                    <ul className="info-list">
+                                      <li>
+                                        <span className="left">
+                                          ID пользователя:
+                                        </span>
+                                        <span className="right">{a.id}</span>
+                                      </li>
+                                      <li>
+                                        <span className="left">
+                                          Организация:
+                                        </span>
+                                        <span className="right active-link">
+                                          <Link to={`/contractors/${a.client}`}>
+                                            {request._getClients &&
+                                              request._getClients.find(
+                                                (t: Client) => t.id === a.client
+                                              )?.longname}
+                                          </Link>
+                                        </span>
+                                      </li>
+                                      <li>
+                                        <span className="left">Email:</span>
+                                        <span className="right">{a.email}</span>
+                                      </li>
+                                      <li>
+                                        <span className="left">
+                                          Контактный номер:
+                                        </span>
+                                        <span className="right">{""}</span>
+                                      </li>
+                                    </ul>
                                   </div>
-                                  <div className="col-md-6">
-                                    <div className="total-info">
-                                      <ul className="info-list">
-                                        <li>
-                                          <span className="left">
-                                            Дата регистрации:
-                                          </span>
-                                          <span className="right">
-                                            {/* {c.reg_date} */}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <span className="left">Статус:</span>
-                                          <span className="right">
-                                            {/* {
+                                </div>
+                                <div className="col-md-6">
+                                  <div className="total-info">
+                                    <ul className="info-list">
+                                      <li>
+                                        <span className="left">
+                                          Дата регистрации:
+                                        </span>
+                                        <span className="right">
+                                          {moment(a.reg_date).format(
+                                            "DD.MM.YYYY"
+                                          )}
+                                        </span>
+                                      </li>
+                                      <li>
+                                        <span className="left">Статус:</span>
+                                        <span className="right">
+                                          {
                                             (
                                               request._getPersonStatus as ServiceCommon[]
                                             ).find(
                                               (s: ServiceCommon) =>
-                                                s.id === c.person_status
+                                                s.id === a.person_status
                                             )?.name
-                                          } */}
-                                          </span>
-                                        </li>
-                                      </ul>
-                                    </div>
+                                          }
+                                        </span>
+                                      </li>
+                                    </ul>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          )
-                        )}
+                          </div>
+                        ))}
                     </div>
                   </TabPanel>
                   <TabPanel>
@@ -567,91 +592,98 @@ const ContractorsInner = observer((props: any) => {
                       Пользователи организации, которые имеют доступ к сервисам
                       БДКИ и ЕСБД
                     </p>
-
-                    {request._getClientUsersForAdd &&
-                      request._getClientUsersForAdd.map(
-                        (c: ClientUsers, index: number) => (
-                          <div className="card mb-24 pad-24">
-                            <div className="card-header">
-                              <div className="title">
-                                <h6 className="text">{c.full_name}</h6>
-                                <span
-                                  className="edit-btn underline"
-                                  onClick={() => {
-                                    main.setModal(true);
-                                    main.setModalType(9);
-                                  }}
-                                >
-                                  <i className="azla edit-primary-icon mr-8"></i>{" "}
-                                  Редактировать
-                                </span>
-                              </div>
-                              <p className="desc">{c.position_name}</p>
+                    {(request._getClientUsersForAdd as ClientUsers[]).map(
+                      (u: ClientUsers, index) => (
+                        <div className="card mb-24 pad-24">
+                          <div className="card-header">
+                            <div className="title">
+                              <h6 className="text">{u.full_name}</h6>
+                              <span
+                                className="edit-btn underline"
+                                onClick={() => {
+                                  main.setModal(true);
+                                  main.setModalType(9);
+                                }}
+                              >
+                                <i className="azla edit-primary-icon mr-8"></i>{" "}
+                                Редактировать
+                              </span>
                             </div>
-                            <div className="card-body pad-rl-16">
-                              <div className="row">
-                                <div className="col-md-6">
-                                  <div className="total-info">
-                                    <ul className="info-list">
-                                      <li>
-                                        <span className="left">
-                                          ID пользователя:
-                                        </span>
-                                        <span className="right">{c.id}</span>
-                                      </li>
-                                      <li>
-                                        <span className="left">
-                                          Организация:
-                                        </span>
-                                        <span className="right active-link">
-                                          {request._getClient.longname}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <span className="left">Email:</span>
-                                        <span className="right">{c.email}</span>
-                                      </li>
-                                      <li>
-                                        <span className="left">
-                                          Контактный номер:
-                                        </span>
-                                        <span className="right"></span>
-                                      </li>
-                                    </ul>
-                                  </div>
+                            <p className="desc">{u.position_name}</p>
+                          </div>
+                          <div className="card-body pad-rl-16">
+                            <div className="row">
+                              <div className="col-md-6">
+                                <div className="total-info">
+                                  <ul className="info-list">
+                                    <li>
+                                      <span className="left">
+                                        ID пользователя:
+                                      </span>
+                                      <span className="right">{u.id}</span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        ИИН сотрудника:
+                                      </span>
+                                      <span className="right">{u.iin}</span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Контактный номер:
+                                      </span>
+                                      <span className="right">
+                                        {u.contacts}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">Email:</span>
+                                      <span className="right">{u.email}</span>
+                                    </li>
+                                  </ul>
                                 </div>
-                                <div className="col-md-6">
-                                  <div className="total-info">
-                                    <ul className="info-list">
-                                      <li>
-                                        <span className="left">
-                                          Дата регистрации:
-                                        </span>
-                                        <span className="right">
-                                          {/* {c.reg_date} */}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <span className="left">Статус:</span>
-                                        <span className="right">
-                                          {/* {
-                                            (
-                                              request._getPersonStatus as ServiceCommon[]
-                                            ).find(
-                                              (s: ServiceCommon) =>
-                                                s.id === c.person_status
-                                            )?.name
-                                          } */}
-                                        </span>
-                                      </li>
-                                    </ul>
-                                  </div>
+                              </div>
+                              <div className="col-md-6">
+                                <div className="total-info">
+                                  <ul className="info-list">
+                                    <li>
+                                      <span className="left">
+                                        Первый руководитель:
+                                      </span>
+                                      <span className="right">
+                                        {u.first_head_full_name}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">Заместитель:</span>
+                                      <span className="right">
+                                        {u.deputy_head_full_name}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Курирующий менеджер:
+                                      </span>
+                                      <span className="right">
+                                        {u.manager_full_name}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Контакты менеджера:
+                                      </span>
+                                      <span className="right">
+                                        {u.manager_contacts}
+                                      </span>
+                                    </li>
+                                  </ul>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        )
-                      )}
+                        </div>
+                      )
+                    )}
                   </TabPanel>
                 </div>
               </Tabs>

@@ -3,45 +3,84 @@ import {
   AuthPerson,
   ClientUser,
   ClientUsers,
+  Documents,
   ServiceCommon,
 } from "../api/Models/ServiceModels";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
+import FileReaderInput from "react-file-reader-input";
 
 const PartnersNew = observer((props: any) => {
   const { main, request } = props;
   const [tab, setTab] = React.useState("1");
-  const [files, setFiles] = React.useState<string[] | []>([]);
-  const [filesTitle, setFilesTitle] = React.useState<string[] | []>([]);
+  const [file1, setFile1] = React.useState<any | null>(null);
+  const [file2, setFile2] = React.useState<any | null>(null);
+  const [file3, setFile3] = React.useState<any | null>(null);
+  const [file4, setFile4] = React.useState<any | null>(null);
+  const [file5, setFile5] = React.useState<any | null>(null);
+  const [filesId, setFilesId] = React.useState<number[] | []>([]);
 
   React.useEffect(() => {
     request.getRequests();
     request.getAuthPersons(main.clientData.client.id);
     request.getClientUsersForAdd(main.clientData.client.id);
     request.getSigners(main.clientData.client.id);
+    request.getDocuments(main.clientData.client.id).then((res: any) => {
+      if (request._getDocuments.length > 0) {
+        request.addedFiles = [];
+        (request._getDocuments as Documents[])
+          .filter((dd: Documents) => dd.doc_status === "Active")
+          .map((d: Documents) => {
+            if (d.doc_type === 4 && d.doc_category === 1) {
+              setFile1(d);
+              setFilesId([...filesId, d.id]);
+            } else if (d.doc_type === 5 && d.doc_category === 1) {
+              setFile2(d);
+              setFilesId([...filesId, d.id]);
+            } else if (d.doc_type === 6 && d.doc_category === 1) {
+              setFile3(d);
+              setFilesId([...filesId, d.id]);
+            } else if (d.doc_type === 7 && d.doc_category === 1) {
+              setFile4(d);
+              setFilesId([...filesId, d.id]);
+            } else if (d.doc_type === 1 && d.doc_category === 1) {
+              setFile5(d);
+              setFilesId([...filesId, d.id]);
+            }
+          });
+      }
+    });
     request.getClientServiceType();
     request.getPersonStatus();
-    request.getDocumentsType();
-    request.getDocumentsCategories();
   }, []);
 
-  const handleChange = (e: any, results: any, doc_type: any) => {
+  const handleChange = (
+    e: any,
+    results: any,
+    doc_type: any,
+    doc_category: any,
+    index: number
+  ) => {
     results.forEach((result: any) => {
       const [e, file] = result;
       const res = e.target.result.split(",");
       if (file.size < 5000000) {
-        setFiles([...files, res[1]]);
-        setFilesTitle([...filesTitle, file.name]);
+        console.log(res, "res");
+        console.log(file, "file");
+        if (index === 1) setFile1(file);
+        else if (index === 2) setFile2(file);
+        else if (index === 3) setFile3(file);
+        else if (index === 4) setFile4(file);
+        else if (index === 5) setFile5(file);
         var bodyFormData = new FormData();
         bodyFormData.append("file", file);
-        bodyFormData.append("doc_category", "2");
+        bodyFormData.append("service_type", request.service);
+        bodyFormData.append("doc_category", doc_category);
+        bodyFormData.append("comments", "");
+        bodyFormData.append("version", "1");
         bodyFormData.append("doc_type", doc_type);
         bodyFormData.append("is_draft", "true");
-        request
-          .addDocument(main.clientData.client.id, bodyFormData)
-          .then((r: any) => {
-            console.log(r);
-          });
+        request.addDocument(main.clientData.client.id, bodyFormData, true);
       }
     });
   };
@@ -108,11 +147,34 @@ const PartnersNew = observer((props: any) => {
                             Справка о регистрации/перерегистрации юридического
                             лица
                           </span>
+                          {file1 && (
+                            <span className="file-name">
+                              {file1.name || file1.doc_name}
+                            </span>
+                          )}
                         </div>
-                        <button className="btn-icon add">
-                          <i className="azla size-18 pin-primary-icon mr-8"></i>
-                          Прикрепить файл
-                        </button>
+                        {file1 ? (
+                          <button
+                            className="btn-icon delete"
+                            onClick={() => {
+                              setFile1(null);
+                            }}
+                          >
+                            <i className="azla size-18 trash-icon-alert mr-8"></i>
+                            Удалить файл
+                          </button>
+                        ) : (
+                          <FileReaderInput
+                            as="url"
+                            accept="image/jpeg,image/png,image/gif,application/pdf"
+                            onChange={(e, f) => handleChange(e, f, 4, 1, 1)}
+                          >
+                            <button className="btn-icon add">
+                              <i className="azla size-18 pin-primary-icon mr-8"></i>
+                              Прикрепить файл
+                            </button>
+                          </FileReaderInput>
+                        )}
                       </li>
                       <li>
                         <div className="name">
@@ -120,22 +182,68 @@ const PartnersNew = observer((props: any) => {
                             Решение учредителя с данными о приеме на работу
                             первого руководителя
                           </span>
+                          {file2 && (
+                            <span className="file-name">
+                              {file2.name || file2.doc_name}
+                            </span>
+                          )}
                         </div>
-                        <button className="btn-icon add">
-                          <i className="azla size-18 pin-primary-icon mr-8"></i>
-                          Прикрепить файл
-                        </button>
+                        {file2 ? (
+                          <button
+                            className="btn-icon delete"
+                            onClick={() => {
+                              setFile2(null);
+                            }}
+                          >
+                            <i className="azla size-18 trash-icon-alert mr-8"></i>
+                            Удалить файл
+                          </button>
+                        ) : (
+                          <FileReaderInput
+                            as="url"
+                            accept="image/jpeg,image/png,image/gif,application/pdf"
+                            onChange={(e, f) => handleChange(e, f, 5, 1, 2)}
+                          >
+                            <button className="btn-icon add">
+                              <i className="azla size-18 pin-primary-icon mr-8"></i>
+                              Прикрепить файл
+                            </button>
+                          </FileReaderInput>
+                        )}
                       </li>
                       <li>
                         <div className="name">
                           <span className="text">
                             Приказ о приеме на работу первого руководителя
                           </span>
+                          {file3 && (
+                            <span className="file-name">
+                              {file3.name || file3.doc_name}
+                            </span>
+                          )}
                         </div>
-                        <button className="btn-icon add">
-                          <i className="azla size-18 pin-primary-icon mr-8"></i>
-                          Прикрепить файл
-                        </button>
+                        {file3 ? (
+                          <button
+                            className="btn-icon delete"
+                            onClick={() => {
+                              setFile3(null);
+                            }}
+                          >
+                            <i className="azla size-18 trash-icon-alert mr-8"></i>
+                            Удалить файл
+                          </button>
+                        ) : (
+                          <FileReaderInput
+                            as="url"
+                            accept="image/jpeg,image/png,image/gif,application/pdf"
+                            onChange={(e, f) => handleChange(e, f, 6, 1, 3)}
+                          >
+                            <button className="btn-icon add">
+                              <i className="azla size-18 pin-primary-icon mr-8"></i>
+                              Прикрепить файл
+                            </button>
+                          </FileReaderInput>
+                        )}
                       </li>
                       <li>
                         <div className="name">
@@ -143,81 +251,71 @@ const PartnersNew = observer((props: any) => {
                             Документ, удостоверяющий личность первого
                             руководителя
                           </span>
-                          {/* <span className="file-name">
-                            spravka_o_registracii.pdf
-                          </span> */}
+                          {file4 && (
+                            <span className="file-name">
+                              {file4.name || file4.doc_name}
+                            </span>
+                          )}
                         </div>
-                        <button className="btn-icon add">
-                          <i className="azla size-18 pin-primary-icon mr-8"></i>
-                          Прикрепить файл
-                        </button>
+
+                        {file4 ? (
+                          <button
+                            className="btn-icon delete"
+                            onClick={() => {
+                              setFile4(null);
+                            }}
+                          >
+                            <i className="azla size-18 trash-icon-alert mr-8"></i>
+                            Удалить файл
+                          </button>
+                        ) : (
+                          <FileReaderInput
+                            as="url"
+                            accept="image/jpeg,image/png,image/gif,application/pdf"
+                            onChange={(e, f) => handleChange(e, f, 7, 1, 4)}
+                          >
+                            <button className="btn-icon add">
+                              <i className="azla size-18 pin-primary-icon mr-8"></i>
+                              Прикрепить файл
+                            </button>
+                          </FileReaderInput>
+                        )}
                       </li>
                       <li>
                         <div className="name">
                           <span className="text">Устав юрического лица</span>
+                          {file5 && (
+                            <span className="file-name">
+                              {file5.name || file5.doc_name}
+                            </span>
+                          )}
                         </div>
-                        <button className="btn-icon add">
-                          <i className="azla size-18 pin-primary-icon mr-8"></i>
-                          Прикрепить файл
-                        </button>
+                        {file5 ? (
+                          <button
+                            className="btn-icon delete"
+                            onClick={() => {
+                              setFile5(null);
+                            }}
+                          >
+                            <i className="azla size-18 trash-icon-alert mr-8"></i>
+                            Удалить файл
+                          </button>
+                        ) : (
+                          <FileReaderInput
+                            as="url"
+                            accept="image/jpeg,image/png,image/gif,application/pdf"
+                            onChange={(e, f) => handleChange(e, f, 1, 1, 5)}
+                          >
+                            <button className="btn-icon add">
+                              <i className="azla size-18 pin-primary-icon mr-8"></i>
+                              Прикрепить файл
+                            </button>
+                          </FileReaderInput>
+                        )}
                       </li>
                     </ul>
                   </div>
                 </div>
-
-                {/* <div className="special-card">
-                  <h3 className="title-subhead mb-16 mt-32">Документы</h3>
-                  <p className="text-desc">
-                    Пожалуйста прикрепите следующие документы организации
-                  </p>
-                  <div className="reg-file-add mb-32">
-                    <ul>
-                      {request
-                        .getDocTypes()
-                        .map((t: ServiceCommon, index: number) => (
-                          <li>
-                            <div className="name">
-                              <span className="text">{t.name}</span>
-                              {files[index] && (
-                                <span className="file-name">
-                                  {filesTitle[index]}
-                                </span>
-                              )}
-                            </div>
-                            {files[index] ? (
-                              <button
-                                className="btn-icon delete"
-                                onClick={() => {
-                                  setFiles(
-                                    files.filter((f) => f !== files[index])
-                                  );
-                                  setFilesTitle(
-                                    filesTitle.filter(
-                                      (f) => f !== filesTitle[index]
-                                    )
-                                  );
-                                }}
-                              >
-                                <i className="azla size-18 trash-icon-alert mr-8"></i>
-                                Удалить файл
-                              </button>
-                            ) : (
-                              <FileReaderInput
-                                as="url"
-                                accept="image/jpeg,image/png,image/gif,application/pdf"
-                                onChange={(e, f) => handleChange(e, f, t.id)}
-                              >
-                                <button className="btn-icon add">
-                                  <i className="azla size-18 pin-primary-icon mr-8"></i>
-                                  Прикрепить файл
-                                </button>
-                              </FileReaderInput>
-                            )}
-                          </li>
-                        ))}
-                    </ul>
-                  </div>
-                </div> */}
 
                 <div className="create-page-docs">
                   <div className="d-flex-align-c-spaceb mb-32">
@@ -338,7 +436,10 @@ const PartnersNew = observer((props: any) => {
                           client: main.clientData.client.id,
                           service_category: tab,
                           service_type: request.service,
-                          client_doc: [],
+                          client_doc:
+                            request.addedFiles.length > 0
+                              ? [...filesId, ...request.addedFiles]
+                              : [...filesId],
                           client_user: main.usersNew.map(
                             (u: ClientUser) => u.id
                           ),

@@ -14,6 +14,9 @@ import {
   ContractorsInner,
   Profile,
   Request,
+  ServiceDesk,
+  ServiceDeskInner,
+  Manager,
 } from "./containers";
 import { LoginPage } from "./components";
 import PrivateRoute from "./PrivateRoute";
@@ -202,6 +205,8 @@ const App = observer((props: any) => {
             component={() =>
               main.getRole === "Agent" && main.isReg ? (
                 <Registration main={main} request={request} />
+              ) : main.getRole === "Service Desk" ? (
+                <ServiceDesk request={request} main={main} />
               ) : main.getRole === "Agent" ? (
                 <Partners request={request} main={main} />
               ) : (
@@ -222,14 +227,21 @@ const App = observer((props: any) => {
             main={main}
             path="/request/:id"
             component={(props: any) => (
-              <RequestInner
-                setState={setState}
-                state={state}
-                client={client}
-                {...props}
-                main={main}
-                request={request}
-              />
+              <RequestInner {...props} main={main} request={request} />
+            )}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/users"
+            component={() => <Manager main={main} request={request} />}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/service-desk/:id"
+            component={(props: any) => (
+              <ServiceDeskInner {...props} main={main} request={request} />
             )}
             exact
           />

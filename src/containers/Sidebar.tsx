@@ -44,7 +44,7 @@ const Sidebar = observer((props: any) => {
           <div className="navigation">
             <ul className="list">
               {/* Если перешли в сам Link то класс дается active */}
-              {main.role === "Manager" ? (
+              {main.role === "Service Desk" ? (
                 <>
                   <li>
                     <NavLink
@@ -59,7 +59,43 @@ const Sidebar = observer((props: any) => {
                     </NavLink>
                   </li>
                   <li className={`dropdown-menu`}>
-                    {/* Если нажать на Dropdown то открывает самму сылку и раскрывает список, и класс дается collapse */}
+                    <NavLink
+                      to="/users"
+                      className="link-list"
+                      activeClassName="link-list active"
+                    >
+                      <i className="azla user-add-icon"></i>
+                      <span className="text">Пользователи портала</span>
+                      <span className="status"></span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/profile"
+                      className="link-list"
+                      activeClassName="link-list active"
+                    >
+                      <i className="azla user-icon"></i>
+                      <span className="text">Мой профиль</span>
+                      <span className="status"></span>
+                    </NavLink>
+                  </li>
+                </>
+              ) : main.role === "Manager" ? (
+                <>
+                  <li>
+                    <NavLink
+                      to="/"
+                      className="link-list"
+                      activeClassName="link-list active"
+                      exact
+                    >
+                      <i className="azla blank-alt-icon"></i>
+                      <span className="text">Заявки</span>
+                      <span className="status"></span>
+                    </NavLink>
+                  </li>
+                  <li>
                     <NavLink
                       to="/contractors"
                       className="link-list"
@@ -70,20 +106,6 @@ const Sidebar = observer((props: any) => {
                       <span className="status"></span>
                     </NavLink>
                   </li>
-                  {/* <li>
-                    <NavLink
-                      to="/users"
-                      className={`link-list ${
-                        window.location.hash.includes("users")
-                          ? "active"
-                          : ""
-                      }`}
-                    >
-                      <i className="azla bookmark-icon"></i>
-                      <span className="text">Пользователи портала</span>
-                      <span className="status"></span>
-                    </NavLink>
-                  </li> */}
                   <li>
                     <NavLink
                       to="/profile"
@@ -123,11 +145,8 @@ const Sidebar = observer((props: any) => {
                   <li>
                     <NavLink
                       to="/organization"
-                      className={`link-list ${
-                        window.location.hash.includes("organization")
-                          ? "active"
-                          : ""
-                      }`}
+                      className="link-list"
+                      activeClassName="link-list active"
                     >
                       <i className="azla bookmark-icon"></i>
                       <span className="text">Моя организация</span>
@@ -147,7 +166,6 @@ const Sidebar = observer((props: any) => {
                   </li>
                 </>
               )}
-              {/* <li><NavLink to="/" className="link-list"><i className="azla pin-icon"></i> <span className="text">Адреса </span> <span className="status"></span></NavLink></li> */}
             </ul>
           </div>
         </div>

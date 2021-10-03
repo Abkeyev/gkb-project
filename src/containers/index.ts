@@ -15,6 +15,8 @@ import Contractors from "./Contractors";
 import ContractorsInner from "./ContractorsInner";
 import Profile from "./Profile";
 import ServiceInner from "./ServiceInner";
+import ServiceDesk from "./ServiceDesk";
+import ServiceDeskInner from "./ServiceDeskInner";
 
 export {
   Login,
@@ -34,4 +36,6 @@ export {
   Contractors,
   ContractorsInner,
   Profile,
+  ServiceDesk,
+  ServiceDeskInner,
 };

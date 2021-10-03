@@ -20,14 +20,11 @@ const RequestInner = observer((props: any) => {
   const history = useHistory();
   const { id } = props.match.params;
   const { main, request } = props;
-  const [signType, setSignType] = React.useState(true);
-  const [signNotType, setSignNotType] = React.useState(false);
-  const [agreeNotType, setAgreeNotType] = React.useState(true);
-  const [agree, setAgree] = React.useState(false);
 
   React.useEffect(() => {
     request.getClientServiceType();
     request.getClients();
+    request.getPosition();
     request.getUsers();
     request.getRequestStatus();
     request.getDocumentsCategories();
@@ -103,8 +100,8 @@ const RequestInner = observer((props: any) => {
                         className={`step-item ${
                           request.step === 3
                             ? "step-item-active"
-                            : request._getRequest.request_stepper > 4 &&
-                              request.step > 4
+                            : request._getRequest.request_stepper > 3 &&
+                              request.step > 3
                             ? "step-item-complete"
                             : ""
                         }`}
@@ -289,10 +286,7 @@ const RequestInner = observer((props: any) => {
                                         <i className="azla blank-alt-primary-icon"></i>
                                         <span
                                           onClick={() =>
-                                            request.downloadDocument(
-                                              d.id,
-                                              d.doc_name
-                                            )
+                                            request.downloadDocument(d)
                                           }
                                         >
                                           {d.doc_name}
@@ -438,26 +432,13 @@ const RequestInner = observer((props: any) => {
                           Нетиповой
                         </span>
                       </div>
-                      {console.log(
-                        request._getClientDocs,
-                        "request._getClientDocs"
-                      )}
                       {request._getRequest.is_model_contract &&
-                      request._getClientDocs &&
-                      request._getClientDocs.length > 0 &&
-                      request._getClientDocs[
-                        request._getClientDocs.length - 1
-                      ] ? (
+                      request.mainDoc ? (
                         <div
                           className={`card-collapse tab-num-1 ${
-                            (!signType &&
-                              request._getRequest.request_stepper > 2) ||
-                            !signType
-                              ? "collapsed"
-                              : ""
+                            !request.signType ? "collapsed" : ""
                           }`}
                         >
-                          {/* При сворачивании дается класс "collapsed" */}
                           <div
                             className={
                               request._getRequest.request_stepper === 3
@@ -465,7 +446,6 @@ const RequestInner = observer((props: any) => {
                                 : "card-collapse-header"
                             }
                           >
-                            {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
                             <div className="collapsing-header">
                               <h3
                                 className={
@@ -474,22 +454,15 @@ const RequestInner = observer((props: any) => {
                                     : "title-subhead mb-0"
                                 }
                               >
-                                {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
                                 {request._getRequest.request_stepper === 3
                                   ? "Договор подписан"
-                                  : `На подписание: Договор №${
-                                      request._getClientDocs[
-                                        request._getClientDocs.length - 1
-                                      ].id
-                                    } - вер. ${
-                                      request._getClientDocs[
-                                        request._getClientDocs.length - 1
-                                      ].version
-                                    }`}
+                                  : `На подписание: Договор №${request.mainDoc.id} - вер. ${request.mainDoc.version}`}
                               </h3>
                               <span
                                 className="btn-collapse"
-                                onClick={() => setSignType(!signType)}
+                                onClick={() =>
+                                  (request.signType = !request.signType)
+                                }
                               >
                                 <i className="azla chevron-up-icon"></i>
                               </span>
@@ -502,14 +475,7 @@ const RequestInner = observer((props: any) => {
                                     type="button"
                                     className="button btn-secondary btn-icon"
                                     onClick={() =>
-                                      request._getClientDocs[
-                                        request._getClientDocs.length - 1
-                                      ] &&
-                                      request.downloadDocument(
-                                        request._getClientDocs[
-                                          request._getClientDocs.length - 1
-                                        ].id
-                                      )
+                                      request.downloadDocument(request.mainDoc)
                                     }
                                   >
                                     <i className="azla blank-alt-primary-icon"></i>
@@ -564,6 +530,7 @@ const RequestInner = observer((props: any) => {
                                             }
                                           />
                                           <span className="name">
+                                            {console.log(request._getConSigner)}
                                             {request._getConSigner.full_name}
                                           </span>
                                         </div>
@@ -571,22 +538,29 @@ const RequestInner = observer((props: any) => {
                                       <div className="col-md-6">
                                         <div className="signatory-status">
                                           <p className="desc">
-                                            {request._getConSigner.position}
+                                            {
+                                              request._getPosition.find(
+                                                (t: ServiceCommon) =>
+                                                  t.id ===
+                                                  request._getConSigner.position
+                                              )?.name
+                                            }
                                           </p>
-                                          {request._getClientDocs[
-                                            request._getClientDocs.length - 1
-                                          ].is_signed_by_both ||
-                                          request._getClientDocs[
-                                            request._getClientDocs.length - 1
-                                          ].is_signed_by_agent ? (
+                                          {request._getRequest
+                                            .request_status === 8 ||
+                                          request._getRequest.request_status ===
+                                            12 ||
+                                          request._getRequest.request_status ===
+                                            15 ||
+                                          request._getRequest.request_status ===
+                                            16 ||
+                                          request._getRequest.request_status ===
+                                            18 ? (
                                             <span className="btn-status done">
                                               Подписано
                                             </span>
                                           ) : request._getRequest
-                                              .request_status === 11 &&
-                                            !request._getClientDocs[
-                                              request._getClientDocs.length - 1
-                                            ].is_signed_by_agent ? (
+                                              .request_status === 11 ? (
                                             <span className="btn-status not-active">
                                               Не Подписано
                                             </span>
@@ -628,11 +602,16 @@ const RequestInner = observer((props: any) => {
                                     <div className="col-md-6">
                                       <div className="signatory-status">
                                         <p className="desc">
-                                          {request._getManSigner.position}
+                                          {
+                                            request._getPosition.find(
+                                              (t: ServiceCommon) =>
+                                                t.id ===
+                                                request._getManSigner.position
+                                            )?.name
+                                          }
                                         </p>
-                                        {request._getClientDocs[
-                                          request._getClientDocs.length - 1
-                                        ].is_signed_by_both ? (
+                                        {request._getRequest.request_stepper >
+                                        2 ? (
                                           <span className="btn-status done">
                                             Подписано
                                           </span>
@@ -643,9 +622,10 @@ const RequestInner = observer((props: any) => {
                                             onClick={() =>
                                               request
                                                 .signDocGkb(true)
-                                                .then(() => {
-                                                  setSignType(true);
-                                                })
+                                                .then(
+                                                  () =>
+                                                    (request.signType = true)
+                                                )
                                             }
                                           >
                                             <i className="azla edit-white-icon"></i>
@@ -690,21 +670,16 @@ const RequestInner = observer((props: any) => {
                         <>
                           <div
                             className={`card-collapse tab-num-2 two-signatory ${
-                              !agreeNotType ||
-                              request._getRequest.request_status === 14 ||
-                              (request._getReviews.length > 0 &&
-                                (request._getRequest.request_status === 11 ||
-                                  request._getRequest.request_status === 12))
-                                ? "collapsed"
-                                : ""
+                              !request.agreeNotType ? "collapsed" : ""
                             }`}
                           >
                             <div
                               className={`card-collapse-header ${
-                                request._getRequest.request_status === 14 ||
-                                (request._getReviews.length > 0 &&
-                                  (request._getRequest.request_status === 11 ||
-                                    request._getRequest.request_status === 12))
+                                request._getRequest.request_stepper === 3 ||
+                                request._getRequest.request_status === 8 ||
+                                request._getRequest.request_status === 11 ||
+                                request._getRequest.request_status === 12 ||
+                                request._getRequest.request_status === 14
                                   ? "success"
                                   : ""
                               }`}
@@ -713,28 +688,29 @@ const RequestInner = observer((props: any) => {
                               <div className="collapsing-header">
                                 <h3
                                   className={
-                                    request._getRequest.request_status === 14 ||
-                                    (request._getReviews.length > 0 &&
-                                      (request._getRequest.request_status ===
-                                        11 ||
-                                        request._getRequest.request_status ===
-                                          12))
+                                    request._getRequest.request_stepper === 3 ||
+                                    request._getRequest.request_status === 8 ||
+                                    request._getRequest.request_status === 11 ||
+                                    request._getRequest.request_status === 12 ||
+                                    request._getRequest.request_status === 14
                                       ? "title-subhead mb-0 done-success"
                                       : "title-subhead mb-0"
                                   }
                                 >
-                                  {request._getRequest.request_status === 14 ||
-                                  (request._getReviews.length > 0 &&
-                                    (request._getRequest.request_status ===
-                                      11 ||
-                                      request._getRequest.request_status ===
-                                        12))
+                                  {request._getRequest.request_stepper === 3 ||
+                                  request._getRequest.request_status === 8 ||
+                                  request._getRequest.request_status === 11 ||
+                                  request._getRequest.request_status === 12 ||
+                                  request._getRequest.request_status === 14
                                     ? "Договор согласован"
                                     : `На согласование: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}
                                 </h3>
                                 <span
                                   className="btn-collapse"
-                                  onClick={() => setAgreeNotType(!agreeNotType)}
+                                  onClick={() =>
+                                    (request.agreeNotType =
+                                      !request.agreeNotType)
+                                  }
                                 >
                                   <i className="azla chevron-up-icon"></i>
                                 </span>
@@ -749,7 +725,7 @@ const RequestInner = observer((props: any) => {
                                       onClick={() =>
                                         request._getDoc &&
                                         request.downloadDocument(
-                                          request._getDoc.id
+                                          request._getDoc
                                         )
                                       }
                                     >
@@ -860,11 +836,17 @@ const RequestInner = observer((props: any) => {
                                                           </div>
                                                           <span className="position">
                                                             {request._getAllUsers &&
-                                                              request._getAllUsers.find(
-                                                                (u: User) =>
-                                                                  u.id ===
-                                                                  s.user_id
-                                                              )?.position}
+                                                              request._getPosition.find(
+                                                                (
+                                                                  t: ServiceCommon
+                                                                ) =>
+                                                                  t.id ===
+                                                                  request._getAllUsers.find(
+                                                                    (u: User) =>
+                                                                      u.id ===
+                                                                      s.user_id
+                                                                  )?.position
+                                                              )?.name}
                                                           </span>
 
                                                           {s.is_approved ? (
@@ -987,10 +969,16 @@ const RequestInner = observer((props: any) => {
                                                         </div>
                                                         <span className="position">
                                                           {request._getAllUsers &&
-                                                            request._getAllUsers.find(
-                                                              (u: User) =>
-                                                                u.id === s
-                                                            )?.position}
+                                                            request._getPosition.find(
+                                                              (
+                                                                t: ServiceCommon
+                                                              ) =>
+                                                                t.id ===
+                                                                request._getAllUsers.find(
+                                                                  (u: User) =>
+                                                                    u.id === s
+                                                                )?.position
+                                                            )?.name}
                                                         </span>
                                                         <i
                                                           onClick={() =>
@@ -1093,11 +1081,12 @@ const RequestInner = observer((props: any) => {
                           </div>
                           <div
                             className={`card-collapse tab-num-1 ${
-                              !signNotType ? "collapsed " : ""
+                              request.signNotType ? "" : "collapsed "
                             } ${
-                              request._getRequest.request_status === 14
-                                ? ""
-                                : "disabled"
+                              request._getRequest.request_status === 7 ||
+                              request._getRequest.request_status === 13
+                                ? "disabled"
+                                : ""
                             }`}
                           >
                             {/* При сворачивании дается класс "collapsed" */}
@@ -1124,11 +1113,15 @@ const RequestInner = observer((props: any) => {
                                 </h3>
                                 <span
                                   className="btn-collapse"
-                                  onClick={() =>
-                                    request._getRequest.request_status !== 6 &&
-                                    request._getRequest.request_status !== 7 &&
-                                    setSignNotType(!signNotType)
-                                  }
+                                  onClick={() => {
+                                    if (
+                                      request._getRequest.request_status !==
+                                        7 &&
+                                      request._getRequest.request_status !== 13
+                                    )
+                                      request.signNotType =
+                                        !request.signNotType;
+                                  }}
                                 >
                                   <i className="azla chevron-up-icon"></i>
                                 </span>
@@ -1143,7 +1136,7 @@ const RequestInner = observer((props: any) => {
                                       onClick={() =>
                                         request._getDoc &&
                                         request.downloadDocument(
-                                          request._getDoc.id
+                                          request._getDoc
                                         )
                                       }
                                     >
@@ -1205,7 +1198,14 @@ const RequestInner = observer((props: any) => {
                                         <div className="col-md-6">
                                           <div className="signatory-status">
                                             <p className="desc">
-                                              {request._getConSigner.position}
+                                              {
+                                                request._getPosition.find(
+                                                  (t: ServiceCommon) =>
+                                                    t.id ===
+                                                    request._getConSigner
+                                                      .position
+                                                )?.name
+                                              }
                                             </p>
                                             {request._getRequest
                                               .request_status === 11 ? (
@@ -1214,6 +1214,12 @@ const RequestInner = observer((props: any) => {
                                               </span>
                                             ) : request._getRequest
                                                 .request_status === 12 ||
+                                              request._getRequest
+                                                .request_status === 15 ||
+                                              request._getRequest
+                                                .request_status === 16 ||
+                                              request._getRequest
+                                                .request_status === 18 ||
                                               request._getRequest
                                                 .request_status === 8 ? (
                                               <span className="btn-status done">
@@ -1259,7 +1265,14 @@ const RequestInner = observer((props: any) => {
                                         <div className="col-md-6">
                                           <div className="signatory-status">
                                             <p className="desc">
-                                              {request._getManSigner.position}
+                                              {
+                                                request._getPosition.find(
+                                                  (t: ServiceCommon) =>
+                                                    t.id ===
+                                                    request._getManSigner
+                                                      .position
+                                                )?.name
+                                              }
                                             </p>
                                             {request._getRequest
                                               .request_stepper > 2 ? (
@@ -1274,8 +1287,10 @@ const RequestInner = observer((props: any) => {
                                                   request
                                                     .signDocGkb()
                                                     .then(() => {
-                                                      setAgreeNotType(false);
-                                                      setSignNotType(true);
+                                                      request.agreeNotType =
+                                                        false;
+                                                      request.signNotType =
+                                                        true;
                                                     })
                                                 }
                                               >
@@ -1289,7 +1304,7 @@ const RequestInner = observer((props: any) => {
                                                 Подписать
                                               </button>
                                             ) : request._getRequest
-                                                .request_status === 7 ? (
+                                                .request_status === 14 ? (
                                               <i
                                                 onClick={() =>
                                                   request
@@ -1358,7 +1373,8 @@ const RequestInner = observer((props: any) => {
                             <h3 className="title-subhead">
                               История изменения договора{" "}
                               <span className="number">
-                                {(request._getClientDocs as Documents[]).length}
+                                {request._getDogovors &&
+                                  (request._getDogovors as Documents[]).length}
                               </span>
                             </h3>
                             <button
@@ -1382,30 +1398,33 @@ const RequestInner = observer((props: any) => {
                               </tr>
                             </thead>
                             <tbody>
-                              {(request._getClientDocs as Documents[]).map(
-                                (d: Documents) => (
-                                  <tr
-                                    onClick={() => {
-                                      if (
-                                        request._getRequest.request_status === 7
-                                      ) {
-                                        main.setModal(true);
-                                        main.setModalType(2);
-                                        request.setTempDoc(d);
-                                      } else {
-                                        request.setDoc(d);
-                                      }
-                                    }}
-                                  >
-                                    <td>{d.doc_name}</td>
-                                    <td>{}</td>
-                                    <td>{d.comments}</td>
-                                    <td>
-                                      {request._getRequest.client.longname}
-                                    </td>
-                                  </tr>
-                                )
-                              )}
+                              {request._getDogovors &&
+                                (request._getDogovors as Documents[]).map(
+                                  (d: Documents) => (
+                                    <tr
+                                      onClick={() => {
+                                        if (
+                                          request._getRequest.request_status ===
+                                          7
+                                        ) {
+                                          main.setModal(true);
+                                          main.setModalType(2);
+                                          request.setTempDoc(d);
+                                        } else {
+                                          console.log(d, "dd");
+                                          request.setDoc(d);
+                                        }
+                                      }}
+                                    >
+                                      <td>{d.doc_name}</td>
+                                      <td>{}</td>
+                                      <td>{d.comments}</td>
+                                      <td>
+                                        {request._getRequest.client.longname}
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
                             </tbody>
                           </table>
                         </>
@@ -1428,10 +1447,7 @@ const RequestInner = observer((props: any) => {
                                       <i className="azla blank-alt-primary-icon"></i>
                                       <span
                                         onClick={() =>
-                                          request.downloadDocument(
-                                            d.id,
-                                            d.doc_name
-                                          )
+                                          request.downloadDocument(d)
                                         }
                                       >
                                         {d.doc_name}
@@ -1447,6 +1463,9 @@ const RequestInner = observer((props: any) => {
                   </div>
                 ) : request.step === 3 ? (
                   <>
+                    <h3 className="title-subhead mb-16">
+                      {request._getClientUsers.length} заявленных пользователей
+                    </h3>
                     {request._getClientUsers.map(
                       (u: ClientUsers, index: number) => (
                         <div className="card mb-24 pad-24">
@@ -1543,19 +1562,39 @@ const RequestInner = observer((props: any) => {
                               </h3>
                               <div className="files-added">
                                 <ul className="files-list">
-                                  <li>
-                                    <i className="azla blank-alt-primary-icon"></i>
-                                    <span>Протокол тестирования.docx</span>
-                                  </li>
-                                  <li>
-                                    <i className="azla blank-alt-primary-icon"></i>
-                                    <span>Акт тестирования.pdf</span>
-                                  </li>
+                                  {request.testProt && (
+                                    <li>
+                                      <i className="azla blank-alt-primary-icon"></i>
+                                      <span
+                                        onClick={() =>
+                                          request.downloadDocument(
+                                            request.testProt
+                                          )
+                                        }
+                                      >
+                                        {request.testProt.doc_name}
+                                      </span>
+                                    </li>
+                                  )}
+                                  {request.testAct && (
+                                    <li>
+                                      <i className="azla blank-alt-primary-icon"></i>
+                                      <span
+                                        onClick={() =>
+                                          request.downloadDocument(
+                                            request.testAct
+                                          )
+                                        }
+                                      >
+                                        {request.testAct.doc_name}
+                                      </span>
+                                    </li>
+                                  )}
                                 </ul>
                               </div>
 
                               <h3 className="title-subhead mb-16">
-                                Тестирование сервисов
+                                Сценарий тестирования
                               </h3>
                               <p className="text-desc">
                                 Amet minim mollit non deserunt ullamco est sit
@@ -1569,31 +1608,48 @@ const RequestInner = observer((props: any) => {
                                 <h3 className="title-subhead mb-16">
                                   Ключи доступа
                                 </h3>
-                                <div className="keys-loader mb-32">
-                                  <h5>
-                                    Тестовые ключи не предоставлены. Ожидайте.
-                                  </h5>
-                                  <p>
-                                    Ключи предоставляются департаментом Service
-                                    Desk после проверки всех данных контрагента.
-                                    Это занимает 2-7 дней с момента принятия
-                                    формы доступа менеджером.
-                                  </p>
-                                </div>
-                                <div className="keys-btn">
-                                  <button
-                                    type="button"
-                                    className="btn-file btn-icon"
-                                  >
-                                    Скачать тестовые ключи
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="btn-file btn-icon"
-                                  >
-                                    Скачать боевые ключи
-                                  </button>
-                                </div>
+                                {request._getRequest.request_status === 15 ? (
+                                  <div className="keys-loader mb-32">
+                                    <h5>
+                                      Тестовые ключи не предоставлены. Ожидайте.
+                                    </h5>
+                                    <p>
+                                      Ключи предоставляются департаментом
+                                      Service Desk после проверки всех данных
+                                      контрагента. Это занимает 2-7 дней с
+                                      момента принятия формы доступа менеджером.
+                                    </p>
+                                  </div>
+                                ) : (
+                                  <div className="keys-btn">
+                                    {request.testKey && (
+                                      <button
+                                        type="button"
+                                        className="btn-file btn-icon"
+                                        onClick={() =>
+                                          request.downloadKeys(request.testKey)
+                                        }
+                                      >
+                                        Скачать тестовые ключи
+                                      </button>
+                                    )}
+                                    {request.prodKey &&
+                                      request._getRequest.request_stepper >
+                                        4 && (
+                                        <button
+                                          type="button"
+                                          className="btn-file btn-icon"
+                                          onClick={() =>
+                                            request.downloadKeys(
+                                              request.prodKey
+                                            )
+                                          }
+                                        >
+                                          Скачать боевые ключи
+                                        </button>
+                                      )}
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -1726,18 +1782,28 @@ const RequestInner = observer((props: any) => {
                           Ключи доступа
                         </h5>
                         <div className="d-flex">
-                          <button
-                            type="button"
-                            className="button btn-secondary mr-16"
-                          >
-                            Скачать тестовые ключи
-                          </button>
-                          <button
-                            type="button"
-                            className="button btn-secondary"
-                          >
-                            Скачать боевые ключи
-                          </button>
+                          {request.testKey && (
+                            <button
+                              type="button"
+                              className="button btn-secondary mr-16"
+                              onClick={() =>
+                                request.downloadKeys(request.testKey)
+                              }
+                            >
+                              Скачать тестовые ключи
+                            </button>
+                          )}
+                          {request.prodKey && (
+                            <button
+                              type="button"
+                              className="button btn-secondary"
+                              onClick={() =>
+                                request.downloadKeys(request.prodKey)
+                              }
+                            >
+                              Скачать боевые ключи
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

@@ -4,12 +4,14 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { ServiceCommon } from "../api/Models/ServiceModels";
 
 const Profile = observer((props: any) => {
   const { main, request } = props;
   const [modal, setModal]: any = useState(null);
 
   React.useEffect(() => {
+    request.getPosition();
     request.getClient(main.clientData.client.id);
     request.getUser(main.clientData.client.id);
   }, []);
@@ -35,16 +37,22 @@ const Profile = observer((props: any) => {
                         <li>
                           <span className="left">Должность:</span>
                           <span className="right d-flex">
-                            {request._getUser.position}{" "}
-                            {/* <span
+                            {
+                              request._getPosition.find(
+                                (t: ServiceCommon) =>
+                                  t.id === request._getUser.position
+                              )?.name
+                            }
+                            <span
                               className="edit"
                               onClick={() => {
-                                setOpened(true);
-                                setModal(dolzhnostModal);
+                                main.setModal(true);
+                                main.setModalType(15);
+                                main.setModalTypeEdit(1);
                               }}
                             >
                               <i className="azla edit-primary-icon ml-8"></i>
-                            </span> */}
+                            </span>
                           </span>
                         </li>
                         <li>
@@ -56,6 +64,7 @@ const Profile = observer((props: any) => {
                               onClick={() => {
                                 main.setModal(true);
                                 main.setModalType(15);
+                                main.setModalTypeEdit(0);
                               }}
                             >
                               <i className="azla edit-primary-icon ml-8"></i>
@@ -72,9 +81,7 @@ const Profile = observer((props: any) => {
                         </li>
                         <li>
                           <span className="left">Роль:</span>
-                          <span className="right d-flex">
-                            {request._getUser.position}
-                          </span>
+                          <span className="right d-flex">{""}</span>
                         </li>
                         <li>
                           <span className="left">Организация:</span>

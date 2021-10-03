@@ -1,14 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
-import { Link } from "react-router-dom";
-import { ServiceCommon, Request } from "../api/Models/ServiceModels";
+import moment from "moment";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
-import moment from "moment";
+import {
+  ServiceCommon,
+  Request as RequestModel,
+} from "../api/Models/ServiceModels";
 import { OnClickOutside } from "../utils/utils";
 
-const Partners = observer((props: any) => {
+const ServiceDesk = observer((props: any) => {
   const { request, main } = props;
   const [advance, setAdvance] = useState(false);
   const [sort, setSort] = useState(false);
@@ -24,17 +26,21 @@ const Partners = observer((props: any) => {
   const catRef = useRef<any>(null);
   const serviceRef = useRef<any>(null);
 
-  useEffect(() => {
-    request.getClientRequests(main.clientData.client.id);
+  React.useEffect(() => {
+    request.getRequests();
+    request.getMineRequest(main.clientData.user.id);
+    request.getClients();
+    request.getClientServiceType();
+    request.getClientTypes();
   }, []);
 
   OnClickOutside(catRef, () => setCategory(false));
   OnClickOutside(serviceRef, () => setService(false));
 
-  const filterRequests = (type: number[] = []) => {
+  const filterRequests = (step: number[] = []) => {
     const req = request._getRequests
       .slice()
-      .sort((a: Request, b: Request) => {
+      .sort((a: RequestModel, b: RequestModel) => {
         return new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime();
       })
       .reverse();
@@ -42,7 +48,7 @@ const Partners = observer((props: any) => {
     return req.length > 0
       ? req
           .filter(
-            (cc: Request) =>
+            (cc: RequestModel) =>
               cc.client.longname
                 .toLocaleLowerCase()
                 .includes(bin.toLocaleLowerCase()) ||
@@ -50,16 +56,16 @@ const Partners = observer((props: any) => {
                 .toLocaleLowerCase()
                 .includes(bin.toLocaleLowerCase())
           )
-          .filter((ccc: Request) =>
+          .filter((ccc: RequestModel) =>
             services.length === 0 ? true : services.includes(ccc.service_type)
           )
-          .filter((ccc: Request) =>
+          .filter((ccc: RequestModel) =>
             categories.length === 0
               ? true
               : categories.includes(ccc.service_category)
           )
-          .filter((r: Request) =>
-            type.length === 0 ? true : type.includes(r.request_status)
+          .filter((r: RequestModel) =>
+            step.length === 0 ? true : step.includes(r.request_stepper)
           )
       : [];
   };
@@ -80,10 +86,9 @@ const Partners = observer((props: any) => {
                   request.tabIndexPar = i;
                 }}
               >
-                <div className="">
+                <div>
                   <TabList>
-                    <Tab>Исходящие</Tab>
-                    <Tab>Подписанные</Tab>
+                    <Tab>Входящие</Tab>
                   </TabList>
                 </div>
                 <div className="filter mb-24">
@@ -347,48 +352,8 @@ const Partners = observer((props: any) => {
                   <div className="tab-content tab-1">
                     <h3 className="title-subhead mb-16">
                       Найдено{" "}
-                      <span className="number">{filterRequests().length}</span>
-                    </h3>
-                    <table className="table req-table">
-                      <thead>
-                        <tr>
-                          <th>БИН</th>
-                          <th>Организации</th>
-                          <th>Категория деятельности</th>
-                          <th>Сервис</th>
-                          <th>Дата поступления</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filterRequests().map((r: Request) => (
-                          <tr onClick={() => history.push(`/partner/${r.id}`)}>
-                            <td>{r.client.bin}</td>
-                            <td>{r.client.longname}</td>
-
-                            <td>
-                              {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                            </td>
-                            <td>
-                              {
-                                request._getClientServiceType.find(
-                                  (t: ServiceCommon) => t.id === r.service_type
-                                )?.name
-                              }
-                            </td>
-                            <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </TabPanel>
-
-                <TabPanel>
-                  <div className="tab-content tab-2">
-                    <h3 className="title-subhead mb-16">
-                      На подпись{" "}
                       <span className="number">
-                        {filterRequests([11]).length}
+                        {filterRequests([3, 4, 5]).length}
                       </span>
                     </h3>
                     <table className="table req-table">
@@ -402,48 +367,12 @@ const Partners = observer((props: any) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {filterRequests([11]).map((r: Request) => (
-                          <tr onClick={() => history.push(`/partner/${r.id}`)}>
-                            <td>{r.client.bin}</td>
-                            <td>{r.client.longname}</td>
-
-                            <td>
-                              {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                            </td>
-                            <td>
-                              {
-                                request._getClientServiceType.find(
-                                  (t: ServiceCommon) => t.id === r.service_type
-                                )?.name
-                              }
-                            </td>
-                            <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div className="tab-content tab-2 mt-16">
-                    <h3 className="title-subhead mb-16">
-                      Активные{" "}
-                      <span className="number">
-                        {filterRequests([12]).length}
-                      </span>
-                    </h3>
-                    <table className="table req-table">
-                      <thead>
-                        <tr>
-                          <th>БИН</th>
-                          <th>Организации</th>
-                          <th>Категория деятельности</th>
-                          <th>Сервис</th>
-                          <th>Дата поступления</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filterRequests([12]).map((r: Request) => (
-                          <tr onClick={() => history.push(`/partner/${r.id}`)}>
+                        {filterRequests([3, 4, 5]).map((r: RequestModel) => (
+                          <tr
+                            onClick={() =>
+                              history.push(`/service-desk/${r.id}`)
+                            }
+                          >
                             <td>{r.client.bin}</td>
                             <td>{r.client.longname}</td>
 
@@ -465,17 +394,6 @@ const Partners = observer((props: any) => {
                   </div>
                 </TabPanel>
               </Tabs>
-
-              <div className="req-inner-footer">
-                <div className="container">
-                  <Link
-                    to="/request-new"
-                    className="button btn-primary btn-icon ml-32 d-inline-flex"
-                  >
-                    <i className="azla add-plusRound-icon"></i> Новая заявка
-                  </Link>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -483,4 +401,4 @@ const Partners = observer((props: any) => {
     </div>
   );
 });
-export default Partners;
+export default ServiceDesk;

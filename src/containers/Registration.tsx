@@ -3,7 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react";
 import "react-tabs/style/react-tabs.css";
-import { ServiceCommon } from "../api/Models/ServiceModels";
+import { Documents, ServiceCommon } from "../api/Models/ServiceModels";
 import FileReaderInput from "react-file-reader-input";
 import moment from "moment";
 
@@ -18,74 +18,71 @@ const Registration = observer((props: any) => {
   const [otherSegment, setOtherSegment] = React.useState("");
   const [otherPosition, setOtherPosition] = React.useState("");
   const [otherSigningAuth, setOtherSigningAuth] = React.useState("");
-  const [file1, setFile1] = React.useState("");
-  const [file1title, setFile1title] = React.useState("");
-  const [file2, setFile2] = React.useState("");
-  const [file2title, setFile2title] = React.useState("");
-  const [file3, setFile3] = React.useState("");
-  const [file3title, setFile3title] = React.useState("");
-  const [file4, setFile4] = React.useState("");
-  const [file4title, setFile4title] = React.useState("");
-  const [file5, setFile5] = React.useState("");
-  const [file5title, setFile5title] = React.useState("");
+  const [file1, setFile1] = React.useState<any | null>(null);
+  const [file2, setFile2] = React.useState<any | null>(null);
+  const [file3, setFile3] = React.useState<any | null>(null);
+  const [file4, setFile4] = React.useState<any | null>(null);
+  const [file5, setFile5] = React.useState<any | null>(null);
+  const [filesId, setFilesId] = React.useState<number[] | []>([]);
   React.useEffect(() => {
     request.getClientTypes();
     request.getPosition();
     request.getSigningAuth();
+    request.getDocuments(main.clientData.client.id).then((res: any) => {
+      if (request._getDocuments.length > 0) {
+        request.addedFiles = [];
+        (request._getDocuments as Documents[])
+          .filter((dd: Documents) => dd.doc_status === "Active")
+          .map((d: Documents) => {
+            if (d.doc_type === 4 && d.doc_category === 1) {
+              setFile1(d);
+              setFilesId([...filesId, d.id]);
+            } else if (d.doc_type === 5 && d.doc_category === 1) {
+              setFile2(d);
+              setFilesId([...filesId, d.id]);
+            } else if (d.doc_type === 6 && d.doc_category === 1) {
+              setFile3(d);
+              setFilesId([...filesId, d.id]);
+            } else if (d.doc_type === 7 && d.doc_category === 1) {
+              setFile4(d);
+              setFilesId([...filesId, d.id]);
+            } else if (d.doc_type === 1 && d.doc_category === 1) {
+              setFile5(d);
+              setFilesId([...filesId, d.id]);
+            }
+          });
+      }
+    });
     main.clientExist ? setStep(2) : setStep(0);
   }, []);
 
-  const handleChange1 = (e: any, results: any) => {
+  const handleChange = (
+    e: any,
+    results: any,
+    doc_type: any,
+    doc_category: any,
+    index: number
+  ) => {
     results.forEach((result: any) => {
       const [e, file] = result;
       const res = e.target.result.split(",");
       if (file.size < 5000000) {
-        setFile1(res[1]);
-        setFile1title(file.name);
-      }
-    });
-  };
-
-  const handleChange2 = (e: any, results: any) => {
-    results.forEach((result: any) => {
-      const [e, file] = result;
-      const res = e.target.result.split(",");
-      if (file.size < 5000000) {
-        setFile2(res[1]);
-        setFile2title(file.name);
-      }
-    });
-  };
-
-  const handleChange3 = (e: any, results: any) => {
-    results.forEach((result: any) => {
-      const [e, file] = result;
-      const res = e.target.result.split(",");
-      if (file.size < 5000000) {
-        setFile3(res[1]);
-        setFile3title(file.name);
-      }
-    });
-  };
-
-  const handleChange4 = (e: any, results: any) => {
-    results.forEach((result: any) => {
-      const [e, file] = result;
-      const res = e.target.result.split(",");
-      if (file.size < 5000000) {
-        setFile4(res[1]);
-        setFile4title(file.name);
-      }
-    });
-  };
-
-  const handleChange5 = (e: any, results: any) => {
-    results.forEach((result: any) => {
-      const [e, file] = result;
-      const res = e.target.result.split(",");
-      if (file.size < 5000000) {
-        setFile5(res[1]);
-        setFile5title(file.name);
+        console.log(res, "res");
+        console.log(file, "file");
+        if (index === 1) setFile1(file);
+        else if (index === 2) setFile2(file);
+        else if (index === 3) setFile3(file);
+        else if (index === 4) setFile4(file);
+        else if (index === 5) setFile5(file);
+        var bodyFormData = new FormData();
+        bodyFormData.append("file", file);
+        bodyFormData.append("service_type", "");
+        bodyFormData.append("doc_category", doc_category);
+        bodyFormData.append("comments", "");
+        bodyFormData.append("version", "1");
+        bodyFormData.append("doc_type", doc_type);
+        bodyFormData.append("is_draft", "true");
+        request.addDocument(main.clientData.client.id, bodyFormData, true);
       }
     });
   };
@@ -207,15 +204,16 @@ const Registration = observer((props: any) => {
                             лица
                           </span>
                           {file1 && (
-                            <span className="file-name">{file1title}</span>
+                            <span className="file-name">
+                              {file1.name || file1.doc_name}
+                            </span>
                           )}
                         </div>
                         {file1 ? (
                           <button
                             className="btn-icon delete"
                             onClick={() => {
-                              setFile1("");
-                              setFile1title("");
+                              setFile1(null);
                             }}
                           >
                             <i className="azla size-18 trash-icon-alert mr-8"></i>
@@ -225,7 +223,7 @@ const Registration = observer((props: any) => {
                           <FileReaderInput
                             as="url"
                             accept="image/jpeg,image/png,image/gif,application/pdf"
-                            onChange={handleChange1}
+                            onChange={(e, f) => handleChange(e, f, 4, 1, 1)}
                           >
                             <button className="btn-icon add">
                               <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -241,15 +239,16 @@ const Registration = observer((props: any) => {
                             первого руководителя
                           </span>
                           {file2 && (
-                            <span className="file-name">{file2title}</span>
+                            <span className="file-name">
+                              {file2.name || file2.doc_name}
+                            </span>
                           )}
                         </div>
                         {file2 ? (
                           <button
                             className="btn-icon delete"
                             onClick={() => {
-                              setFile2("");
-                              setFile2title("");
+                              setFile2(null);
                             }}
                           >
                             <i className="azla size-18 trash-icon-alert mr-8"></i>
@@ -259,7 +258,7 @@ const Registration = observer((props: any) => {
                           <FileReaderInput
                             as="url"
                             accept="image/jpeg,image/png,image/gif,application/pdf"
-                            onChange={handleChange2}
+                            onChange={(e, f) => handleChange(e, f, 5, 1, 2)}
                           >
                             <button className="btn-icon add">
                               <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -274,15 +273,16 @@ const Registration = observer((props: any) => {
                             Приказ о приеме на работу первого руководителя
                           </span>
                           {file3 && (
-                            <span className="file-name">{file3title}</span>
+                            <span className="file-name">
+                              {file3.name || file3.doc_name}
+                            </span>
                           )}
                         </div>
                         {file3 ? (
                           <button
                             className="btn-icon delete"
                             onClick={() => {
-                              setFile3("");
-                              setFile3title("");
+                              setFile3(null);
                             }}
                           >
                             <i className="azla size-18 trash-icon-alert mr-8"></i>
@@ -292,7 +292,7 @@ const Registration = observer((props: any) => {
                           <FileReaderInput
                             as="url"
                             accept="image/jpeg,image/png,image/gif,application/pdf"
-                            onChange={handleChange3}
+                            onChange={(e, f) => handleChange(e, f, 6, 1, 3)}
                           >
                             <button className="btn-icon add">
                               <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -308,15 +308,17 @@ const Registration = observer((props: any) => {
                             руководителя
                           </span>
                           {file4 && (
-                            <span className="file-name">{file4title}</span>
+                            <span className="file-name">
+                              {file4.name || file4.doc_name}
+                            </span>
                           )}
                         </div>
+
                         {file4 ? (
                           <button
                             className="btn-icon delete"
                             onClick={() => {
-                              setFile4("");
-                              setFile4title("");
+                              setFile4(null);
                             }}
                           >
                             <i className="azla size-18 trash-icon-alert mr-8"></i>
@@ -326,7 +328,7 @@ const Registration = observer((props: any) => {
                           <FileReaderInput
                             as="url"
                             accept="image/jpeg,image/png,image/gif,application/pdf"
-                            onChange={handleChange4}
+                            onChange={(e, f) => handleChange(e, f, 7, 1, 4)}
                           >
                             <button className="btn-icon add">
                               <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -339,15 +341,16 @@ const Registration = observer((props: any) => {
                         <div className="name">
                           <span className="text">Устав юрического лица</span>
                           {file5 && (
-                            <span className="file-name">{file5title}</span>
+                            <span className="file-name">
+                              {file5.name || file5.doc_name}
+                            </span>
                           )}
                         </div>
                         {file5 ? (
                           <button
                             className="btn-icon delete"
                             onClick={() => {
-                              setFile5("");
-                              setFile5title("");
+                              setFile5(null);
                             }}
                           >
                             <i className="azla size-18 trash-icon-alert mr-8"></i>
@@ -357,7 +360,7 @@ const Registration = observer((props: any) => {
                           <FileReaderInput
                             as="url"
                             accept="image/jpeg,image/png,image/gif,application/pdf"
-                            onChange={handleChange5}
+                            onChange={(e, f) => handleChange(e, f, 1, 1, 5)}
                           >
                             <button className="btn-icon add">
                               <i className="azla size-18 pin-primary-icon mr-8"></i>
