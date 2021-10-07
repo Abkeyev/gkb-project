@@ -449,7 +449,10 @@ const Request = observer((props: any) => {
                     <h3 className="title-subhead mb-16">
                       Активные{" "}
                       <span className="number">
-                        {filterRequests([7, 11, 12, 13], true).length}
+                        {
+                          filterRequests([7, 11, 12, 13, 15, 16, 18], true)
+                            .length
+                        }
                       </span>
                     </h3>
                     <table className="table req-table">
@@ -463,7 +466,7 @@ const Request = observer((props: any) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {filterRequests([7, 11, 12, 13], true).map(
+                        {filterRequests([7, 11, 12, 13, 15, 16, 18], true).map(
                           (r: RequestModel) => (
                             <tr
                               onClick={() => history.push(`/request/${r.id}`)}

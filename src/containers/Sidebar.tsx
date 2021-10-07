@@ -50,7 +50,7 @@ const Sidebar = observer((props: any) => {
                     <NavLink
                       to="/"
                       className="link-list"
-                      activeClassName="link-list active"
+                      activeClassName="active"
                       exact
                     >
                       <i className="azla blank-alt-icon"></i>
@@ -62,7 +62,7 @@ const Sidebar = observer((props: any) => {
                     <NavLink
                       to="/users"
                       className="link-list"
-                      activeClassName="link-list active"
+                      activeClassName="active"
                     >
                       <i className="azla user-add-icon"></i>
                       <span className="text">Пользователи портала</span>
@@ -73,7 +73,7 @@ const Sidebar = observer((props: any) => {
                     <NavLink
                       to="/profile"
                       className="link-list"
-                      activeClassName="link-list active"
+                      activeClassName="active"
                     >
                       <i className="azla user-icon"></i>
                       <span className="text">Мой профиль</span>
@@ -87,7 +87,7 @@ const Sidebar = observer((props: any) => {
                     <NavLink
                       to="/"
                       className="link-list"
-                      activeClassName="link-list active"
+                      activeClassName="active"
                       exact
                     >
                       <i className="azla blank-alt-icon"></i>
@@ -99,7 +99,7 @@ const Sidebar = observer((props: any) => {
                     <NavLink
                       to="/contractors"
                       className="link-list"
-                      activeClassName="link-list active"
+                      activeClassName="active"
                     >
                       <i className="azla user-add-icon"></i>
                       <span className="text">Контрагенты</span>
@@ -110,7 +110,7 @@ const Sidebar = observer((props: any) => {
                     <NavLink
                       to="/profile"
                       className="link-list"
-                      activeClassName="link-list active"
+                      activeClassName="active"
                     >
                       <i className="azla user-icon"></i>
                       <span className="text">Мой профиль</span>
@@ -124,7 +124,7 @@ const Sidebar = observer((props: any) => {
                     <NavLink
                       to="/request-new"
                       className="link-list"
-                      activeClassName="link-list active"
+                      activeClassName="active"
                     >
                       <i className="azla add-plusRound-icon"></i>
                       <span className="text">Новая заявка</span>
@@ -135,7 +135,8 @@ const Sidebar = observer((props: any) => {
                     <NavLink
                       to="/"
                       className="link-list"
-                      activeClassName="link-list active"
+                      activeClassName="active"
+                      exact
                     >
                       <i className="azla blank-alt-icon"></i>
                       <span className="text">Заявки</span>
@@ -146,7 +147,7 @@ const Sidebar = observer((props: any) => {
                     <NavLink
                       to="/organization"
                       className="link-list"
-                      activeClassName="link-list active"
+                      activeClassName="active"
                     >
                       <i className="azla bookmark-icon"></i>
                       <span className="text">Моя организация</span>
@@ -157,7 +158,7 @@ const Sidebar = observer((props: any) => {
                     <NavLink
                       to="/profile"
                       className="link-list"
-                      activeClassName="link-list active"
+                      activeClassName="active"
                     >
                       <i className="azla user-icon"></i>
                       <span className="text">Мой профиль</span>

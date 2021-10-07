@@ -641,6 +641,13 @@
   filter: contrast(0);
   transition: 0.3s;
 }
+.files-list li:hover .trash {
+  filter: contrast(1);
+  cursor: pointer;
+}
+.files-list li:hover {
+  color: #19959c;
+}
 .files-list li.active .trash {
   cursor: pointer;
   filter: unset;
@@ -1236,6 +1243,41 @@
 
 .manager-req .alert p {
   color: #ff0000;
+}
+.delete-signatory {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid #ff0000;
+  cursor: pointer;
+  border-radius: 8px;
+  position: relative;
+  transition: 0.3s;
+}
+.delete-signatory::before,
+.delete-signatory::after {
+  content: "";
+  height: 1px;
+  width: 12px;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ff0000;
+}
+.delete-signatory::before {
+  transform: rotate(45deg);
+}
+.delete-signatory::after {
+  transform: rotate(-45deg);
+}
+.delete-signatory:hover {
+  opacity: 0.6;
 }
 
 /* Animation */

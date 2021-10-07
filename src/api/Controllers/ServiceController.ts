@@ -19,6 +19,11 @@ export class ServiceController {
       baseURL,
     });
   }
+  async addDogovor(id: number, data: any): Promise<any> {
+    return server.post(`/request/${id}/document`, data, {
+      baseURL,
+    });
+  }
   async getDocumentCategories(): Promise<any> {
     return server.get(`/doc/category`, {
       baseURL,
@@ -44,13 +49,17 @@ export class ServiceController {
       }
     );
   }
-
   async addDocument(id: number, data: any): Promise<any> {
     return server.post(`/client_document/${id}`, data, {
       baseURL,
       headers: {
         "Content-Type": `multipart/form-data`,
       },
+    });
+  }
+  async deleteDocument(id: number, data: any): Promise<any> {
+    return server.put(`/client/document/${id}`, data, {
+      baseURL,
     });
   }
   async uploadKeys(id: number, data: any): Promise<any> {
@@ -67,9 +76,20 @@ export class ServiceController {
       baseURL,
     });
   }
+  async addClientTypes(data: any): Promise<any> {
+    return server.post(`/client_type`, data, {
+      baseURL,
+    });
+  }
 
   async getClients(): Promise<any> {
     return server.get(`/client`, {
+      baseURL,
+    });
+  }
+
+  async editClient(id: number, data: any): Promise<any> {
+    return server.put(`/client/${id}`, data, {
       baseURL,
     });
   }
@@ -81,6 +101,11 @@ export class ServiceController {
   }
   async getAuthPersons(id: number) {
     return server.get(`/client/${id}/auth_person`, {
+      baseURL,
+    });
+  }
+  async setAuthPersons(id: number, data: any) {
+    return server.put(`/client/auth_person/${id}`, data, {
       baseURL,
     });
   }
@@ -119,14 +144,34 @@ export class ServiceController {
       baseURL,
     });
   }
+  async addClientContact(data: any) {
+    return server.post(`/client/contact`, data, {
+      baseURL,
+    });
+  }
+  async editClientContact(id: number, data: any) {
+    return server.put(`/client/contact/${id}`, data, {
+      baseURL,
+    });
+  }
   async getClientAddress(id: number) {
     return server.get(`/client/${id}/address`, {
+      baseURL,
+    });
+  }
+  async editClientAddress(id: number, data: any) {
+    return server.put(`/client/address/${id}`, data, {
       baseURL,
     });
   }
 
   async getClientBankDetails(id: number) {
     return server.get(`/client/${id}/bank_details`, {
+      baseURL,
+    });
+  }
+  async editClientBankDetails(id: number, data: any) {
+    return server.put(`/client/bank_details/${id}`, data, {
       baseURL,
     });
   }
@@ -169,8 +214,20 @@ export class ServiceController {
     });
   }
 
+  async addPosition(data: any): Promise<any> {
+    return server.post(`/position`, data, {
+      baseURL,
+    });
+  }
+
   async getSigningAuth(): Promise<any> {
     return server.get(`/signing_authority`, {
+      baseURL,
+    });
+  }
+
+  async addSigningAuth(data: any): Promise<any> {
+    return server.post(`/signing_authority`, data, {
       baseURL,
     });
   }
@@ -182,11 +239,6 @@ export class ServiceController {
   }
   async getClientAddressTypes() {
     return server.get(`/address_type`, {
-      baseURL,
-    });
-  }
-  async getSigningAuthority() {
-    return server.get(`/signing_authority`, {
       baseURL,
     });
   }
@@ -233,6 +285,7 @@ export class ServiceController {
         ...request,
         client: request.client.id,
         is_model_contract: !request.is_model_contract,
+        request_status: !request.is_model_contract ? 7 : 13,
       },
       {
         baseURL,

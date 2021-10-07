@@ -89,6 +89,7 @@ export interface AuthPerson {
   full_name: string;
   reg_date: string;
   is_ecp: boolean;
+  is_main: boolean;
   client: number;
   position: number | null;
   sign_auth: number;
@@ -193,6 +194,5 @@ export interface Documents {
 export interface Categories {
   id: number;
   name: string;
-  doc_type: string;
-  documents: Documents[];
+  doc_type: any[];
 }

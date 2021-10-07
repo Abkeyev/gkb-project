@@ -13,6 +13,11 @@ export class ClientController {
       baseURL,
     });
   }
+  async decileReg(id: string): Promise<any> {
+    return server.delete(`/user/${id}/auth/decline`, {
+      baseURL,
+    });
+  }
   async regClient(id: string, data: any): Promise<any> {
     return server.put(`/client/${id}`, data, {
       baseURL,
@@ -149,7 +154,7 @@ export class ClientController {
   }
   async createUser(data: any): Promise<any> {
     return server.post(
-      `/users`,
+      `/user`,
       {
         data,
       },
@@ -158,19 +163,13 @@ export class ClientController {
       }
     );
   }
-  async editUser(data: any): Promise<any> {
-    return server.put(
-      `/users`,
-      {
-        data,
-      },
-      {
-        baseURL,
-      }
-    );
+  async editUser(id: number, data: any): Promise<any> {
+    return server.put(`/user/${id}`, data, {
+      baseURL,
+    });
   }
-  async deleteUser(id: string): Promise<any> {
-    return server.delete(`/users/${id}`, {
+  async deleteUser(id: number): Promise<any> {
+    return server.delete(`/user/${id}`, {
       baseURL,
     });
   }
@@ -196,24 +195,23 @@ export class ClientController {
       }
     );
   }
-  async editClientUser(data: any): Promise<any> {
-    return server.put(
-      `/client_users`,
-      {
-        data,
-      },
-      {
-        baseURL,
-      }
-    );
+  async regClientUser(data: any): Promise<any> {
+    return server.post(`/client/user`, data, {
+      baseURL,
+    });
   }
-  async deleteClientUser(id: string): Promise<any> {
-    return server.delete(`/client_users/${id}`, {
+  async editClientUser(id: number, data: any): Promise<any> {
+    return server.put(`/client/user/${id}`, data, {
+      baseURL,
+    });
+  }
+  async deleteClientUser(id: number): Promise<any> {
+    return server.delete(`/client/user/${id}`, {
       baseURL,
     });
   }
   async addUser(data: any): Promise<any> {
-    return server.post(`/client/user`, data, {
+    return server.post(`/user`, data, {
       baseURL,
     });
   }

@@ -10,12 +10,12 @@ import {
   Categories,
   Client,
   ClientService,
-  ClientUser,
   ClientUsers,
   Contact,
   Documents,
   ServiceCommon,
   User,
+  Request,
 } from "../api/Models/ServiceModels";
 import { Link } from "react-router-dom";
 import moment from "moment";
@@ -26,23 +26,25 @@ const ContractorsInner = observer((props: any) => {
   const history = useHistory();
 
   React.useEffect(() => {
+    request.getPosition();
     request.getClient(id);
+    request.getClientUser(id);
+    request.getClientUsersForAdd(id);
     request.getClientAllUsers(id);
-    request.getClients();
-    request.getClientServices(main.clientData.client.id);
-    request.getClientUsersForAdd(main.clientData.client.id);
+    request.getClientService();
     request.getDocumentsCategories();
-    request.getDocuments(id);
-    request.getDocCategories();
     request.getClientTypes();
-    request.getAuthPersons(id);
+    request.getDocumentsType();
     request.getClientContact(id);
     request.getClientAddress(id);
+    request.getAuthPersons(id);
     request.getClientAddressTypes();
     request.getClientBankDetails(id);
-    request.getSigningAuthority();
+    request.getSigningAuth();
     request.getPersonStatus();
     request.getClientServiceType();
+    request.getDocuments(id);
+    request.getClientRequests(id);
   }, []);
   return (
     <div className="main-body">
@@ -126,28 +128,28 @@ const ContractorsInner = observer((props: any) => {
                             </span>
                           </li>
                           {request._getAuthPersons &&
-                            request._getAuthPersons[0] && (
-                              <>
-                                <li>
-                                  <span className="left">
-                                    Уполномоченное лицо:
-                                  </span>
-                                  <span className="right d-flex">
-                                    {request._getAuthPersons[0].full_name}
-                                  </span>
-                                </li>
-                                <li>
-                                  <span className="left">
-                                    Дата регистрации:
-                                  </span>
-                                  <span className="right">
-                                    {moment(
-                                      request._getAuthPersons[0].reg_date
-                                    ).format("DD.MM.YYYY")}
-                                  </span>
-                                </li>
-                              </>
-                            )}
+                            (request._getAuthPersons as AuthPerson[])
+                              .filter((f: AuthPerson) => f.is_main)
+                              .map((a: AuthPerson) => (
+                                <>
+                                  <li>
+                                    <span className="left">
+                                      Уполномоченное лицо:
+                                    </span>
+                                    <span className="right d-flex">
+                                      {a.full_name}
+                                    </span>
+                                  </li>
+                                  <li>
+                                    <span className="left">
+                                      Дата регистрации:
+                                    </span>
+                                    <span className="right">
+                                      {moment(a.reg_date).format("DD.MM.YYYY")}
+                                    </span>
+                                  </li>
+                                </>
+                              ))}
                           <li>
                             <span className="left">ОКЭД:</span>
                             <span className="right">
@@ -165,10 +167,10 @@ const ContractorsInner = observer((props: any) => {
                         {request._getContacts &&
                           request._getContacts
                             .filter((c: Contact) => c.is_main)
-                            .map((c: Contact, index: number) => (
+                            .map((c: Contact, i: number) => (
                               <li>
                                 <span className="left">
-                                  {index === 0 && "Контакты:"}
+                                  {i === 0 && "Контакты:"}
                                 </span>
                                 <span className="right d-flex">
                                   {c.phone_number} ({c.phone_type})
@@ -204,24 +206,6 @@ const ContractorsInner = observer((props: any) => {
                                   <span className="left">Индекс:</span>
                                   <span className="right d-flex">{c.kato}</span>
                                 </li>
-                                {/* <li>
-                                  <span className="left">Область:</span>
-                                  <span className="right d-flex">
-                                    {}
-                                  </span>
-                                </li>
-                                <li>
-                                  <span className="left">Район:</span>
-                                  <span className="right d-flex">
-                                    {}
-                                  </span>
-                                </li>
-                                <li>
-                                  <span className="left">Город:</span>
-                                  <span className="right d-flex">
-                                    {}
-                                  </span>
-                                </li> */}
                                 <li>
                                   <span className="left">Улица:</span>
                                   <span className="right d-flex">
@@ -236,34 +220,6 @@ const ContractorsInner = observer((props: any) => {
                                 </li>
                               </>
                             ))}
-                        {/* 
-                        <li>
-                          <span className="left">Область:</span>
-                          <span className="right d-flex">
-                            Алматинская область{" "}
-                            <span className="edit">
-                              <i className="azla edit-primary-icon ml-8"></i>
-                            </span>
-                          </span>
-                        </li>
-                        <li>
-                          <span className="left">Район:</span>
-                          <span className="right d-flex">
-                            Алматинский{" "}
-                            <span className="edit">
-                              <i className="azla edit-primary-icon ml-8"></i>
-                            </span>
-                          </span>
-                        </li>
-                        <li>
-                          <span className="left">Город:</span>
-                          <span className="right d-flex">
-                            Алматы{" "}
-                            <span className="edit">
-                              <i className="azla edit-primary-icon ml-8"></i>
-                            </span>
-                          </span>
-                        </li> */}
                       </ul>
                     </div>
 
@@ -296,31 +252,31 @@ const ContractorsInner = observer((props: any) => {
 
                   <TabPanel>
                     <h3 className="title-subhead mb-16">Документы</h3>
-
-                    {request.getDocCategories().map(
-                      (c: Categories) =>
-                        c.documents.length > 0 && (
-                          <>
-                            <h5 className="title-subhead-h5 mb-16">{c.name}</h5>
-                            <div className="files-added">
-                              <ul className="files-list">
-                                {c.documents.map((d: Documents) => (
-                                  <li>
-                                    <i className="azla blank-alt-primary-icon"></i>
-                                    <span
-                                      onClick={() =>
-                                        request.downloadDocument(d)
-                                      }
-                                    >
-                                      {d.doc_name}
-                                    </span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </>
-                        )
-                    )}
+                    {request._getDocCategories &&
+                      request._getDocCategories.map(
+                        (c: Categories) =>
+                          c.doc_type.filter((dt: any) => dt.file !== null)
+                            .length > 0 && (
+                            <>
+                              <h5 className="title-subhead-h5 mb-16">
+                                {c.name}
+                              </h5>
+                              <div className="files-added">
+                                <ul className="files-list">
+                                  {c.doc_type.map(
+                                    (d: any) =>
+                                      d.file && (
+                                        <li>
+                                          <i className="azla blank-alt-primary-icon"></i>
+                                          <span>{d.name}</span>
+                                        </li>
+                                      )
+                                  )}
+                                </ul>
+                              </div>
+                            </>
+                          )
+                      )}
                   </TabPanel>
 
                   <TabPanel>
@@ -328,222 +284,238 @@ const ContractorsInner = observer((props: any) => {
                       <h3 className="title-subhead mb-8">
                         Уполномоченные лица{" "}
                         <span className="number">
-                          {
+                          {request._getUsers &&
                             request._getUsers.filter(
                               (u: User) => u.client_auth_person
-                            ).length
-                          }
+                            ).length}
                         </span>
                       </h3>
                       <p className="mb-24">
                         Пользователи организации с наличием ЭЦП организации
                       </p>
 
-                      {request._getUsers
-                        .filter((u: User) => u.client_auth_person)
-                        .map(
-                          (a: User) =>
-                            a.client_auth_person && (
-                              <div className="card mb-24 pad-24">
-                                <div className="card-header">
-                                  <div className="title">
-                                    <h6 className="text">{a.full_name}</h6>
+                      {request._getUsers &&
+                        request._getUsers
+                          .filter((u: User) => u.client_auth_person)
+                          .map(
+                            (a: User) =>
+                              a.client_auth_person && (
+                                <div className="card mb-24 pad-24">
+                                  <div className="card-header">
+                                    <div className="title">
+                                      <h6 className="text">{a.full_name}</h6>
+                                    </div>
+                                    <p className="desc">
+                                      {
+                                        request._getPosition.find(
+                                          (t: ServiceCommon) =>
+                                            t.id ===
+                                            a.client_auth_person.position
+                                        )?.name
+                                      }
+                                    </p>
                                   </div>
-                                  <p className="desc">
-                                    {a.client_auth_person.position}
-                                  </p>
-                                </div>
-                                <div className="card-body pad-rl-16">
-                                  <div className="row">
-                                    <div className="col-md-6">
-                                      <div className="total-info">
-                                        <ul className="info-list">
-                                          <li>
-                                            <span className="left">
-                                              ID пользователя:
-                                            </span>
-                                            <span className="right">
-                                              {a.id}
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">
-                                              Организация:
-                                            </span>
-                                            <span className="right active-link">
-                                              <Link
-                                                to={`/contractors/${a.client}`}
-                                              >
-                                                {request._getClients &&
-                                                  request._getClients.find(
-                                                    (t: Client) =>
-                                                      t.id === a.client
-                                                  )?.longname}
-                                              </Link>
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">Email:</span>
-                                            <span className="right">
-                                              {a.email}
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">
-                                              Контактный номер:
-                                            </span>
-                                            <span className="right">{""}</span>
-                                          </li>
-                                        </ul>
+                                  <div className="card-body pad-rl-16">
+                                    <div className="row">
+                                      <div className="col-md-6">
+                                        <div className="total-info">
+                                          <ul className="info-list">
+                                            <li>
+                                              <span className="left">
+                                                ID пользователя:
+                                              </span>
+                                              <span className="right">
+                                                {a.id}
+                                              </span>
+                                            </li>
+                                            <li>
+                                              <span className="left">
+                                                Организация:
+                                              </span>
+                                              <span className="right active-link">
+                                                <Link
+                                                  to={`/contractors/${a.client}`}
+                                                >
+                                                  {request._getClients &&
+                                                    request._getClients.find(
+                                                      (t: Client) =>
+                                                        t.id === a.client
+                                                    )?.longname}
+                                                </Link>
+                                              </span>
+                                            </li>
+                                            <li>
+                                              <span className="left">
+                                                Email:
+                                              </span>
+                                              <span className="right">
+                                                {a.email}
+                                              </span>
+                                            </li>
+                                            <li>
+                                              <span className="left">
+                                                Контактный номер:
+                                              </span>
+                                              <span className="right">
+                                                {""}
+                                              </span>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                      <div className="col-md-6">
+                                        <div className="total-info">
+                                          <ul className="info-list">
+                                            <li>
+                                              <span className="left">
+                                                Дата регистрации:
+                                              </span>
+                                              <span className="right">
+                                                {moment(a.reg_date).format(
+                                                  "DD.MM.YYYY"
+                                                )}
+                                              </span>
+                                            </li>
+                                            <li>
+                                              <span className="left">
+                                                Статус:
+                                              </span>
+                                              <span className="right">
+                                                {
+                                                  (
+                                                    request._getPersonStatus as ServiceCommon[]
+                                                  ).find(
+                                                    (s: ServiceCommon) =>
+                                                      s.id === a.person_status
+                                                  )?.name
+                                                }
+                                              </span>
+                                            </li>
+                                            <li>
+                                              <span className="left">
+                                                Основание для подписи:
+                                              </span>
+                                              <span className="right">
+                                                {
+                                                  (
+                                                    request._getSigningAuthority as ServiceCommon[]
+                                                  ).find(
+                                                    (s: ServiceCommon) =>
+                                                      s.id ===
+                                                      a.client_auth_person
+                                                        .sign_auth
+                                                  )?.name
+                                                }
+                                              </span>
+                                            </li>
+                                          </ul>
+                                        </div>
                                       </div>
                                     </div>
-                                    <div className="col-md-6">
-                                      <div className="total-info">
-                                        <ul className="info-list">
-                                          <li>
-                                            <span className="left">
-                                              Дата регистрации:
-                                            </span>
-                                            <span className="right">
-                                              {moment(a.reg_date).format(
-                                                "DD.MM.YYYY"
-                                              )}
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">
-                                              Статус:
-                                            </span>
-                                            <span className="right">
-                                              {
-                                                (
-                                                  request._getPersonStatus as ServiceCommon[]
-                                                ).find(
-                                                  (s: ServiceCommon) =>
-                                                    s.id === a.person_status
-                                                )?.name
-                                              }
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">
-                                              Основание для подписи:
-                                            </span>
-                                            <span className="right">
-                                              {
-                                                (
-                                                  request._getSigningAuthority as ServiceCommon[]
-                                                ).find(
-                                                  (s: ServiceCommon) =>
-                                                    s.id ===
-                                                    a.client_auth_person
-                                                      .sign_auth
-                                                )?.name
-                                              }
-                                            </span>
-                                          </li>
-                                        </ul>
-                                      </div>
-                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            )
-                        )}
+                              )
+                          )}
 
                       <h3 className="title-subhead mb-8">
                         Пользователи{" "}
                         <span className="number">
-                          {
+                          {request._getUsers &&
                             request._getUsers.filter(
                               (u: User) => u.client_auth_person === null
-                            ).length
-                          }
+                            ).length}
                         </span>
                       </h3>
                       <p className="mb-24">
-                        Пользователи организации с наличием ЭЦП организации
+                        Пользователи организации (не уполномоченные лица) без
+                        ЭЦП, имеющие доступ на портал
                       </p>
 
-                      {request._getUsers
-                        .filter((u: User) => u.client_auth_person === null)
-                        .map((a: User) => (
-                          <div className="card mb-24 pad-24">
-                            <div className="card-header">
-                              <div className="title">
-                                <h6 className="text">{a.full_name}</h6>
-                              </div>
-                            </div>
-                            <div className="card-body pad-rl-16">
-                              <div className="row">
-                                <div className="col-md-6">
-                                  <div className="total-info">
-                                    <ul className="info-list">
-                                      <li>
-                                        <span className="left">
-                                          ID пользователя:
-                                        </span>
-                                        <span className="right">{a.id}</span>
-                                      </li>
-                                      <li>
-                                        <span className="left">
-                                          Организация:
-                                        </span>
-                                        <span className="right active-link">
-                                          <Link to={`/contractors/${a.client}`}>
-                                            {request._getClients &&
-                                              request._getClients.find(
-                                                (t: Client) => t.id === a.client
-                                              )?.longname}
-                                          </Link>
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <span className="left">Email:</span>
-                                        <span className="right">{a.email}</span>
-                                      </li>
-                                      <li>
-                                        <span className="left">
-                                          Контактный номер:
-                                        </span>
-                                        <span className="right">{""}</span>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <div className="col-md-6">
-                                  <div className="total-info">
-                                    <ul className="info-list">
-                                      <li>
-                                        <span className="left">
-                                          Дата регистрации:
-                                        </span>
-                                        <span className="right">
-                                          {moment(a.reg_date).format(
-                                            "DD.MM.YYYY"
-                                          )}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <span className="left">Статус:</span>
-                                        <span className="right">
-                                          {
-                                            (
-                                              request._getPersonStatus as ServiceCommon[]
-                                            ).find(
-                                              (s: ServiceCommon) =>
-                                                s.id === a.person_status
-                                            )?.name
-                                          }
-                                        </span>
-                                      </li>
-                                    </ul>
-                                  </div>
+                      {request._getUsers &&
+                        request._getUsers
+                          .filter((u: User) => u.client_auth_person === null)
+                          .map((a: User) => (
+                            <div className="card mb-24 pad-24">
+                              <div className="card-header">
+                                <div className="title">
+                                  <h6 className="text">{a.full_name}</h6>
                                 </div>
                               </div>
+                              <div className="card-body pad-rl-16">
+                                <div className="row">
+                                  <div className="col-md-6">
+                                    <div className="total-info">
+                                      <ul className="info-list">
+                                        <li>
+                                          <span className="left">
+                                            ID пользователя:
+                                          </span>
+                                          <span className="right">{a.id}</span>
+                                        </li>
+                                        <li>
+                                          <span className="left">
+                                            Организация:
+                                          </span>
+                                          <span className="right active-link">
+                                            <Link
+                                              to={`/contractors/${a.client}`}
+                                            >
+                                              {request._getClients &&
+                                                request._getClients.find(
+                                                  (t: Client) =>
+                                                    t.id === a.client
+                                                )?.longname}
+                                            </Link>
+                                          </span>
+                                        </li>
+                                        <li>
+                                          <span className="left">Email:</span>
+                                          <span className="right">
+                                            {a.email}
+                                          </span>
+                                        </li>
+                                        <li>
+                                          <span className="left">
+                                            Контактный номер:
+                                          </span>
+                                          <span className="right">{""}</span>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                  <div className="col-md-6">
+                                    <div className="total-info">
+                                      <ul className="info-list">
+                                        <li>
+                                          <span className="left">
+                                            Дата регистрации:
+                                          </span>
+                                          <span className="right">
+                                            {moment(a.reg_date).format(
+                                              "DD.MM.YYYY"
+                                            )}
+                                          </span>
+                                        </li>
+                                        <li>
+                                          <span className="left">Статус:</span>
+                                          <span className="right">
+                                            {
+                                              (
+                                                request._getPersonStatus as ServiceCommon[]
+                                              ).find(
+                                                (s: ServiceCommon) =>
+                                                  s.id === a.person_status
+                                              )?.name
+                                            }
+                                          </span>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
                     </div>
                   </TabPanel>
                   <TabPanel>
@@ -561,27 +533,37 @@ const ContractorsInner = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {request._getClientService.map((c: ClientService) => (
-                            <tr
-                              onClick={() => history.push(`/service/${c.id}`)}
-                            >
-                              <td>
-                                {
-                                  request._getClientServiceType.find(
-                                    (t: ServiceCommon) =>
-                                      t.id === c.service_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>
-                                {c.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                              </td>
-                              <td>
-                                {moment(c.date_from).format("DD.MM.YYYY")}
-                              </td>
-                              <td>{moment(c.date_to).format("DD.MM.YYYY")}</td>
-                            </tr>
-                          ))}
+                          {request._getRequests &&
+                            request._getRequests
+                              .filter((c: Request) => c.request_status === 8)
+                              .map((c: Request) => (
+                                <tr
+                                  onClick={() =>
+                                    history.push(`/service/${c.id}`)
+                                  }
+                                >
+                                  <td>
+                                    {
+                                      request._getClientServiceType.find(
+                                        (t: ServiceCommon) =>
+                                          t.id === c.service_type
+                                      )?.name
+                                    }
+                                  </td>
+                                  <td>
+                                    {c.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                  </td>
+                                  <td>
+                                    {moment(c.reg_date).format("DD.MM.YYYY")}
+                                  </td>
+                                  <td>
+                                    {c.fulfill_date &&
+                                      moment(c.fulfill_date).format(
+                                        "DD.MM.YYYY"
+                                      )}
+                                  </td>
+                                </tr>
+                              ))}
                         </tbody>
                       </table>
                     </div>
@@ -598,16 +580,6 @@ const ContractorsInner = observer((props: any) => {
                           <div className="card-header">
                             <div className="title">
                               <h6 className="text">{u.full_name}</h6>
-                              <span
-                                className="edit-btn underline"
-                                onClick={() => {
-                                  main.setModal(true);
-                                  main.setModalType(9);
-                                }}
-                              >
-                                <i className="azla edit-primary-icon mr-8"></i>{" "}
-                                Редактировать
-                              </span>
                             </div>
                             <p className="desc">{u.position_name}</p>
                           </div>

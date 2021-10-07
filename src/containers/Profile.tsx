@@ -5,19 +5,29 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { ServiceCommon } from "../api/Models/ServiceModels";
+import { Modal } from "../containers";
 
 const Profile = observer((props: any) => {
-  const { main, request } = props;
+  const { main, request, state, setState, client } = props;
   const [modal, setModal]: any = useState(null);
 
   React.useEffect(() => {
     request.getPosition();
     request.getClient(main.clientData.client.id);
-    request.getUser(main.clientData.client.id);
+    request.getUser(main.clientData.user.id);
   }, []);
 
   return (
     <>
+      {main.isOpenModal && (
+        <Modal
+          main={main}
+          setState={setState}
+          state={state}
+          client={client}
+          request={request}
+        />
+      )}
       <div className="main-body">
         {request._getUser && (
           <div className="container">
@@ -87,7 +97,11 @@ const Profile = observer((props: any) => {
                           <span className="left">Организация:</span>
                           <span className="right d-flex">
                             <Link
-                              to={`/contractors/${request._getUser.client}`}
+                              to={
+                                main.role === "Manager"
+                                  ? `/contractors/${request._getUser.client}`
+                                  : "/organization"
+                              }
                               className="pre-primary-color"
                             >
                               {request._getClient &&

@@ -4,6 +4,7 @@ import {
   AuthPerson,
   Client,
   ClientUsers,
+  Documents,
   User,
 } from "../api/Models/ServiceModels";
 import Cookies from "../utils/cookies";
@@ -31,6 +32,7 @@ class MainStore {
   isOpenModal: boolean = false;
   modalType: number = 0;
   modalTypeEdit: number = 0;
+  modalTypeData: any = null;
   modalManager: boolean = false;
   decline: boolean = false;
   declineReason: string = "";
@@ -38,6 +40,7 @@ class MainStore {
   login: string = "";
   password: string = "";
   usersNew: ClientUsers[] | [] = [];
+  doc: Documents | null = null;
 
   private role: string;
   private _clientData: ClientData;
@@ -86,7 +89,6 @@ class MainStore {
       logout: action.bound,
       setModal: action.bound,
       setModalType: action.bound,
-      regUser: action.bound,
       setNewUsers: action.bound,
       setDeclineReason: action.bound,
       finishReg: action.bound,
@@ -123,6 +125,10 @@ class MainStore {
 
   setModalTypeEdit(type: number) {
     this.modalTypeEdit = type;
+  }
+
+  setModalTypeData(data: any) {
+    this.modalTypeData = data;
   }
 
   setModalManager(modalManager: boolean) {
@@ -196,10 +202,11 @@ class MainStore {
         password,
       })
       .then((r) => {
-        runInAction(async () => {
-          await this.setTokens(r);
-          setTimeout(() => window.location.reload(), 500);
-        });
+        r &&
+          runInAction(async () => {
+            await this.setTokens(r);
+            setTimeout(() => window.location.reload(), 500);
+          });
       })
       .catch((err) => {
         if (err && err.detail) {
@@ -240,7 +247,7 @@ class MainStore {
             });
         });
       })
-      .catch((err) => alert(err.message));
+      .catch((err) => console.error(err.message));
   }
 
   getSubstring(text: string, string: string) {
@@ -248,12 +255,14 @@ class MainStore {
     return text.substring(start, text.indexOf(",", start));
   }
 
-  async regClient(id: string, data: any) {
-    await api.client.regClient(id, data);
+  async decileReg(id: string) {
+    await api.client
+      .decileReg(id)
+      .then(() => runInAction(async () => await this.logout()));
   }
 
-  async regUser(data: any) {
-    await api.client.addUser(data);
+  async regClient(id: string, data: any) {
+    await api.client.regClient(id, data);
   }
 
   async regAuthPerson(id: string, data: any) {

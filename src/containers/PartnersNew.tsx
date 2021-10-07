@@ -9,9 +9,10 @@ import {
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
 import FileReaderInput from "react-file-reader-input";
+import { Modal } from "../containers";
 
 const PartnersNew = observer((props: any) => {
-  const { main, request } = props;
+  const { main, request, setState, state, client } = props;
   const [tab, setTab] = React.useState("1");
   const [file1, setFile1] = React.useState<any | null>(null);
   const [file2, setFile2] = React.useState<any | null>(null);
@@ -22,9 +23,9 @@ const PartnersNew = observer((props: any) => {
 
   React.useEffect(() => {
     request.getRequests();
-    request.getAuthPersons(main.clientData.client.id);
     request.getClientUsersForAdd(main.clientData.client.id);
     request.getSigners(main.clientData.client.id);
+    request.getPosition();
     request.getDocuments(main.clientData.client.id).then((res: any) => {
       if (request._getDocuments.length > 0) {
         request.addedFiles = [];
@@ -86,370 +87,385 @@ const PartnersNew = observer((props: any) => {
   };
 
   return (
-    <div className="main-body">
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="create-page p-50 pad-b-128">
-              <div className="header-text-inner justify-content-between mb-32">
-                <h1 className="title-main mb-32">Новая заявка</h1>
-              </div>
-              <div className="create-page-inner">
-                <h3 className="title-subhead mb-16">Выберите сервис</h3>
-                <div className="choose-service">
-                  <div className="tab-button">
-                    <span
-                      className={`tab-btn ${tab === "1" ? "active" : ""}`}
-                      onClick={() => setTab("1")}
-                    >
-                      ЕСБД
-                    </span>
-                    <span
-                      className={`tab-btn ${tab === "2" ? "active" : ""}`}
-                      onClick={() => setTab("2")}
-                    >
-                      БДКИ
-                    </span>
-                  </div>
-                  <div className="d-grid ml-24">
-                    <p className="small-text mb-0">
-                      ЕСБД - Единая Страховая База Данных
-                    </p>
-                    <p className="small-text mb-0">
-                      БДКИ - База Данных Кредитных Историй
-                    </p>
-                  </div>
+    <>
+      {main.isOpenModal && (
+        <Modal
+          main={main}
+          setState={setState}
+          state={state}
+          client={client}
+          request={request}
+        />
+      )}
+      <div className="main-body">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="create-page p-50 pad-b-128">
+                <div className="header-text-inner justify-content-between mb-32">
+                  <h1 className="title-main mb-32">Новая заявка</h1>
                 </div>
-
-                <select
-                  value={request.service}
-                  onChange={(e) => (request.service = e.target.value)}
-                  className="form-control-v mt-24"
-                >
-                  <option>Выберите сервис ЕСБД</option>
-                  {request._getClientServiceType.map((c: ServiceCommon) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-
-                <div className="special-card">
-                  <h3 className="title-subhead mb-16 mt-32">Документы</h3>
-                  <p className="text-desc">
-                    Пожалуйста прикрепите следующие документы организации
-                  </p>
-                  <div className="reg-file-add mb-32">
-                    <ul>
-                      <li>
-                        <div className="name">
-                          <span className="text">
-                            Справка о регистрации/перерегистрации юридического
-                            лица
-                          </span>
-                          {file1 && (
-                            <span className="file-name">
-                              {file1.name || file1.doc_name}
-                            </span>
-                          )}
-                        </div>
-                        {file1 ? (
-                          <button
-                            className="btn-icon delete"
-                            onClick={() => {
-                              setFile1(null);
-                            }}
-                          >
-                            <i className="azla size-18 trash-icon-alert mr-8"></i>
-                            Удалить файл
-                          </button>
-                        ) : (
-                          <FileReaderInput
-                            as="url"
-                            accept="image/jpeg,image/png,image/gif,application/pdf"
-                            onChange={(e, f) => handleChange(e, f, 4, 1, 1)}
-                          >
-                            <button className="btn-icon add">
-                              <i className="azla size-18 pin-primary-icon mr-8"></i>
-                              Прикрепить файл
-                            </button>
-                          </FileReaderInput>
-                        )}
-                      </li>
-                      <li>
-                        <div className="name">
-                          <span className="text">
-                            Решение учредителя с данными о приеме на работу
-                            первого руководителя
-                          </span>
-                          {file2 && (
-                            <span className="file-name">
-                              {file2.name || file2.doc_name}
-                            </span>
-                          )}
-                        </div>
-                        {file2 ? (
-                          <button
-                            className="btn-icon delete"
-                            onClick={() => {
-                              setFile2(null);
-                            }}
-                          >
-                            <i className="azla size-18 trash-icon-alert mr-8"></i>
-                            Удалить файл
-                          </button>
-                        ) : (
-                          <FileReaderInput
-                            as="url"
-                            accept="image/jpeg,image/png,image/gif,application/pdf"
-                            onChange={(e, f) => handleChange(e, f, 5, 1, 2)}
-                          >
-                            <button className="btn-icon add">
-                              <i className="azla size-18 pin-primary-icon mr-8"></i>
-                              Прикрепить файл
-                            </button>
-                          </FileReaderInput>
-                        )}
-                      </li>
-                      <li>
-                        <div className="name">
-                          <span className="text">
-                            Приказ о приеме на работу первого руководителя
-                          </span>
-                          {file3 && (
-                            <span className="file-name">
-                              {file3.name || file3.doc_name}
-                            </span>
-                          )}
-                        </div>
-                        {file3 ? (
-                          <button
-                            className="btn-icon delete"
-                            onClick={() => {
-                              setFile3(null);
-                            }}
-                          >
-                            <i className="azla size-18 trash-icon-alert mr-8"></i>
-                            Удалить файл
-                          </button>
-                        ) : (
-                          <FileReaderInput
-                            as="url"
-                            accept="image/jpeg,image/png,image/gif,application/pdf"
-                            onChange={(e, f) => handleChange(e, f, 6, 1, 3)}
-                          >
-                            <button className="btn-icon add">
-                              <i className="azla size-18 pin-primary-icon mr-8"></i>
-                              Прикрепить файл
-                            </button>
-                          </FileReaderInput>
-                        )}
-                      </li>
-                      <li>
-                        <div className="name">
-                          <span className="text">
-                            Документ, удостоверяющий личность первого
-                            руководителя
-                          </span>
-                          {file4 && (
-                            <span className="file-name">
-                              {file4.name || file4.doc_name}
-                            </span>
-                          )}
-                        </div>
-
-                        {file4 ? (
-                          <button
-                            className="btn-icon delete"
-                            onClick={() => {
-                              setFile4(null);
-                            }}
-                          >
-                            <i className="azla size-18 trash-icon-alert mr-8"></i>
-                            Удалить файл
-                          </button>
-                        ) : (
-                          <FileReaderInput
-                            as="url"
-                            accept="image/jpeg,image/png,image/gif,application/pdf"
-                            onChange={(e, f) => handleChange(e, f, 7, 1, 4)}
-                          >
-                            <button className="btn-icon add">
-                              <i className="azla size-18 pin-primary-icon mr-8"></i>
-                              Прикрепить файл
-                            </button>
-                          </FileReaderInput>
-                        )}
-                      </li>
-                      <li>
-                        <div className="name">
-                          <span className="text">Устав юрического лица</span>
-                          {file5 && (
-                            <span className="file-name">
-                              {file5.name || file5.doc_name}
-                            </span>
-                          )}
-                        </div>
-                        {file5 ? (
-                          <button
-                            className="btn-icon delete"
-                            onClick={() => {
-                              setFile5(null);
-                            }}
-                          >
-                            <i className="azla size-18 trash-icon-alert mr-8"></i>
-                            Удалить файл
-                          </button>
-                        ) : (
-                          <FileReaderInput
-                            as="url"
-                            accept="image/jpeg,image/png,image/gif,application/pdf"
-                            onChange={(e, f) => handleChange(e, f, 1, 1, 5)}
-                          >
-                            <button className="btn-icon add">
-                              <i className="azla size-18 pin-primary-icon mr-8"></i>
-                              Прикрепить файл
-                            </button>
-                          </FileReaderInput>
-                        )}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="create-page-docs">
-                  <div className="d-flex-align-c-spaceb mb-32">
-                    <div className="d-grid">
-                      <h3 className="title-subhead mb-8">
-                        Пользователи услуг{" "}
-                        <span className="number">{main.usersNew.length}</span>
-                      </h3>
-                      <p>Пользователи организации с наличием ЭЦП организации</p>
+                <div className="create-page-inner">
+                  <h3 className="title-subhead mb-16">Выберите сервис</h3>
+                  <div className="choose-service">
+                    <div className="tab-button">
+                      <span
+                        className={`tab-btn ${tab === "1" ? "active" : ""}`}
+                        onClick={() => setTab("1")}
+                      >
+                        ЕСБД
+                      </span>
+                      <span
+                        className={`tab-btn ${tab === "2" ? "active" : ""}`}
+                        onClick={() => setTab("2")}
+                      >
+                        БДКИ
+                      </span>
                     </div>
-                    <button
-                      className="btn button btn-primary btn-icon"
-                      onClick={() => {
-                        main.setModal(true);
-                        main.setModalType(10);
-                      }}
-                    >
-                      <i className="azla add-plusRound-icon"></i> Добавить
-                    </button>
+                    <div className="d-grid ml-24">
+                      <p className="small-text mb-0">
+                        ЕСБД - Единая Страховая База Данных
+                      </p>
+                      <p className="small-text mb-0">
+                        БДКИ - База Данных Кредитных Историй
+                      </p>
+                    </div>
                   </div>
 
-                  {(main.usersNew as ClientUsers[]).map(
-                    (u: ClientUsers, index) => (
-                      <div className="card mb-24 pad-24">
-                        <div className="card-header">
-                          <div className="title">
-                            <h6 className="text">{u.full_name}</h6>
-                            <span className="num">№{index + 1}</span>
+                  <select
+                    value={request.service}
+                    onChange={(e) => (request.service = e.target.value)}
+                    className="form-control-v mt-24"
+                  >
+                    <option>Выберите сервис ЕСБД</option>
+                    {request._getClientServiceType.map((c: ServiceCommon) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  <div className="special-card">
+                    <h3 className="title-subhead mb-16 mt-32">Документы</h3>
+                    <p className="text-desc">
+                      Пожалуйста прикрепите следующие документы организации
+                    </p>
+                    <div className="reg-file-add mb-32">
+                      <ul>
+                        <li>
+                          <div className="name">
+                            <span className="text">
+                              Справка о регистрации/перерегистрации юридического
+                              лица
+                            </span>
+                            {file1 && (
+                              <span className="file-name">
+                                {file1.name || file1.doc_name}
+                              </span>
+                            )}
                           </div>
-                          <p className="desc">{u.position_name}</p>
-                        </div>
-                        <div className="card-body pad-rl-16">
-                          <div className="row">
-                            <div className="col-md-6">
-                              <div className="total-info">
-                                <ul className="info-list">
-                                  <li>
-                                    <span className="left">
-                                      ID пользователя:
-                                    </span>
-                                    <span className="right">{u.id}</span>
-                                  </li>
-                                  <li>
-                                    <span className="left">
-                                      ИИН сотрудника:
-                                    </span>
-                                    <span className="right">{u.iin}</span>
-                                  </li>
-                                  <li>
-                                    <span className="left">
-                                      Контактный номер:
-                                    </span>
-                                    <span className="right">{u.contacts}</span>
-                                  </li>
-                                  <li>
-                                    <span className="left">Email:</span>
-                                    <span className="right">{u.email}</span>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="total-info">
-                                <ul className="info-list">
-                                  <li>
-                                    <span className="left">
-                                      Первый руководитель:
-                                    </span>
-                                    <span className="right">
-                                      {u.first_head_full_name}
-                                    </span>
-                                  </li>
-                                  <li>
-                                    <span className="left">Заместитель:</span>
-                                    <span className="right">
-                                      {u.deputy_head_full_name}
-                                    </span>
-                                  </li>
-                                  <li>
-                                    <span className="left">
-                                      Курирующий менеджер:
-                                    </span>
-                                    <span className="right">
-                                      {u.manager_full_name}
-                                    </span>
-                                  </li>
-                                  <li>
-                                    <span className="left">
-                                      Контакты менеджера:
-                                    </span>
-                                    <span className="right">
-                                      {u.manager_contacts}
-                                    </span>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
+                          {file1 ? (
+                            <button
+                              className="btn-icon delete"
+                              onClick={() => {
+                                setFile1(null);
+                              }}
+                            >
+                              <i className="azla size-18 trash-icon-alert mr-8"></i>
+                              Удалить файл
+                            </button>
+                          ) : (
+                            <FileReaderInput
+                              as="url"
+                              accept="image/jpeg,image/png,image/gif,application/pdf"
+                              onChange={(e, f) => handleChange(e, f, 4, 1, 1)}
+                            >
+                              <button className="btn-icon add">
+                                <i className="azla size-18 pin-primary-icon mr-8"></i>
+                                Прикрепить файл
+                              </button>
+                            </FileReaderInput>
+                          )}
+                        </li>
+                        <li>
+                          <div className="name">
+                            <span className="text">
+                              Решение учредителя с данными о приеме на работу
+                              первого руководителя
+                            </span>
+                            {file2 && (
+                              <span className="file-name">
+                                {file2.name || file2.doc_name}
+                              </span>
+                            )}
                           </div>
-                        </div>
+                          {file2 ? (
+                            <button
+                              className="btn-icon delete"
+                              onClick={() => {
+                                setFile2(null);
+                              }}
+                            >
+                              <i className="azla size-18 trash-icon-alert mr-8"></i>
+                              Удалить файл
+                            </button>
+                          ) : (
+                            <FileReaderInput
+                              as="url"
+                              accept="image/jpeg,image/png,image/gif,application/pdf"
+                              onChange={(e, f) => handleChange(e, f, 5, 1, 2)}
+                            >
+                              <button className="btn-icon add">
+                                <i className="azla size-18 pin-primary-icon mr-8"></i>
+                                Прикрепить файл
+                              </button>
+                            </FileReaderInput>
+                          )}
+                        </li>
+                        <li>
+                          <div className="name">
+                            <span className="text">
+                              Приказ о приеме на работу первого руководителя
+                            </span>
+                            {file3 && (
+                              <span className="file-name">
+                                {file3.name || file3.doc_name}
+                              </span>
+                            )}
+                          </div>
+                          {file3 ? (
+                            <button
+                              className="btn-icon delete"
+                              onClick={() => {
+                                setFile3(null);
+                              }}
+                            >
+                              <i className="azla size-18 trash-icon-alert mr-8"></i>
+                              Удалить файл
+                            </button>
+                          ) : (
+                            <FileReaderInput
+                              as="url"
+                              accept="image/jpeg,image/png,image/gif,application/pdf"
+                              onChange={(e, f) => handleChange(e, f, 6, 1, 3)}
+                            >
+                              <button className="btn-icon add">
+                                <i className="azla size-18 pin-primary-icon mr-8"></i>
+                                Прикрепить файл
+                              </button>
+                            </FileReaderInput>
+                          )}
+                        </li>
+                        <li>
+                          <div className="name">
+                            <span className="text">
+                              Документ, удостоверяющий личность первого
+                              руководителя
+                            </span>
+                            {file4 && (
+                              <span className="file-name">
+                                {file4.name || file4.doc_name}
+                              </span>
+                            )}
+                          </div>
+
+                          {file4 ? (
+                            <button
+                              className="btn-icon delete"
+                              onClick={() => {
+                                setFile4(null);
+                              }}
+                            >
+                              <i className="azla size-18 trash-icon-alert mr-8"></i>
+                              Удалить файл
+                            </button>
+                          ) : (
+                            <FileReaderInput
+                              as="url"
+                              accept="image/jpeg,image/png,image/gif,application/pdf"
+                              onChange={(e, f) => handleChange(e, f, 7, 1, 4)}
+                            >
+                              <button className="btn-icon add">
+                                <i className="azla size-18 pin-primary-icon mr-8"></i>
+                                Прикрепить файл
+                              </button>
+                            </FileReaderInput>
+                          )}
+                        </li>
+                        <li>
+                          <div className="name">
+                            <span className="text">Устав юрического лица</span>
+                            {file5 && (
+                              <span className="file-name">
+                                {file5.name || file5.doc_name}
+                              </span>
+                            )}
+                          </div>
+                          {file5 ? (
+                            <button
+                              className="btn-icon delete"
+                              onClick={() => {
+                                setFile5(null);
+                              }}
+                            >
+                              <i className="azla size-18 trash-icon-alert mr-8"></i>
+                              Удалить файл
+                            </button>
+                          ) : (
+                            <FileReaderInput
+                              as="url"
+                              accept="image/jpeg,image/png,image/gif,application/pdf"
+                              onChange={(e, f) => handleChange(e, f, 1, 1, 5)}
+                            >
+                              <button className="btn-icon add">
+                                <i className="azla size-18 pin-primary-icon mr-8"></i>
+                                Прикрепить файл
+                              </button>
+                            </FileReaderInput>
+                          )}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="create-page-docs">
+                    <div className="d-flex-align-c-spaceb mb-32">
+                      <div className="d-grid">
+                        <h3 className="title-subhead mb-8">
+                          Пользователи услуг{" "}
+                          <span className="number">{main.usersNew.length}</span>
+                        </h3>
+                        <p>
+                          Пользователи организации с наличием ЭЦП организации
+                        </p>
                       </div>
-                    )
-                  )}
+                      <button
+                        className="btn button btn-primary btn-icon"
+                        onClick={() => {
+                          main.setModal(true);
+                          main.setModalType(10);
+                        }}
+                      >
+                        <i className="azla add-plusRound-icon"></i> Добавить
+                      </button>
+                    </div>
+
+                    {(main.usersNew as ClientUsers[]).map(
+                      (u: ClientUsers, index) => (
+                        <div className="card mb-24 pad-24">
+                          <div className="card-header">
+                            <div className="title">
+                              <h6 className="text">{u.full_name}</h6>
+                              <span className="num">№{index + 1}</span>
+                            </div>
+                            <p className="desc">{u.position_name}</p>
+                          </div>
+                          <div className="card-body pad-rl-16">
+                            <div className="row">
+                              <div className="col-md-6">
+                                <div className="total-info">
+                                  <ul className="info-list">
+                                    <li>
+                                      <span className="left">
+                                        ID пользователя:
+                                      </span>
+                                      <span className="right">{u.id}</span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        ИИН сотрудника:
+                                      </span>
+                                      <span className="right">{u.iin}</span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Контактный номер:
+                                      </span>
+                                      <span className="right">
+                                        {u.contacts}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">Email:</span>
+                                      <span className="right">{u.email}</span>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                              <div className="col-md-6">
+                                <div className="total-info">
+                                  <ul className="info-list">
+                                    <li>
+                                      <span className="left">
+                                        Первый руководитель:
+                                      </span>
+                                      <span className="right">
+                                        {u.first_head_full_name}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">Заместитель:</span>
+                                      <span className="right">
+                                        {u.deputy_head_full_name}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Курирующий менеджер:
+                                      </span>
+                                      <span className="right">
+                                        {u.manager_full_name}
+                                      </span>
+                                    </li>
+                                    <li>
+                                      <span className="left">
+                                        Контакты менеджера:
+                                      </span>
+                                      <span className="right">
+                                        {u.manager_contacts}
+                                      </span>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="req-inner-footer">
-                <div className="container">
-                  <div className="manager-req mrl-32">
-                    <button
-                      type="button"
-                      className="button btn-primary"
-                      disabled={
-                        request.service === "" || main.usersNew.length === 0
-                      }
-                      onClick={() => {
-                        main.setModal(true);
-                        main.setModalType(13);
-                        request.data = {
-                          client: main.clientData.client.id,
-                          service_category: tab,
-                          service_type: request.service,
-                          client_doc:
-                            request.addedFiles.length > 0
-                              ? [...filesId, ...request.addedFiles]
-                              : [...filesId],
-                          client_user: main.usersNew.map(
-                            (u: ClientUser) => u.id
-                          ),
-                          request_status: 6,
-                          request_stepper: 1,
-                        };
-                      }}
-                    >
-                      Отправить заявку
-                    </button>
+                <div className="req-inner-footer">
+                  <div className="container">
+                    <div className="manager-req mrl-32">
+                      <button
+                        type="button"
+                        className="button btn-primary"
+                        disabled={
+                          request.service === "" || main.usersNew.length === 0
+                        }
+                        onClick={() => {
+                          main.setModal(true);
+                          main.setModalType(13);
+                          request.data = {
+                            client: main.clientData.client.id,
+                            service_category: tab,
+                            service_type: request.service,
+                            client_doc:
+                              request.addedFiles.length > 0
+                                ? [...filesId, ...request.addedFiles]
+                                : [...filesId],
+                            client_user: main.usersNew.map(
+                              (u: ClientUser) => u.id
+                            ),
+                            request_status: 6,
+                            request_stepper: 1,
+                          };
+                        }}
+                      >
+                        Отправить заявку
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -457,7 +473,7 @@ const PartnersNew = observer((props: any) => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 });
 export default PartnersNew;

@@ -18,15 +18,14 @@ const ServiceInner = observer((props: any) => {
 
   React.useEffect(() => {
     request.getClients();
-    request.getDocuments(main.clientData.client.id);
     request.getClientServiceType();
-    request.getClientServiceById(id);
+    request.getRequest(id);
   }, []);
 
   return (
     <div className="main-body">
       <div className="container">
-        {request._getClientServiceById && (
+        {request._getRequest && (
           <div className="row">
             <div className="col-lg-12">
               <div className="my-organization p-50 pad-b-128">
@@ -45,7 +44,7 @@ const ServiceInner = observer((props: any) => {
                     {
                       request._getClientServiceType.find(
                         (t: ServiceCommon) =>
-                          t.id === request._getClientServiceById.service_type
+                          t.id === request._getRequest.service_type
                       )?.name
                     }
                   </h1>
@@ -68,16 +67,14 @@ const ServiceInner = observer((props: any) => {
                               {request._getClients &&
                                 request._getClients.find(
                                   (t: Client) =>
-                                    t.id ===
-                                    request._getClientServiceById.client
+                                    t.id === request._getRequest.client.id
                                 )?.longname}
                             </span>
                           </li>
                           <li>
                             <span className="left">Категория сервиса:</span>
                             <span className="right">
-                              {request._getClientServiceById
-                                .service_category === 1
+                              {request._getRequest.service_category === 1
                                 ? "БДКИ"
                                 : "ЕСБД"}
                             </span>
@@ -88,17 +85,16 @@ const ServiceInner = observer((props: any) => {
                               {
                                 request._getClientServiceType.find(
                                   (t: ServiceCommon) =>
-                                    t.id ===
-                                    request._getClientServiceById.service_type
+                                    t.id === request._getRequest.service_type
                                 )?.name
                               }
                             </span>
                           </li>
-                          {request._getClientServiceById.client_request && (
+                          {request._getRequest && (
                             <li>
                               <span className="left">Заявка:</span>
                               <Link
-                                to={`/request/${request._getClientServiceById.client_request}`}
+                                to={`/request/${request._getRequest.id}`}
                                 className="right"
                               >
                                 Заявка
@@ -111,7 +107,7 @@ const ServiceInner = observer((props: any) => {
                       <h3 className="title-subhead mb-16">Документы</h3>
                       <div className="files-added">
                         <ul className="files-list">
-                          {request._getDocuments.map((d: Documents) => (
+                          {request._getClientDocs.map((d: Documents) => (
                             <li>
                               <i className="azla blank-alt-primary-icon"></i>
                               <span onClick={() => request.downloadDocument(d)}>
@@ -128,23 +124,20 @@ const ServiceInner = observer((props: any) => {
                         <h3 className="title-subhead mb-8">
                           Пользователи услуг{" "}
                           <span className="number">
-                            {request._getServiceUsers.length}
+                            {request._getClientUsers.length}
                           </span>
                         </h3>
+                        {console.log(
+                          request._getClientUsers,
+                          "request._getServiceUsers"
+                        )}
 
-                        {request._getServiceUsers.map(
+                        {request._getClientUsers.map(
                           (c: ClientUsers, index: number) => (
                             <div className="card mb-24 pad-24">
                               <div className="card-header">
                                 <div className="title">
                                   <h6 className="text">{c.full_name}</h6>
-                                  <div className="d-flex">
-                                    <span className="edit-btn underline mr-16">
-                                      <i className="azla edit-primary-icon mr-8"></i>{" "}
-                                      Редактировать
-                                    </span>
-                                    <span className="num">№{index + 1}</span>
-                                  </div>
                                 </div>
                                 <p className="desc">{c.position_name}</p>
                               </div>

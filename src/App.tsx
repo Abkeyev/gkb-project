@@ -168,15 +168,6 @@ const App = observer((props: any) => {
   return (
     <div className="app-root modal-open">
       <HashRouter>
-        {main.isOpenModal && (
-          <Modal
-            main={main}
-            setState={setState}
-            state={state}
-            client={client}
-            request={request}
-          />
-        )}
         {main.logged && !main.isReg && (
           <Sidebar main={main} request={request} />
         )}
@@ -204,13 +195,37 @@ const App = observer((props: any) => {
             path="/"
             component={() =>
               main.getRole === "Agent" && main.isReg ? (
-                <Registration main={main} request={request} />
+                <Registration
+                  setState={setState}
+                  state={state}
+                  client={client}
+                  main={main}
+                  request={request}
+                />
               ) : main.getRole === "Service Desk" ? (
-                <ServiceDesk request={request} main={main} />
+                <ServiceDesk
+                  setState={setState}
+                  state={state}
+                  client={client}
+                  request={request}
+                  main={main}
+                />
               ) : main.getRole === "Agent" ? (
-                <Partners request={request} main={main} />
+                <Partners
+                  setState={setState}
+                  state={state}
+                  client={client}
+                  request={request}
+                  main={main}
+                />
               ) : (
-                <Request request={request} main={main} />
+                <Request
+                  setState={setState}
+                  state={state}
+                  client={client}
+                  request={request}
+                  main={main}
+                />
               )
             }
             exact
@@ -219,7 +234,14 @@ const App = observer((props: any) => {
             main={main}
             path="/partner/:id"
             component={(props: any) => (
-              <PartnersInner {...props} main={main} request={request} />
+              <PartnersInner
+                {...props}
+                setState={setState}
+                state={state}
+                client={client}
+                main={main}
+                request={request}
+              />
             )}
             exact
           />
@@ -227,7 +249,14 @@ const App = observer((props: any) => {
             main={main}
             path="/request/:id"
             component={(props: any) => (
-              <RequestInner {...props} main={main} request={request} />
+              <RequestInner
+                {...props}
+                setState={setState}
+                state={state}
+                client={client}
+                main={main}
+                request={request}
+              />
             )}
             exact
           />
@@ -241,21 +270,42 @@ const App = observer((props: any) => {
             main={main}
             path="/service-desk/:id"
             component={(props: any) => (
-              <ServiceDeskInner {...props} main={main} request={request} />
+              <ServiceDeskInner
+                {...props}
+                setState={setState}
+                state={state}
+                client={client}
+                main={main}
+                request={request}
+              />
             )}
             exact
           />
           <PrivateRoute
             main={main}
             path="/contractors"
-            component={() => <Contractors request={request} />}
+            component={() => (
+              <Contractors
+                setState={setState}
+                state={state}
+                client={client}
+                request={request}
+              />
+            )}
             exact
           />
           <PrivateRoute
             main={main}
             path="/contractors/:id"
             component={(props: any) => (
-              <ContractorsInner {...props} main={main} request={request} />
+              <ContractorsInner
+                setState={setState}
+                state={state}
+                client={client}
+                {...props}
+                main={main}
+                request={request}
+              />
             )}
             exact
           />
@@ -263,32 +313,57 @@ const App = observer((props: any) => {
             main={main}
             path="/service/:id"
             component={(props: any) => (
-              <ServiceInner {...props} main={main} request={request} />
+              <ServiceInner
+                setState={setState}
+                state={state}
+                client={client}
+                {...props}
+                main={main}
+                request={request}
+              />
             )}
             exact
           />
           <PrivateRoute
             main={main}
             path="/profile"
-            component={() => <Profile main={main} request={request} />}
+            component={() => (
+              <Profile
+                setState={setState}
+                state={state}
+                client={client}
+                main={main}
+                request={request}
+              />
+            )}
             exact
           />
           <PrivateRoute
             main={main}
             path="/organization"
-            component={() => <MyOrganization main={main} request={request} />}
+            component={() => (
+              <MyOrganization
+                setState={setState}
+                state={state}
+                client={client}
+                main={main}
+                request={request}
+              />
+            )}
             exact
           />
           <PrivateRoute
             main={main}
             path="/request-new"
-            component={() => <PartnersNew main={main} request={request} />}
-            exact
-          />
-          <PrivateRoute
-            main={main}
-            path="/partner-new"
-            component={() => <PartnersNew main={main} request={request} />}
+            component={() => (
+              <PartnersNew
+                setState={setState}
+                state={state}
+                client={client}
+                main={main}
+                request={request}
+              />
+            )}
             exact
           />
         </Switch>

@@ -32,12 +32,16 @@ const Partners = observer((props: any) => {
   OnClickOutside(serviceRef, () => setService(false));
 
   const filterRequests = (type: number[] = []) => {
-    const req = request._getRequests
-      .slice()
-      .sort((a: Request, b: Request) => {
-        return new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime();
-      })
-      .reverse();
+    const req =
+      request._getRequests &&
+      request._getRequests
+        .slice()
+        .sort((a: Request, b: Request) => {
+          return (
+            new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime()
+          );
+        })
+        .reverse();
     if (sortTitle === "сначала старые") req.reverse();
     return req.length > 0
       ? req
