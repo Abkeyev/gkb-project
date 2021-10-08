@@ -187,7 +187,7 @@ class MainStore {
     });
   }
 
-  async finishReg() {
+  finishReg() {
     this.isReg = false;
     this.clientExist = false;
     Cookies.set("isReg", false, { expires: 7 });
@@ -202,6 +202,7 @@ class MainStore {
         password,
       })
       .then((r) => {
+        console.log(r, "rrr");
         r &&
           runInAction(async () => {
             await this.setTokens(r);
@@ -232,10 +233,11 @@ class MainStore {
               name: this.getSubstring(res.subjectDn, "O=").replace(/\\/g, ""),
             })
             .then((r) => {
-              runInAction(async () => {
-                await this.setTokens(r);
-                setTimeout(() => window.location.reload(), 500);
-              });
+              r &&
+                runInAction(async () => {
+                  await this.setTokens(r);
+                  setTimeout(() => window.location.reload(), 500);
+                });
             })
             .catch((err) => {
               if (err && err.detail) {

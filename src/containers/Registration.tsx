@@ -4,6 +4,7 @@ import "react-tabs/style/react-tabs.css";
 import { Documents, ServiceCommon } from "../api/Models/ServiceModels";
 import FileReaderInput from "react-file-reader-input";
 import moment from "moment";
+import { runInAction } from "mobx";
 
 const Registration = observer((props: any) => {
   const { main, request } = props;
@@ -21,7 +22,8 @@ const Registration = observer((props: any) => {
   const [file3, setFile3] = React.useState<any | null>(null);
   const [file4, setFile4] = React.useState<any | null>(null);
   const [file5, setFile5] = React.useState<any | null>(null);
-  const [filesId, setFilesId] = React.useState<number[] | []>([]);
+  const [file6, setFile6] = React.useState<any | null>(null);
+  const [file7, setFile7] = React.useState<any | null>(null);
   React.useEffect(() => {
     request.getClientTypes();
     request.getPosition();
@@ -34,19 +36,18 @@ const Registration = observer((props: any) => {
           .map((d: Documents) => {
             if (d.doc_type === 4 && d.doc_category === 1) {
               setFile1(d);
-              setFilesId([...filesId, d.id]);
             } else if (d.doc_type === 5 && d.doc_category === 1) {
               setFile2(d);
-              setFilesId([...filesId, d.id]);
             } else if (d.doc_type === 6 && d.doc_category === 1) {
               setFile3(d);
-              setFilesId([...filesId, d.id]);
             } else if (d.doc_type === 7 && d.doc_category === 1) {
               setFile4(d);
-              setFilesId([...filesId, d.id]);
             } else if (d.doc_type === 1 && d.doc_category === 1) {
               setFile5(d);
-              setFilesId([...filesId, d.id]);
+            } else if (d.doc_type === 2 && d.doc_category === 4) {
+              setFile6(d);
+            } else if (d.doc_type === 8 && d.doc_category === 3) {
+              setFile7(d);
             }
           });
       }
@@ -69,6 +70,8 @@ const Registration = observer((props: any) => {
       else if (index === 3) setFile3(file);
       else if (index === 4) setFile4(file);
       else if (index === 5) setFile5(file);
+      else if (index === 6) setFile6(file);
+      else if (index === 7) setFile7(file);
       var bodyFormData = new FormData();
       bodyFormData.append("file", file);
       bodyFormData.append("service_type", "");
@@ -87,6 +90,37 @@ const Registration = observer((props: any) => {
       doc_status: "Archive",
     };
     request.deleteDocument(main.clientData.client.id, data);
+  };
+
+  const regClient = () => {
+    main
+      .regClient(main.clientData.client.id, {
+        name: main.clientData.client.name,
+        longname: main.clientData.client.longname,
+        website: address,
+        bin: main.clientData.client.bin,
+        client_type: request._getClientTypes.find(
+          (t: any) => t.name === otherSegment
+        )?.id,
+        person_status: main.clientData.client.person_status,
+      })
+      .then(() => setStep(1));
+  };
+
+  const regAuthPerson = () => {
+    main
+      .regAuthPerson(main.clientData.auth_person.id, {
+        full_name: main.clientData.auth_person.full_name,
+        client: main.clientData.client.id,
+        position:
+          position === "other"
+            ? request._getPosition.find((t: any) => t.name === otherPosition)
+                ?.id
+            : position,
+        sign_auth: signingAuth,
+        signing_authority_comment: signingAuth === "1" ? otherSigningAuth : "",
+      })
+      .then(() => main.finishReg());
   };
 
   return (
@@ -405,36 +439,13 @@ const Registration = observer((props: any) => {
                     }
                     onClick={() => {
                       segment === "other"
-                        ? request
-                            .addClientTypes({
+                        ? request.addClientTypes(
+                            {
                               name: otherSegment,
-                            })
-                            .then(() => {
-                              main
-                                .regClient(main.clientData.client.id, {
-                                  name: main.clientData.client.name,
-                                  longname: main.clientData.client.longname,
-                                  website: address,
-                                  bin: main.clientData.client.bin,
-                                  client_type: request._getClientTypes.find(
-                                    (t: any) => t.name === otherSegment
-                                  )?.id,
-                                  person_status:
-                                    main.clientData.client.person_status,
-                                })
-                                .then(() => setStep(1));
-                            })
-                        : main
-                            .regClient(main.clientData.client.id, {
-                              name: main.clientData.client.name,
-                              longname: main.clientData.client.longname,
-                              website: address,
-                              bin: main.clientData.client.bin,
-                              client_type: segment,
-                              person_status:
-                                main.clientData.client.person_status,
-                            })
-                            .then(() => setStep(1));
+                            },
+                            regClient
+                          )
+                        : regClient();
                     }}
                   >
                     Далее
@@ -471,13 +482,7 @@ const Registration = observer((props: any) => {
                       </div>
                       <div className="form-group-v">
                         <label>ИИН:</label>
-                        <input
-                          className="form-control-v"
-                          type="text"
-                          value={iin}
-                          onChange={(e) => setIin(e.target.value)}
-                          placeholder="Введите ИИН"
-                        />
+                        <span>{main.clientData.client.bin}</span>
                       </div>
                       <div className="form-group-v">
                         <label>ФИО уполномоченого лица:</label>
@@ -553,135 +558,119 @@ const Registration = observer((props: any) => {
                           )}
                         </span>
                       </div>
-                      <button
-                        className="button btn-primary table-mr"
-                        disabled={
-                          position === "" ||
-                          (position === "other" && otherPosition === "") ||
-                          iin.length < 12 ||
-                          signingAuth === "" ||
-                          (signingAuth === "1" && otherSigningAuth === "")
-                        }
-                        onClick={() => {
-                          position === "other"
-                            ? request
-                                .addPosition({
-                                  name: otherPosition,
-                                })
-                                .then(() => {
-                                  signingAuth === "1"
-                                    ? request
-                                        .addSigningAuth({
-                                          name: otherSigningAuth,
-                                        })
-                                        .then(() => {
-                                          main
-                                            .regAuthPerson(
-                                              main.clientData.auth_person.id,
-                                              {
-                                                full_name:
-                                                  main.clientData.auth_person
-                                                    .full_name,
-                                                client:
-                                                  main.clientData.client.id,
-                                                position:
-                                                  request._getPosition.find(
-                                                    (t: any) =>
-                                                      t.name === otherPosition
-                                                  )?.id,
-                                                sign_auth:
-                                                  request._getSigningAuth.find(
-                                                    (t: any) =>
-                                                      t.name === signingAuth
-                                                  )?.id,
-                                              }
-                                            )
-                                            .then(() => setStep(1));
-                                        })
-                                    : main
-                                        .regAuthPerson(
-                                          main.clientData.auth_person.id,
-                                          {
-                                            full_name:
-                                              main.clientData.auth_person
-                                                .full_name,
-                                            client: main.clientData.client.id,
-                                            position: request._getPosition.find(
-                                              (t: any) =>
-                                                t.name === otherPosition
-                                            )?.id,
-                                            sign_auth: signingAuth,
-                                          }
-                                        )
-                                        .then(() => setStep(1));
-                                })
-                            : signingAuth === "1"
-                            ? request
-                                .addPosition({
-                                  name: otherPosition,
-                                })
-                                .then(() => {
-                                  position === "other"
-                                    ? request
-                                        .addSigningAuth({
-                                          name: otherSigningAuth,
-                                        })
-                                        .then(() => {
-                                          main
-                                            .regAuthPerson(
-                                              main.clientData.auth_person.id,
-                                              {
-                                                full_name:
-                                                  main.clientData.auth_person
-                                                    .full_name,
-                                                client:
-                                                  main.clientData.client.id,
-                                                position:
-                                                  request._getPosition.find(
-                                                    (t: any) =>
-                                                      t.name === otherPosition
-                                                  )?.id,
-                                                sign_auth:
-                                                  request._getSigningAuth.find(
-                                                    (t: any) =>
-                                                      t.name === signingAuth
-                                                  )?.id,
-                                              }
-                                            )
-                                            .then(() => setStep(1));
-                                        })
-                                    : main
-                                        .regAuthPerson(
-                                          main.clientData.auth_person.id,
-                                          {
-                                            full_name:
-                                              main.clientData.auth_person
-                                                .full_name,
-                                            client: main.clientData.client.id,
-                                            position: position,
-                                            sign_auth: signingAuth,
-                                          }
-                                        )
-                                        .then(() => setStep(1));
-                                })
-                            : main.regAuthPerson(
-                                main.clientData.auth_person.id,
-                                {
-                                  full_name:
-                                    main.clientData.auth_person.full_name,
-                                  client: main.clientData.client.id,
-                                  position: position,
-                                  sign_auth: signingAuth,
-                                }
-                              );
-                        }}
-                      >
-                        Завершить регистрацию
-                      </button>
                     </div>
                   </div>
                 </div>
               )}
+              <div className="col-md-8 offset-md-2">
+                <div className="special-card">
+                  <h3 className="title-subhead mb-16 mt-32">Документы</h3>
+                  <p className="text-desc">
+                    Пожалуйста прикрепите следующие документы организации
+                  </p>
+                  <div className="reg-file-add mb-32">
+                    <ul>
+                      <li>
+                        <div className="name">
+                          <span className="text">
+                            Доверенность на подписанта, если подписантом
+                            выступает данный пользователь
+                          </span>
+                          {file6 && (
+                            <span className="file-name">
+                              {file6.name || file6.doc_name}
+                            </span>
+                          )}
+                        </div>
+                        {file6 ? (
+                          <button
+                            className="btn-icon delete"
+                            onClick={() => {
+                              file6 && file6.id && deleteDoc(file6);
+                              setFile6(null);
+                            }}
+                          >
+                            <i className="azla size-18 trash-icon-alert mr-8"></i>
+                            Удалить файл
+                          </button>
+                        ) : (
+                          <label
+                            // type="button"
+                            className="btn-icon add"
+                          >
+                            <input
+                              type="file"
+                              onChange={(e) => handleChange(e, 2, 4, 6)}
+                              style={{ display: "none" }}
+                            />
+                            <i className="azla size-18 pin-primary-icon mr-8"></i>
+                            Прикрепить файл
+                          </label>
+                        )}
+                      </li>
+                      <li>
+                        <div className="name">
+                          <span className="text">
+                            Документ, удостоверяющий личность подписанта
+                            (данного пользователя)
+                          </span>
+                          {file7 && (
+                            <span className="file-name">
+                              {file7.name || file7.doc_name}
+                            </span>
+                          )}
+                        </div>
+                        {file7 ? (
+                          <button
+                            className="btn-icon delete"
+                            onClick={() => {
+                              file7 && file7.id && deleteDoc(file7);
+                              setFile7(null);
+                            }}
+                          >
+                            <i className="azla size-18 trash-icon-alert mr-8"></i>
+                            Удалить файл
+                          </button>
+                        ) : (
+                          <label
+                            // type="button"
+                            className="btn-icon add"
+                          >
+                            <input
+                              type="file"
+                              onChange={(e) => handleChange(e, 8, 3, 7)}
+                              style={{ display: "none" }}
+                            />
+                            <i className="azla size-18 pin-primary-icon mr-8"></i>
+                            Прикрепить файл
+                          </label>
+                        )}
+                      </li>
+                    </ul>
+                  </div>
+                  <button
+                    className="button btn-primary table-mr"
+                    disabled={
+                      position === "" ||
+                      (position === "other" && otherPosition === "") ||
+                      signingAuth === "" ||
+                      (signingAuth === "1" && otherSigningAuth === "")
+                    }
+                    onClick={() => {
+                      position === "other"
+                        ? request.addPosition(
+                            {
+                              name: otherPosition,
+                            },
+                            regAuthPerson
+                          )
+                        : regAuthPerson();
+                    }}
+                  >
+                    Завершить регистрацию
+                  </button>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="row">
@@ -707,13 +696,7 @@ const Registration = observer((props: any) => {
                       </div>
                       <div className="form-group-v">
                         <label>ИИН:</label>
-                        <input
-                          className="form-control-v"
-                          type="text"
-                          value={iin}
-                          onChange={(e) => setIin(e.target.value)}
-                          placeholder="Введите ИИН"
-                        />
+                        <span>{main.clientData.client.bin}</span>
                       </div>
                       <div className="form-group-v">
                         <label>ФИО уполномоченого лица:</label>
@@ -789,39 +772,121 @@ const Registration = observer((props: any) => {
                           )}
                         </span>
                       </div>
-                      <button
-                        className="button btn-primary table-mr"
-                        disabled={
-                          position === "" ||
-                          (position === "other" && otherPosition === "") ||
-                          iin.length < 12 ||
-                          signingAuth === "" ||
-                          (signingAuth === "1" && otherSigningAuth === "")
-                        }
-                        onClick={() =>
-                          main
-                            .regAuthPerson(main.clientData.client.id, {
-                              full_name: main.clientData.auth_person.name,
-                              is_ecp: main.clientData.auth_person.is_ecp,
-                              client: main.clientData.auth_person.client,
-                              position:
-                                position === "other" ? otherPosition : position,
-                              sign_auth: signingAuth,
-                              signing_authority_comment:
-                                signingAuth === "1" ? otherSigningAuth : "",
-                              person_status:
-                                main.clientData.auth_person.person_status,
-                              iin: iin,
-                            })
-                            .then(() => main.finishReg())
-                        }
-                      >
-                        Завершить регистрацию
-                      </button>
                     </div>
                   </div>
                 </div>
               )}
+
+              <div className="col-md-8 offset-md-2">
+                <div className="special-card">
+                  <h3 className="title-subhead mb-16 mt-32">Документы</h3>
+                  <p className="text-desc">
+                    Пожалуйста прикрепите следующие документы организации
+                  </p>
+                  <div className="reg-file-add mb-32">
+                    <ul>
+                      <li>
+                        <div className="name">
+                          <span className="text">
+                            Доверенность на подписанта, если подписантом
+                            выступает данный пользователь
+                          </span>
+                          {file6 && (
+                            <span className="file-name">
+                              {file6.name || file6.doc_name}
+                            </span>
+                          )}
+                        </div>
+                        {file6 ? (
+                          <button
+                            className="btn-icon delete"
+                            onClick={() => {
+                              file6 && file6.id && deleteDoc(file6);
+                              setFile6(null);
+                            }}
+                          >
+                            <i className="azla size-18 trash-icon-alert mr-8"></i>
+                            Удалить файл
+                          </button>
+                        ) : (
+                          <label
+                            // type="button"
+                            className="btn-icon add"
+                          >
+                            <input
+                              type="file"
+                              onChange={(e) => handleChange(e, 2, 4, 6)}
+                              style={{ display: "none" }}
+                            />
+                            <i className="azla size-18 pin-primary-icon mr-8"></i>
+                            Прикрепить файл
+                          </label>
+                        )}
+                      </li>
+                      <li>
+                        <div className="name">
+                          <span className="text">
+                            Документ, удостоверяющий личность подписанта
+                            (данного пользователя)
+                          </span>
+                          {file7 && (
+                            <span className="file-name">
+                              {file7.name || file7.doc_name}
+                            </span>
+                          )}
+                        </div>
+                        {file7 ? (
+                          <button
+                            className="btn-icon delete"
+                            onClick={() => {
+                              file7 && file7.id && deleteDoc(file7);
+                              setFile7(null);
+                            }}
+                          >
+                            <i className="azla size-18 trash-icon-alert mr-8"></i>
+                            Удалить файл
+                          </button>
+                        ) : (
+                          <label
+                            // type="button"
+                            className="btn-icon add"
+                          >
+                            <input
+                              type="file"
+                              onChange={(e) => handleChange(e, 8, 3, 7)}
+                              style={{ display: "none" }}
+                            />
+                            <i className="azla size-18 pin-primary-icon mr-8"></i>
+                            Прикрепить файл
+                          </label>
+                        )}
+                      </li>
+                    </ul>
+                  </div>
+                  <button
+                    className="button btn-primary table-mr"
+                    disabled={
+                      position === "" ||
+                      (position === "other" && otherPosition === "") ||
+                      signingAuth === "" ||
+                      (signingAuth === "1" && otherSigningAuth === "")
+                    }
+                    onClick={() => {
+                      position === "other"
+                        ? request
+                            .addPosition({
+                              name: otherPosition,
+                            })
+                            .then(() =>
+                              runInAction(async () => await regAuthPerson())
+                            )
+                        : regAuthPerson();
+                    }}
+                  >
+                    Завершить регистрацию
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </form>

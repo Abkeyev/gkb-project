@@ -902,7 +902,8 @@ const Modal = observer((props: any) => {
                   </div>
                   <div className="form-wrapper">
                     <input
-                      type="text"
+                      type="number"
+                      size={12}
                       defaultValue={
                         main.modalTypeEdit === 2 ? main.modalTypeData?.iin : iin
                       }
@@ -913,7 +914,8 @@ const Modal = observer((props: any) => {
                   </div>
                   <div className="form-wrapper">
                     <input
-                      type="text"
+                      type="number"
+                      size={9}
                       defaultValue={
                         main.modalTypeEdit === 2
                           ? main.modalTypeData?.idcard_number
@@ -2072,10 +2074,11 @@ const Modal = observer((props: any) => {
                       type="button"
                       onClick={() => {
                         request
-                          .deleteUser(
-                            main.clientData.client.id,
-                            main.modalTypeData?.id
-                          )
+                          .editUser(main.modalTypeData?.id, {
+                            ...main.modalTypeData,
+                            client_id: main.clientData.client.id,
+                            person_status: 2,
+                          })
                           .then(() => {
                             main.setModal(false);
                             setFullName("");

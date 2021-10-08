@@ -1405,7 +1405,13 @@ const PartnersInner = observer((props: any) => {
                                         Статус заявки:
                                       </span>
                                       <span className="right">
-                                        {request._getRequest.request_status}
+                                        {
+                                          request._getRequestStatus.find(
+                                            (t: ServiceCommon) =>
+                                              t.id ===
+                                              request._getRequest.request_status
+                                          )?.name
+                                        }
                                       </span>
                                     </li>
                                     <li>
@@ -1484,7 +1490,7 @@ const PartnersInner = observer((props: any) => {
                                       <i className="azla blank-alt-primary-icon"></i>
                                       <span
                                         onClick={() =>
-                                          request.downloadDocument(request.d)
+                                          d && request.downloadDocument(d)
                                         }
                                       >
                                         {d.doc_name}

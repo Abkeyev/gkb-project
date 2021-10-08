@@ -459,10 +459,13 @@ class RequestStore {
       .then((r: ClientTypes[]) => (this.clientTypes = r));
   }
 
-  async addClientTypes(data: any) {
+  async addClientTypes(data: any, callBack?: any) {
     await api.service
       .addClientTypes(data)
       .then(() => runInAction(async () => await this.getClientTypes()));
+    if (callBack) {
+      await callBack();
+    }
   }
 
   async getPosition() {
@@ -471,10 +474,13 @@ class RequestStore {
       .then((r: ServiceCommon[]) => (this.position = r));
   }
 
-  async addPosition(data: any) {
+  async addPosition(data: any, callBack?: any) {
     await api.service
       .addPosition(data)
       .then(() => runInAction(async () => await this.getPosition()));
+    if (callBack) {
+      await callBack();
+    }
   }
 
   async getClients() {
@@ -664,7 +670,7 @@ class RequestStore {
 
   async getClientAllUsers(id: number) {
     await api.service.getClientUsers(id).then((res) => {
-      this.users = res;
+      this.users = res && res.filter((r: User) => r.person_status === 1);
     });
   }
 
@@ -810,8 +816,10 @@ class RequestStore {
   }
   async updateRequest(data: any) {
     this._getRequest &&
-      (await api.service.updateRequest(this._getRequest, data).then((res) => {
-        this.request = res;
+      (await api.service.updateRequest(this._getRequest, data).then(() => {
+        runInAction(async () => {
+          this._getRequest && (await this.getRequest(this._getRequest.id));
+        });
       }));
   }
   async toSign(isType: boolean) {

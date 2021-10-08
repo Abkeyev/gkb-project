@@ -1766,7 +1766,13 @@ const RequestInner = observer((props: any) => {
                                         Статус заявки:
                                       </span>
                                       <span className="right">
-                                        {request._getRequest.request_status}
+                                        {
+                                          request._getRequestStatus.find(
+                                            (t: ServiceCommon) =>
+                                              t.id ===
+                                              request._getRequest.request_status
+                                          )?.name
+                                        }
                                       </span>
                                     </li>
                                     <li>
@@ -1841,24 +1847,21 @@ const RequestInner = observer((props: any) => {
                           <h5 className="title-subhead-h5 mb-16">Документы</h5>
                           <div className="files-added">
                             <ul className="files-list">
-                              <li>
-                                <i className="azla blank-alt-primary-icon"></i>
-                                <span>
-                                  Договор МЛомбард-ГКБ от 22 Июня 2021.pdf
-                                </span>
-                              </li>
-                              <li>
-                                <i className="azla blank-alt-primary-icon"></i>
-                                <span>Форма доступа.pdf</span>
-                              </li>
-                              <li>
-                                <i className="azla blank-alt-primary-icon"></i>
-                                <span>Акт прохождения тестирования</span>
-                              </li>
-                              <li>
-                                <i className="azla blank-alt-primary-icon"></i>
-                                <span>Акт прохождения тестирования</span>
-                              </li>
+                              {request._getClientDocs &&
+                                (request._getClientDocs as Documents[]).map(
+                                  (d) => (
+                                    <li>
+                                      <i className="azla blank-alt-primary-icon"></i>
+                                      <span
+                                        onClick={() =>
+                                          d && request.downloadDocument(d)
+                                        }
+                                      >
+                                        {d.doc_name}
+                                      </span>
+                                    </li>
+                                  )
+                                )}
                             </ul>
                           </div>
 
