@@ -1706,10 +1706,11 @@ textarea.form-control-v {
   -webkit-appearance: none;
   z-index: -1;
   position: absolute;
+  margin: auto;
   left: -7px;
-  top: -5px;
+  top: 0;
+  bottom: 0;
   display: block;
-  margin: 0;
   border-radius: 4px;
   width: 40px;
   height: 40px;
@@ -1749,7 +1750,9 @@ textarea.form-control-v {
   content: "";
   display: block;
   position: absolute;
-  top: 6px;
+  margin: auto;
+  top: -12px;
+  bottom: 0;
   left: 3px;
   width: 14px;
   height: 7px;
@@ -2262,6 +2265,9 @@ textarea.form-control-v {
 /* BG */
 .bg-light {
   background: #f9f9f9;
+}
+.bg-white {
+  background: white;
 }
 
 /* Animation */
