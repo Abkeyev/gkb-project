@@ -1572,22 +1572,6 @@ const SignersInner = observer((props: any) => {
                   ) : (
                     <></>
                   )}
-                  {request._getRequest.request_stepper === 4 &&
-                    request._getRequest.request_status === 16 && (
-                      <div className="req-inner-footer">
-                        <div className="container">
-                          <div className="left">
-                            <button
-                              type="button"
-                              onClick={() => request.getBase64()}
-                              className="button btn-primary mrl-32"
-                            >
-                              Подписать акт тестирования
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                 </div>
               </div>
             </div>

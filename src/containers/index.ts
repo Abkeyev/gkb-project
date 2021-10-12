@@ -19,8 +19,6 @@ import ServiceDesk from "./ServiceDesk";
 import ServiceDeskInner from "./ServiceDeskInner";
 import Signers from "./Signers";
 import SignersInner from "./SignersInner";
-import Agree from "./Agree";
-import AgreeInner from "./AgreeInner";
 
 export {
   Login,
@@ -42,8 +40,6 @@ export {
   Profile,
   ServiceDesk,
   ServiceDeskInner,
-  Agree,
-  AgreeInner,
   Signers,
   SignersInner,
 };

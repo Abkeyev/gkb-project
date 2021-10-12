@@ -17,8 +17,6 @@ import {
   ServiceDesk,
   ServiceDeskInner,
   Manager,
-  Agree,
-  AgreeInner,
   Signers,
   SignersInner,
 } from "./containers";
@@ -62,8 +60,6 @@ const App = observer((props: any) => {
                 <ServiceDesk request={request} main={main} />
               ) : main.getRole === "Agent" ? (
                 <Partners request={request} main={main} />
-              ) : main.getRole === "Agree" ? (
-                <Agree request={request} main={main} />
               ) : main.getRole === "Signer" ? (
                 <Signers request={request} main={main} />
               ) : (
@@ -85,14 +81,6 @@ const App = observer((props: any) => {
             path="/request/:id"
             component={(props: any) => (
               <RequestInner {...props} main={main} request={request} />
-            )}
-            exact
-          />
-          <PrivateRoute
-            main={main}
-            path="/agree/:id"
-            component={(props: any) => (
-              <AgreeInner {...props} main={main} request={request} />
             )}
             exact
           />
