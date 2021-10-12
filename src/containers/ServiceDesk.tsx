@@ -356,41 +356,46 @@ const ServiceDesk = observer((props: any) => {
                         {filterRequests([3, 4, 5]).length}
                       </span>
                     </h3>
-                    <table className="table req-table">
-                      <thead>
-                        <tr>
-                          <th>БИН</th>
-                          <th>Организации</th>
-                          <th>Категория деятельности</th>
-                          <th>Сервис</th>
-                          <th>Дата поступления</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filterRequests([3, 4, 5]).map((r: RequestModel) => (
-                          <tr
-                            onClick={() =>
-                              history.push(`/service-desk/${r.id}`)
-                            }
-                          >
-                            <td>{r.client.bin}</td>
-                            <td>{r.client.longname}</td>
-
-                            <td>
-                              {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                            </td>
-                            <td>
-                              {
-                                request._getClientServiceType.find(
-                                  (t: ServiceCommon) => t.id === r.service_type
-                                )?.name
-                              }
-                            </td>
-                            <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
+                    {filterRequests([3, 4, 5]).length === 0 ? (
+                      "Заявки отсутствуют."
+                    ) : (
+                      <table className="table req-table">
+                        <thead>
+                          <tr>
+                            <th>БИН</th>
+                            <th>Организации</th>
+                            <th>Категория деятельности</th>
+                            <th>Сервис</th>
+                            <th>Дата поступления</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {filterRequests([3, 4, 5]).map((r: RequestModel) => (
+                            <tr
+                              onClick={() =>
+                                history.push(`/service-desk/${r.id}`)
+                              }
+                            >
+                              <td>{r.client.bin}</td>
+                              <td>{r.client.longname}</td>
+
+                              <td>
+                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                              </td>
+                              <td>
+                                {
+                                  request._getClientServiceType.find(
+                                    (t: ServiceCommon) =>
+                                      t.id === r.service_type
+                                  )?.name
+                                }
+                              </td>
+                              <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
                   </div>
                 </TabPanel>
               </Tabs>

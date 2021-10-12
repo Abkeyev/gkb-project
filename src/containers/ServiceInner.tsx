@@ -107,14 +107,19 @@ const ServiceInner = observer((props: any) => {
                       <h3 className="title-subhead mb-16">Документы</h3>
                       <div className="files-added">
                         <ul className="files-list">
-                          {request._getClientDocs.map((d: Documents) => (
-                            <li>
-                              <i className="azla blank-alt-primary-icon"></i>
-                              <span onClick={() => request.downloadDocument(d)}>
-                                {d.doc_name}
-                              </span>
-                            </li>
-                          ))}
+                          {request._getClientDocs &&
+                          request._getClientDocs.length === 0
+                            ? "Документы отсутствуют."
+                            : request._getClientDocs.map((d: Documents) => (
+                                <li>
+                                  <i className="azla blank-alt-primary-icon"></i>
+                                  <span
+                                    onClick={() => request.downloadDocument(d)}
+                                  >
+                                    {d.doc_name}
+                                  </span>
+                                </li>
+                              ))}
                         </ul>
                       </div>
                     </TabPanel>
@@ -127,97 +132,97 @@ const ServiceInner = observer((props: any) => {
                             {request._getClientUsers.length}
                           </span>
                         </h3>
-                        {console.log(
-                          request._getClientUsers,
-                          "request._getServiceUsers"
-                        )}
 
-                        {request._getClientUsers.map(
-                          (c: ClientUsers, index: number) => (
-                            <div className="card mb-24 pad-24">
-                              <div className="card-header">
-                                <div className="title">
-                                  <h6 className="text">{c.full_name}</h6>
+                        {request._getClientUsers.length === 0
+                          ? "Пользователи отсутствуют. "
+                          : request._getClientUsers.map((c: ClientUsers) => (
+                              <div className="card mb-24 pad-24">
+                                <div className="card-header">
+                                  <div className="title">
+                                    <h6 className="text">{c.full_name}</h6>
+                                  </div>
+                                  <p className="desc">{c.position_name}</p>
                                 </div>
-                                <p className="desc">{c.position_name}</p>
-                              </div>
-                              <div className="card-body pad-rl-16">
-                                <div className="row">
-                                  <div className="col-md-6">
-                                    <div className="total-info">
-                                      <ul className="info-list">
-                                        <li>
-                                          <span className="left">
-                                            ID пользователя:
-                                          </span>
-                                          <span className="right">{c.id}</span>
-                                        </li>
-                                        <li>
-                                          <span className="left">
-                                            ИИН сотрудника:
-                                          </span>
-                                          <span className="right">{c.iin}</span>
-                                        </li>
-                                        <li>
-                                          <span className="left">
-                                            Контактный номер:
-                                          </span>
-                                          <span className="right">
-                                            {c.contacts}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <span className="left">Email:</span>
-                                          <span className="right">
-                                            {c.email}
-                                          </span>
-                                        </li>
-                                      </ul>
+                                <div className="card-body pad-rl-16">
+                                  <div className="row">
+                                    <div className="col-md-6">
+                                      <div className="total-info">
+                                        <ul className="info-list">
+                                          <li>
+                                            <span className="left">
+                                              ID пользователя:
+                                            </span>
+                                            <span className="right">
+                                              {c.id}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              ИИН сотрудника:
+                                            </span>
+                                            <span className="right">
+                                              {c.iin}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Контактный номер:
+                                            </span>
+                                            <span className="right">
+                                              {c.contacts}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">Email:</span>
+                                            <span className="right">
+                                              {c.email}
+                                            </span>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                      <div className="total-info">
+                                        <ul className="info-list">
+                                          <li>
+                                            <span className="left">
+                                              Первый руководитель:
+                                            </span>
+                                            <span className="right">
+                                              {c.first_head_full_name}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Заместитель:
+                                            </span>
+                                            <span className="right">
+                                              {c.deputy_head_full_name}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Курирующий менеджер:
+                                            </span>
+                                            <span className="right">
+                                              {c.manager_full_name}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Контакты менеджера:
+                                            </span>
+                                            <span className="right">
+                                              {c.manager_contacts}
+                                            </span>
+                                          </li>
+                                        </ul>
+                                      </div>
                                     </div>
                                   </div>
-                                  <div className="col-md-6">
-                                    <div className="total-info">
-                                      <ul className="info-list">
-                                        <li>
-                                          <span className="left">
-                                            Первый руководитель:
-                                          </span>
-                                          <span className="right">
-                                            {c.first_head_full_name}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <span className="left">
-                                            Заместитель:
-                                          </span>
-                                          <span className="right">
-                                            {c.deputy_head_full_name}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <span className="left">
-                                            Курирующий менеджер:
-                                          </span>
-                                          <span className="right">
-                                            {c.manager_full_name}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <span className="left">
-                                            Контакты менеджера:
-                                          </span>
-                                          <span className="right">
-                                            {c.manager_contacts}
-                                          </span>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          )
-                        )}
+                            ))}
                       </div>
                     </TabPanel>
                   </div>

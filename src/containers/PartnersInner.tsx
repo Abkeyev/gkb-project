@@ -72,7 +72,7 @@ const PartnersInner = observer((props: any) => {
                     {(request._getRequest.request_status === 10 ||
                       request._getRequest.request_status === 9) && (
                       <div className="mess-card alert-mess mb-32 col-md-8">
-                        <h5>Заявка отклонена</h5>
+                        <h5>Заявка отклонена менеджером</h5>
                         <p>Причина: {request._getRequest.client_comment}</p>
                       </div>
                     )}
@@ -161,16 +161,38 @@ const PartnersInner = observer((props: any) => {
                     </div>
                   </div>
 
-                  {request._getRequest.request_stepper === 1 && (
+                  {request._getRequest.request_status === 15 &&
+                  request._getRequest.request_stepper === 3 ? (
                     <div className="mess-card mb-32 col-md-8">
-                      <p>
-                        Менеджер заявки готовит ваш договор на рассмотрение.
-                        Приложенный договор вы увидите в секции “История
-                        изменения договора”. Вы так же можете добавлять/изменять
-                        договор и выносить его на расмотрение загрузив файл в
-                        систему.
-                      </p>
+                      Пожалуйста, ожидайте. Заявленная форма доступа проверяется
+                      департаментом Servicedesk.
                     </div>
+                  ) : request._getRequest.request_status === 9 &&
+                    request._getRequest.request_status === 10 ? (
+                    ""
+                  ) : request._getRequest.request_status === 11 &&
+                    request._getRequest.request_status === 12 ? (
+                    <div className="mess-card mb-32 col-md-8">
+                      Договор отправлен на подписание. Пожалуйста, ожидайте
+                      подписания документа представителями контрагента и АО
+                      “Государственное Кредитное Бюро”.
+                    </div>
+                  ) : request._getRequest.request_status === 6 &&
+                    request._getRequest.request_status === 7 ? (
+                    <div className="mess-card mb-32 col-md-8">
+                      Данная заявка проходит первичную проверку менеджером.
+                      Пожалуйста, ожидайте. Среднее время проверки составляет 1
+                      день.
+                    </div>
+                  ) : request._getRequest.request_stepper === 1 ? (
+                    <div className="mess-card mb-32 col-md-8">
+                      Менеджер заявки готовит ваш договор на рассмотрение.
+                      Приложенный договор вы увидите в секции “История изменения
+                      договора”. Вы так же можете добавлять/изменять договор и
+                      выносить его на расмотрение загрузив файл в систему.
+                    </div>
+                  ) : (
+                    ""
                   )}
 
                   {request.step === 1 ? (
@@ -276,134 +298,146 @@ const PartnersInner = observer((props: any) => {
                             </ul>
                           </div>
                           <h3 className="title-subhead mb-16">
-                            Документы контрагента
+                            Документы организации
                           </h3>
                           {request._getDocCategories &&
-                            request._getDocCategories.map(
-                              (c: Categories) =>
-                                c.doc_type.filter((dt: any) => dt.file !== null)
-                                  .length > 0 && (
-                                  <>
-                                    <h5 className="title-subhead-h5 mb-16">
-                                      {c.name}
-                                    </h5>
-                                    <div className="files-added">
-                                      <ul className="files-list">
-                                        {c.doc_type.map(
-                                          (d: any) =>
-                                            d.file && (
-                                              <li>
-                                                <i className="azla blank-alt-primary-icon"></i>
-                                                <span>{d.name}</span>
-                                              </li>
-                                            )
-                                        )}
-                                      </ul>
-                                    </div>
-                                  </>
-                                )
-                            )}
+                          request._getDocCategories.length === 0
+                            ? "Документы отсутствуют."
+                            : request._getDocCategories.map(
+                                (c: Categories) =>
+                                  c.doc_type.filter(
+                                    (dt: any) => dt.file !== null
+                                  ).length > 0 && (
+                                    <>
+                                      <h5 className="title-subhead-h5 mb-16">
+                                        {c.name}
+                                      </h5>
+                                      <div className="files-added">
+                                        <ul className="files-list">
+                                          {c.doc_type.map(
+                                            (d: any) =>
+                                              d.file && (
+                                                <li>
+                                                  <i className="azla blank-alt-primary-icon"></i>
+                                                  <span>{d.name}</span>
+                                                </li>
+                                              )
+                                          )}
+                                        </ul>
+                                      </div>
+                                    </>
+                                  )
+                              )}
                         </div>
                       </TabPanel>
 
                       <TabPanel>
                         <div className="tab-content tab-1">
-                          <h3 className="title-subhead mb-16">
+                          Потребители услуг – пользователи контрагента, которые
+                          имеют доступ к базам данных БДКИ и ЕСБД.
+                          <h3 className="title-subhead mtb-16">
                             {request._getClientUsers.length} заявленных
                             пользователей
                           </h3>
-
-                          {request._getClientUsers.map(
-                            (u: ClientUsers, index: number) => (
-                              <div className="card mb-24 pad-24">
-                                <div className="card-header">
-                                  <div className="title">
-                                    <h6 className="text">{u.full_name}</h6>
-                                    <span className="num">№{index + 1}</span>
-                                  </div>
-                                  <p className="desc">{u.department_name}</p>
-                                </div>
-                                <div className="card-body pad-rl-16">
-                                  <div className="row">
-                                    <div className="col-md-6">
-                                      <div className="total-info">
-                                        <ul className="info-list">
-                                          <li>
-                                            <span className="left">
-                                              ID пользователя:
-                                            </span>
-                                            <span className="right">
-                                              {u.id}
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">
-                                              ИИН сотрудника:
-                                            </span>
-                                            <span className="right">
-                                              {u.iin}
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">
-                                              Контактный номер:
-                                            </span>
-                                            <span className="right">
-                                              {u.idcard_number}
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">Email:</span>
-                                            <span className="right">
-                                              {u.email}
-                                            </span>
-                                          </li>
-                                        </ul>
+                          {request._getClientUsers.length === 0
+                            ? "Пользователи отсутствуют. "
+                            : request._getClientUsers.map(
+                                (u: ClientUsers, index: number) => (
+                                  <div className="card mb-24 pad-24">
+                                    <div className="card-header">
+                                      <div className="title">
+                                        <h6 className="text">{u.full_name}</h6>
+                                        <span className="num">
+                                          №{index + 1}
+                                        </span>
+                                      </div>
+                                      <p className="desc">
+                                        {u.department_name}
+                                      </p>
+                                    </div>
+                                    <div className="card-body pad-rl-16">
+                                      <div className="row">
+                                        <div className="col-md-6">
+                                          <div className="total-info">
+                                            <ul className="info-list">
+                                              <li>
+                                                <span className="left">
+                                                  ID пользователя:
+                                                </span>
+                                                <span className="right">
+                                                  {u.id}
+                                                </span>
+                                              </li>
+                                              <li>
+                                                <span className="left">
+                                                  ИИН сотрудника:
+                                                </span>
+                                                <span className="right">
+                                                  {u.iin}
+                                                </span>
+                                              </li>
+                                              <li>
+                                                <span className="left">
+                                                  Контактный номер:
+                                                </span>
+                                                <span className="right">
+                                                  {u.idcard_number}
+                                                </span>
+                                              </li>
+                                              <li>
+                                                <span className="left">
+                                                  Email:
+                                                </span>
+                                                <span className="right">
+                                                  {u.email}
+                                                </span>
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                          <div className="total-info">
+                                            <ul className="info-list">
+                                              <li>
+                                                <span className="left">
+                                                  Первый руководитель:
+                                                </span>
+                                                <span className="right">
+                                                  {u.first_head_full_name}
+                                                </span>
+                                              </li>
+                                              <li>
+                                                <span className="left">
+                                                  Заместитель:
+                                                </span>
+                                                <span className="right">
+                                                  {u.deputy_head_full_name}
+                                                </span>
+                                              </li>
+                                              <li>
+                                                <span className="left">
+                                                  Курирующий менеджер:
+                                                </span>
+                                                <span className="right">
+                                                  {u.manager_full_name}
+                                                </span>
+                                              </li>
+                                              <li>
+                                                <span className="left">
+                                                  Контакты менеджера:
+                                                </span>
+                                                <span className="right">
+                                                  {u.manager_contacts}
+                                                </span>
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
-                                    <div className="col-md-6">
-                                      <div className="total-info">
-                                        <ul className="info-list">
-                                          <li>
-                                            <span className="left">
-                                              Первый руководитель:
-                                            </span>
-                                            <span className="right">
-                                              {u.first_head_full_name}
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">
-                                              Заместитель:
-                                            </span>
-                                            <span className="right">
-                                              {u.deputy_head_full_name}
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">
-                                              Курирующий менеджер:
-                                            </span>
-                                            <span className="right">
-                                              {u.manager_full_name}
-                                            </span>
-                                          </li>
-                                          <li>
-                                            <span className="left">
-                                              Контакты менеджера:
-                                            </span>
-                                            <span className="right">
-                                              {u.manager_contacts}
-                                            </span>
-                                          </li>
-                                        </ul>
-                                      </div>
-                                    </div>
                                   </div>
-                                </div>
-                              </div>
-                            )
-                          )}
+                                )
+                              )}
                         </div>
                       </TabPanel>
                     </Tabs>
@@ -1108,68 +1142,76 @@ const PartnersInner = observer((props: any) => {
                             Загрузить договор
                           </button>
                         </div>
-                        <table className="table req-table">
-                          <thead>
-                            <tr>
-                              <th>Название</th>
-                              <th>Дата загрузки</th>
-                              <th>Комментарий</th>
-                              <th>Автор</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {request._getDogovors &&
-                              (request._getDogovors as Documents[]).map(
-                                (d: Documents) => (
-                                  <tr
-                                    onClick={() => {
-                                      main.setModal(true);
-                                      main.setModalType(2);
-                                      request.setTempDoc(d);
-                                    }}
-                                  >
-                                    <td>{d.doc_name}</td>
-                                    <td>{}</td>
-                                    <td>{d.comments}</td>
-                                    <td>
-                                      {request._getClients &&
-                                        request._getClients.find(
-                                          (t: Client) => t.id === d.client
-                                        )?.longname}
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                          </tbody>
-                        </table>
+                        {request._getDogovors &&
+                          (request._getDogovors.length === 0 ? (
+                            "Нет загруженных договоров."
+                          ) : (
+                            <table className="table req-table">
+                              <thead>
+                                <tr>
+                                  <th>Название</th>
+                                  <th>Дата загрузки</th>
+                                  <th>Комментарий</th>
+                                  <th>Автор</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {request._getDogovors &&
+                                  (request._getDogovors as Documents[]).map(
+                                    (d: Documents) => (
+                                      <tr
+                                        onClick={() => {
+                                          main.setModal(true);
+                                          main.setModalType(2);
+                                          request.setTempDoc(d);
+                                        }}
+                                      >
+                                        <td>{d.doc_name}</td>
+                                        <td>{}</td>
+                                        <td>{d.comments}</td>
+                                        <td>
+                                          {request._getClients &&
+                                            request._getClients.find(
+                                              (t: Client) => t.id === d.client
+                                            )?.longname}
+                                        </td>
+                                      </tr>
+                                    )
+                                  )}
+                              </tbody>
+                            </table>
+                          ))}
                         <h3 className="title-subhead mb-16">
-                          Документы контрагента
+                          Документы организации
                         </h3>
                         {request._getDocCategories &&
-                          request._getDocCategories.map(
-                            (c: Categories) =>
-                              c.doc_type.filter((dt: any) => dt.file !== null)
-                                .length > 0 && (
-                                <>
-                                  <h5 className="title-subhead-h5 mb-16">
-                                    {c.name}
-                                  </h5>
-                                  <div className="files-added">
-                                    <ul className="files-list">
-                                      {c.doc_type.map(
-                                        (d: any) =>
-                                          d.file && (
-                                            <li>
-                                              <i className="azla blank-alt-primary-icon"></i>
-                                              <span>{d.name}</span>
-                                            </li>
-                                          )
-                                      )}
-                                    </ul>
-                                  </div>
-                                </>
-                              )
-                          )}
+                          (request._getDocCategories.length === 0
+                            ? "Документы отсутствуют."
+                            : request._getDocCategories.map(
+                                (c: Categories) =>
+                                  c.doc_type.filter(
+                                    (dt: any) => dt.file !== null
+                                  ).length > 0 && (
+                                    <>
+                                      <h5 className="title-subhead-h5 mb-16">
+                                        {c.name}
+                                      </h5>
+                                      <div className="files-added">
+                                        <ul className="files-list">
+                                          {c.doc_type.map(
+                                            (d: any) =>
+                                              d.file && (
+                                                <li>
+                                                  <i className="azla blank-alt-primary-icon"></i>
+                                                  <span>{d.name}</span>
+                                                </li>
+                                              )
+                                          )}
+                                        </ul>
+                                      </div>
+                                    </>
+                                  )
+                              ))}
                       </div>
                     </div>
                   ) : request.step === 3 ? (
@@ -1178,91 +1220,99 @@ const PartnersInner = observer((props: any) => {
                         {request._getClientUsers.length} заявленных
                         пользователей
                       </h3>
-                      {request._getClientUsers.map(
-                        (u: ClientUsers, index: number) => (
-                          <div className="card mb-24 pad-24">
-                            <div className="card-header">
-                              <div className="title">
-                                <h6 className="text">{u.full_name}</h6>
-                                <span className="num">№{index + 1}</span>
-                              </div>
-                              <p className="desc">{u.department_name}</p>
-                            </div>
-                            <div className="card-body pad-rl-16">
-                              <div className="row">
-                                <div className="col-md-6">
-                                  <div className="total-info">
-                                    <ul className="info-list">
-                                      <li>
-                                        <span className="left">
-                                          ID пользователя:
-                                        </span>
-                                        <span className="right">{u.id}</span>
-                                      </li>
-                                      <li>
-                                        <span className="left">
-                                          ИИН сотрудника:
-                                        </span>
-                                        <span className="right">{u.iin}</span>
-                                      </li>
-                                      <li>
-                                        <span className="left">
-                                          Контактный номер:
-                                        </span>
-                                        <span className="right">
-                                          {u.idcard_number}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <span className="left">Email:</span>
-                                        <span className="right">{u.email}</span>
-                                      </li>
-                                    </ul>
+                      {request._getClientUsers.length === 0
+                        ? "Пользователи отсутствуют. "
+                        : request._getClientUsers.map(
+                            (u: ClientUsers, index: number) => (
+                              <div className="card mb-24 pad-24">
+                                <div className="card-header">
+                                  <div className="title">
+                                    <h6 className="text">{u.full_name}</h6>
+                                    <span className="num">№{index + 1}</span>
+                                  </div>
+                                  <p className="desc">{u.department_name}</p>
+                                </div>
+                                <div className="card-body pad-rl-16">
+                                  <div className="row">
+                                    <div className="col-md-6">
+                                      <div className="total-info">
+                                        <ul className="info-list">
+                                          <li>
+                                            <span className="left">
+                                              ID пользователя:
+                                            </span>
+                                            <span className="right">
+                                              {u.id}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              ИИН сотрудника:
+                                            </span>
+                                            <span className="right">
+                                              {u.iin}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Контактный номер:
+                                            </span>
+                                            <span className="right">
+                                              {u.idcard_number}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">Email:</span>
+                                            <span className="right">
+                                              {u.email}
+                                            </span>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                      <div className="total-info">
+                                        <ul className="info-list">
+                                          <li>
+                                            <span className="left">
+                                              Первый руководитель:
+                                            </span>
+                                            <span className="right">
+                                              {u.first_head_full_name}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Заместитель:
+                                            </span>
+                                            <span className="right">
+                                              {u.deputy_head_full_name}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Курирующий менеджер:
+                                            </span>
+                                            <span className="right">
+                                              {u.manager_full_name}
+                                            </span>
+                                          </li>
+                                          <li>
+                                            <span className="left">
+                                              Контакты менеджера:
+                                            </span>
+                                            <span className="right">
+                                              {u.manager_contacts}
+                                            </span>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-                                <div className="col-md-6">
-                                  <div className="total-info">
-                                    <ul className="info-list">
-                                      <li>
-                                        <span className="left">
-                                          Первый руководитель:
-                                        </span>
-                                        <span className="right">
-                                          {u.first_head_full_name}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <span className="left">
-                                          Заместитель:
-                                        </span>
-                                        <span className="right">
-                                          {u.deputy_head_full_name}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <span className="left">
-                                          Курирующий менеджер:
-                                        </span>
-                                        <span className="right">
-                                          {u.manager_full_name}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <span className="left">
-                                          Контакты менеджера:
-                                        </span>
-                                        <span className="right">
-                                          {u.manager_contacts}
-                                        </span>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
                               </div>
-                            </div>
-                          </div>
-                        )
-                      )}
+                            )
+                          )}
                     </>
                   ) : request.step === 4 ? (
                     <>
