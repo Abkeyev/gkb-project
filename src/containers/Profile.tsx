@@ -8,7 +8,7 @@ import { ServiceCommon } from "../api/Models/ServiceModels";
 import { Modal } from "../containers";
 
 const Profile = observer((props: any) => {
-  const { main, request, state, setState, client } = props;
+  const { main, request } = props;
   const [modal, setModal]: any = useState(null);
 
   React.useEffect(() => {
@@ -19,15 +19,7 @@ const Profile = observer((props: any) => {
 
   return (
     <>
-      {main.isOpenModal && (
-        <Modal
-          main={main}
-          setState={setState}
-          state={state}
-          client={client}
-          request={request}
-        />
-      )}
+      {main.isOpenModal && <Modal main={main} request={request} />}
       <div className="main-body">
         {request._getUser && (
           <div className="container">

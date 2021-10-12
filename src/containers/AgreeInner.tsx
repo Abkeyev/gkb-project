@@ -15,9 +15,9 @@ import {
   ServiceCommon,
   User,
 } from "../api/Models/ServiceModels";
-import { Modal } from "../containers";
+import { Modal } from ".";
 
-const ServiceDeskInner = observer((props: any) => {
+const SignersInner = observer((props: any) => {
   const history = useHistory();
   const { id } = props.match.params;
   const { main, request } = props;
@@ -29,6 +29,7 @@ const ServiceDeskInner = observer((props: any) => {
     request.getRequestStatus();
     request.getDocumentsCategories();
     request.getDocumentsType();
+    request.getDocuments(main.clientData.client.id);
     request.getClientTypes();
     request.getRequest(id);
   }, []);
@@ -148,6 +149,40 @@ const ServiceDeskInner = observer((props: any) => {
                     </div>
                   </div>
 
+                  {request._getRequest.request_status === 15 &&
+                  request._getRequest.request_stepper === 3 ? (
+                    <div className="mess-card mb-32 col-md-8">
+                      Пожалуйста, ожидайте. Заявленная форма доступа проверяется
+                      департаментом Servicedesk.
+                    </div>
+                  ) : request._getRequest.request_status === 9 &&
+                    request._getRequest.request_status === 10 ? (
+                    ""
+                  ) : request._getRequest.request_status === 11 &&
+                    request._getRequest.request_status === 12 ? (
+                    <div className="mess-card mb-32 col-md-8">
+                      Договор отправлен на подписание. Пожалуйста, ожидайте
+                      подписания документа представителями контрагента и АО
+                      “Государственное Кредитное Бюро”.
+                    </div>
+                  ) : request._getRequest.request_status === 6 &&
+                    request._getRequest.request_status === 7 ? (
+                    <div className="mess-card mb-32 col-md-8">
+                      Данная заявка проходит первичную проверку менеджером.
+                      Пожалуйста, ожидайте. Среднее время проверки составляет 1
+                      день.
+                    </div>
+                  ) : request._getRequest.request_stepper === 1 ? (
+                    <div className="mess-card mb-32 col-md-8">
+                      Менеджер заявки готовит ваш договор на рассмотрение.
+                      Приложенный договор вы увидите в секции “История изменения
+                      договора”. Вы так же можете добавлять/изменять договор и
+                      выносить его на расмотрение загрузив файл в систему.
+                    </div>
+                  ) : (
+                    ""
+                  )}
+
                   {request.step === 1 ? (
                     <Tabs>
                       <div className="line-hr mb-32">
@@ -251,7 +286,7 @@ const ServiceDeskInner = observer((props: any) => {
                             </ul>
                           </div>
                           <h3 className="title-subhead mb-16">
-                            Документы контрагента
+                            Документы организации
                           </h3>
                           {request._getDocCategories &&
                           request._getDocCategories.length === 0
@@ -507,26 +542,54 @@ const ServiceDeskInner = observer((props: any) => {
                                         <div className="col-md-6">
                                           <div className="signatory-status">
                                             <p className="desc">
-                                              {request._getConSigner.position}
+                                              {
+                                                request._getPosition.find(
+                                                  (t: ServiceCommon) =>
+                                                    t.id ===
+                                                    request._getConSigner
+                                                      .position
+                                                )?.name
+                                              }
                                             </p>
 
                                             {request._getRequest
-                                              .request_status === 12 ||
-                                            request._getRequest
-                                              .request_status === 8 ||
-                                            request._getRequest
-                                              .request_status === 15 ||
-                                            request._getRequest
-                                              .request_status === 16 ||
-                                            request._getRequest
-                                              .request_status === 18 ? (
+                                              .request_status === 11 ? (
+                                              <div className="d-flex-align-c-spaceb">
+                                                <button
+                                                  className="btn-status-signatory btn-icon active mr-16"
+                                                  onClick={() =>
+                                                    request.getBase64()
+                                                  }
+                                                >
+                                                  <i className="azla edit-white-icon"></i>
+                                                  Подписать
+                                                </button>
+                                                <button
+                                                  onClick={() => {
+                                                    main.setModal(true);
+                                                    main.setModalType(1);
+                                                  }}
+                                                  className="delete-signatory"
+                                                ></button>
+                                              </div>
+                                            ) : request._getRequest
+                                                .request_status === 12 ||
+                                              request._getRequest
+                                                .request_status === 8 ||
+                                              request._getRequest
+                                                .request_status === 15 ||
+                                              request._getRequest
+                                                .request_status === 16 ||
+                                              request._getRequest
+                                                .request_status === 18 ? (
                                               <span className="btn-status done">
                                                 Подписано
                                               </span>
                                             ) : (
-                                              <span className="btn-status not-active">
-                                                Не Подписано
-                                              </span>
+                                              <button className="btn-status-signatory btn-icon not-active">
+                                                <i className="azla edit-white-icon"></i>
+                                                Подписать
+                                              </button>
                                             )}
                                           </div>
                                         </div>
@@ -564,7 +627,13 @@ const ServiceDeskInner = observer((props: any) => {
                                       <div className="col-md-6">
                                         <div className="signatory-status">
                                           <p className="desc">
-                                            {request._getManSigner.position}
+                                            {
+                                              request._getPosition.find(
+                                                (t: ServiceCommon) =>
+                                                  t.id ===
+                                                  request._getManSigner.position
+                                              )?.name
+                                            }
                                           </p>
 
                                           {request._getRequest.request_stepper >
@@ -759,11 +828,17 @@ const ServiceDeskInner = observer((props: any) => {
                                                         </div>
                                                         <span className="position">
                                                           {request._getAllUsers &&
-                                                            request._getAllUsers.find(
-                                                              (u: User) =>
-                                                                u.id ===
-                                                                s.user_id
-                                                            )?.position}
+                                                            request._getPosition.find(
+                                                              (
+                                                                t: ServiceCommon
+                                                              ) =>
+                                                                t.id ===
+                                                                request._getAllUsers.find(
+                                                                  (u: User) =>
+                                                                    u.id ===
+                                                                    s.user_id
+                                                                )?.position
+                                                            )?.name}
                                                         </span>
 
                                                         {s.is_approved ? (
@@ -911,25 +986,54 @@ const ServiceDeskInner = observer((props: any) => {
                                           <div className="col-md-6">
                                             <div className="signatory-status">
                                               <p className="desc">
-                                                {request._getConSigner.position}
+                                                {
+                                                  request._getPosition.find(
+                                                    (t: ServiceCommon) =>
+                                                      t.id ===
+                                                      request._getConSigner
+                                                        .position
+                                                  )?.name
+                                                }
                                               </p>
                                               {request._getRequest
-                                                .request_status === 12 ||
-                                              request._getRequest
-                                                .request_status === 15 ||
-                                              request._getRequest
-                                                .request_status === 16 ||
-                                              request._getRequest
-                                                .request_status === 18 ||
-                                              request._getRequest
-                                                .request_status === 8 ? (
+                                                .request_status === 11 ? (
+                                                <div className="d-flex-align-c-spaceb">
+                                                  <button
+                                                    className="btn-status-signatory btn-icon active mr-16"
+                                                    onClick={() =>
+                                                      request.getBase64()
+                                                    }
+                                                  >
+                                                    <i className="azla edit-white-icon"></i>
+                                                    Подписать
+                                                  </button>
+
+                                                  <button
+                                                    onClick={() => {
+                                                      main.setModal(true);
+                                                      main.setModalType(1);
+                                                    }}
+                                                    className="delete-signatory"
+                                                  ></button>
+                                                </div>
+                                              ) : request._getRequest
+                                                  .request_status === 12 ||
+                                                request._getRequest
+                                                  .request_status === 15 ||
+                                                request._getRequest
+                                                  .request_status === 16 ||
+                                                request._getRequest
+                                                  .request_status === 18 ||
+                                                request._getRequest
+                                                  .request_status === 8 ? (
                                                 <span className="btn-status done">
                                                   Подписано
                                                 </span>
                                               ) : (
-                                                <span className="btn-status not-active">
-                                                  Не Подписано
-                                                </span>
+                                                <button className="btn-status-signatory btn-icon not-active">
+                                                  <i className="azla edit-white-icon"></i>
+                                                  Подписать
+                                                </button>
                                               )}
                                             </div>
                                           </div>
@@ -971,7 +1075,14 @@ const ServiceDeskInner = observer((props: any) => {
                                           <div className="col-md-6">
                                             <div className="signatory-status">
                                               <p className="desc">
-                                                {request._getManSigner.position}
+                                                {
+                                                  request._getPosition.find(
+                                                    (t: ServiceCommon) =>
+                                                      t.id ===
+                                                      request._getManSigner
+                                                        .position
+                                                  )?.name
+                                                }
                                               </p>
                                               {request._getRequest
                                                 .request_stepper > 2 ? (
@@ -979,6 +1090,8 @@ const ServiceDeskInner = observer((props: any) => {
                                                   Подписано
                                                 </span>
                                               ) : request._getRequest
+                                                  .request_status === 11 ||
+                                                request._getRequest
                                                   .request_status === 12 ? (
                                                 <span className="btn-status not-active">
                                                   Не Подписано
@@ -1006,76 +1119,87 @@ const ServiceDeskInner = observer((props: any) => {
                                 (request._getDogovors as Documents[]).length}
                             </span>
                           </h3>
+                          <button
+                            type="button"
+                            className="button btn-secondary"
+                            onClick={() => {
+                              main.setModal(true);
+                              main.setModalType(14);
+                            }}
+                          >
+                            Загрузить договор
+                          </button>
                         </div>
                         {request._getDogovors &&
-                        request._getDogovors.length === 0 ? (
-                          "Нет загруженных договоров."
-                        ) : (
-                          <table className="table req-table">
-                            <thead>
-                              <tr>
-                                <th>Название</th>
-                                <th>Дата загрузки</th>
-                                <th>Комментарий</th>
-                                <th>Автор</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {request._getDogovors &&
-                                (request._getDogovors as Documents[]).map(
-                                  (d: Documents) => (
-                                    <tr
-                                      onClick={() => {
-                                        main.setModal(true);
-                                        main.setModalType(2);
-                                        request.setTempDoc(d);
-                                      }}
-                                    >
-                                      <td>{d.doc_name}</td>
-                                      <td>{}</td>
-                                      <td>{d.comments}</td>
-                                      <td>
-                                        {request._getClients &&
-                                          request._getClients.find(
-                                            (t: Client) => t.id === d.client
-                                          )?.longname}
-                                      </td>
-                                    </tr>
-                                  )
-                                )}
-                            </tbody>
-                          </table>
-                        )}
+                          (request._getDogovors.length === 0 ? (
+                            "Нет загруженных договоров."
+                          ) : (
+                            <table className="table req-table">
+                              <thead>
+                                <tr>
+                                  <th>Название</th>
+                                  <th>Дата загрузки</th>
+                                  <th>Комментарий</th>
+                                  <th>Автор</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {request._getDogovors &&
+                                  (request._getDogovors as Documents[]).map(
+                                    (d: Documents) => (
+                                      <tr
+                                        onClick={() => {
+                                          main.setModal(true);
+                                          main.setModalType(2);
+                                          request.setTempDoc(d);
+                                        }}
+                                      >
+                                        <td>{d.doc_name}</td>
+                                        <td>{}</td>
+                                        <td>{d.comments}</td>
+                                        <td>
+                                          {request._getClients &&
+                                            request._getClients.find(
+                                              (t: Client) => t.id === d.client
+                                            )?.longname}
+                                        </td>
+                                      </tr>
+                                    )
+                                  )}
+                              </tbody>
+                            </table>
+                          ))}
                         <h3 className="title-subhead mb-16">
-                          Документы контрагента
+                          Документы организации
                         </h3>
                         {request._getDocCategories &&
-                        request._getDocCategories.length === 0
-                          ? "Документы отсутствуют."
-                          : request._getDocCategories.map(
-                              (c: Categories) =>
-                                c.doc_type.filter((dt: any) => dt.file !== null)
-                                  .length > 0 && (
-                                  <>
-                                    <h5 className="title-subhead-h5 mb-16">
-                                      {c.name}
-                                    </h5>
-                                    <div className="files-added">
-                                      <ul className="files-list">
-                                        {c.doc_type.map(
-                                          (d: any) =>
-                                            d.file && (
-                                              <li>
-                                                <i className="azla blank-alt-primary-icon"></i>
-                                                <span>{d.name}</span>
-                                              </li>
-                                            )
-                                        )}
-                                      </ul>
-                                    </div>
-                                  </>
-                                )
-                            )}
+                          (request._getDocCategories.length === 0
+                            ? "Документы отсутствуют."
+                            : request._getDocCategories.map(
+                                (c: Categories) =>
+                                  c.doc_type.filter(
+                                    (dt: any) => dt.file !== null
+                                  ).length > 0 && (
+                                    <>
+                                      <h5 className="title-subhead-h5 mb-16">
+                                        {c.name}
+                                      </h5>
+                                      <div className="files-added">
+                                        <ul className="files-list">
+                                          {c.doc_type.map(
+                                            (d: any) =>
+                                              d.file && (
+                                                <li>
+                                                  <i className="azla blank-alt-primary-icon"></i>
+                                                  <span>{d.name}</span>
+                                                </li>
+                                              )
+                                          )}
+                                        </ul>
+                                      </div>
+                                    </>
+                                  )
+                              ))}
                       </div>
                     </div>
                   ) : request.step === 3 ? (
@@ -1236,54 +1360,52 @@ const ServiceDeskInner = observer((props: any) => {
                                   <h3 className="title-subhead mb-16">
                                     Ключи доступа
                                   </h3>
-                                  <div className="keys-btn">
-                                    {request.testKey ? (
-                                      <button
-                                        type="button"
-                                        className="btn-file btn-icon"
-                                        onClick={() =>
-                                          request.downloadKeys(request.testKey)
-                                        }
-                                      >
-                                        Скачать тестовые ключи
-                                      </button>
-                                    ) : (
-                                      <div
-                                        className="file-add-sd"
-                                        onClick={() => {
-                                          main.setModal(true);
-                                          main.setModalType(16);
-                                          main.setModalTypeEdit(1);
-                                        }}
-                                      >
-                                        <i className="azla plus-primary-icon size-18 mr-8"></i>
-                                        Тестовые ключи
-                                      </div>
-                                    )}
-                                    {request.prodKey ? (
-                                      <button
-                                        type="button"
-                                        className="btn-file btn-icon"
-                                        onClick={() =>
-                                          request.downloadKeys(request.prodKey)
-                                        }
-                                      >
-                                        Скачать боевые ключи
-                                      </button>
-                                    ) : (
-                                      <div
-                                        className="file-add-sd"
-                                        onClick={() => {
-                                          main.setModal(true);
-                                          main.setModalType(16);
-                                          main.setModalTypeEdit(2);
-                                        }}
-                                      >
-                                        <i className="azla plus-primary-icon size-18 mr-8"></i>
-                                        Боевые ключи
-                                      </div>
-                                    )}
-                                  </div>
+                                  {request._getRequest.request_status === 15 ? (
+                                    <div className="keys-loader mb-32">
+                                      <h5>
+                                        Тестовые ключи не предоставлены.
+                                        Ожидайте.
+                                      </h5>
+                                      <p>
+                                        Ключи предоставляются департаментом
+                                        Service Desk после проверки всех данных
+                                        контрагента. Это занимает 2-7 дней с
+                                        момента принятия формы доступа
+                                        менеджером.
+                                      </p>
+                                    </div>
+                                  ) : (
+                                    <div className="keys-btn">
+                                      {request.testKey && (
+                                        <button
+                                          type="button"
+                                          className="btn-file btn-icon"
+                                          onClick={() =>
+                                            request.downloadKeys(
+                                              request.testKey
+                                            )
+                                          }
+                                        >
+                                          Скачать тестовые ключи
+                                        </button>
+                                      )}
+                                      {request.prodKey &&
+                                        request._getRequest.request_stepper >
+                                          4 && (
+                                          <button
+                                            type="button"
+                                            className="btn-file btn-icon"
+                                            onClick={() =>
+                                              request.downloadKeys(
+                                                request.prodKey
+                                              )
+                                            }
+                                          >
+                                            Скачать боевые ключи
+                                          </button>
+                                        )}
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -1333,13 +1455,13 @@ const ServiceDeskInner = observer((props: any) => {
                                     <li>
                                       <span className="left">Организация:</span>
                                       <span className="right">
-                                        {main.clientData.client.longname}
+                                        {request._getRequest.client.longname}
                                       </span>
                                     </li>
                                     <li>
                                       <span className="left">БИН:</span>
                                       <span className="right">
-                                        {main.clientData.client.bin}
+                                        {request._getRequest.client.bin}
                                       </span>
                                     </li>
                                     <li>
@@ -1351,7 +1473,8 @@ const ServiceDeskInner = observer((props: any) => {
                                           request._getClientTypes.find(
                                             (t: any) =>
                                               t.id ===
-                                              main.clientData.client.client_type
+                                              request._getRequest.client
+                                                .client_type
                                           )?.name
                                         }
                                       </span>
@@ -1415,22 +1538,33 @@ const ServiceDeskInner = observer((props: any) => {
                                 )}
                             </ul>
                           </div>
+
                           <h5 className="title-subhead-h5 mb-16">
                             Ключи доступа
                           </h5>
                           <div className="d-flex">
-                            <button
-                              type="button"
-                              className="button btn-secondary mr-16"
-                            >
-                              Скачать тестовые ключи
-                            </button>
-                            <button
-                              type="button"
-                              className="button btn-secondary"
-                            >
-                              Скачать боевые ключи
-                            </button>
+                            {request.testKey && (
+                              <button
+                                type="button"
+                                className="button btn-secondary mr-16"
+                                onClick={() =>
+                                  request.downloadKeys(request.testKey)
+                                }
+                              >
+                                Скачать тестовые ключи
+                              </button>
+                            )}
+                            {request.prodKey && (
+                              <button
+                                type="button"
+                                className="button btn-secondary"
+                                onClick={() =>
+                                  request.downloadKeys(request.prodKey)
+                                }
+                              >
+                                Скачать боевые ключи
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1438,30 +1572,17 @@ const ServiceDeskInner = observer((props: any) => {
                   ) : (
                     <></>
                   )}
-
-                  {request._getRequest.request_stepper === 3 &&
-                    request._getRequest.request_status !== 10 && (
+                  {request._getRequest.request_stepper === 4 &&
+                    request._getRequest.request_status === 16 && (
                       <div className="req-inner-footer">
                         <div className="container">
                           <div className="left">
                             <button
                               type="button"
-                              onClick={() =>
-                                request.nextRequest(request._getRequest)
-                              }
+                              onClick={() => request.getBase64()}
                               className="button btn-primary mrl-32"
                             >
-                              Подтвердить заполнение
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                main.setModalType(1);
-                                main.setModal(true);
-                              }}
-                              className="button btn-danger"
-                            >
-                              Отклонить
+                              Подписать акт тестирования
                             </button>
                           </div>
                         </div>
@@ -1476,4 +1597,4 @@ const ServiceDeskInner = observer((props: any) => {
     </>
   );
 });
-export default ServiceDeskInner;
+export default SignersInner;

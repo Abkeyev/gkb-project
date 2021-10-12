@@ -20,7 +20,7 @@ import { Modal } from "../containers";
 const PartnersInner = observer((props: any) => {
   const history = useHistory();
   const { id } = props.match.params;
-  const { main, request, state, setState, client } = props;
+  const { main, request } = props;
 
   React.useEffect(() => {
     request.getClientServiceType();
@@ -36,15 +36,7 @@ const PartnersInner = observer((props: any) => {
 
   return (
     <>
-      {main.isOpenModal && (
-        <Modal
-          main={main}
-          setState={setState}
-          state={state}
-          client={client}
-          request={request}
-        />
-      )}
+      {main.isOpenModal && <Modal main={main} request={request} />}
       <div className="main-body">
         {request._getRequest && (
           <div className="container">
@@ -81,7 +73,7 @@ const PartnersInner = observer((props: any) => {
                       <ul className="step-progressbar">
                         <li
                           className={`step-item ${
-                            request.step === 1
+                            request._getRequest.request_stepper === 1
                               ? "step-item-active"
                               : "step-item-complete"
                           }`}
@@ -91,10 +83,9 @@ const PartnersInner = observer((props: any) => {
                         </li>
                         <li
                           className={`step-item ${
-                            request.step === 2
+                            request._getRequest.request_stepper === 2
                               ? "step-item-active"
-                              : request._getRequest.request_stepper > 2 &&
-                                request.step > 2
+                              : request._getRequest.request_stepper > 2
                               ? "step-item-complete"
                               : ""
                           }`}
@@ -109,10 +100,9 @@ const PartnersInner = observer((props: any) => {
                         </li>
                         <li
                           className={`step-item ${
-                            request.step === 3
+                            request._getRequest.request_stepper === 3
                               ? "step-item-active"
-                              : request._getRequest.request_stepper > 3 &&
-                                request.step > 3
+                              : request._getRequest.request_stepper > 3
                               ? "step-item-complete"
                               : ""
                           }`}
@@ -127,10 +117,9 @@ const PartnersInner = observer((props: any) => {
                         </li>
                         <li
                           className={`step-item ${
-                            request.step === 4
+                            request._getRequest.request_stepper === 4
                               ? "step-item-active"
-                              : request._getRequest.request_stepper > 4 &&
-                                request.step > 4
+                              : request._getRequest.request_stepper > 4
                               ? "step-item-complete"
                               : ""
                           }`}
@@ -143,10 +132,9 @@ const PartnersInner = observer((props: any) => {
                         </li>
                         <li
                           className={`step-item ${
-                            request.step === 5
+                            request._getRequest.request_stepper === 5
                               ? "step-item-active"
-                              : request._getRequest.request_stepper > 5 ||
-                                request.step > 5
+                              : request._getRequest.request_stepper > 5
                               ? "step-item-complete"
                               : ""
                           }`}
@@ -1336,7 +1324,7 @@ const PartnersInner = observer((props: any) => {
                                             )
                                           }
                                         >
-                                          {request.testProt.doc_name}
+                                          Протокол тестирования.docx
                                         </span>
                                       </li>
                                     )}
@@ -1350,7 +1338,7 @@ const PartnersInner = observer((props: any) => {
                                             )
                                           }
                                         >
-                                          {request.testAct.doc_name}
+                                          Акт тестирования.pdf
                                         </span>
                                       </li>
                                     )}

@@ -1,15 +1,10 @@
 import * as React from "react";
-import NCALayer from "../ncalayer/ncalayer";
 import { Login, LoginEcp } from "../containers";
 import { observer } from "mobx-react";
 
 export interface LoginProps {
   main: any;
   request: any;
-  state: any;
-  setState: any;
-  client: NCALayer;
-  ready: boolean;
 }
 
 @observer

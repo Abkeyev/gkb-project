@@ -24,7 +24,7 @@ import { Modal } from "../containers";
 
 const MyOrganization = observer((props: any) => {
   const history = useHistory();
-  const { main, request, setState, state, client } = props;
+  const { main, request } = props;
 
   React.useEffect(() => {
     request.getPosition();
@@ -50,15 +50,7 @@ const MyOrganization = observer((props: any) => {
 
   return (
     <>
-      {main.isOpenModal && (
-        <Modal
-          main={main}
-          setState={setState}
-          state={state}
-          client={client}
-          request={request}
-        />
-      )}
+      {main.isOpenModal && <Modal main={main} request={request} />}
       <div className="main-body">
         <div className="container">
           <div className="row">

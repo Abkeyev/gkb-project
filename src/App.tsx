@@ -17,153 +17,22 @@ import {
   ServiceDesk,
   ServiceDeskInner,
   Manager,
+  Agree,
+  AgreeInner,
+  Signers,
+  SignersInner,
 } from "./containers";
 import { LoginPage } from "./components";
 import PrivateRoute from "./PrivateRoute";
 import { observer } from "mobx-react";
-import NCALayer, { MethodName } from "./ncalayer/ncalayer";
-import { extractKeyAlias, isNullOrEmpty } from "./ncalayer/helper";
-import Response, { ValidationType } from "./ncalayer/response";
-import AppState, { initAppState } from "./ncalayer/state";
 import { connection } from "./ncaLayer";
 
 const App = observer((props: any) => {
   const { main, request } = props;
-  const ws = React.useRef<WebSocket>();
-  const [state, setState] = React.useState<AppState>(initAppState());
-  const [ready, setReady] = React.useState(false);
-  const client = new NCALayer(ws.current!);
 
   React.useEffect(() => {
     connection();
-    ws.current = new WebSocket("wss://127.0.0.1:13579/");
-    ws.current.onopen = (e: any) => {
-      // tslint:disable-next-line
-      console.log("connection opened");
-      setReady(true);
-    };
-
-    ws.current.onclose = (e: any) => {
-      if (e.wasClean) {
-        // tslint:disable-next-line
-        console.log("connection closed");
-      } else {
-        // tslint:disable-next-line
-        console.log(
-          "connection error: [code]=" + e.code + ", [reason]=" + e.reason
-        );
-      }
-      setReady(false);
-    };
-
-    return () => {
-      ws.current!.close();
-    };
-  }, [setReady]);
-
-  React.useEffect(() => {
-    const browseKeyStoreCallback = (resp: Response) => {
-      if (resp.IsOK()) {
-        setState({ ...state, path: resp.GetResult() });
-      }
-    };
-
-    const showFileChooserCallback = (resp: Response) => {
-      if (resp.IsOK()) {
-        setState({ ...state, cmsFilePath: resp.GetResult() });
-      }
-    };
-
-    const createCMSSignatureCallback = (resp: Response) => {
-      if (resp.IsOK()) {
-        setState({ ...state, cmsSignatureSigned: resp.GetResult() });
-        return;
-      }
-
-      resp.HandleError(
-        ValidationType.Password && ValidationType.PasswordAttemps
-      );
-    };
-
-    const getKeysCallback = (resp: Response) => {
-      if (resp.IsOK()) {
-        const k: string[] = [];
-        resp
-          .GetResult()
-          .split("\n")
-          .forEach((el) => {
-            if (isNullOrEmpty(el)) {
-              return;
-            }
-            k.push(el);
-          });
-        setState({
-          ...state,
-          keys: k,
-          keyAlias: k.length > 0 ? extractKeyAlias(k[0]) : "",
-          method: client.GetSubjectDN(
-            state.alias,
-            state.path,
-            k.length > 0 ? extractKeyAlias(k[0]) : "",
-            state.password
-          ),
-        });
-        return;
-      }
-      resp.HandleError(
-        ValidationType.Password &&
-          ValidationType.PasswordAttemps &&
-          ValidationType.KeyType
-      );
-    };
-
-    const getSubjectDNCallback = (resp: Response) => {
-      if (resp.IsOK()) {
-        setState({ ...state, subjectDN: resp.GetResult() });
-        return;
-      }
-
-      resp.HandleError(
-        ValidationType.Password && ValidationType.PasswordAttemps
-      );
-    };
-
-    ws.current!.onmessage = (e: any) => {
-      if (e.data === "--heartbeat--") {
-        return;
-      }
-
-      const data = JSON.parse(e.data);
-      if (data !== null) {
-        const resp = new Response(
-          data.result,
-          data.secondResult,
-          data.errorCode
-        );
-
-        switch (state.method) {
-          case MethodName.BrowseKeyStore:
-            browseKeyStoreCallback(resp);
-            break;
-          case MethodName.ShowFileChooser:
-            showFileChooserCallback(resp);
-            break;
-          case MethodName.GetKeys:
-            getKeysCallback(resp);
-            break;
-          case MethodName.GetSubjectDN:
-            getSubjectDNCallback(resp);
-            break;
-          case MethodName.CreateCMSSignature:
-            createCMSSignatureCallback(resp);
-            break;
-            break;
-          default:
-            break;
-        }
-      }
-    };
-  }, [state, setState]);
+  }, []);
 
   return (
     <div className="app-root modal-open">
@@ -178,14 +47,7 @@ const App = observer((props: any) => {
               main.logged ? (
                 <Redirect to={{ pathname: "/" }} />
               ) : (
-                <LoginPage
-                  request={request}
-                  ready={ready}
-                  setState={setState}
-                  state={state}
-                  client={client}
-                  main={main}
-                />
+                <LoginPage request={request} main={main} />
               )
             }
             exact
@@ -195,37 +57,17 @@ const App = observer((props: any) => {
             path="/"
             component={() =>
               main.getRole === "Agent" && main.isReg ? (
-                <Registration
-                  setState={setState}
-                  state={state}
-                  client={client}
-                  main={main}
-                  request={request}
-                />
+                <Registration main={main} request={request} />
               ) : main.getRole === "Service Desk" ? (
-                <ServiceDesk
-                  setState={setState}
-                  state={state}
-                  client={client}
-                  request={request}
-                  main={main}
-                />
+                <ServiceDesk request={request} main={main} />
               ) : main.getRole === "Agent" ? (
-                <Partners
-                  setState={setState}
-                  state={state}
-                  client={client}
-                  request={request}
-                  main={main}
-                />
+                <Partners request={request} main={main} />
+              ) : main.getRole === "Agree" ? (
+                <Agree request={request} main={main} />
+              ) : main.getRole === "Signer" ? (
+                <Signers request={request} main={main} />
               ) : (
-                <Request
-                  setState={setState}
-                  state={state}
-                  client={client}
-                  request={request}
-                  main={main}
-                />
+                <Request request={request} main={main} />
               )
             }
             exact
@@ -234,14 +76,7 @@ const App = observer((props: any) => {
             main={main}
             path="/partner/:id"
             component={(props: any) => (
-              <PartnersInner
-                {...props}
-                setState={setState}
-                state={state}
-                client={client}
-                main={main}
-                request={request}
-              />
+              <PartnersInner {...props} main={main} request={request} />
             )}
             exact
           />
@@ -249,14 +84,23 @@ const App = observer((props: any) => {
             main={main}
             path="/request/:id"
             component={(props: any) => (
-              <RequestInner
-                {...props}
-                setState={setState}
-                state={state}
-                client={client}
-                main={main}
-                request={request}
-              />
+              <RequestInner {...props} main={main} request={request} />
+            )}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/agree/:id"
+            component={(props: any) => (
+              <AgreeInner {...props} main={main} request={request} />
+            )}
+            exact
+          />
+          <PrivateRoute
+            main={main}
+            path="/signers/:id"
+            component={(props: any) => (
+              <SignersInner {...props} main={main} request={request} />
             )}
             exact
           />
@@ -270,42 +114,21 @@ const App = observer((props: any) => {
             main={main}
             path="/service-desk/:id"
             component={(props: any) => (
-              <ServiceDeskInner
-                {...props}
-                setState={setState}
-                state={state}
-                client={client}
-                main={main}
-                request={request}
-              />
+              <ServiceDeskInner {...props} main={main} request={request} />
             )}
             exact
           />
           <PrivateRoute
             main={main}
             path="/contractors"
-            component={() => (
-              <Contractors
-                setState={setState}
-                state={state}
-                client={client}
-                request={request}
-              />
-            )}
+            component={() => <Contractors main={main} request={request} />}
             exact
           />
           <PrivateRoute
             main={main}
             path="/contractors/:id"
             component={(props: any) => (
-              <ContractorsInner
-                setState={setState}
-                state={state}
-                client={client}
-                {...props}
-                main={main}
-                request={request}
-              />
+              <ContractorsInner {...props} main={main} request={request} />
             )}
             exact
           />
@@ -313,57 +136,26 @@ const App = observer((props: any) => {
             main={main}
             path="/service/:id"
             component={(props: any) => (
-              <ServiceInner
-                setState={setState}
-                state={state}
-                client={client}
-                {...props}
-                main={main}
-                request={request}
-              />
+              <ServiceInner {...props} main={main} request={request} />
             )}
             exact
           />
           <PrivateRoute
             main={main}
             path="/profile"
-            component={() => (
-              <Profile
-                setState={setState}
-                state={state}
-                client={client}
-                main={main}
-                request={request}
-              />
-            )}
+            component={() => <Profile main={main} request={request} />}
             exact
           />
           <PrivateRoute
             main={main}
             path="/organization"
-            component={() => (
-              <MyOrganization
-                setState={setState}
-                state={state}
-                client={client}
-                main={main}
-                request={request}
-              />
-            )}
+            component={() => <MyOrganization main={main} request={request} />}
             exact
           />
           <PrivateRoute
             main={main}
             path="/request-new"
-            component={() => (
-              <PartnersNew
-                setState={setState}
-                state={state}
-                client={client}
-                main={main}
-                request={request}
-              />
-            )}
+            component={() => <PartnersNew main={main} request={request} />}
             exact
           />
         </Switch>

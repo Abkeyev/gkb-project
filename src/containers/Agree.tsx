@@ -1,17 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
-import moment from "moment";
+import { Link } from "react-router-dom";
+import { ServiceCommon, Request } from "../api/Models/ServiceModels";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
-import {
-  ServiceCommon,
-  Request as RequestModel,
-  Client,
-} from "../api/Models/ServiceModels";
+import moment from "moment";
 import { OnClickOutside } from "../utils/utils";
 
-const Request = observer((props: any) => {
+const Signers = observer((props: any) => {
   const { request, main } = props;
   const [advance, setAdvance] = useState(false);
   const [sort, setSort] = useState(false);
@@ -27,42 +24,29 @@ const Request = observer((props: any) => {
   const catRef = useRef<any>(null);
   const serviceRef = useRef<any>(null);
 
-  React.useEffect(() => {
-    request.getRequests();
-    request.getMineRequest(main.clientData.user.id);
-    request.getClients();
-    request.getClientServiceType();
-    request.getClientTypes();
+  useEffect(() => {
+    request.getClientRequests(main.clientData.client.id);
   }, []);
 
   OnClickOutside(catRef, () => setCategory(false));
   OnClickOutside(serviceRef, () => setService(false));
 
-  const filterRequests = (type: number[] = [], isMine: boolean = false) => {
-    const req = isMine
-      ? request._getMineRequests &&
-        request._getMineRequests
-          .slice()
-          .sort((a: RequestModel, b: RequestModel) => {
-            return (
-              new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime()
-            );
-          })
-          .reverse()
-      : request._getRequests &&
-        request._getRequests
-          .slice()
-          .sort((a: RequestModel, b: RequestModel) => {
-            return (
-              new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime()
-            );
-          })
-          .reverse();
+  const filterRequests = (type: number[] = []) => {
+    const req =
+      request._getRequests &&
+      request._getRequests
+        .slice()
+        .sort((a: Request, b: Request) => {
+          return (
+            new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime()
+          );
+        })
+        .reverse();
     if (sortTitle === "сначала старые") req.reverse();
     return req.length > 0
       ? req
           .filter(
-            (cc: RequestModel) =>
+            (cc: Request) =>
               cc.client.longname
                 .toLocaleLowerCase()
                 .includes(bin.toLocaleLowerCase()) ||
@@ -70,15 +54,15 @@ const Request = observer((props: any) => {
                 .toLocaleLowerCase()
                 .includes(bin.toLocaleLowerCase())
           )
-          .filter((ccc: RequestModel) =>
+          .filter((ccc: Request) =>
             services.length === 0 ? true : services.includes(ccc.service_type)
           )
-          .filter((ccc: RequestModel) =>
+          .filter((ccc: Request) =>
             categories.length === 0
               ? true
               : categories.includes(ccc.service_category)
           )
-          .filter((r: RequestModel) =>
+          .filter((r: Request) =>
             type.length === 0 ? true : type.includes(r.request_status)
           )
       : [];
@@ -102,10 +86,8 @@ const Request = observer((props: any) => {
               >
                 <div>
                   <TabList>
-                    <Tab>Нераспределенные</Tab>
-                    <Tab>Мои</Tab>
+                    <Tab>На подписание</Tab>
                     <Tab>Подписанные</Tab>
-                    <Tab>В архиве</Tab>
                   </TabList>
                 </div>
                 <div className="filter mb-24">
@@ -369,11 +351,9 @@ const Request = observer((props: any) => {
                   <div className="tab-content tab-1">
                     <h3 className="title-subhead mb-16">
                       Найдено{" "}
-                      <span className="number">
-                        {filterRequests([6]).length}
-                      </span>
+                      <span className="number">{filterRequests().length}</span>
                     </h3>
-                    {filterRequests([6]).length === 0 ? (
+                    {filterRequests().length === 0 ? (
                       "Заявки отсутствуют."
                     ) : (
                       <table className="table req-table">
@@ -387,9 +367,9 @@ const Request = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filterRequests([6]).map((r: RequestModel) => (
+                          {filterRequests().map((r: Request) => (
                             <tr
-                              onClick={() => history.push(`/request/${r.id}`)}
+                              onClick={() => history.push(`/partner/${r.id}`)}
                             >
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
@@ -413,15 +393,16 @@ const Request = observer((props: any) => {
                     )}
                   </div>
                 </TabPanel>
+
                 <TabPanel>
                   <div className="tab-content tab-2">
                     <h3 className="title-subhead mb-16">
                       На подпись{" "}
                       <span className="number">
-                        {filterRequests([12], true).length}
+                        {filterRequests([11]).length}
                       </span>
                     </h3>
-                    {filterRequests([12]).length === 0 ? (
+                    {filterRequests([11]).length === 0 ? (
                       "Заявки отсутствуют."
                     ) : (
                       <table className="table req-table">
@@ -435,9 +416,9 @@ const Request = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filterRequests([12], true).map((r: RequestModel) => (
+                          {filterRequests([11]).map((r: Request) => (
                             <tr
-                              onClick={() => history.push(`/request/${r.id}`)}
+                              onClick={() => history.push(`/partner/${r.id}`)}
                             >
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
@@ -465,14 +446,10 @@ const Request = observer((props: any) => {
                     <h3 className="title-subhead mb-16">
                       Активные{" "}
                       <span className="number">
-                        {
-                          filterRequests([7, 11, 12, 13, 15, 16, 18], true)
-                            .length
-                        }
+                        {filterRequests([12]).length}
                       </span>
                     </h3>
-                    {filterRequests([7, 11, 12, 13, 15, 16, 18], true)
-                      .length === 0 ? (
+                    {filterRequests([12]).length === 0 ? (
                       "Заявки отсутствуют."
                     ) : (
                       <table className="table req-table">
@@ -486,108 +463,9 @@ const Request = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filterRequests(
-                            [7, 11, 12, 13, 15, 16, 18],
-                            true
-                          ).map((r: RequestModel) => (
+                          {filterRequests([12]).map((r: Request) => (
                             <tr
-                              onClick={() => history.push(`/request/${r.id}`)}
-                            >
-                              <td>{r.client.bin}</td>
-                              <td>{r.client.longname}</td>
-
-                              <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                              </td>
-                              <td>
-                                {
-                                  request._getClientServiceType.find(
-                                    (t: ServiceCommon) =>
-                                      t.id === r.service_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    )}
-                  </div>
-                </TabPanel>
-                <TabPanel>
-                  <div className="tab-content tab-3">
-                    <h3 className="title-subhead mb-16">
-                      Подписанные{" "}
-                      <span className="number">
-                        {filterRequests([11]).length}
-                      </span>
-                    </h3>
-                    <p>
-                      Список подписанных заявок контрагентов, которые стали
-                      партнерами ГКБ
-                    </p>
-                    {filterRequests([11]).length === 0 ? (
-                      "Список пуст."
-                    ) : (
-                      <table className="table req-table">
-                        <thead>
-                          <tr>
-                            <th>БИН</th>
-                            <th>Организации</th>
-                            <th>Категория деятельности</th>
-                            <th>Сервис</th>
-                            <th>Дата поступления</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filterRequests([11]).map((r: RequestModel) => (
-                            <tr
-                              onClick={() => history.push(`/request/${r.id}`)}
-                            >
-                              <td>{r.client.bin}</td>
-                              <td>{r.client.longname}</td>
-
-                              <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                              </td>
-                              <td>
-                                {
-                                  request._getClientServiceType.find(
-                                    (t: ServiceCommon) =>
-                                      t.id === r.service_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    )}
-                  </div>
-                </TabPanel>
-                <TabPanel>
-                  <div className="tab-content tab-4">
-                    <h3 className="title-subhead mb-16">В архиве</h3>
-                    <p>Список архивированных заявок</p>
-                    {filterRequests([9]).length === 0 ? (
-                      "Список пуст."
-                    ) : (
-                      <table className="table req-table">
-                        <thead>
-                          <tr>
-                            <th>БИН</th>
-                            <th>Организации</th>
-                            <th>Категория деятельности</th>
-                            <th>Сервис</th>
-                            <th>Дата поступления</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filterRequests([9]).map((r: RequestModel) => (
-                            <tr
-                              onClick={() => history.push(`/request/${r.id}`)}
+                              onClick={() => history.push(`/partner/${r.id}`)}
                             >
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
@@ -612,6 +490,17 @@ const Request = observer((props: any) => {
                   </div>
                 </TabPanel>
               </Tabs>
+
+              <div className="req-inner-footer">
+                <div className="container">
+                  <Link
+                    to="/request-new"
+                    className="button btn-primary btn-icon ml-32 d-inline-flex"
+                  >
+                    <i className="azla add-plusRound-icon"></i> Новая заявка
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -619,4 +508,4 @@ const Request = observer((props: any) => {
     </div>
   );
 });
-export default Request;
+export default Signers;

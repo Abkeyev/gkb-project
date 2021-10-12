@@ -12,7 +12,7 @@ import FileReaderInput from "react-file-reader-input";
 import { Modal } from "../containers";
 
 const PartnersNew = observer((props: any) => {
-  const { main, request, setState, state, client } = props;
+  const { main, request } = props;
   const [tab, setTab] = React.useState("1");
   const [file1, setFile1] = React.useState<any | null>(null);
   const [file2, setFile2] = React.useState<any | null>(null);
@@ -88,15 +88,7 @@ const PartnersNew = observer((props: any) => {
 
   return (
     <>
-      {main.isOpenModal && (
-        <Modal
-          main={main}
-          setState={setState}
-          state={state}
-          client={client}
-          request={request}
-        />
-      )}
+      {main.isOpenModal && <Modal main={main} request={request} />}
       <div className="main-body">
         <div className="container">
           <div className="row">
