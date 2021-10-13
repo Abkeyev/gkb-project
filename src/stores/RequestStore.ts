@@ -806,6 +806,8 @@ class RequestStore {
       (await api.service.sendType(this._getRequest).then((res) => {
         runInAction(async () => {
           this._getRequest && (await this.getRequest(this._getRequest.id));
+          this.agreeGroup = [];
+          this.agreeUsers = [];
         });
       }));
   }
