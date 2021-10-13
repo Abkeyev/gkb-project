@@ -1272,7 +1272,13 @@ const Modal = observer((props: any) => {
                                 />
                                 <span className="name">{r.full_name}</span>
                               </div>
-                              <span className="position">{r.position}</span>
+                              <span className="position">
+                                {
+                                  request._getPosition.find(
+                                    (t: ServiceCommon) => t.id === r.position
+                                  )?.name
+                                }
+                              </span>
                             </li>
                           ))}
                     </ul>

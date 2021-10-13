@@ -451,7 +451,8 @@ class RequestStore {
           (this.documents = r.filter(
             (rr: Documents) => rr.doc_status !== "Archive"
           ))
-      );
+      )
+      .then(() => runInAction(async () => await this.getDocumentsCategories()));
   }
 
   async getClientTypes() {
