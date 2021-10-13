@@ -673,7 +673,10 @@ const RequestInner = observer((props: any) => {
                                               Подписано
                                             </span>
                                           ) : request._getRequest
-                                              .request_status === 6 ? (
+                                              .request_status === 6 &&
+                                            request._getRequest
+                                              .manager_signer_user ===
+                                              main.clientData.user.id ? (
                                             <div className="d-flex-align-c-spaceb">
                                               <button
                                                 className="btn-status-signatory btn-icon active mr-16"
@@ -700,7 +703,9 @@ const RequestInner = observer((props: any) => {
                                               ></button>
                                             </div>
                                           ) : request._getRequest
-                                              .request_status === 9 ? (
+                                              .request_status === 9 ||
+                                            request._getRequest
+                                              .request_status === 6 ? (
                                             <button className="btn-status-signatory btn-icon not-active">
                                               <i className="azla edit-white-icon"></i>
                                               Подписать
