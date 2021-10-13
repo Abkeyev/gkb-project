@@ -28,7 +28,6 @@ const ServiceDesk = observer((props: any) => {
 
   React.useEffect(() => {
     request.getRequests();
-    request.getMineRequest(main.clientData.user.id);
     request.getClients();
     request.getClientServiceType();
     request.getClientTypes();
@@ -353,10 +352,10 @@ const ServiceDesk = observer((props: any) => {
                     <h3 className="title-subhead mb-16">
                       Найдено{" "}
                       <span className="number">
-                        {filterRequests([10]).length}
+                        {filterRequests([3]).length}
                       </span>
                     </h3>
-                    {filterRequests([10]).length === 0 ? (
+                    {filterRequests([3]).length === 0 ? (
                       "Заявки отсутствуют."
                     ) : (
                       <table className="table req-table">
@@ -370,7 +369,7 @@ const ServiceDesk = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filterRequests([10]).map((r: RequestModel) => (
+                          {filterRequests([3]).map((r: RequestModel) => (
                             <tr
                               onClick={() =>
                                 history.push(`/service-desk/${r.id}`)
