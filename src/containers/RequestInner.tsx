@@ -1894,7 +1894,12 @@ const RequestInner = observer((props: any) => {
                                           d && request.downloadDocument(d)
                                         }
                                       >
-                                        {d.doc_name}
+                                        {
+                                          request._getTypes.find(
+                                            (t: any) => t.id === d.doc_type
+                                          )?.name
+                                        }
+                                        {d.doc_type}
                                       </span>
                                     </li>
                                   ))}
