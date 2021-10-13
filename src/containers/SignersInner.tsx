@@ -619,7 +619,13 @@ const SignersInner = observer((props: any) => {
                                               <button
                                                 className="btn-status-signatory btn-icon active mr-16"
                                                 onClick={() =>
-                                                  request.getBase64()
+                                                  request
+                                                    .signDocGkb(true)
+                                                    .then(
+                                                      () =>
+                                                        (request.signType =
+                                                          true)
+                                                    )
                                                 }
                                               >
                                                 <i className="azla edit-white-icon"></i>
@@ -1098,7 +1104,13 @@ const SignersInner = observer((props: any) => {
                                                   <button
                                                     className="btn-status-signatory btn-icon active mr-16"
                                                     onClick={() =>
-                                                      request.getBase64()
+                                                      request
+                                                        .signDocGkb(true)
+                                                        .then(
+                                                          () =>
+                                                            (request.signType =
+                                                              true)
+                                                        )
                                                     }
                                                   >
                                                     <i className="azla edit-white-icon"></i>

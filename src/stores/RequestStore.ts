@@ -311,7 +311,6 @@ class RequestStore {
   async getDogovor(id: number) {
     await api.service.getDogovor(id).then((d: Documents[]) => {
       this.dogovors = d;
-      d && this.setDoc(d[d.length - 1]);
     });
   }
 

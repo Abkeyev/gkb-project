@@ -421,7 +421,7 @@ const Request = observer((props: any) => {
                         {filterRequests([6], true).length}
                       </span>
                     </h3>
-                    {filterRequests([6]).length === 0 ? (
+                    {filterRequests([6], true).length === 0 ? (
                       "Заявки отсутствуют."
                     ) : (
                       <table className="table req-table">

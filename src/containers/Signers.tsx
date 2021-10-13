@@ -11,10 +11,10 @@ const Signers = observer((props: any) => {
   const history = useHistory();
 
   useEffect(() => {
-    request.getClientRequests(main.clientData.client.id);
+    request.getRequests();
   }, []);
 
-  const filterRequests = (type: number[] = []) => {
+  const filterRequests = (type: number[] = [], user: number | null = null) => {
     const req =
       request._getRequests &&
       request._getRequests
@@ -26,9 +26,13 @@ const Signers = observer((props: any) => {
         })
         .reverse();
     return req.length > 0
-      ? req.filter((r: Request) =>
-          type.length === 0 ? true : type.includes(r.request_status)
-        )
+      ? req
+          .filter((r: Request) =>
+            user === null ? true : r.responsible_user === user
+          )
+          .filter((r: Request) =>
+            type.length === 0 ? true : type.includes(r.request_status)
+          )
       : [];
   };
 
@@ -59,7 +63,9 @@ const Signers = observer((props: any) => {
                   <div className="tab-content tab-1">
                     <h3 className="title-subhead mb-16">
                       На подписание{" "}
-                      <span className="number">{filterRequests().length}</span>
+                      <span className="number">
+                        {filterRequests([6], main.clientData.user.id).length}
+                      </span>
                     </h3>
                     {filterRequests().length === 0 ? (
                       "Заявки отсутствуют."
@@ -75,24 +81,30 @@ const Signers = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filterRequests().map((r: Request) => (
-                            <tr onClick={() => history.push(`/signer/${r.id}`)}>
-                              <td>{r.client.bin}</td>
-                              <td>{r.client.longname}</td>
-                              <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                              </td>
-                              <td>
-                                {
-                                  request._getClientServiceType.find(
-                                    (t: ServiceCommon) =>
-                                      t.id === r.service_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
-                            </tr>
-                          ))}
+                          {filterRequests([6], main.clientData.user.id).map(
+                            (r: Request) => (
+                              <tr
+                                onClick={() => history.push(`/signer/${r.id}`)}
+                              >
+                                <td>{r.client.bin}</td>
+                                <td>{r.client.longname}</td>
+                                <td>
+                                  {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                </td>
+                                <td>
+                                  {
+                                    request._getClientServiceType.find(
+                                      (t: ServiceCommon) =>
+                                        t.id === r.service_type
+                                    )?.name
+                                  }
+                                </td>
+                                <td>
+                                  {moment(r.reg_date).format("DD.MM.YYYY")}
+                                </td>
+                              </tr>
+                            )
+                          )}
                         </tbody>
                       </table>
                     )}
@@ -104,10 +116,11 @@ const Signers = observer((props: any) => {
                     <h3 className="title-subhead mb-16">
                       На согласование{" "}
                       <span className="number">
-                        {filterRequests([11]).length}
+                        {filterRequests([11], main.clientData.user.id).length}
                       </span>
                     </h3>
-                    {filterRequests([11]).length === 0 ? (
+                    {filterRequests([11], main.clientData.user.id).length ===
+                    0 ? (
                       "Заявки отсутствуют."
                     ) : (
                       <table className="table req-table">
@@ -121,24 +134,30 @@ const Signers = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filterRequests([11]).map((r: Request) => (
-                            <tr onClick={() => history.push(`/signer/${r.id}`)}>
-                              <td>{r.client.bin}</td>
-                              <td>{r.client.longname}</td>
-                              <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
-                              </td>
-                              <td>
-                                {
-                                  request._getClientServiceType.find(
-                                    (t: ServiceCommon) =>
-                                      t.id === r.service_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
-                            </tr>
-                          ))}
+                          {filterRequests([11], main.clientData.user.id).map(
+                            (r: Request) => (
+                              <tr
+                                onClick={() => history.push(`/signer/${r.id}`)}
+                              >
+                                <td>{r.client.bin}</td>
+                                <td>{r.client.longname}</td>
+                                <td>
+                                  {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                </td>
+                                <td>
+                                  {
+                                    request._getClientServiceType.find(
+                                      (t: ServiceCommon) =>
+                                        t.id === r.service_type
+                                    )?.name
+                                  }
+                                </td>
+                                <td>
+                                  {moment(r.reg_date).format("DD.MM.YYYY")}
+                                </td>
+                              </tr>
+                            )
+                          )}
                         </tbody>
                       </table>
                     )}
