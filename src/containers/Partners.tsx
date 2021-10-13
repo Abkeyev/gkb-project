@@ -399,10 +399,10 @@ const Partners = observer((props: any) => {
                     <h3 className="title-subhead mb-16">
                       На подпись{" "}
                       <span className="number">
-                        {filterRequests([11]).length}
+                        {filterRequests([9]).length}
                       </span>
                     </h3>
-                    {filterRequests([11]).length === 0 ? (
+                    {filterRequests([9]).length === 0 ? (
                       "Заявки отсутствуют."
                     ) : (
                       <table className="table req-table">
@@ -416,7 +416,7 @@ const Partners = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filterRequests([11]).map((r: Request) => (
+                          {filterRequests([9]).map((r: Request) => (
                             <tr
                               onClick={() => history.push(`/partner/${r.id}`)}
                             >
@@ -446,10 +446,10 @@ const Partners = observer((props: any) => {
                     <h3 className="title-subhead mb-16">
                       Активные{" "}
                       <span className="number">
-                        {filterRequests([12]).length}
+                        {filterRequests([6]).length}
                       </span>
                     </h3>
-                    {filterRequests([12]).length === 0 ? (
+                    {filterRequests([6]).length === 0 ? (
                       "Заявки отсутствуют."
                     ) : (
                       <table className="table req-table">
@@ -463,7 +463,7 @@ const Partners = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filterRequests([12]).map((r: Request) => (
+                          {filterRequests([6]).map((r: Request) => (
                             <tr
                               onClick={() => history.push(`/partner/${r.id}`)}
                             >

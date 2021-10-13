@@ -612,7 +612,9 @@ const SignersInner = observer((props: any) => {
                                           </p>
 
                                           {request._getRequest
-                                            .request_status === 6 ? (
+                                            .request_status === 6 &&
+                                          main.clientData.user.id ===
+                                            request._getManSigner.id ? (
                                             <div className="d-flex-align-c-spaceb">
                                               <button
                                                 className="btn-status-signatory btn-icon active mr-16"

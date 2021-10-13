@@ -353,10 +353,10 @@ const ServiceDesk = observer((props: any) => {
                     <h3 className="title-subhead mb-16">
                       Найдено{" "}
                       <span className="number">
-                        {filterRequests([3, 4, 5]).length}
+                        {filterRequests([10]).length}
                       </span>
                     </h3>
-                    {filterRequests([3, 4, 5]).length === 0 ? (
+                    {filterRequests([10]).length === 0 ? (
                       "Заявки отсутствуют."
                     ) : (
                       <table className="table req-table">
@@ -370,7 +370,7 @@ const ServiceDesk = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filterRequests([3, 4, 5]).map((r: RequestModel) => (
+                          {filterRequests([10]).map((r: RequestModel) => (
                             <tr
                               onClick={() =>
                                 history.push(`/service-desk/${r.id}`)

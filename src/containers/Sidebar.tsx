@@ -81,6 +81,32 @@ const Sidebar = observer((props: any) => {
                     </NavLink>
                   </li>
                 </>
+              ) : main.role === "Signer" ? (
+                <>
+                  <li>
+                    <NavLink
+                      to="/"
+                      className="link-list"
+                      activeClassName="active"
+                      exact
+                    >
+                      <i className="azla blank-alt-icon"></i>
+                      <span className="text">Заявки</span>
+                      <span className="status"></span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/profile"
+                      className="link-list"
+                      activeClassName="active"
+                    >
+                      <i className="azla user-icon"></i>
+                      <span className="text">Мой профиль</span>
+                      <span className="status"></span>
+                    </NavLink>
+                  </li>
+                </>
               ) : main.role === "Manager" ? (
                 <>
                   <li>
