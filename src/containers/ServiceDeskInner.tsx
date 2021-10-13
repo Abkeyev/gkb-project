@@ -1204,7 +1204,7 @@ const ServiceDeskInner = observer((props: any) => {
                                             )
                                           }
                                         >
-                                          Протокол тестирования.docx
+                                          Протокол тестирования
                                         </span>
                                       </li>
                                     )}
@@ -1218,7 +1218,7 @@ const ServiceDeskInner = observer((props: any) => {
                                             )
                                           }
                                         >
-                                          Акт тестирования.pdf
+                                          Акт тестирования
                                         </span>
                                       </li>
                                     )}

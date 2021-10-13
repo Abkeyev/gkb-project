@@ -1672,7 +1672,7 @@ const RequestInner = observer((props: any) => {
                                             )
                                           }
                                         >
-                                          Протокол тестирования.docx
+                                          Протокол тестирования
                                         </span>
                                       </li>
                                     )}
@@ -1686,7 +1686,7 @@ const RequestInner = observer((props: any) => {
                                             )
                                           }
                                         >
-                                          Акт тестирования.pdf
+                                          Акт тестирования
                                         </span>
                                       </li>
                                     )}
@@ -1898,7 +1898,6 @@ const RequestInner = observer((props: any) => {
                                             (t: any) => t.id === d.doc_type
                                           )?.name
                                         }
-                                        {d.doc_type}
                                       </span>
                                     </li>
                                   ))}
