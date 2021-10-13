@@ -450,7 +450,7 @@ const RequestInner = observer((props: any) => {
                                 : "tab-btn"
                             }
                             onClick={() => {
-                              if (request._getRequest.request_status === 11) {
+                              if (request._getRequest.request_status === 2) {
                                 main.setModal(true);
                                 main.setModalType(3);
                               }
