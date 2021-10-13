@@ -202,7 +202,6 @@ class MainStore {
         password,
       })
       .then((r) => {
-        console.log(r, "rrr");
         r &&
           runInAction(async () => {
             await this.setTokens(r);

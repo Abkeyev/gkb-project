@@ -61,8 +61,8 @@ const PartnersInner = observer((props: any) => {
                         request._getClient.longname}
                     </h1>
 
-                    {(request._getRequest.request_status === 10 ||
-                      request._getRequest.request_status === 9) && (
+                    {(request._getRequest.request_status === 4 ||
+                      request._getRequest.request_status === 3) && (
                       <div className="mess-card alert-mess mb-32 col-md-8">
                         <h5>Заявка отклонена менеджером</h5>
                         <p>Причина: {request._getRequest.client_comment}</p>
@@ -149,30 +149,29 @@ const PartnersInner = observer((props: any) => {
                     </div>
                   </div>
 
-                  {request._getRequest.request_status === 15 &&
+                  {request._getRequest.request_status === 10 &&
                   request._getRequest.request_stepper === 3 ? (
                     <div className="mess-card mb-32 col-md-8">
                       Пожалуйста, ожидайте. Заявленная форма доступа проверяется
                       департаментом Servicedesk.
                     </div>
-                  ) : request._getRequest.request_status === 9 &&
-                    request._getRequest.request_status === 10 ? (
+                  ) : request._getRequest.request_status === 3 &&
+                    request._getRequest.request_status === 4 ? (
                     ""
-                  ) : request._getRequest.request_status === 11 &&
-                    request._getRequest.request_status === 12 ? (
+                  ) : request._getRequest.request_status === 6 &&
+                    request._getRequest.request_status === 9 ? (
                     <div className="mess-card mb-32 col-md-8">
                       Договор отправлен на подписание. Пожалуйста, ожидайте
                       подписания документа представителями контрагента и АО
                       “Государственное Кредитное Бюро”.
                     </div>
-                  ) : request._getRequest.request_status === 6 &&
-                    request._getRequest.request_status === 7 ? (
+                  ) : request._getRequest.request_status === 2 ? (
                     <div className="mess-card mb-32 col-md-8">
                       Данная заявка проходит первичную проверку менеджером.
                       Пожалуйста, ожидайте. Среднее время проверки составляет 1
                       день.
                     </div>
-                  ) : request._getRequest.request_stepper === 1 ? (
+                  ) : request._getRequest.request_status === 1 ? (
                     <div className="mess-card mb-32 col-md-8">
                       Менеджер заявки готовит ваш договор на рассмотрение.
                       Приложенный договор вы увидите в секции “История изменения
@@ -553,7 +552,7 @@ const PartnersInner = observer((props: any) => {
                                             </p>
 
                                             {request._getRequest
-                                              .request_status === 11 ? (
+                                              .request_status === 9 ? (
                                               <div className="d-flex-align-c-spaceb">
                                                 <button
                                                   className="btn-status-signatory btn-icon active mr-16"
@@ -573,15 +572,13 @@ const PartnersInner = observer((props: any) => {
                                                 ></button>
                                               </div>
                                             ) : request._getRequest
-                                                .request_status === 12 ||
+                                                .request_status === 6 ||
                                               request._getRequest
-                                                .request_status === 8 ||
+                                                .request_status === 7 ||
                                               request._getRequest
-                                                .request_status === 15 ||
+                                                .request_status === 10 ||
                                               request._getRequest
-                                                .request_status === 16 ||
-                                              request._getRequest
-                                                .request_status === 18 ? (
+                                                .request_status === 8 ? (
                                               <span className="btn-status done">
                                                 Подписано
                                               </span>
@@ -665,10 +662,11 @@ const PartnersInner = observer((props: any) => {
                               <div
                                 className={`card-collapse-header ${
                                   request._getRequest.request_stepper === 3 ||
+                                  request._getRequest.request_status === 5 ||
+                                  request._getRequest.request_status === 6 ||
+                                  request._getRequest.request_status === 7 ||
                                   request._getRequest.request_status === 8 ||
-                                  request._getRequest.request_status === 11 ||
-                                  request._getRequest.request_status === 12 ||
-                                  request._getRequest.request_status === 14
+                                  request._getRequest.request_status === 10
                                     ? "success"
                                     : ""
                                 }`}
@@ -680,22 +678,25 @@ const PartnersInner = observer((props: any) => {
                                       request._getRequest.request_stepper ===
                                         3 ||
                                       request._getRequest.request_status ===
+                                        5 ||
+                                      request._getRequest.request_status ===
+                                        6 ||
+                                      request._getRequest.request_status ===
+                                        7 ||
+                                      request._getRequest.request_status ===
                                         8 ||
-                                      request._getRequest.request_status ===
-                                        11 ||
-                                      request._getRequest.request_status ===
-                                        12 ||
-                                      request._getRequest.request_status === 14
+                                      request._getRequest.request_status === 10
                                         ? "title-subhead mb-0 done-success"
                                         : "title-subhead mb-0"
                                     }
                                   >
                                     {request._getRequest.request_stepper ===
                                       3 ||
+                                    request._getRequest.request_status === 5 ||
+                                    request._getRequest.request_status === 6 ||
+                                    request._getRequest.request_status === 7 ||
                                     request._getRequest.request_status === 8 ||
-                                    request._getRequest.request_status === 11 ||
-                                    request._getRequest.request_status === 12 ||
-                                    request._getRequest.request_status === 14
+                                    request._getRequest.request_status === 10
                                       ? "Договор согласован"
                                       : `На согласование: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}
                                   </h3>
@@ -868,8 +869,8 @@ const PartnersInner = observer((props: any) => {
                               className={`card-collapse tab-num-1 ${
                                 request.signNotType ? "" : "collapsed "
                               } ${
-                                request._getRequest.request_status === 7 ||
-                                request._getRequest.request_status === 13
+                                request._getRequest.request_status === 2 ||
+                                request._getRequest.request_status === 11
                                   ? "disabled"
                                   : ""
                               }`}
@@ -996,7 +997,7 @@ const PartnersInner = observer((props: any) => {
                                                 }
                                               </p>
                                               {request._getRequest
-                                                .request_status === 11 ? (
+                                                .request_status === 9 ? (
                                                 <div className="d-flex-align-c-spaceb">
                                                   <button
                                                     className="btn-status-signatory btn-icon active mr-16"
@@ -1017,15 +1018,13 @@ const PartnersInner = observer((props: any) => {
                                                   ></button>
                                                 </div>
                                               ) : request._getRequest
-                                                  .request_status === 12 ||
+                                                  .request_status === 6 ||
                                                 request._getRequest
-                                                  .request_status === 15 ||
+                                                  .request_status === 7 ||
                                                 request._getRequest
-                                                  .request_status === 16 ||
+                                                  .request_status === 8 ||
                                                 request._getRequest
-                                                  .request_status === 18 ||
-                                                request._getRequest
-                                                  .request_status === 8 ? (
+                                                  .request_status === 10 ? (
                                                 <span className="btn-status done">
                                                   Подписано
                                                 </span>
@@ -1090,9 +1089,9 @@ const PartnersInner = observer((props: any) => {
                                                   Подписано
                                                 </span>
                                               ) : request._getRequest
-                                                  .request_status === 11 ||
+                                                  .request_status === 6 ||
                                                 request._getRequest
-                                                  .request_status === 12 ? (
+                                                  .request_status === 9 ? (
                                                 <span className="btn-status not-active">
                                                   Не Подписано
                                                 </span>
@@ -1360,7 +1359,7 @@ const PartnersInner = observer((props: any) => {
                                   <h3 className="title-subhead mb-16">
                                     Ключи доступа
                                   </h3>
-                                  {request._getRequest.request_status === 15 ? (
+                                  {request._getRequest.request_status === 10 ? (
                                     <div className="keys-loader mb-32">
                                       <h5>
                                         Тестовые ключи не предоставлены.
@@ -1573,7 +1572,7 @@ const PartnersInner = observer((props: any) => {
                     <></>
                   )}
                   {request._getRequest.request_stepper === 4 &&
-                    request._getRequest.request_status === 16 && (
+                    request._getRequest.request_status === 8 && (
                       <div className="req-inner-footer">
                         <div className="container">
                           <div className="left">

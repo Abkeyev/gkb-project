@@ -28,6 +28,7 @@ const MyOrganization = observer((props: any) => {
 
   React.useEffect(() => {
     request.getPosition();
+    request.getClients();
     request.getClient(main.clientData.client.id);
     request.getClientUser(main.clientData.client.id);
     request.getClientUsersForAdd(main.clientData.client.id);
@@ -650,7 +651,7 @@ const MyOrganization = observer((props: any) => {
                           <tbody>
                             {request._getRequests &&
                               request._getRequests
-                                .filter((c: Request) => c.request_status === 8)
+                                .filter((c: Request) => c.request_status === 7)
                                 .map((c: Request) => (
                                   <tr
                                     onClick={() =>

@@ -60,8 +60,8 @@ const ServiceDeskInner = observer((props: any) => {
                         request._getClient.longname}
                     </h1>
 
-                    {(request._getRequest.request_status === 10 ||
-                      request._getRequest.request_status === 9) && (
+                    {(request._getRequest.request_status === 4 ||
+                      request._getRequest.request_status === 3) && (
                       <div className="mess-card alert-mess mb-32 col-md-8">
                         <h5>Заявка отклонена менеджером</h5>
                         <p>Причина: {request._getRequest.client_comment}</p>
@@ -511,15 +511,13 @@ const ServiceDeskInner = observer((props: any) => {
                                             </p>
 
                                             {request._getRequest
-                                              .request_status === 12 ||
+                                              .request_status === 6 ||
+                                            request._getRequest
+                                              .request_status === 7 ||
                                             request._getRequest
                                               .request_status === 8 ||
                                             request._getRequest
-                                              .request_status === 15 ||
-                                            request._getRequest
-                                              .request_status === 16 ||
-                                            request._getRequest
-                                              .request_status === 18 ? (
+                                              .request_status === 10 ? (
                                               <span className="btn-status done">
                                                 Подписано
                                               </span>
@@ -596,10 +594,12 @@ const ServiceDeskInner = observer((props: any) => {
                               <div
                                 className={`card-collapse-header ${
                                   request._getRequest.request_stepper === 3 ||
+                                  request._getRequest.request_status === 5 ||
+                                  request._getRequest.request_status === 6 ||
+                                  request._getRequest.request_status === 7 ||
                                   request._getRequest.request_status === 8 ||
-                                  request._getRequest.request_status === 11 ||
-                                  request._getRequest.request_status === 12 ||
-                                  request._getRequest.request_status === 14
+                                  request._getRequest.request_status === 9 ||
+                                  request._getRequest.request_status === 10
                                     ? "success"
                                     : ""
                                 }`}
@@ -611,22 +611,28 @@ const ServiceDeskInner = observer((props: any) => {
                                       request._getRequest.request_stepper ===
                                         3 ||
                                       request._getRequest.request_status ===
+                                        5 ||
+                                      request._getRequest.request_status ===
+                                        6 ||
+                                      request._getRequest.request_status ===
+                                        7 ||
+                                      request._getRequest.request_status ===
                                         8 ||
                                       request._getRequest.request_status ===
-                                        11 ||
-                                      request._getRequest.request_status ===
-                                        12 ||
-                                      request._getRequest.request_status === 14
+                                        9 ||
+                                      request._getRequest.request_status === 10
                                         ? "title-subhead mb-0 done-success"
                                         : "title-subhead mb-0"
                                     }
                                   >
                                     {request._getRequest.request_stepper ===
                                       3 ||
+                                    request._getRequest.request_status === 5 ||
+                                    request._getRequest.request_status === 6 ||
+                                    request._getRequest.request_status === 7 ||
                                     request._getRequest.request_status === 8 ||
-                                    request._getRequest.request_status === 11 ||
-                                    request._getRequest.request_status === 12 ||
-                                    request._getRequest.request_status === 14
+                                    request._getRequest.request_status === 9 ||
+                                    request._getRequest.request_status === 10
                                       ? "Договор согласован"
                                       : `На согласование: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}
                                   </h3>
@@ -793,8 +799,8 @@ const ServiceDeskInner = observer((props: any) => {
                               className={`card-collapse tab-num-1 ${
                                 request.signNotType ? "" : "collapsed "
                               } ${
-                                request._getRequest.request_status === 7 ||
-                                request._getRequest.request_status === 13
+                                request._getRequest.request_status === 2 ||
+                                request._getRequest.request_status === 11
                                   ? "disabled"
                                   : ""
                               }`}
@@ -914,15 +920,13 @@ const ServiceDeskInner = observer((props: any) => {
                                                 {request._getConSigner.position}
                                               </p>
                                               {request._getRequest
-                                                .request_status === 12 ||
+                                                .request_status === 6 ||
                                               request._getRequest
-                                                .request_status === 15 ||
+                                                .request_status === 7 ||
                                               request._getRequest
-                                                .request_status === 16 ||
+                                                .request_status === 8 ||
                                               request._getRequest
-                                                .request_status === 18 ||
-                                              request._getRequest
-                                                .request_status === 8 ? (
+                                                .request_status === 10 ? (
                                                 <span className="btn-status done">
                                                   Подписано
                                                 </span>
@@ -979,7 +983,7 @@ const ServiceDeskInner = observer((props: any) => {
                                                   Подписано
                                                 </span>
                                               ) : request._getRequest
-                                                  .request_status === 12 ? (
+                                                  .request_status === 6 ? (
                                                 <span className="btn-status not-active">
                                                   Не Подписано
                                                 </span>
@@ -1440,7 +1444,7 @@ const ServiceDeskInner = observer((props: any) => {
                   )}
 
                   {request._getRequest.request_stepper === 3 &&
-                    request._getRequest.request_status !== 10 && (
+                    request._getRequest.request_status === 10 && (
                       <div className="req-inner-footer">
                         <div className="container">
                           <div className="left">

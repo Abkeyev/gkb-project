@@ -86,7 +86,7 @@ const App = observer((props: any) => {
           />
           <PrivateRoute
             main={main}
-            path="/signers/:id"
+            path="/signer/:id"
             component={(props: any) => (
               <SignersInner {...props} main={main} request={request} />
             )}

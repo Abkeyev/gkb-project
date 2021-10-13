@@ -344,12 +344,13 @@ class RequestStore {
       this.getDogovor(id);
       r.request_stepper > 1 && this.setStep(r.request_stepper);
       if (
-        r.request_status === 11 ||
-        r.request_status === 12 ||
-        r.request_status === 14
+        r.request_status === 5 ||
+        r.request_status === 6 ||
+        r.request_status === 9
       ) {
         this.agreeNotType = false;
         this.signNotType = true;
+        this.signType = true;
       } else {
         this.signType = true;
         this.agreeNotType = true;
@@ -889,17 +890,12 @@ class RequestStore {
     });
   }
 
-  async sendReviews() {
-    this.reviews.map((r: AgreeResult) => {
-      r.review_data.map(
-        (d: Result) =>
-          this._getRequest &&
-          this.addReview(this._getRequest.id, {
-            user_id: d.user_id,
-            is_approved: true,
-          })
-      );
-    });
+  async sendReviews(id: number, is_approved: boolean) {
+    this._getRequest &&
+      this.addReview(this._getRequest.id, {
+        user_id: id,
+        is_approved: is_approved,
+      });
   }
 
   async setDoc(doc: Documents | null) {

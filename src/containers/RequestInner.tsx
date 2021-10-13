@@ -61,20 +61,20 @@ const RequestInner = observer((props: any) => {
                         request._getClient.longname}
                     </h1>
 
-                    {request._getRequest.request_status === 10 ||
-                    request._getRequest.request_status === 9 ? (
+                    {request._getRequest.request_status === 4 ||
+                    request._getRequest.request_status === 3 ? (
                       <div className="mess-card alert-mess mb-32 col-md-8">
                         <h5>Заявка отклонена менеджером</h5>
                         <p>Причина: {request._getRequest.client_comment}</p>
                       </div>
-                    ) : request._getRequest.request_status === 15 &&
+                    ) : request._getRequest.request_status === 10 &&
                       request._getRequest.request_stepper === 3 ? (
                       <div className="mess-card mb-32 col-md-8">
                         Пожалуйста, ожидайте. Заявленная форма доступа
                         проверяется департаментом Servicedesk.
                       </div>
-                    ) : request._getRequest.request_status === 11 &&
-                      request._getRequest.request_status === 12 ? (
+                    ) : request._getRequest.request_status === 6 &&
+                      request._getRequest.request_status === 9 ? (
                       <div className="mess-card mb-32 col-md-8">
                         Договор отправлен на подписание. Пожалуйста, ожидайте
                         подписания документа представителями контрагента и АО
@@ -164,7 +164,7 @@ const RequestInner = observer((props: any) => {
                     </div>
                   </div>
 
-                  {request._getRequest.request_status === 6 && (
+                  {request._getRequest.request_status === 1 && (
                     <div className="mess-card mb-32 col-md-8">
                       Назначьте менеджера заявки.
                     </div>
@@ -450,7 +450,7 @@ const RequestInner = observer((props: any) => {
                                 : "tab-btn"
                             }
                             onClick={() => {
-                              if (request._getRequest.request_status === 13) {
+                              if (request._getRequest.request_status === 11) {
                                 main.setModal(true);
                                 main.setModalType(3);
                               }
@@ -465,7 +465,7 @@ const RequestInner = observer((props: any) => {
                                 : "tab-btn"
                             }
                             onClick={() => {
-                              if (request._getRequest.request_status === 7) {
+                              if (request._getRequest.request_status === 2) {
                                 main.setModal(true);
                                 main.setModalType(3);
                               }
@@ -588,9 +588,6 @@ const RequestInner = observer((props: any) => {
                                               }
                                             />
                                             <span className="name">
-                                              {console.log(
-                                                request._getConSigner
-                                              )}
                                               {request._getConSigner.full_name}
                                             </span>
                                           </div>
@@ -608,20 +605,18 @@ const RequestInner = observer((props: any) => {
                                               }
                                             </p>
                                             {request._getRequest
+                                              .request_status === 6 ||
+                                            request._getRequest
+                                              .request_status === 7 ||
+                                            request._getRequest
                                               .request_status === 8 ||
                                             request._getRequest
-                                              .request_status === 12 ||
-                                            request._getRequest
-                                              .request_status === 15 ||
-                                            request._getRequest
-                                              .request_status === 16 ||
-                                            request._getRequest
-                                              .request_status === 18 ? (
+                                              .request_status === 10 ? (
                                               <span className="btn-status done">
                                                 Подписано
                                               </span>
                                             ) : request._getRequest
-                                                .request_status === 11 ? (
+                                                .request_status === 6 ? (
                                               <span className="btn-status not-active">
                                                 Не Подписано
                                               </span>
@@ -678,7 +673,7 @@ const RequestInner = observer((props: any) => {
                                               Подписано
                                             </span>
                                           ) : request._getRequest
-                                              .request_status === 12 ? (
+                                              .request_status === 6 ? (
                                             <div className="d-flex-align-c-spaceb">
                                               <button
                                                 className="btn-status-signatory btn-icon active mr-16"
@@ -705,7 +700,7 @@ const RequestInner = observer((props: any) => {
                                               ></button>
                                             </div>
                                           ) : request._getRequest
-                                              .request_status === 11 ? (
+                                              .request_status === 9 ? (
                                             <button className="btn-status-signatory btn-icon not-active">
                                               <i className="azla edit-white-icon"></i>
                                               Подписать
@@ -720,7 +715,7 @@ const RequestInner = observer((props: any) => {
                                 )}
                               </div>
 
-                              {request._getRequest.request_status === 7 && (
+                              {request._getRequest.request_status === 2 && (
                                 <div className="collapse-footer">
                                   <button
                                     type="button"
@@ -749,10 +744,12 @@ const RequestInner = observer((props: any) => {
                               <div
                                 className={`card-collapse-header ${
                                   request._getRequest.request_stepper === 3 ||
+                                  request._getRequest.request_status === 5 ||
+                                  request._getRequest.request_status === 6 ||
+                                  request._getRequest.request_status === 7 ||
                                   request._getRequest.request_status === 8 ||
-                                  request._getRequest.request_status === 11 ||
-                                  request._getRequest.request_status === 12 ||
-                                  request._getRequest.request_status === 14
+                                  request._getRequest.request_status === 9 ||
+                                  request._getRequest.request_status === 10
                                     ? "success"
                                     : ""
                                 }`}
@@ -764,22 +761,28 @@ const RequestInner = observer((props: any) => {
                                       request._getRequest.request_stepper ===
                                         3 ||
                                       request._getRequest.request_status ===
+                                        5 ||
+                                      request._getRequest.request_status ===
+                                        6 ||
+                                      request._getRequest.request_status ===
+                                        7 ||
+                                      request._getRequest.request_status ===
                                         8 ||
                                       request._getRequest.request_status ===
-                                        11 ||
-                                      request._getRequest.request_status ===
-                                        12 ||
-                                      request._getRequest.request_status === 14
+                                        9 ||
+                                      request._getRequest.request_status === 10
                                         ? "title-subhead mb-0 done-success"
                                         : "title-subhead mb-0"
                                     }
                                   >
                                     {request._getRequest.request_stepper ===
                                       3 ||
+                                    request._getRequest.request_status === 5 ||
+                                    request._getRequest.request_status === 6 ||
+                                    request._getRequest.request_status === 7 ||
                                     request._getRequest.request_status === 8 ||
-                                    request._getRequest.request_status === 11 ||
-                                    request._getRequest.request_status === 12 ||
-                                    request._getRequest.request_status === 14
+                                    request._getRequest.request_status === 9 ||
+                                    request._getRequest.request_status === 10
                                       ? "Договор согласован"
                                       : `На согласование: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}
                                   </h3>
@@ -937,12 +940,7 @@ const RequestInner = observer((props: any) => {
                                                                 Согласовано
                                                               </span>
                                                             ) : (
-                                                              <span
-                                                                onClick={() =>
-                                                                  request.sendReviews()
-                                                                }
-                                                                className="btn-status not-active"
-                                                              >
+                                                              <span className="btn-status not-active">
                                                                 Не согласовано
                                                               </span>
                                                             )}
@@ -1091,7 +1089,7 @@ const RequestInner = observer((props: any) => {
                                                     </ul>
                                                   </div>
                                                   {request._getRequest
-                                                    .request_status === 13 &&
+                                                    .request_status === 11 &&
                                                     request._getReviews
                                                       .length === 0 && (
                                                       <span
@@ -1115,7 +1113,7 @@ const RequestInner = observer((props: any) => {
                                           )}
                                     </div>
                                     {request._getRequest.request_status ===
-                                      13 &&
+                                      11 &&
                                       request._getReviews.length === 0 && (
                                         <div
                                           className="method-add-group"
@@ -1142,7 +1140,7 @@ const RequestInner = observer((props: any) => {
                                   </div>
                                 </div>
 
-                                {request._getRequest.request_status === 13 &&
+                                {request._getRequest.request_status === 11 &&
                                   request._getReviews.length === 0 && (
                                     <div className="collapse-footer">
                                       <button
@@ -1170,8 +1168,8 @@ const RequestInner = observer((props: any) => {
                               className={`card-collapse tab-num-1 ${
                                 request.signNotType ? "" : "collapsed "
                               } ${
-                                request._getRequest.request_status === 7 ||
-                                request._getRequest.request_status === 13
+                                request._getRequest.request_status === 2 ||
+                                request._getRequest.request_status === 11
                                   ? "disabled"
                                   : ""
                               }`}
@@ -1299,20 +1297,18 @@ const RequestInner = observer((props: any) => {
                                                 }
                                               </p>
                                               {request._getRequest
-                                                .request_status === 11 ? (
+                                                .request_status === 9 ? (
                                                 <span className="btn-status not-active">
                                                   Не Подписано
                                                 </span>
                                               ) : request._getRequest
-                                                  .request_status === 12 ||
+                                                  .request_status === 6 ||
                                                 request._getRequest
-                                                  .request_status === 15 ||
+                                                  .request_status === 7 ||
                                                 request._getRequest
-                                                  .request_status === 16 ||
+                                                  .request_status === 8 ||
                                                 request._getRequest
-                                                  .request_status === 18 ||
-                                                request._getRequest
-                                                  .request_status === 8 ? (
+                                                  .request_status === 10 ? (
                                                 <span className="btn-status done">
                                                   Подписано
                                                 </span>
@@ -1374,41 +1370,14 @@ const RequestInner = observer((props: any) => {
                                                   Подписано
                                                 </span>
                                               ) : request._getRequest
-                                                  .request_status === 12 ? (
-                                                <div className="d-flex-align-c-spaceb">
-                                                  <button
-                                                    className="btn-status-signatory btn-icon active mr-16"
-                                                    onClick={() =>
-                                                      request
-                                                        .signDocGkb()
-                                                        .then(() => {
-                                                          request.agreeNotType =
-                                                            false;
-                                                          request.signNotType =
-                                                            true;
-                                                        })
-                                                    }
-                                                  >
-                                                    <i className="azla edit-white-icon"></i>
-                                                    Подписать
-                                                  </button>
-
-                                                  <button
-                                                    onClick={() => {
-                                                      main.setModal(true);
-                                                      main.setModalType(1);
-                                                    }}
-                                                    className="delete-signatory"
-                                                  ></button>
-                                                </div>
+                                                  .request_status === 6 ||
+                                                request._getRequest
+                                                  .request_status === 9 ? (
+                                                <span className="btn-status not-active">
+                                                  Не Подписано
+                                                </span>
                                               ) : request._getRequest
-                                                  .request_status === 11 ? (
-                                                <button className="btn-status-signatory btn-icon not-active">
-                                                  <i className="azla edit-white-icon"></i>
-                                                  Подписать
-                                                </button>
-                                              ) : request._getRequest
-                                                  .request_status === 14 ? (
+                                                  .request_status === 2 ? (
                                                 <i
                                                   onClick={() =>
                                                     request
@@ -1517,13 +1486,12 @@ const RequestInner = observer((props: any) => {
                                           onClick={() => {
                                             if (
                                               request._getRequest
-                                                .request_status === 7
+                                                .request_status === 2
                                             ) {
                                               main.setModal(true);
                                               main.setModalType(2);
                                               request.setTempDoc(d);
                                             } else {
-                                              console.log(d, "dd");
                                               request.setDoc(d);
                                             }
                                           }}
@@ -1736,7 +1704,7 @@ const RequestInner = observer((props: any) => {
                                   <h3 className="title-subhead mb-16">
                                     Ключи доступа
                                   </h3>
-                                  {request._getRequest.request_status === 15 ? (
+                                  {request._getRequest.request_status === 10 ? (
                                     <div className="keys-loader mb-32">
                                       <h5>
                                         Тестовые ключи не предоставлены.
@@ -1955,7 +1923,8 @@ const RequestInner = observer((props: any) => {
                     <div className="container">
                       {request._getManUser &&
                       request._getRequest.request_stepper === 1 &&
-                      request._getRequest.request_status !== 9 ? (
+                      (request._getRequest.request_status === 2 ||
+                        request._getRequest.request_status === 4) ? (
                         <div className="manager-req mrl-32">
                           <div className="left">
                             <p>Менеджер заявки</p>
@@ -1973,7 +1942,7 @@ const RequestInner = observer((props: any) => {
                             </div>
                           </div>
 
-                          {request._getRequest.request_status === 10 ? (
+                          {request._getRequest.request_status === 4 ? (
                             <div className="right alert">
                               <p>Заявка отклонена</p>
                               <button
@@ -1981,7 +1950,7 @@ const RequestInner = observer((props: any) => {
                                 onClick={() =>
                                   request
                                     .updateRequest({
-                                      request_status: 9,
+                                      request_status: 3,
                                       client: request._getRequest.client.id,
                                     })
                                     .then(() => {
@@ -2020,9 +1989,7 @@ const RequestInner = observer((props: any) => {
                           )}
                         </div>
                       ) : request._getRequest.request_stepper === 1 &&
-                        request._getRequest.request_status !== 9 &&
-                        request._getRequest.request_status !== 10 &&
-                        request.step === 1 ? (
+                        request._getRequest.request_status === 1 ? (
                         <button
                           type="button"
                           onClick={() => {
@@ -2034,7 +2001,7 @@ const RequestInner = observer((props: any) => {
                           Назначить
                         </button>
                       ) : (
-                        <></>
+                        ""
                       )}
                     </div>
                   </div>

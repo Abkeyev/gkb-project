@@ -32,19 +32,19 @@ const PartnersNew = observer((props: any) => {
         (request._getDocuments as Documents[])
           .filter((dd: Documents) => dd.doc_status === "Active")
           .map((d: Documents) => {
-            if (d.doc_type === 4 && d.doc_category === 1) {
+            if (d.doc_type === 3 && d.doc_category === 1) {
               setFile1(d);
               setFilesId([...filesId, d.id]);
-            } else if (d.doc_type === 5 && d.doc_category === 1) {
+            } else if (d.doc_type === 4 && d.doc_category === 1) {
               setFile2(d);
               setFilesId([...filesId, d.id]);
-            } else if (d.doc_type === 6 && d.doc_category === 1) {
+            } else if (d.doc_type === 5 && d.doc_category === 1) {
               setFile3(d);
               setFilesId([...filesId, d.id]);
-            } else if (d.doc_type === 7 && d.doc_category === 1) {
+            } else if (d.doc_type === 6 && d.doc_category === 2) {
               setFile4(d);
               setFilesId([...filesId, d.id]);
-            } else if (d.doc_type === 1 && d.doc_category === 1) {
+            } else if (d.doc_type === 2 && d.doc_category === 1) {
               setFile5(d);
               setFilesId([...filesId, d.id]);
             }
@@ -170,7 +170,7 @@ const PartnersNew = observer((props: any) => {
                             <FileReaderInput
                               as="url"
                               accept="image/jpeg,image/png,image/gif,application/pdf"
-                              onChange={(e, f) => handleChange(e, f, 4, 1, 1)}
+                              onChange={(e, f) => handleChange(e, f, 3, 1, 1)}
                             >
                               <button className="btn-icon add">
                                 <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -205,7 +205,7 @@ const PartnersNew = observer((props: any) => {
                             <FileReaderInput
                               as="url"
                               accept="image/jpeg,image/png,image/gif,application/pdf"
-                              onChange={(e, f) => handleChange(e, f, 5, 1, 2)}
+                              onChange={(e, f) => handleChange(e, f, 4, 1, 2)}
                             >
                               <button className="btn-icon add">
                                 <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -239,7 +239,7 @@ const PartnersNew = observer((props: any) => {
                             <FileReaderInput
                               as="url"
                               accept="image/jpeg,image/png,image/gif,application/pdf"
-                              onChange={(e, f) => handleChange(e, f, 6, 1, 3)}
+                              onChange={(e, f) => handleChange(e, f, 5, 1, 3)}
                             >
                               <button className="btn-icon add">
                                 <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -275,7 +275,7 @@ const PartnersNew = observer((props: any) => {
                             <FileReaderInput
                               as="url"
                               accept="image/jpeg,image/png,image/gif,application/pdf"
-                              onChange={(e, f) => handleChange(e, f, 7, 1, 4)}
+                              onChange={(e, f) => handleChange(e, f, 6, 2, 4)}
                             >
                               <button className="btn-icon add">
                                 <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -307,7 +307,7 @@ const PartnersNew = observer((props: any) => {
                             <FileReaderInput
                               as="url"
                               accept="image/jpeg,image/png,image/gif,application/pdf"
-                              onChange={(e, f) => handleChange(e, f, 1, 1, 5)}
+                              onChange={(e, f) => handleChange(e, f, 2, 1, 5)}
                             >
                               <button className="btn-icon add">
                                 <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -450,7 +450,7 @@ const PartnersNew = observer((props: any) => {
                             client_user: main.usersNew.map(
                               (u: ClientUser) => u.id
                             ),
-                            request_status: 6,
+                            request_status: 1,
                             request_stepper: 1,
                           };
                         }}

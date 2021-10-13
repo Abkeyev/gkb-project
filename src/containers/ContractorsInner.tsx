@@ -537,7 +537,7 @@ const ContractorsInner = observer((props: any) => {
                         <tbody>
                           {request._getRequests &&
                             request._getRequests
-                              .filter((c: Request) => c.request_status === 8)
+                              .filter((c: Request) => c.request_status === 7)
                               .map((c: Request) => (
                                 <tr
                                   onClick={() =>

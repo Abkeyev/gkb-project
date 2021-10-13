@@ -1,7 +1,6 @@
 import { Route, Redirect, RouteProps } from "react-router-dom";
 
 interface PrivateRouteProps extends RouteProps {
-  // tslint:disable-next-line:no-any
   component: any;
   main: any;
 }

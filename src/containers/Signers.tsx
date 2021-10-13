@@ -25,7 +25,11 @@ const Signers = observer((props: any) => {
           );
         })
         .reverse();
-    return req.length > 0 ? req : [];
+    return req.length > 0
+      ? req.filter((r: Request) =>
+          type.length === 0 ? true : type.includes(r.request_status)
+        )
+      : [];
   };
 
   return (
@@ -72,12 +76,9 @@ const Signers = observer((props: any) => {
                         </thead>
                         <tbody>
                           {filterRequests().map((r: Request) => (
-                            <tr
-                              onClick={() => history.push(`/partner/${r.id}`)}
-                            >
+                            <tr onClick={() => history.push(`/signer/${r.id}`)}>
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
-
                               <td>
                                 {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
                               </td>
@@ -121,12 +122,9 @@ const Signers = observer((props: any) => {
                         </thead>
                         <tbody>
                           {filterRequests([11]).map((r: Request) => (
-                            <tr
-                              onClick={() => history.push(`/partner/${r.id}`)}
-                            >
+                            <tr onClick={() => history.push(`/signer/${r.id}`)}>
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
-
                               <td>
                                 {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
                               </td>
@@ -170,12 +168,9 @@ const Signers = observer((props: any) => {
                         </thead>
                         <tbody>
                           {filterRequests([11]).map((r: Request) => (
-                            <tr
-                              onClick={() => history.push(`/partner/${r.id}`)}
-                            >
+                            <tr onClick={() => history.push(`/signer/${r.id}`)}>
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
-
                               <td>
                                 {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
                               </td>

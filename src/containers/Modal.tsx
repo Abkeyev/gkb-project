@@ -239,7 +239,7 @@ const Modal = observer((props: any) => {
                     onClick={() =>
                       request
                         .updateRequest({
-                          request_status: 13,
+                          request_status: 11,
                           client: request._getRequest.client.id,
                         })
                         .then(() => {

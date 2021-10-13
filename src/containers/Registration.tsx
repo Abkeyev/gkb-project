@@ -2,7 +2,6 @@ import React from "react";
 import { observer } from "mobx-react";
 import "react-tabs/style/react-tabs.css";
 import { Documents, ServiceCommon } from "../api/Models/ServiceModels";
-import FileReaderInput from "react-file-reader-input";
 import moment from "moment";
 import { runInAction } from "mobx";
 
@@ -34,19 +33,19 @@ const Registration = observer((props: any) => {
         (request._getDocuments as Documents[])
           .filter((dd: Documents) => dd.doc_status === "Active")
           .map((d: Documents) => {
-            if (d.doc_type === 4 && d.doc_category === 1) {
+            if (d.doc_type === 3 && d.doc_category === 1) {
               setFile1(d);
-            } else if (d.doc_type === 5 && d.doc_category === 1) {
+            } else if (d.doc_type === 4 && d.doc_category === 1) {
               setFile2(d);
-            } else if (d.doc_type === 6 && d.doc_category === 1) {
+            } else if (d.doc_type === 5 && d.doc_category === 1) {
               setFile3(d);
-            } else if (d.doc_type === 7 && d.doc_category === 1) {
+            } else if (d.doc_type === 6 && d.doc_category === 2) {
               setFile4(d);
-            } else if (d.doc_type === 1 && d.doc_category === 1) {
+            } else if (d.doc_type === 2 && d.doc_category === 1) {
               setFile5(d);
-            } else if (d.doc_type === 2 && d.doc_category === 4) {
+            } else if (d.doc_type === 12 && d.doc_category === 1) {
               setFile6(d);
-            } else if (d.doc_type === 8 && d.doc_category === 3) {
+            } else if (d.doc_type === 6 && d.doc_category === 2) {
               setFile7(d);
             }
           });
@@ -271,7 +270,7 @@ const Registration = observer((props: any) => {
                           >
                             <input
                               type="file"
-                              onChange={(e) => handleChange(e, 4, 1, 1)}
+                              onChange={(e) => handleChange(e, 3, 1, 1)}
                               style={{ display: "none" }}
                             />
                             <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -309,7 +308,7 @@ const Registration = observer((props: any) => {
                           >
                             <input
                               type="file"
-                              onChange={(e) => handleChange(e, 5, 1, 2)}
+                              onChange={(e) => handleChange(e, 4, 1, 2)}
                               style={{ display: "none" }}
                             />
                             <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -346,7 +345,7 @@ const Registration = observer((props: any) => {
                           >
                             <input
                               type="file"
-                              onChange={(e) => handleChange(e, 6, 1, 3)}
+                              onChange={(e) => handleChange(e, 5, 1, 3)}
                               style={{ display: "none" }}
                             />
                             <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -385,7 +384,7 @@ const Registration = observer((props: any) => {
                           >
                             <input
                               type="file"
-                              onChange={(e) => handleChange(e, 7, 1, 4)}
+                              onChange={(e) => handleChange(e, 6, 2, 4)}
                               style={{ display: "none" }}
                             />
                             <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -420,7 +419,7 @@ const Registration = observer((props: any) => {
                           >
                             <input
                               type="file"
-                              onChange={(e) => handleChange(e, 1, 1, 5)}
+                              onChange={(e) => handleChange(e, 2, 1, 5)}
                               style={{ display: "none" }}
                             />
                             <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -600,7 +599,7 @@ const Registration = observer((props: any) => {
                           >
                             <input
                               type="file"
-                              onChange={(e) => handleChange(e, 2, 4, 6)}
+                              onChange={(e) => handleChange(e, 12, 1, 6)}
                               style={{ display: "none" }}
                             />
                             <i className="azla size-18 pin-primary-icon mr-8"></i>
@@ -638,7 +637,7 @@ const Registration = observer((props: any) => {
                           >
                             <input
                               type="file"
-                              onChange={(e) => handleChange(e, 8, 3, 7)}
+                              onChange={(e) => handleChange(e, 6, 2, 7)}
                               style={{ display: "none" }}
                             />
                             <i className="azla size-18 pin-primary-icon mr-8"></i>
