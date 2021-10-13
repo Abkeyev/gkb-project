@@ -26,6 +26,7 @@ const Partners = observer((props: any) => {
 
   useEffect(() => {
     request.getClientTypes();
+    request.getClientServiceType();
     request.getClientRequests(main.clientData.client.id);
   }, []);
 
@@ -61,7 +62,7 @@ const Partners = observer((props: any) => {
           .filter((ccc: Request) =>
             categories.length === 0
               ? true
-              : categories.includes(ccc.service_category)
+              : categories.includes(ccc.client.client_type)
           )
           .filter((r: Request) =>
             type.length === 0 ? true : type.includes(r.request_status)
@@ -145,43 +146,59 @@ const Partners = observer((props: any) => {
                                 Категория деятельности
                               </label>
                             </div>
-                            {request._getClientServiceType
-                              .filter((f: ServiceCommon) =>
-                                f.name.includes(searchService)
-                              )
-                              .map((t: ServiceCommon, index: number) => (
-                                <div className="multi-option option-current">
-                                  <div className="multi-list">
-                                    <div className="form-check gkb-checkbox">
-                                      <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        checked={services.includes(t.id)}
-                                        onClick={() => {
-                                          !services.includes(t.id)
-                                            ? setServices([...services, t.id])
-                                            : setServices([
-                                                ...services.filter(
-                                                  (s) => s !== t.id
-                                                ),
-                                              ]);
-                                        }}
-                                        id={`serviceCheck${t.id}`}
-                                        required
-                                      />
-                                      <label
-                                        className="form-check-label"
-                                        htmlFor={`serviceCheck${t.id}`}
-                                      >
-                                        {t.name}
-                                      </label>
-                                      <div className="invalid-feedback">
-                                        Ошибка
+                            <div className="multi-menu">
+                              <div className="multi-search">
+                                <input
+                                  type="search"
+                                  className="azla form-icon search-icon"
+                                  placeholder="Поиск"
+                                  value={searchService}
+                                  onChange={(e) =>
+                                    setSearchService(e.target.value)
+                                  }
+                                />
+                              </div>
+                              {request._getClientTypes
+                                .filter((f: ServiceCommon) =>
+                                  f.name.includes(searchService)
+                                )
+                                .map((t: ServiceCommon, index: number) => (
+                                  <div className="multi-option option-current">
+                                    <div className="multi-list">
+                                      <div className="form-check gkb-checkbox">
+                                        <input
+                                          className="form-check-input"
+                                          type="checkbox"
+                                          checked={categories.includes(t.id)}
+                                          onClick={() => {
+                                            !categories.includes(t.id)
+                                              ? setCategories([
+                                                  ...categories,
+                                                  t.id,
+                                                ])
+                                              : setCategories([
+                                                  ...categories.filter(
+                                                    (s) => s !== t.id
+                                                  ),
+                                                ]);
+                                          }}
+                                          id={`catCheck${t.id}`}
+                                          required
+                                        />
+                                        <label
+                                          className="form-check-label"
+                                          htmlFor={`catCheck${t.id}`}
+                                        >
+                                          {t.name}
+                                        </label>
+                                        <div className="invalid-feedback">
+                                          Ошибка
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                              ))}
+                                ))}
+                            </div>
                           </div>
                         </div>
 
@@ -355,10 +372,9 @@ const Partners = observer((props: any) => {
                               <td>
                                 {
                                   request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.id
+                                    (t: any) => t.id === r.client.client_type
                                   )?.name
                                 }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
@@ -367,6 +383,7 @@ const Partners = observer((props: any) => {
                                       t.id === r.service_type
                                   )?.name
                                 }
+                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
                             </tr>
@@ -405,14 +422,12 @@ const Partners = observer((props: any) => {
                             >
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
-
                               <td>
                                 {
                                   request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.id
+                                    (t: any) => t.id === r.client.client_type
                                   )?.name
                                 }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
@@ -421,6 +436,7 @@ const Partners = observer((props: any) => {
                                       t.id === r.service_type
                                   )?.name
                                 }
+                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
                             </tr>
@@ -457,14 +473,12 @@ const Partners = observer((props: any) => {
                             >
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
-
                               <td>
                                 {
                                   request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.id
+                                    (t: any) => t.id === r.client.client_type
                                   )?.name
                                 }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
@@ -473,6 +487,7 @@ const Partners = observer((props: any) => {
                                       t.id === r.service_type
                                   )?.name
                                 }
+                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
                             </tr>

@@ -13,6 +13,7 @@ const Signers = observer((props: any) => {
   useEffect(() => {
     request.getRequests();
     request.getClientTypes();
+    request.getClientServiceType();
   }, []);
 
   const filterRequests = (type: number[] = [], user: number | null = null) => {
@@ -199,10 +200,9 @@ const Signers = observer((props: any) => {
                               <td>
                                 {
                                   request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.id
+                                    (t: any) => t.id === r.client.client_type
                                   )?.name
                                 }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
@@ -211,6 +211,7 @@ const Signers = observer((props: any) => {
                                       t.id === r.service_type
                                   )?.name
                                 }
+                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
                             </tr>

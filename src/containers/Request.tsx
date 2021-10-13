@@ -76,7 +76,7 @@ const Request = observer((props: any) => {
           .filter((ccc: RequestModel) =>
             categories.length === 0
               ? true
-              : categories.includes(ccc.service_category)
+              : categories.includes(ccc.client.client_type)
           )
           .filter((r: RequestModel) =>
             type.length === 0 ? true : type.includes(r.request_status)
@@ -163,63 +163,57 @@ const Request = observer((props: any) => {
                               </label>
                             </div>
                             <div className="multi-menu">
-                              <div className="multi-option option-current">
-                                <div className="multi-list">
-                                  <div className="form-check gkb-checkbox">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      checked={categories.includes(1)}
-                                      onClick={() => {
-                                        !categories.includes(1)
-                                          ? setCategories([...categories, 1])
-                                          : setCategories([
-                                              ...categories.filter(
-                                                (s) => s !== 1
-                                              ),
-                                            ]);
-                                      }}
-                                      id={`categoryCheck1`}
-                                      required
-                                    />
-                                    <label
-                                      className="form-check-label"
-                                      htmlFor={`categoryCheck1`}
-                                    >
-                                      БДКИ
-                                    </label>
-                                  </div>
-                                </div>
+                              <div className="multi-search">
+                                <input
+                                  type="search"
+                                  className="azla form-icon search-icon"
+                                  placeholder="Поиск"
+                                  value={searchService}
+                                  onChange={(e) =>
+                                    setSearchService(e.target.value)
+                                  }
+                                />
                               </div>
-
-                              <div className="multi-option option-current">
-                                <div className="multi-list">
-                                  <div className="form-check gkb-checkbox">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      checked={categories.includes(2)}
-                                      onClick={() => {
-                                        !categories.includes(2)
-                                          ? setCategories([...categories, 2])
-                                          : setCategories([
-                                              ...categories.filter(
-                                                (s) => s !== 2
-                                              ),
-                                            ]);
-                                      }}
-                                      id={`categoryCheck2`}
-                                      required
-                                    />
-                                    <label
-                                      className="form-check-label"
-                                      htmlFor={`categoryCheck2`}
-                                    >
-                                      ЕСБД
-                                    </label>
+                              {request._getClientTypes
+                                .filter((f: ServiceCommon) =>
+                                  f.name.includes(searchService)
+                                )
+                                .map((t: ServiceCommon, index: number) => (
+                                  <div className="multi-option option-current">
+                                    <div className="multi-list">
+                                      <div className="form-check gkb-checkbox">
+                                        <input
+                                          className="form-check-input"
+                                          type="checkbox"
+                                          checked={categories.includes(t.id)}
+                                          onClick={() => {
+                                            !categories.includes(t.id)
+                                              ? setCategories([
+                                                  ...categories,
+                                                  t.id,
+                                                ])
+                                              : setCategories([
+                                                  ...categories.filter(
+                                                    (s) => s !== t.id
+                                                  ),
+                                                ]);
+                                          }}
+                                          id={`catCheck${t.id}`}
+                                          required
+                                        />
+                                        <label
+                                          className="form-check-label"
+                                          htmlFor={`catCheck${t.id}`}
+                                        >
+                                          {t.name}
+                                        </label>
+                                        <div className="invalid-feedback">
+                                          Ошибка
+                                        </div>
+                                      </div>
+                                    </div>
                                   </div>
-                                </div>
-                              </div>
+                                ))}
                             </div>
                           </div>
                         </div>
@@ -393,14 +387,12 @@ const Request = observer((props: any) => {
                             >
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
-
                               <td>
                                 {
                                   request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.id
+                                    (t: any) => t.id === r.client.client_type
                                   )?.name
                                 }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
@@ -409,6 +401,7 @@ const Request = observer((props: any) => {
                                       t.id === r.service_type
                                   )?.name
                                 }
+                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
                             </tr>
@@ -446,14 +439,12 @@ const Request = observer((props: any) => {
                             >
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
-
                               <td>
                                 {
                                   request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.id
+                                    (t: any) => t.id === r.client.client_type
                                   )?.name
                                 }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
@@ -462,6 +453,7 @@ const Request = observer((props: any) => {
                                       t.id === r.service_type
                                   )?.name
                                 }
+                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
                             </tr>
@@ -499,14 +491,12 @@ const Request = observer((props: any) => {
                               >
                                 <td>{r.client.bin}</td>
                                 <td>{r.client.longname}</td>
-
                                 <td>
                                   {
                                     request._getClientTypes.find(
-                                      (t: any) => t.id === r.client.id
+                                      (t: any) => t.id === r.client.client_type
                                     )?.name
                                   }
-                                  /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                                 </td>
                                 <td>
                                   {
@@ -515,6 +505,7 @@ const Request = observer((props: any) => {
                                         t.id === r.service_type
                                     )?.name
                                   }
+                                  /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                                 </td>
                                 <td>
                                   {moment(r.reg_date).format("DD.MM.YYYY")}
@@ -559,14 +550,12 @@ const Request = observer((props: any) => {
                             >
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
-
                               <td>
                                 {
                                   request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.id
+                                    (t: any) => t.id === r.client.client_type
                                   )?.name
                                 }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
@@ -575,6 +564,7 @@ const Request = observer((props: any) => {
                                       t.id === r.service_type
                                   )?.name
                                 }
+                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
                             </tr>
@@ -608,14 +598,12 @@ const Request = observer((props: any) => {
                             >
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
-
                               <td>
                                 {
                                   request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.id
+                                    (t: any) => t.id === r.client.client_type
                                   )?.name
                                 }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
@@ -624,6 +612,7 @@ const Request = observer((props: any) => {
                                       t.id === r.service_type
                                   )?.name
                                 }
+                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
                             </tr>
