@@ -812,7 +812,9 @@ class RequestStore {
       (await api.service
         .nextRequestStatus(this._getRequest.id, id)
         .then((res) => {
-          console.log(res);
+          runInAction(async () => {
+            this._getRequest && (await this.getRequest(this._getRequest.id));
+          });
         }));
   }
   async updateRequest(data: any) {

@@ -851,13 +851,17 @@ const SignersInner = observer((props: any) => {
                                                           <span className="btn-status done">
                                                             Согласовано
                                                           </span>
-                                                        ) : false ? (
+                                                        ) : request._getRequest
+                                                            .user.id ===
+                                                          s.user_id ? (
                                                           <div className="d-flex-align-c-spaceb">
                                                             <button
                                                               className="btn-status-signatory btn-icon active mr-16"
                                                               onClick={() =>
                                                                 request.sendReviews(
-                                                                  1,
+                                                                  main
+                                                                    .clientData
+                                                                    .user.id,
                                                                   true
                                                                 )
                                                               }
