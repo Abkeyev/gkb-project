@@ -616,7 +616,7 @@ const RequestInner = observer((props: any) => {
                                                 Подписано
                                               </span>
                                             ) : request._getRequest
-                                                .request_status === 6 ? (
+                                                .request_status === 9 ? (
                                               <span className="btn-status not-active">
                                                 Не Подписано
                                               </span>
