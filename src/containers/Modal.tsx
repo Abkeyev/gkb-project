@@ -1676,7 +1676,7 @@ const Modal = observer((props: any) => {
                     );
                     bodyFormData.append(
                       "doc_type",
-                      main.modalTypeEdit === 1 ? "11" : "12"
+                      main.modalTypeEdit === 1 ? "11" : "10"
                     );
                     request._getRequest &&
                       request
