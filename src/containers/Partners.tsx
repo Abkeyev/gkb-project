@@ -25,6 +25,7 @@ const Partners = observer((props: any) => {
   const serviceRef = useRef<any>(null);
 
   useEffect(() => {
+    request.getClientTypes();
     request.getClientRequests(main.clientData.client.id);
   }, []);
 
@@ -144,65 +145,43 @@ const Partners = observer((props: any) => {
                                 Категория деятельности
                               </label>
                             </div>
-                            <div className="multi-menu">
-                              <div className="multi-option option-current">
-                                <div className="multi-list">
-                                  <div className="form-check gkb-checkbox">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      checked={categories.includes(1)}
-                                      onClick={() => {
-                                        !categories.includes(1)
-                                          ? setCategories([...categories, 1])
-                                          : setCategories([
-                                              ...categories.filter(
-                                                (s) => s !== 1
-                                              ),
-                                            ]);
-                                      }}
-                                      id={`categoryCheck1`}
-                                      required
-                                    />
-                                    <label
-                                      className="form-check-label"
-                                      htmlFor={`categoryCheck1`}
-                                    >
-                                      ЕСБД
-                                    </label>
+                            {request._getClientServiceType
+                              .filter((f: ServiceCommon) =>
+                                f.name.includes(searchService)
+                              )
+                              .map((t: ServiceCommon, index: number) => (
+                                <div className="multi-option option-current">
+                                  <div className="multi-list">
+                                    <div className="form-check gkb-checkbox">
+                                      <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={services.includes(t.id)}
+                                        onClick={() => {
+                                          !services.includes(t.id)
+                                            ? setServices([...services, t.id])
+                                            : setServices([
+                                                ...services.filter(
+                                                  (s) => s !== t.id
+                                                ),
+                                              ]);
+                                        }}
+                                        id={`serviceCheck${t.id}`}
+                                        required
+                                      />
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor={`serviceCheck${t.id}`}
+                                      >
+                                        {t.name}
+                                      </label>
+                                      <div className="invalid-feedback">
+                                        Ошибка
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-
-                              <div className="multi-option option-current">
-                                <div className="multi-list">
-                                  <div className="form-check gkb-checkbox">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      checked={categories.includes(2)}
-                                      onClick={() => {
-                                        !categories.includes(2)
-                                          ? setCategories([...categories, 2])
-                                          : setCategories([
-                                              ...categories.filter(
-                                                (s) => s !== 2
-                                              ),
-                                            ]);
-                                      }}
-                                      id={`categoryCheck2`}
-                                      required
-                                    />
-                                    <label
-                                      className="form-check-label"
-                                      htmlFor={`categoryCheck2`}
-                                    >
-                                      БДКИ
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                              ))}
                           </div>
                         </div>
 

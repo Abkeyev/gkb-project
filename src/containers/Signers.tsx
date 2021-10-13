@@ -12,6 +12,7 @@ const Signers = observer((props: any) => {
 
   useEffect(() => {
     request.getRequests();
+    request.getClientTypes();
   }, []);
 
   const filterRequests = (type: number[] = [], user: number | null = null) => {
