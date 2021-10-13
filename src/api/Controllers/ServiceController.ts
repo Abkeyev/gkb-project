@@ -273,6 +273,11 @@ export class ServiceController {
       baseURL,
     });
   }
+  async getVoteRequest(id: number): Promise<any> {
+    return server.get(`/request/vote/${id}`, {
+      baseURL,
+    });
+  }
   async addRequest(data: any): Promise<any> {
     return server.post(`/client_request`, data, {
       baseURL,

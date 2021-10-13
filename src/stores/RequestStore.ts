@@ -60,6 +60,7 @@ class RequestStore {
   private requests: Request[] | [];
   private reviews: AgreeResult[] | [];
   private mineRequests: Request[] | [];
+  private voteRequests: Request[] | [];
   private documents: Documents[] | [];
   private dogovors: Documents[] | [];
   private doc: Documents | null;
@@ -117,6 +118,9 @@ class RequestStore {
   }
   get _getMineRequests() {
     return this.mineRequests;
+  }
+  get _getVoteRequests() {
+    return this.voteRequests;
   }
   get _getClientUsersForAdd() {
     return this.clientUsersForAdd;
@@ -306,6 +310,12 @@ class RequestStore {
     await api.service
       .getMineRequest(id)
       .then((r: Request[]) => (this.mineRequests = r));
+  }
+
+  async getVoteRequest(id: number) {
+    await api.service
+      .getVoteRequest(id)
+      .then((r: Request[]) => (this.voteRequests = r));
   }
 
   async getDogovor(id: number) {
@@ -973,16 +983,18 @@ class RequestStore {
         .downloadFileForSign(this.request.id)
         .then((response: any) => {
           runInAction(async () => {
-            if (response.base64) {
-              await this.signDoc(response.base64);
+            if (response && response.base64) {
+              this.base64file = response.base64;
+              await this.signDoc();
             }
           });
         }));
   }
 
-  async signDoc(base64: string) {
-    if (base64.length) {
-      await signWithBase64(base64)
+  async signDoc() {
+    console.log(this.base64file, "64");
+    if (this.base64file.length) {
+      await signWithBase64(this.base64file)
         .then((res) => {
           this.afterNca();
         })
@@ -1006,6 +1018,7 @@ class RequestStore {
   constructor() {
     this.requests = [];
     this.mineRequests = [];
+    this.voteRequests = [];
     this.documents = [];
     this.dogovors = [];
     this.categories = [];
@@ -1051,6 +1064,7 @@ class RequestStore {
       getRequests: action.bound,
       getClientRequests: action.bound,
       getMineRequest: action.bound,
+      getVoteRequest: action.bound,
       getRequest: action.bound,
       getDocuments: action.bound,
       getDocumentsCategories: action.bound,
@@ -1155,6 +1169,7 @@ class RequestStore {
       _getUsers: computed,
       _getReviews: computed,
       _getMineRequests: computed,
+      _getVoteRequests: computed,
       _getServiceDesk: computed,
       _getServiceUsers: computed,
       getAgreeStatus: computed,

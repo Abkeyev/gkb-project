@@ -1879,8 +1879,7 @@ const RequestInner = observer((props: any) => {
                                       (dd.doc_type === 1 &&
                                         dd.is_signed_by_both) ||
                                       (dd.doc_type === 8 &&
-                                        dd.is_signed_by_both) ||
-                                      dd.doc_type === 9 ||
+                                        dd.is_signed_by_agent) ||
                                       (dd.doc_type !== 1 &&
                                         dd.doc_type !== 8 &&
                                         dd.doc_type !== 9)
