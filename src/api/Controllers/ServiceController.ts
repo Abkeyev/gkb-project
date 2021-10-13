@@ -283,6 +283,7 @@ export class ServiceController {
       `/client_request/${request.id}`,
       {
         ...request,
+        client: request.client.id,
         request_status: 11,
       },
       {
