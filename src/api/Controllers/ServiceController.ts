@@ -285,7 +285,7 @@ export class ServiceController {
         ...request,
         client: request.client.id,
         is_model_contract: !request.is_model_contract,
-        request_status: !request.is_model_contract ? 2 : 11,
+        request_status: 2,
       },
       {
         baseURL,
