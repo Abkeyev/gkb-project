@@ -379,7 +379,7 @@ const ServiceDesk = observer((props: any) => {
                               <td>{r.client.longname}</td>
 
                               <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                {r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {

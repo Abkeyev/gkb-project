@@ -250,8 +250,8 @@ const RequestInner = observer((props: any) => {
                                 </span>
                                 <span className="right">
                                   {request._getRequest.service_category === 1
-                                    ? "БДКИ"
-                                    : "ЕСБД"}
+                                    ? "ЕСБД"
+                                    : "БДКИ"}
                                 </span>
                               </li>
                               <li>

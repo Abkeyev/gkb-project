@@ -129,7 +129,9 @@ const PartnersNew = observer((props: any) => {
                     onChange={(e) => (request.service = e.target.value)}
                     className="form-control-v mt-24"
                   >
-                    <option>Выберите сервис ЕСБД</option>
+                    <option>
+                      Выберите сервис {tab === "1" ? "ЕСБД" : "БДКИ"}
+                    </option>
                     {request._getClientServiceType.map((c: ServiceCommon) => (
                       <option key={c.id} value={c.id}>
                         {c.name}

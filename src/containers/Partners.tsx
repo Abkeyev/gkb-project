@@ -168,7 +168,7 @@ const Partners = observer((props: any) => {
                                       className="form-check-label"
                                       htmlFor={`categoryCheck1`}
                                     >
-                                      БДКИ
+                                      ЕСБД
                                     </label>
                                   </div>
                                 </div>
@@ -197,7 +197,7 @@ const Partners = observer((props: any) => {
                                       className="form-check-label"
                                       htmlFor={`categoryCheck2`}
                                     >
-                                      ЕСБД
+                                      БДКИ
                                     </label>
                                   </div>
                                 </div>
@@ -375,7 +375,7 @@ const Partners = observer((props: any) => {
                               <td>{r.client.longname}</td>
 
                               <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                {r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
@@ -424,7 +424,7 @@ const Partners = observer((props: any) => {
                               <td>{r.client.longname}</td>
 
                               <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                {r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
@@ -471,7 +471,7 @@ const Partners = observer((props: any) => {
                               <td>{r.client.longname}</td>
 
                               <td>
-                                {r.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                {r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {

@@ -553,7 +553,7 @@ const ContractorsInner = observer((props: any) => {
                                     }
                                   </td>
                                   <td>
-                                    {c.service_category === 1 ? "БДКИ" : "ЕСБД"}
+                                    {c.service_category === 1 ? "ЕСБД" : "БДКИ"}
                                   </td>
                                   <td>
                                     {moment(c.reg_date).format("DD.MM.YYYY")}

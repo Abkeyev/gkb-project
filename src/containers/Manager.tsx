@@ -142,7 +142,7 @@ const Manager = observer((props: any) => {
                                         className="form-check-label"
                                         htmlFor={`categoryCheck1`}
                                       >
-                                        БДКИ
+                                        ЕСБД
                                       </label>
                                     </div>
                                   </div>
@@ -171,7 +171,7 @@ const Manager = observer((props: any) => {
                                         className="form-check-label"
                                         htmlFor={`categoryCheck2`}
                                       >
-                                        ЕСБД
+                                        БДКИ
                                       </label>
                                     </div>
                                   </div>

@@ -75,8 +75,8 @@ const ServiceInner = observer((props: any) => {
                             <span className="left">Категория сервиса:</span>
                             <span className="right">
                               {request._getRequest.service_category === 1
-                                ? "БДКИ"
-                                : "ЕСБД"}
+                                ? "ЕСБД"
+                                : "БДКИ"}
                             </span>
                           </li>
                           <li>
