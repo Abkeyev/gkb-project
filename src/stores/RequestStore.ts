@@ -894,7 +894,12 @@ class RequestStore {
   async toReview(id: number, data: any) {
     await api.service.toReview(id, data).then((res) => {
       runInAction(async () => {
-        await this.getRequest(id);
+        this._getRequest &&
+          (await api.service.sendAgree(this._getRequest).then((res) => {
+            runInAction(async () => {
+              await this.getRequest(id);
+            });
+          }));
       });
     });
   }

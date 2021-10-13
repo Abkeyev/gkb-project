@@ -278,6 +278,18 @@ export class ServiceController {
       baseURL,
     });
   }
+  async sendAgree(request: Request): Promise<any> {
+    return server.put(
+      `/client_request/${request.id}`,
+      {
+        ...request,
+        request_status: 11,
+      },
+      {
+        baseURL,
+      }
+    );
+  }
   async sendType(request: Request): Promise<any> {
     return server.put(
       `/client_request/${request.id}`,
