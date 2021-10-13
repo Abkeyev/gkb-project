@@ -142,7 +142,12 @@ const Signers = observer((props: any) => {
                                 <td>{r.client.bin}</td>
                                 <td>{r.client.longname}</td>
                                 <td>
-                                  {r.service_category === 1 ? "ЕСБД" : "БДКИ"}
+                                  {
+                                    request._getClientTypes.find(
+                                      (t: any) => t.id === r.client.id
+                                    )?.name
+                                  }
+                                  /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                                 </td>
                                 <td>
                                   {
@@ -191,7 +196,12 @@ const Signers = observer((props: any) => {
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
                               <td>
-                                {r.service_category === 1 ? "ЕСБД" : "БДКИ"}
+                                {
+                                  request._getClientTypes.find(
+                                    (t: any) => t.id === r.client.id
+                                  )?.name
+                                }
+                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
                               </td>
                               <td>
                                 {
