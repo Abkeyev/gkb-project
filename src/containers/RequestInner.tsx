@@ -1094,7 +1094,7 @@ const RequestInner = observer((props: any) => {
                                                     </ul>
                                                   </div>
                                                   {request._getRequest
-                                                    .request_status === 11 &&
+                                                    .request_status === 2 &&
                                                     request._getReviews
                                                       .length === 0 && (
                                                       <span
@@ -1117,8 +1117,7 @@ const RequestInner = observer((props: any) => {
                                             )
                                           )}
                                     </div>
-                                    {request._getRequest.request_status ===
-                                      11 &&
+                                    {request._getRequest.request_status === 2 &&
                                       request._getReviews.length === 0 && (
                                         <div
                                           className="method-add-group"
@@ -1145,7 +1144,7 @@ const RequestInner = observer((props: any) => {
                                   </div>
                                 </div>
 
-                                {request._getRequest.request_status === 11 &&
+                                {request._getRequest.request_status === 2 &&
                                   request._getReviews.length === 0 && (
                                     <div className="collapse-footer">
                                       <button
