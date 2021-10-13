@@ -710,28 +710,48 @@ class RequestStore {
       ids.map((id: number, index: number) =>
         promises.push(
           api.service.getDocument(id).then((res: Documents) => {
+            if (res.doc_status !== "Active") return;
             if (res.doc_type === 11) {
               this.testKey = res;
             } else if (res.doc_type === 10) {
               this.prodKey = res;
+            } else if (
+              res.doc_type === 8 &&
+              res.is_signed_by_both &&
+              r &&
+              r.request_stepper > 2
+            ) {
+              this.testAct = res;
+              docs.push(res);
             } else if (res.doc_type === 8) {
               this.testAct = res;
-              res.doc_status === "Active" && docs.push(res);
+              docs.push(res);
             } else if (res.doc_type === 9) {
               this.testProt = res;
-              res.doc_status === "Active" && docs.push(res);
+              docs.push(res);
+            } else if (
+              res.doc_type === 1 &&
+              res.is_signed_by_both &&
+              r &&
+              r.request_stepper > 2
+            ) {
+              this.doc = res;
+              docs.push(res);
+            } else if (res.doc_type === 1) {
+              this.doc = res;
+              docs.push(res);
             } else {
-              res.doc_status === "Active" && docs.push(res);
+              docs.push(res);
             }
-            if (r) {
-              if (r.request_stepper > 2 && index === ids.length - 1)
-                this.downloadSignedFile(r.id);
-              else {
-                if (index === ids.length - 1) {
-                  this.doc = res;
-                }
-              }
-            }
+            // if (r) {
+            //   if (r.request_stepper > 2 && index === ids.length - 1)
+            //     this.downloadSignedFile(r.id);
+            //   else {
+            //     if (index === ids.length - 1) {
+            //       this.doc = res;
+            //     }
+            //   }
+            // }
           })
         )
       );

@@ -1521,8 +1521,19 @@ const PartnersInner = observer((props: any) => {
                           <div className="files-added">
                             <ul className="files-list">
                               {request._getClientDocs &&
-                                (request._getClientDocs as Documents[]).map(
-                                  (d) => (
+                                (request._getClientDocs as Documents[])
+                                  .filter(
+                                    (dd: Documents) =>
+                                      (dd.doc_type === 1 &&
+                                        dd.is_signed_by_both) ||
+                                      (dd.doc_type === 8 &&
+                                        dd.is_signed_by_both) ||
+                                      dd.doc_type === 9 ||
+                                      (dd.doc_type !== 1 &&
+                                        dd.doc_type !== 8 &&
+                                        dd.doc_type !== 9)
+                                  )
+                                  .map((d) => (
                                     <li>
                                       <i className="azla blank-alt-primary-icon"></i>
                                       <span
@@ -1533,8 +1544,7 @@ const PartnersInner = observer((props: any) => {
                                         {d.doc_name}
                                       </span>
                                     </li>
-                                  )
-                                )}
+                                  ))}
                             </ul>
                           </div>
 

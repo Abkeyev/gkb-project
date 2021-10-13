@@ -1403,8 +1403,19 @@ const ServiceDeskInner = observer((props: any) => {
                           <div className="files-added">
                             <ul className="files-list">
                               {request._getClientDocs &&
-                                (request._getClientDocs as Documents[]).map(
-                                  (d) => (
+                                (request._getClientDocs as Documents[])
+                                  .filter(
+                                    (dd: Documents) =>
+                                      (dd.doc_type === 1 &&
+                                        dd.is_signed_by_both) ||
+                                      (dd.doc_type === 8 &&
+                                        dd.is_signed_by_both) ||
+                                      dd.doc_type === 9 ||
+                                      (dd.doc_type !== 1 &&
+                                        dd.doc_type !== 8 &&
+                                        dd.doc_type !== 9)
+                                  )
+                                  .map((d) => (
                                     <li>
                                       <i className="azla blank-alt-primary-icon"></i>
                                       <span
@@ -1415,26 +1426,35 @@ const ServiceDeskInner = observer((props: any) => {
                                         {d.doc_name}
                                       </span>
                                     </li>
-                                  )
-                                )}
+                                  ))}
                             </ul>
                           </div>
                           <h5 className="title-subhead-h5 mb-16">
                             Ключи доступа
                           </h5>
                           <div className="d-flex">
-                            <button
-                              type="button"
-                              className="button btn-secondary mr-16"
-                            >
-                              Скачать тестовые ключи
-                            </button>
-                            <button
-                              type="button"
-                              className="button btn-secondary"
-                            >
-                              Скачать боевые ключи
-                            </button>
+                            {request.testKey && (
+                              <button
+                                type="button"
+                                className="button btn-secondary mr-16"
+                                onClick={() =>
+                                  request.downloadKeys(request.testKey)
+                                }
+                              >
+                                Скачать тестовые ключи
+                              </button>
+                            )}
+                            {request.prodKey && (
+                              <button
+                                type="button"
+                                className="button btn-secondary"
+                                onClick={() =>
+                                  request.downloadKeys(request.prodKey)
+                                }
+                              >
+                                Скачать боевые ключи
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
