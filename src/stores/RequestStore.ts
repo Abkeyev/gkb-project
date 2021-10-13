@@ -712,12 +712,12 @@ class RequestStore {
           api.service.getDocument(id).then((res: Documents) => {
             if (res.doc_type === 11) {
               this.testKey = res;
-            } else if (res.doc_type === 12) {
+            } else if (res.doc_type === 10) {
               this.prodKey = res;
-            } else if (res.doc_type === 13) {
+            } else if (res.doc_type === 8) {
               this.testAct = res;
               res.doc_status === "Active" && docs.push(res);
-            } else if (res.doc_type === 14) {
+            } else if (res.doc_type === 9) {
               this.testProt = res;
               res.doc_status === "Active" && docs.push(res);
             } else {
