@@ -79,16 +79,21 @@ const Modal = observer((props: any) => {
                           .map((r: User) => (
                             <li
                               onClick={() => {
-                                request
-                                  .nextRequestStatus(r.id)
-                                  .then((res: any) => {
-                                    main.setModal(false);
-                                    request.setManUser(r);
-                                  })
-                                  .catch((err: any) => {
-                                    main.setModal(false);
-                                    console.log(err);
-                                  });
+                                request._getRequest.request_status === 1
+                                  ? request
+                                      .nextRequestStatus(r.id)
+                                      .then((res: any) => {
+                                        main.setModal(false);
+                                        request.setManUser(r);
+                                      })
+                                      .catch((err: any) => {
+                                        main.setModal(false);
+                                        console.log(err);
+                                      })
+                                  : request.updateRequest({
+                                      responsible_user: r.id,
+                                      client: request._getRequest.client.id,
+                                    });
                               }}
                             >
                               <div className="profile">
@@ -375,7 +380,13 @@ const Modal = observer((props: any) => {
                                     </label>
                                   </div>
                                 </div>
-                                <span className="position">{c.position}</span>
+                                <span className="position">
+                                  {
+                                    request._getPosition.find(
+                                      (t: ServiceCommon) => t.id === c.position
+                                    )?.name
+                                  }
+                                </span>
                               </li>
                             )
                         )}
@@ -517,7 +528,13 @@ const Modal = observer((props: any) => {
                                 />
                                 <span className="name">{r.full_name}</span>
                               </div>
-                              <span className="position">{r.position}</span>
+                              <span className="position">
+                                {
+                                  request._getPosition.find(
+                                    (t: ServiceCommon) => t.id === r.position
+                                  )?.name
+                                }
+                              </span>
                             </li>
                           ))}
                     </ul>
@@ -808,7 +825,14 @@ const Modal = observer((props: any) => {
                                       </label>
                                     </div>
                                   </div>
-                                  <span className="position">{r.position}</span>
+                                  <span className="position">
+                                    {
+                                      request._getPosition.find(
+                                        (t: ServiceCommon) =>
+                                          t.id === r.position
+                                      )?.name
+                                    }
+                                  </span>
                                 </li>
                               )
                           )}
