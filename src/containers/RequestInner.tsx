@@ -1403,7 +1403,7 @@ const RequestInner = observer((props: any) => {
                                                   Подписано
                                                 </span>
                                               ) : request._getRequest
-                                                  .request_status === 2 ? (
+                                                  .request_status === 5 ? (
                                                 <i
                                                   onClick={() =>
                                                     request
