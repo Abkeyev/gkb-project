@@ -781,7 +781,13 @@ const ServiceDeskInner = observer((props: any) => {
                                                             )?.position}
                                                         </span>
 
-                                                        {s.is_approved ? (
+                                                        {s.is_approved !==
+                                                          null &&
+                                                        !s.is_approved ? (
+                                                          <span className="btn-status done">
+                                                            Отклонено
+                                                          </span>
+                                                        ) : s.is_approved ? (
                                                           <span className="btn-status done">
                                                             Согласовано
                                                           </span>
