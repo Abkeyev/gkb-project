@@ -314,7 +314,16 @@ const RequestInner = observer((props: any) => {
                                               d.file && (
                                                 <li>
                                                   <i className="azla blank-alt-primary-icon"></i>
-                                                  <span>{d.name}</span>
+                                                  <span
+                                                    onClick={() =>
+                                                      d.file &&
+                                                      request.downloadDocument(
+                                                        d.file
+                                                      )
+                                                    }
+                                                  >
+                                                    {d.name}
+                                                  </span>
                                                 </li>
                                               )
                                           )}
@@ -1598,7 +1607,16 @@ const RequestInner = observer((props: any) => {
                                             d.file && (
                                               <li>
                                                 <i className="azla blank-alt-primary-icon"></i>
-                                                <span>{d.name}</span>
+                                                <span
+                                                  onClick={() =>
+                                                    d.file &&
+                                                    request.downloadDocument(
+                                                      d.file
+                                                    )
+                                                  }
+                                                >
+                                                  {d.name}
+                                                </span>
                                               </li>
                                             )
                                         )}
@@ -1829,7 +1847,7 @@ const RequestInner = observer((props: any) => {
                           </h3>
 
                           <h5 className="title-subhead-h5 mb-16">
-                            Организационные документы
+                            Общие данные
                           </h5>
 
                           <div className="pad-rl-16 mb-32">

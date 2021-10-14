@@ -272,7 +272,16 @@ const ServiceDeskInner = observer((props: any) => {
                                               d.file && (
                                                 <li>
                                                   <i className="azla blank-alt-primary-icon"></i>
-                                                  <span>{d.name}</span>
+                                                  <span
+                                                    onClick={() =>
+                                                      d.file &&
+                                                      request.downloadDocument(
+                                                        d.file
+                                                      )
+                                                    }
+                                                  >
+                                                    {d.name}
+                                                  </span>
                                                 </li>
                                               )
                                           )}
@@ -1071,7 +1080,16 @@ const ServiceDeskInner = observer((props: any) => {
                                             d.file && (
                                               <li>
                                                 <i className="azla blank-alt-primary-icon"></i>
-                                                <span>{d.name}</span>
+                                                <span
+                                                  onClick={() =>
+                                                    d.file &&
+                                                    request.downloadDocument(
+                                                      d.file
+                                                    )
+                                                  }
+                                                >
+                                                  {d.name}
+                                                </span>
                                               </li>
                                             )
                                         )}
