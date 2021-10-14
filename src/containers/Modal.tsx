@@ -95,9 +95,9 @@ const Modal = observer((props: any) => {
                                         responsible_user: r.id,
                                         client: request._getRequest.client.id,
                                       })
-                                      .catch((err: any) => {
+                                      .then((res: any) => {
                                         main.setModal(false);
-                                        console.log(err);
+                                        request.setManUser(r);
                                       });
                               }}
                             >
