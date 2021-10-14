@@ -1403,13 +1403,6 @@ const RequestInner = observer((props: any) => {
                                                   Подписано
                                                 </span>
                                               ) : request._getRequest
-                                                  .request_status === 6 ||
-                                                request._getRequest
-                                                  .request_status === 9 ? (
-                                                <span className="btn-status not-active">
-                                                  Не Подписано
-                                                </span>
-                                              ) : request._getRequest
                                                   .request_status === 2 ? (
                                                 <i
                                                   onClick={() =>
@@ -1429,6 +1422,43 @@ const RequestInner = observer((props: any) => {
                                                   }
                                                   className="azla close-red-icon delete-if-icon"
                                                 ></i>
+                                              ) : request._getRequest
+                                                  .request_status === 6 &&
+                                                request._getRequest
+                                                  .manager_signer_user ===
+                                                  main.clientData.user.id ? (
+                                                <div className="d-flex-align-c-spaceb">
+                                                  <button
+                                                    className="btn-status-signatory btn-icon active mr-16"
+                                                    onClick={() =>
+                                                      request
+                                                        .signDocGkb(true)
+                                                        .then(
+                                                          () =>
+                                                            (request.signType =
+                                                              true)
+                                                        )
+                                                    }
+                                                  >
+                                                    <i className="azla edit-white-icon"></i>
+                                                    Подписать
+                                                  </button>
+
+                                                  <button
+                                                    onClick={() => {
+                                                      main.setModal(true);
+                                                      main.setModalType(1);
+                                                    }}
+                                                    className="delete-signatory"
+                                                  ></button>
+                                                </div>
+                                              ) : request._getRequest
+                                                  .request_status === 6 ||
+                                                request._getRequest
+                                                  .request_status === 9 ? (
+                                                <span className="btn-status not-active">
+                                                  Не Подписано
+                                                </span>
                                               ) : (
                                                 ""
                                               )}
