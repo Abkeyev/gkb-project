@@ -855,7 +855,13 @@ const PartnersInner = observer((props: any) => {
                                                             )?.name}
                                                         </span>
 
-                                                        {s.is_approved ? (
+                                                        {s.is_approved !==
+                                                          null &&
+                                                        !s.is_approved ? (
+                                                          <span className="btn-status canceled">
+                                                            Отклонено
+                                                          </span>
+                                                        ) : s.is_approved ? (
                                                           <span className="btn-status done">
                                                             Согласовано
                                                           </span>

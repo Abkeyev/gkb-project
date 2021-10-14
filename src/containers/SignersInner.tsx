@@ -865,7 +865,7 @@ const SignersInner = observer((props: any) => {
                                                         {s.is_approved !==
                                                           null &&
                                                         !s.is_approved ? (
-                                                          <span className="btn-status done">
+                                                          <span className="btn-status canceled">
                                                             Отклонено
                                                           </span>
                                                         ) : s.is_approved ? (
