@@ -944,6 +944,35 @@ const RequestInner = observer((props: any) => {
                                                               <span className="btn-status done">
                                                                 Согласовано
                                                               </span>
+                                                            ) : main.clientData
+                                                                .user.id ===
+                                                              s.user_id ? (
+                                                              <div className="d-flex-align-c-spaceb">
+                                                                <button
+                                                                  className="btn-status-signatory btn-icon active mr-16"
+                                                                  onClick={() =>
+                                                                    request.sendReviews(
+                                                                      main
+                                                                        .clientData
+                                                                        .user
+                                                                        .id,
+                                                                      true
+                                                                    )
+                                                                  }
+                                                                >
+                                                                  Согласовать
+                                                                </button>
+
+                                                                <button
+                                                                  onClick={() =>
+                                                                    request.sendReviews(
+                                                                      1,
+                                                                      false
+                                                                    )
+                                                                  }
+                                                                  className="delete-signatory"
+                                                                ></button>
+                                                              </div>
                                                             ) : (
                                                               <span className="btn-status not-active">
                                                                 Не согласовано
@@ -1425,7 +1454,7 @@ const RequestInner = observer((props: any) => {
                                     </div>
                                   )}
                                 </div>
-                                {request._getRequest.request_status === 14 && (
+                                {request._getRequest.request_status === 5 && (
                                   <div className="collapse-footer">
                                     <button
                                       type="button"

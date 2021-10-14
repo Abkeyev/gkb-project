@@ -30,6 +30,7 @@ const Request = observer((props: any) => {
   React.useEffect(() => {
     request.getRequests();
     request.getMineRequest(main.clientData.user.id);
+    request.getVoteRequest(main.clientData.user.id);
     request.getClients();
     request.getClientServiceType();
     request.getClientTypes();
@@ -38,8 +39,22 @@ const Request = observer((props: any) => {
   OnClickOutside(catRef, () => setCategory(false));
   OnClickOutside(serviceRef, () => setService(false));
 
-  const filterRequests = (type: number[] = [], isMine: boolean = false) => {
-    const req = isMine
+  const filterRequests = (
+    type: number[] = [],
+    isMine: boolean = false,
+    isVote: boolean = false
+  ) => {
+    const req = isVote
+      ? request._getVoteRequests &&
+        request._getVoteRequests
+          .slice()
+          .sort((a: RequestModel, b: RequestModel) => {
+            return (
+              new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime()
+            );
+          })
+          .reverse()
+      : isMine
       ? request._getMineRequests &&
         request._getMineRequests
           .slice()
@@ -458,6 +473,60 @@ const Request = observer((props: any) => {
                               <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
                             </tr>
                           ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+                  <div className="tab-content tab-2">
+                    <h3 className="title-subhead mb-16">
+                      На согласование{" "}
+                      <span className="number">
+                        {filterRequests([], false, true).length}
+                      </span>
+                    </h3>
+                    {filterRequests([], false, true).length === 0 ? (
+                      "Заявки отсутствуют."
+                    ) : (
+                      <table className="table req-table">
+                        <thead>
+                          <tr>
+                            <th>БИН</th>
+                            <th>Организации</th>
+                            <th>Категория деятельности</th>
+                            <th>Сервис</th>
+                            <th>Дата поступления</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filterRequests([], false, true).map(
+                            (r: RequestModel) => (
+                              <tr
+                                onClick={() => history.push(`/request/${r.id}`)}
+                              >
+                                <td>{r.client.bin}</td>
+                                <td>{r.client.longname}</td>
+                                <td>
+                                  {
+                                    request._getClientTypes.find(
+                                      (t: any) => t.id === r.client.client_type
+                                    )?.name
+                                  }
+                                </td>
+                                <td>
+                                  {
+                                    request._getClientServiceType.find(
+                                      (t: ServiceCommon) =>
+                                        t.id === r.service_type
+                                    )?.name
+                                  }
+                                  /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
+                                </td>
+                                <td>
+                                  {moment(r.reg_date).format("DD.MM.YYYY")}
+                                </td>
+                              </tr>
+                            )
+                          )}
                         </tbody>
                       </table>
                     )}

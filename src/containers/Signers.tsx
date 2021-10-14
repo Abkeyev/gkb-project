@@ -12,8 +12,10 @@ const Signers = observer((props: any) => {
 
   useEffect(() => {
     request.getRequests();
+    request.getVoteRequest(main.clientData.user.id);
     request.getClientTypes();
     request.getClientServiceType();
+    request.getClients();
   }, []);
 
   const filterRequests = (type: number[] = [], user: number | null = null) => {
@@ -36,6 +38,20 @@ const Signers = observer((props: any) => {
             type.length === 0 ? true : type.includes(r.request_status)
           )
       : [];
+  };
+
+  const filterVoteRequests = () => {
+    const req =
+      request._getVoteRequests &&
+      request._getVoteRequests
+        .slice()
+        .sort((a: Request, b: Request) => {
+          return (
+            new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime()
+          );
+        })
+        .reverse();
+    return req.length > 0 ? req : [];
   };
 
   return (
@@ -118,11 +134,10 @@ const Signers = observer((props: any) => {
                     <h3 className="title-subhead mb-16">
                       На согласование{" "}
                       <span className="number">
-                        {filterRequests([11], main.clientData.user.id).length}
+                        {filterVoteRequests().length}
                       </span>
                     </h3>
-                    {filterRequests([11], main.clientData.user.id).length ===
-                    0 ? (
+                    {filterVoteRequests().length === 0 ? (
                       "Заявки отсутствуют."
                     ) : (
                       <table className="table req-table">
@@ -136,64 +151,7 @@ const Signers = observer((props: any) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filterRequests([11], main.clientData.user.id).map(
-                            (r: Request) => (
-                              <tr
-                                onClick={() => history.push(`/signer/${r.id}`)}
-                              >
-                                <td>{r.client.bin}</td>
-                                <td>{r.client.longname}</td>
-                                <td>
-                                  {
-                                    request._getClientTypes.find(
-                                      (t: any) => t.id === r.client.id
-                                    )?.name
-                                  }
-                                  /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
-                                </td>
-                                <td>
-                                  {
-                                    request._getClientServiceType.find(
-                                      (t: ServiceCommon) =>
-                                        t.id === r.service_type
-                                    )?.name
-                                  }
-                                </td>
-                                <td>
-                                  {moment(r.reg_date).format("DD.MM.YYYY")}
-                                </td>
-                              </tr>
-                            )
-                          )}
-                        </tbody>
-                      </table>
-                    )}
-                  </div>
-                </TabPanel>
-
-                <TabPanel>
-                  <div className="tab-content tab-2">
-                    <h3 className="title-subhead mb-16">
-                      Расмотренные{" "}
-                      <span className="number">
-                        {filterRequests([11]).length}
-                      </span>
-                    </h3>
-                    {filterRequests([11]).length === 0 ? (
-                      "Заявки отсутствуют."
-                    ) : (
-                      <table className="table req-table">
-                        <thead>
-                          <tr>
-                            <th>БИН</th>
-                            <th>Организации</th>
-                            <th>Категория деятельности</th>
-                            <th>Сервис</th>
-                            <th>Дата поступления</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filterRequests([11]).map((r: Request) => (
+                          {filterVoteRequests().map((r: Request) => (
                             <tr onClick={() => history.push(`/signer/${r.id}`)}>
                               <td>{r.client.bin}</td>
                               <td>{r.client.longname}</td>
@@ -221,6 +179,57 @@ const Signers = observer((props: any) => {
                     )}
                   </div>
                 </TabPanel>
+
+                {/* <TabPanel>
+                  <div className="tab-content tab-2">
+                    <h3 className="title-subhead mb-16">
+                      Расмотренные{" "}
+                      <span className="number">
+                        {filterVoteRequests().length}
+                      </span>
+                    </h3>
+                    {filterVoteRequests().length === 0 ? (
+                      "Заявки отсутствуют."
+                    ) : (
+                      <table className="table req-table">
+                        <thead>
+                          <tr>
+                            <th>БИН</th>
+                            <th>Организации</th>
+                            <th>Категория деятельности</th>
+                            <th>Сервис</th>
+                            <th>Дата поступления</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filterVoteRequests().map((r: Request) => (
+                            <tr onClick={() => history.push(`/signer/${r.id}`)}>
+                              <td>{r.client.bin}</td>
+                              <td>{r.client.longname}</td>
+                              <td>
+                                {
+                                  request._getClientTypes.find(
+                                    (t: any) => t.id === r.client.client_type
+                                  )?.name
+                                }
+                              </td>
+                              <td>
+                                {
+                                  request._getClientServiceType.find(
+                                    (t: ServiceCommon) =>
+                                      t.id === r.service_type
+                                  )?.name
+                                }
+                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
+                              </td>
+                              <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+                </TabPanel> */}
               </Tabs>
             </div>
           </div>

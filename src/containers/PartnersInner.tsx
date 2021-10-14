@@ -666,6 +666,7 @@ const PartnersInner = observer((props: any) => {
                                   request._getRequest.request_status === 6 ||
                                   request._getRequest.request_status === 7 ||
                                   request._getRequest.request_status === 8 ||
+                                  request._getRequest.request_status === 9 ||
                                   request._getRequest.request_status === 10
                                     ? "success"
                                     : ""
@@ -685,6 +686,8 @@ const PartnersInner = observer((props: any) => {
                                         7 ||
                                       request._getRequest.request_status ===
                                         8 ||
+                                      request._getRequest.request_status ===
+                                        9 ||
                                       request._getRequest.request_status === 10
                                         ? "title-subhead mb-0 done-success"
                                         : "title-subhead mb-0"
@@ -696,6 +699,7 @@ const PartnersInner = observer((props: any) => {
                                     request._getRequest.request_status === 6 ||
                                     request._getRequest.request_status === 7 ||
                                     request._getRequest.request_status === 8 ||
+                                    request._getRequest.request_status === 9 ||
                                     request._getRequest.request_status === 10
                                       ? "Договор согласован"
                                       : `На согласование: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}

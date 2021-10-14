@@ -857,8 +857,8 @@ const SignersInner = observer((props: any) => {
                                                           <span className="btn-status done">
                                                             Согласовано
                                                           </span>
-                                                        ) : request._getRequest
-                                                            .user.id ===
+                                                        ) : main.clientData.user
+                                                            .id ===
                                                           s.user_id ? (
                                                           <div className="d-flex-align-c-spaceb">
                                                             <button
@@ -1042,7 +1042,7 @@ const SignersInner = observer((props: any) => {
                                                   Подписано
                                                 </span>
                                               ) : request._getRequest
-                                                  .request_status === 9 ? (
+                                                  .request_status === 6 ? (
                                                 <span className="btn-status not-active">
                                                   Не Подписано
                                                 </span>
