@@ -90,10 +90,15 @@ const Modal = observer((props: any) => {
                                         main.setModal(false);
                                         console.log(err);
                                       })
-                                  : request.updateRequest({
-                                      responsible_user: r.id,
-                                      client: request._getRequest.client.id,
-                                    });
+                                  : request
+                                      .updateRequest({
+                                        responsible_user: r.id,
+                                        client: request._getRequest.client.id,
+                                      })
+                                      .catch((err: any) => {
+                                        main.setModal(false);
+                                        console.log(err);
+                                      });
                               }}
                             >
                               <div className="profile">
