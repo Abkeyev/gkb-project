@@ -8,7 +8,7 @@ const ModalTypeOne = ({ main, request }: ModalTypes) => {
   const [users, setUsers] = React.useState<ClientUser[]>([]);
 
   return (
-    <BaseModal main={main}>
+    <BaseModal size={'modal-large-xl'} main={main}>
       <div className='modal-body'>
         <div className='paper-signatory'>
           <div className='d-flex align-items-center mb-16'>

@@ -3,9 +3,9 @@ import { BaseModalProps } from './BaseModalProps';
 
 // Компонент для шаблонизации Модалок. Имеются только начальные стили для организации формы
 
-const BaseModal = ({ children, main }: BaseModalProps): JSX.Element => {
+const BaseModal = ({ children, main, size }: BaseModalProps): JSX.Element => {
   return (
-    <div className='modal modal-large-xl'>
+    <div className={`modal ${size}`}>
       <div className='modal-backbg' onClick={() => main.setModal(false)}></div>
       <div className='modal-dialog'>
         <div className='modal-content fadeInModal animated'>

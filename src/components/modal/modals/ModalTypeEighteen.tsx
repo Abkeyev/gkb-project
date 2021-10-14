@@ -9,7 +9,7 @@ const ModalTypeEighteen = ({ main, request }: ModalTypes) => {
   const [file, setFile] = React.useState<any | null>(null);
   const [comment, setComment] = React.useState('');
   return (
-    <BaseModal main={main}>
+    <BaseModal size={'modal-large-xl'} main={main}>
       <div className='modal-body'>
         <div className='paper-show'>
           <h3 className='text-left title-subhead mb-16'>Загрузка документа</h3>

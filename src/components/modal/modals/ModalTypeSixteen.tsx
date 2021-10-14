@@ -6,7 +6,7 @@ const ModalTypeSixteen = ({ main, request }: ModalTypes) => {
   const [testKey, setTestKey] = React.useState<any | null>(null);
   const [key, setKey] = React.useState<any | null>(null);
   return (
-    <BaseModal main={main}>
+    <BaseModal size={'modal-large-xl'} main={main}>
       <div className='modal-body'>
         <div className='paper-show'>
           <h3 className='text-left title-subhead mb-16'>Ключи доступа</h3>

@@ -6,7 +6,7 @@ const ModalTypeSeventeen = ({ main, request }: ModalTypes) => {
   const [website, setWebsite] = React.useState('');
   const [position, setPosition] = React.useState('');
   return (
-    <BaseModal main={main}>
+    <BaseModal size={'modal-large-xl'} main={main}>
       <div className='modal-body'>
         <div className='paper-signatory'>
           <h3 className='text-left title-subhead mb-16'>

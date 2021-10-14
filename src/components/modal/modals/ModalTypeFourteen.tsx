@@ -8,7 +8,7 @@ const ModalTypeFourteen = ({ main, request }: ModalTypes) => {
   const [comment, setComment] = React.useState('');
 
   return (
-    <BaseModal main={main}>
+    <BaseModal size={'modal-large-xl'} main={main}>
       <div className='modal-body'>
         <div className='paper-show'>
           <h3 className='text-left title-subhead mb-16'>Прикрепить документ</h3>
