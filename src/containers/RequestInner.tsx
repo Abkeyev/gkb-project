@@ -975,7 +975,10 @@ const RequestInner = observer((props: any) => {
                                                                 <button
                                                                   onClick={() =>
                                                                     request.sendReviews(
-                                                                      1,
+                                                                      main
+                                                                        .clientData
+                                                                        .user
+                                                                        .id,
                                                                       false
                                                                     )
                                                                   }
