@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { useHistory } from "react-router";
-import { Link } from "react-router-dom";
-import { ServiceCommon, Request } from "../api/Models/ServiceModels";
-import "react-tabs/style/react-tabs.css";
-import { observer } from "mobx-react";
-import moment from "moment";
-import { OnClickOutside } from "../utils/utils";
+import React, { useState, useRef, useEffect } from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
+import { ServiceCommon, Request } from '../api/Models/ServiceModels';
+import 'react-tabs/style/react-tabs.css';
+import { observer } from 'mobx-react';
+import moment from 'moment';
+import { OnClickOutside } from '../utils/utils';
+import PartnersOutbox from '../components/partners/PartnersOutbox';
+import PartnersSigned from '../components/partners/PartnersSigned';
 
 const Partners = observer((props: any) => {
   const { request, main } = props;
@@ -17,9 +19,9 @@ const Partners = observer((props: any) => {
   const [services, setServices] = useState<number[]>([]);
   const [category, setCategory] = useState(false);
   const [categories, setCategories] = useState<number[]>([]);
-  const [searchService, setSearchService] = useState<string>("");
-  const [bin, setBin] = useState<string>("");
-  const [sortTitle, setSortTitle] = useState("");
+  const [searchService, setSearchService] = useState<string>('');
+  const [bin, setBin] = useState<string>('');
+  const [sortTitle, setSortTitle] = useState('');
   const history = useHistory();
   const catRef = useRef<any>(null);
   const serviceRef = useRef<any>(null);
@@ -44,7 +46,7 @@ const Partners = observer((props: any) => {
           );
         })
         .reverse();
-    if (sortTitle === "сначала старые") req.reverse();
+    if (sortTitle === 'сначала старые') req.reverse();
     return req.length > 0
       ? req
           .filter(
@@ -71,13 +73,13 @@ const Partners = observer((props: any) => {
   };
 
   return (
-    <div className="main-body">
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="req-manager p-50 pad-b-128">
-              <div className="header-text justify-content-between mb-24">
-                <h1 className="title-main">Заявки</h1>
+    <div className='main-body'>
+      <div className='container'>
+        <div className='row'>
+          <div className='col-lg-12'>
+            <div className='req-manager p-50 pad-b-128'>
+              <div className='header-text justify-content-between mb-24'>
+                <h1 className='title-main'>Заявки</h1>
               </div>
 
               <Tabs
@@ -86,72 +88,72 @@ const Partners = observer((props: any) => {
                   request.tabIndexPar = i;
                 }}
               >
-                <div className="">
+                <div className=''>
                   <TabList>
                     <Tab>Исходящие</Tab>
                     <Tab>Подписанные</Tab>
                   </TabList>
                 </div>
-                <div className="filter mb-24">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="filter-search">
-                        <div className="form-group mr-16 mb-0">
+                <div className='filter mb-24'>
+                  <div className='row'>
+                    <div className='col-md-12'>
+                      <div className='filter-search'>
+                        <div className='form-group mr-16 mb-0'>
                           <input
-                            className="form-control azla form-icon search-icon"
-                            type="name"
-                            placeholder="Поиск по названию, БИН"
+                            className='form-control azla form-icon search-icon'
+                            type='name'
+                            placeholder='Поиск по названию, БИН'
                             defaultValue={bin}
                             onChange={(e) => setBin(e.target.value)}
                           />
                         </div>
                         <button
-                          className="btn-s btn-secondary btn-icon col-md-3"
+                          className='btn-s btn-secondary btn-icon col-md-3'
                           onClick={() => setAdvance(!advance)}
                         >
-                          <i className="azla filter-icon"></i> Расширенный поиск
+                          <i className='azla filter-icon'></i> Расширенный поиск
                         </button>
                       </div>
                     </div>
 
                     <div
                       className={`col-md-12 filter-content ${
-                        advance ? "view" : ""
+                        advance ? 'view' : ''
                       }`}
                       onClick={() => {
                         sort && setSort(false);
                       }}
                     >
                       {/* Класс "view" добавляется при нажатии "Расширенный поиск" */}
-                      <div className="filter-inputs">
-                        <div className="form-multiselect mb-0 mr-16">
+                      <div className='filter-inputs'>
+                        <div className='form-multiselect mb-0 mr-16'>
                           <div
                             className={`multi js-multi-buttons ${
-                              category ? "open" : ""
+                              category ? 'open' : ''
                             }`}
                             ref={catRef}
                           >
-                            <div className="input-wrapper">
+                            <div className='input-wrapper'>
                               <input
-                                className="multi-input azla form-icon chevron-down-icon"
-                                type="text"
-                                placeholder="Выберите категорию деятельности"
+                                className='multi-input azla form-icon chevron-down-icon'
+                                type='text'
+                                placeholder='Выберите категорию деятельности'
                                 readOnly
                                 onClick={(e) => {
                                   e.preventDefault();
                                   setCategory(true);
                                 }}
                               />
-                              <label className="label">
+                              <label className='label'>
                                 Категория деятельности
                               </label>
                             </div>
-                            <div className="multi-menu">
-                              <div className="multi-search">
+                            <div className='multi-menu'>
+                              <div className='multi-search'>
                                 <input
-                                  type="search"
-                                  className="azla form-icon search-icon"
-                                  placeholder="Поиск"
+                                  type='search'
+                                  className='azla form-icon search-icon'
+                                  placeholder='Поиск'
                                   value={searchService}
                                   onChange={(e) =>
                                     setSearchService(e.target.value)
@@ -163,12 +165,12 @@ const Partners = observer((props: any) => {
                                   f.name.includes(searchService)
                                 )
                                 .map((t: ServiceCommon, index: number) => (
-                                  <div className="multi-option option-current">
-                                    <div className="multi-list">
-                                      <div className="form-check gkb-checkbox">
+                                  <div className='multi-option option-current'>
+                                    <div className='multi-list'>
+                                      <div className='form-check gkb-checkbox'>
                                         <input
-                                          className="form-check-input"
-                                          type="checkbox"
+                                          className='form-check-input'
+                                          type='checkbox'
                                           checked={categories.includes(t.id)}
                                           onClick={() => {
                                             !categories.includes(t.id)
@@ -186,12 +188,12 @@ const Partners = observer((props: any) => {
                                           required
                                         />
                                         <label
-                                          className="form-check-label"
+                                          className='form-check-label'
                                           htmlFor={`catCheck${t.id}`}
                                         >
                                           {t.name}
                                         </label>
-                                        <div className="invalid-feedback">
+                                        <div className='invalid-feedback'>
                                           Ошибка
                                         </div>
                                       </div>
@@ -202,32 +204,32 @@ const Partners = observer((props: any) => {
                           </div>
                         </div>
 
-                        <div className="form-multiselect mb-0 mr-16">
+                        <div className='form-multiselect mb-0 mr-16'>
                           <div
                             className={`multi js-multi-buttons ${
-                              service ? "open" : ""
+                              service ? 'open' : ''
                             }`}
                             ref={serviceRef}
                           >
-                            <div className="input-wrapper">
+                            <div className='input-wrapper'>
                               <input
-                                className="multi-input azla form-icon chevron-down-icon"
-                                type="text"
-                                placeholder="Выберите тип сервиса"
+                                className='multi-input azla form-icon chevron-down-icon'
+                                type='text'
+                                placeholder='Выберите тип сервиса'
                                 readOnly
                                 onClick={(e) => {
                                   e.preventDefault();
                                   !service && setService(true);
                                 }}
                               />
-                              <label className="label">Тип сервиса</label>
+                              <label className='label'>Тип сервиса</label>
                             </div>
-                            <div className="multi-menu">
-                              <div className="multi-search">
+                            <div className='multi-menu'>
+                              <div className='multi-search'>
                                 <input
-                                  type="search"
-                                  className="azla form-icon search-icon"
-                                  placeholder="Поиск"
+                                  type='search'
+                                  className='azla form-icon search-icon'
+                                  placeholder='Поиск'
                                   value={searchService}
                                   onChange={(e) =>
                                     setSearchService(e.target.value)
@@ -239,12 +241,12 @@ const Partners = observer((props: any) => {
                                   f.name.includes(searchService)
                                 )
                                 .map((t: ServiceCommon, index: number) => (
-                                  <div className="multi-option option-current">
-                                    <div className="multi-list">
-                                      <div className="form-check gkb-checkbox">
+                                  <div className='multi-option option-current'>
+                                    <div className='multi-list'>
+                                      <div className='form-check gkb-checkbox'>
                                         <input
-                                          className="form-check-input"
-                                          type="checkbox"
+                                          className='form-check-input'
+                                          type='checkbox'
                                           checked={services.includes(t.id)}
                                           onClick={() => {
                                             !services.includes(t.id)
@@ -259,12 +261,12 @@ const Partners = observer((props: any) => {
                                           required
                                         />
                                         <label
-                                          className="form-check-label"
+                                          className='form-check-label'
                                           htmlFor={`serviceCheck${t.id}`}
                                         >
                                           {t.name}
                                         </label>
-                                        <div className="invalid-feedback">
+                                        <div className='invalid-feedback'>
                                           Ошибка
                                         </div>
                                       </div>
@@ -275,40 +277,40 @@ const Partners = observer((props: any) => {
                           </div>
                         </div>
 
-                        <div className="form-multiselect mb-0">
+                        <div className='form-multiselect mb-0'>
                           <div
                             className={`multi js-multi-buttons ${
-                              date ? "open" : ""
+                              date ? 'open' : ''
                             }`}
                             onClick={() => setDate(!date)}
                           >
-                            <div className="input-wrapper">
+                            <div className='input-wrapper'>
                               <input
-                                className="multi-input azla form-icon chevron-down-icon"
-                                type="text"
-                                placeholder="Выберите тип сортировки"
+                                className='multi-input azla form-icon chevron-down-icon'
+                                type='text'
+                                placeholder='Выберите тип сортировки'
                                 value={sortTitle}
                                 readOnly
                               />
-                              <label className="label">Сортировать</label>
+                              <label className='label'>Сортировать</label>
                             </div>
-                            <div className="multi-menu">
-                              <div className="multi-option option-current">
-                                <div className="multi-list">
+                            <div className='multi-menu'>
+                              <div className='multi-option option-current'>
+                                <div className='multi-list'>
                                   <span
-                                    className="multi-option-select"
+                                    className='multi-option-select'
                                     onClick={() =>
-                                      setSortTitle("сначала новые")
+                                      setSortTitle('сначала новые')
                                     }
                                   >
                                     сначала новые
                                   </span>
                                 </div>
-                                <div className="multi-list">
+                                <div className='multi-list'>
                                   <span
-                                    className="multi-option-select"
+                                    className='multi-option-select'
                                     onClick={() =>
-                                      setSortTitle("сначала старые")
+                                      setSortTitle('сначала старые')
                                     }
                                   >
                                     сначала старые
@@ -319,23 +321,23 @@ const Partners = observer((props: any) => {
                           </div>
                         </div>
                       </div>
-                      <div className="filter-btns">
+                      <div className='filter-btns'>
                         <button
-                          type="button"
-                          className="button btn-primary mr-16"
+                          type='button'
+                          className='button btn-primary mr-16'
                         >
                           Применить
                         </button>
                         <button
-                          type="button"
-                          className="button btn-secondary btn-icon"
+                          type='button'
+                          className='button btn-secondary btn-icon'
                           onClick={() => {
                             setServices([]);
                             setCategories([]);
-                            setSortTitle("");
+                            setSortTitle('');
                           }}
                         >
-                          <i className="azla close-primary-icon"></i>
+                          <i className='azla close-primary-icon'></i>
                           Убрать фильтры
                         </button>
                       </div>
@@ -344,168 +346,21 @@ const Partners = observer((props: any) => {
                 </div>
 
                 <TabPanel>
-                  <div className="tab-content tab-1">
-                    <h3 className="title-subhead mb-16">
-                      Найдено{" "}
-                      <span className="number">{filterRequests().length}</span>
-                    </h3>
-                    {filterRequests().length === 0 ? (
-                      "Заявки отсутствуют."
-                    ) : (
-                      <table className="table req-table">
-                        <thead>
-                          <tr>
-                            <th>БИН</th>
-                            <th>Организации</th>
-                            <th>Категория деятельности</th>
-                            <th>Сервис</th>
-                            <th>Дата поступления</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filterRequests().map((r: Request) => (
-                            <tr
-                              onClick={() => history.push(`/partner/${r.id}`)}
-                            >
-                              <td>{r.client.bin}</td>
-                              <td>{r.client.longname}</td>
-                              <td>
-                                {
-                                  request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.client_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>
-                                {
-                                  request._getClientServiceType.find(
-                                    (t: ServiceCommon) =>
-                                      t.id === r.service_type
-                                  )?.name
-                                }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
-                              </td>
-                              <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    )}
-                  </div>
+                  <PartnersOutbox request={request} filter={filterRequests} />
                 </TabPanel>
 
                 <TabPanel>
-                  <div className="tab-content tab-2">
-                    <h3 className="title-subhead mb-16">
-                      На подпись{" "}
-                      <span className="number">
-                        {filterRequests([9]).length}
-                      </span>
-                    </h3>
-                    {filterRequests([9]).length === 0 ? (
-                      "Заявки отсутствуют."
-                    ) : (
-                      <table className="table req-table">
-                        <thead>
-                          <tr>
-                            <th>БИН</th>
-                            <th>Организации</th>
-                            <th>Категория деятельности</th>
-                            <th>Сервис</th>
-                            <th>Дата поступления</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filterRequests([9]).map((r: Request) => (
-                            <tr
-                              onClick={() => history.push(`/partner/${r.id}`)}
-                            >
-                              <td>{r.client.bin}</td>
-                              <td>{r.client.longname}</td>
-                              <td>
-                                {
-                                  request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.client_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>
-                                {
-                                  request._getClientServiceType.find(
-                                    (t: ServiceCommon) =>
-                                      t.id === r.service_type
-                                  )?.name
-                                }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
-                              </td>
-                              <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    )}
-                  </div>
-
-                  <div className="tab-content tab-2 mt-16">
-                    <h3 className="title-subhead mb-16">
-                      Активные{" "}
-                      <span className="number">
-                        {filterRequests([6]).length}
-                      </span>
-                    </h3>
-                    {filterRequests([6]).length === 0 ? (
-                      "Заявки отсутствуют."
-                    ) : (
-                      <table className="table req-table">
-                        <thead>
-                          <tr>
-                            <th>БИН</th>
-                            <th>Организации</th>
-                            <th>Категория деятельности</th>
-                            <th>Сервис</th>
-                            <th>Дата поступления</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filterRequests([6]).map((r: Request) => (
-                            <tr
-                              onClick={() => history.push(`/partner/${r.id}`)}
-                            >
-                              <td>{r.client.bin}</td>
-                              <td>{r.client.longname}</td>
-                              <td>
-                                {
-                                  request._getClientTypes.find(
-                                    (t: any) => t.id === r.client.client_type
-                                  )?.name
-                                }
-                              </td>
-                              <td>
-                                {
-                                  request._getClientServiceType.find(
-                                    (t: ServiceCommon) =>
-                                      t.id === r.service_type
-                                  )?.name
-                                }
-                                /{r.service_category === 1 ? "ЕСБД" : "БДКИ"}
-                              </td>
-                              <td>{moment(r.reg_date).format("DD.MM.YYYY")}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    )}
-                  </div>
+                  <PartnersSigned request={request} filter={filterRequests} />
                 </TabPanel>
               </Tabs>
 
-              <div className="req-inner-footer">
-                <div className="container">
+              <div className='req-inner-footer'>
+                <div className='container'>
                   <Link
-                    to="/request-new"
-                    className="button btn-primary btn-icon ml-32 d-inline-flex"
+                    to='/request-new'
+                    className='button btn-primary btn-icon ml-32 d-inline-flex'
                   >
-                    <i className="azla add-plusRound-icon"></i> Новая заявка
+                    <i className='azla add-plusRound-icon'></i> Новая заявка
                   </Link>
                 </div>
               </div>
