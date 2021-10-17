@@ -1,6 +1,7 @@
 import React from 'react';
 import BaseModal from '../BaseModal';
 import { ModalTypes } from './ModalTypes.props';
+import { observer } from 'mobx-react';
 
 const ModalTypeThree = ({ main, request }: ModalTypes) => {
   return (
@@ -33,4 +34,4 @@ const ModalTypeThree = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeThree;
+export default observer(ModalTypeThree);

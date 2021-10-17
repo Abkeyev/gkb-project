@@ -2,6 +2,7 @@ import React from 'react';
 import { ModalTypes } from './ModalTypes.props';
 import BaseModal from '../BaseModal';
 import { ServiceCommon } from '../../../api/Models/ServiceModels';
+import { observer } from 'mobx-react';
 
 const ModalTypeFifteen = ({ main, request }: ModalTypes) => {
   const [email, setEmail] = React.useState('');
@@ -191,4 +192,4 @@ const ModalTypeFifteen = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeFifteen;
+export default observer(ModalTypeFifteen);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ServiceCommon } from '../../../api/Models/ServiceModels';
 import { ModalTypes } from './ModalTypes.props';
+import { observer } from 'mobx-react';
 
 const ModalTypeEleven = ({ main, request }: ModalTypes) => {
   const [firstRuk, setFirstRuk] = React.useState('');
@@ -379,4 +380,4 @@ const ModalTypeEleven = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeEleven;
+export default observer(ModalTypeEleven);

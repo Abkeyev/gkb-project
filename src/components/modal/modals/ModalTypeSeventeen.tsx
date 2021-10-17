@@ -1,6 +1,7 @@
 import React from 'react';
 import BaseModal from '../BaseModal';
 import { ModalTypes } from './ModalTypes.props';
+import { observer } from 'mobx-react';
 
 const ModalTypeSeventeen = ({ main, request }: ModalTypes) => {
   const [website, setWebsite] = React.useState('');
@@ -72,4 +73,4 @@ const ModalTypeSeventeen = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeSeventeen;
+export default observer(ModalTypeSeventeen);

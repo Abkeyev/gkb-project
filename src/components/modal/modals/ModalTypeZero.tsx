@@ -2,6 +2,7 @@ import React from 'react';
 import { ModalTypes } from './ModalTypes.props';
 import BaseModal from '../BaseModal';
 import { ServiceCommon, User } from '../../../api/Models/ServiceModels';
+import { observer } from 'mobx-react';
 
 const ModalTypeZero = ({ main, request }: ModalTypes) => {
   const [search, setSearch] = React.useState('');
@@ -75,4 +76,4 @@ const ModalTypeZero = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeZero;
+export default observer(ModalTypeZero);

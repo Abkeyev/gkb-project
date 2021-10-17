@@ -2,6 +2,7 @@ import React from 'react';
 import BaseModal from '../BaseModal';
 import { ModalTypes } from './ModalTypes.props';
 import { Categories, ServiceCommon } from '../../../api/Models/ServiceModels';
+import { observer } from 'mobx-react';
 
 const ModalTypeEighteen = ({ main, request }: ModalTypes) => {
   const [docCat, setDocCat] = React.useState(0);
@@ -120,4 +121,4 @@ const ModalTypeEighteen = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeEighteen;
+export default observer(ModalTypeEighteen);

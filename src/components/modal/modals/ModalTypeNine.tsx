@@ -2,6 +2,7 @@ import React from 'react';
 import BaseModal from '../BaseModal';
 import { ModalTypes } from './ModalTypes.props';
 import { ServiceCommon } from '../../../api/Models/ServiceModels';
+import { observer } from 'mobx-react';
 
 const ModalTypeNine = ({ main, request }: ModalTypes) => {
   const [position, setPosition] = React.useState('');
@@ -76,4 +77,4 @@ const ModalTypeNine = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeNine;
+export default observer(ModalTypeNine);

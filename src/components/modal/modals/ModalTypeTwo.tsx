@@ -2,6 +2,7 @@ import React from 'react';
 import BaseModal from '../BaseModal';
 import { ModalTypes } from './ModalTypes.props';
 import { Client } from '../../../api/Models/ServiceModels';
+import { observer } from 'mobx-react';
 
 const ModalTypeTwo = ({ main, request }: ModalTypes) => {
   return (
@@ -73,4 +74,4 @@ const ModalTypeTwo = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeTwo;
+export default observer(ModalTypeTwo);

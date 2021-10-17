@@ -1,6 +1,7 @@
 import React from 'react';
 import BaseModal from '../BaseModal';
 import { ModalTypes } from './ModalTypes.props';
+import { observer } from 'mobx-react';
 
 const ModalTypeOne = ({ main, request }: ModalTypes) => {
   const [declineReason, setDeclineReason] = React.useState('');
@@ -52,4 +53,4 @@ const ModalTypeOne = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeOne;
+export default observer(ModalTypeOne);

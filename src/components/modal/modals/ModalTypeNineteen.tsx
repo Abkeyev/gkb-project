@@ -1,6 +1,7 @@
 import React from 'react';
 import BaseModal from '../BaseModal';
 import { ModalTypes } from './ModalTypes.props';
+import { observer } from 'mobx-react';
 
 const ModalTypeNineteen = ({ main, request }: ModalTypes) => {
   return (
@@ -60,4 +61,4 @@ const ModalTypeNineteen = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeNineteen;
+export default observer(ModalTypeNineteen);

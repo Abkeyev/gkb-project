@@ -2,6 +2,7 @@ import React from 'react';
 import { ModalTypes } from './ModalTypes.props';
 import BaseModal from '../BaseModal';
 import { User } from '../../../api/Models/ServiceModels';
+import { observer } from 'mobx-react';
 
 const ModalTypeFourteen = ({ main, request }: ModalTypes) => {
   const [file, setFile] = React.useState<any | null>(null);
@@ -118,4 +119,4 @@ const ModalTypeFourteen = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeFourteen;
+export default observer(ModalTypeFourteen);

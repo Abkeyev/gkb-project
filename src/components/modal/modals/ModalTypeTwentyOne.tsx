@@ -1,6 +1,7 @@
 import React from 'react';
 import { ModalTypes } from './ModalTypes.props';
 import { ServiceCommon } from '../../../api/Models/ServiceModels';
+import { observer } from 'mobx-react';
 
 const ModalTypeTwentyOne = ({ main, request }: ModalTypes) => {
   const [fullName, setFullName] = React.useState('');
@@ -142,4 +143,4 @@ const ModalTypeTwentyOne = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeTwentyOne;
+export default observer(ModalTypeTwentyOne);

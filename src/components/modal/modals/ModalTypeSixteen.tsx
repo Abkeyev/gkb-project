@@ -1,6 +1,7 @@
 import React from 'react';
 import BaseModal from '../BaseModal';
 import { ModalTypes } from './ModalTypes.props';
+import { observer } from 'mobx-react';
 
 const ModalTypeSixteen = ({ main, request }: ModalTypes) => {
   const [testKey, setTestKey] = React.useState<any | null>(null);
@@ -87,4 +88,4 @@ const ModalTypeSixteen = ({ main, request }: ModalTypes) => {
   );
 };
 
-export default ModalTypeSixteen;
+export default observer(ModalTypeSixteen);
