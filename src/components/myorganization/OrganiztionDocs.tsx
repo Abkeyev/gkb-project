@@ -1,9 +1,14 @@
 import React from 'react';
 import { OrganizationProps } from './Organization.props';
-import { TabPanel } from 'react-tabs';
+import { observer } from 'mobx-react';
 import { Categories } from '../../api/Models/ServiceModels';
 
 const MyOrganization = ({ main, request }: OrganizationProps) => {
+  React.useEffect(() => {
+    request.getDocumentsType();
+    request.getDocumentsCategories();
+    request.getDocuments(main.clientData.client.id);
+  }, []);
   return (
     <>
       <h3 className='title-subhead mb-16'>Документы</h3>
@@ -50,4 +55,4 @@ const MyOrganization = ({ main, request }: OrganizationProps) => {
   );
 };
 
-export default MyOrganization;
+export default observer(MyOrganization);

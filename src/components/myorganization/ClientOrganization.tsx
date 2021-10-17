@@ -3,8 +3,15 @@ import { User, ServiceCommon, Client } from '../../api/Models/ServiceModels';
 import moment from 'moment';
 import { OrganizationProps } from './Organization.props';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 
 const ClientOrganization = ({ main, request }: OrganizationProps) => {
+  React.useEffect(() => {
+    request.getClients();
+    request.getClientAllUsers(main.clientData.client.id);
+    request.getPersonStatus();
+    request.getPosition();
+  }, []);
   return (
     <>
       <div className='tab-content tab-1'>
@@ -216,4 +223,4 @@ const ClientOrganization = ({ main, request }: OrganizationProps) => {
   );
 };
 
-export default ClientOrganization;
+export default observer(ClientOrganization);

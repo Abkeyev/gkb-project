@@ -197,6 +197,7 @@ class RequestStore {
   get _getUser() {
     return this.user;
   }
+  // Organization and ContractorsInner
   get _getUsers() {
     return this.users;
   }

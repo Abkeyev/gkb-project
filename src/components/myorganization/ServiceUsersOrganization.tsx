@@ -1,8 +1,12 @@
 import React from 'react';
 import { ServiceCommon, ClientUsers } from '../../api/Models/ServiceModels';
 import { OrganizationProps } from './Organization.props';
+import { observer } from 'mobx-react';
 
 const ServiceUsersOrganization = ({ main, request }: OrganizationProps) => {
+  React.useEffect(() => {
+    request.getClientUsersForAdd(main.clientData.client.id);
+  }, []);
   return (
     <>
       <h3 className='title-subhead mb-8'>
@@ -96,4 +100,4 @@ const ServiceUsersOrganization = ({ main, request }: OrganizationProps) => {
   );
 };
 
-export default ServiceUsersOrganization;
+export default observer(ServiceUsersOrganization);

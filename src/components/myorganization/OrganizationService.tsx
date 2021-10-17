@@ -3,8 +3,13 @@ import { OrganizationProps } from './Organization.props';
 import { ServiceCommon, Request } from '../../api/Models/ServiceModels';
 import { useHistory } from 'react-router';
 import moment from 'moment';
+import { observer } from 'mobx-react';
 
 const OrganizationService = ({ main, request }: OrganizationProps) => {
+  React.useEffect(() => {
+    request.getClientRequests(main.clientData.client.id);
+    request.getClientServiceType();
+  }, []);
   const history = useHistory();
   return (
     <>
@@ -47,4 +52,4 @@ const OrganizationService = ({ main, request }: OrganizationProps) => {
   );
 };
 
-export default OrganizationService;
+export default observer(OrganizationService);
