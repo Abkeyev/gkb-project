@@ -1,9 +1,9 @@
-import React from "react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
-import { Link, useHistory } from "react-router-dom";
-import { observer } from "mobx-react";
-import moment from "moment";
+import React from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import { Link, useHistory } from 'react-router-dom';
+import { observer } from 'mobx-react';
+import moment from 'moment';
 import {
   Agree,
   AgreeResult,
@@ -14,8 +14,8 @@ import {
   Result,
   ServiceCommon,
   User,
-} from "../api/Models/ServiceModels";
-import { Modal } from "../containers";
+} from '../api/Models/ServiceModels';
+import { Modal } from '../containers';
 
 const ServiceDeskInner = observer((props: any) => {
   const history = useHistory();
@@ -36,25 +36,25 @@ const ServiceDeskInner = observer((props: any) => {
   return (
     <>
       {main.isOpenModal && <Modal main={main} request={request} />}
-      <div className="main-body">
+      <div className='main-body'>
         {request._getRequest && (
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-12">
-                <div className="req-manager-inner p-16-50 pad-b-128">
-                  <div className="req-inner-header">
-                    <div className="back-breadcrumbs">
-                      <div onClick={() => history.goBack()} className="back">
-                        <i className="azla arrow-left-icon"></i> Назад
+          <div className='container'>
+            <div className='row'>
+              <div className='col-lg-12'>
+                <div className='req-manager-inner p-16-50 pad-b-128'>
+                  <div className='req-inner-header'>
+                    <div className='back-breadcrumbs'>
+                      <div onClick={() => history.goBack()} className='back'>
+                        <i className='azla arrow-left-icon'></i> Назад
                       </div>
-                      <div className="breadcrumbs">
-                        <Link to="/">Заявки</Link> /{" "}
+                      <div className='breadcrumbs'>
+                        <Link to='/'>Заявки</Link> /{' '}
                         <span>Заявка №{request._getRequest.id}</span>
                       </div>
                     </div>
 
-                    <h1 className="title-main mb-32">
-                      Заявка №{request._getRequest.id} -{" "}
+                    <h1 className='title-main mb-32'>
+                      Заявка №{request._getRequest.id} -{' '}
                       {request._getClient &&
                         request._getClient.longname &&
                         request._getClient.longname}
@@ -62,19 +62,19 @@ const ServiceDeskInner = observer((props: any) => {
 
                     {(request._getRequest.request_status === 4 ||
                       request._getRequest.request_status === 3) && (
-                      <div className="mess-card alert-mess mb-32 col-md-8">
+                      <div className='mess-card alert-mess mb-32 col-md-8'>
                         <h5>Заявка отклонена менеджером</h5>
                         <p>Причина: {request._getRequest.client_comment}</p>
                       </div>
                     )}
 
-                    <div className="status-bar">
-                      <ul className="step-progressbar">
+                    <div className='status-bar'>
+                      <ul className='step-progressbar'>
                         <li
                           className={`step-item ${
                             request._getRequest.request_stepper === 1
-                              ? "step-item-active"
-                              : "step-item-complete"
+                              ? 'step-item-active'
+                              : 'step-item-complete'
                           }`}
                           onClick={() => request.setStep(1)}
                         >
@@ -83,10 +83,10 @@ const ServiceDeskInner = observer((props: any) => {
                         <li
                           className={`step-item ${
                             request._getRequest.request_stepper === 2
-                              ? "step-item-active"
+                              ? 'step-item-active'
                               : request._getRequest.request_stepper > 2
-                              ? "step-item-complete"
-                              : ""
+                              ? 'step-item-complete'
+                              : ''
                           }`}
                           onClick={() =>
                             request._getRequest.request_stepper >= 2 &&
@@ -100,10 +100,10 @@ const ServiceDeskInner = observer((props: any) => {
                         <li
                           className={`step-item ${
                             request._getRequest.request_stepper === 3
-                              ? "step-item-active"
+                              ? 'step-item-active'
                               : request._getRequest.request_stepper > 3
-                              ? "step-item-complete"
-                              : ""
+                              ? 'step-item-complete'
+                              : ''
                           }`}
                           onClick={() =>
                             request._getRequest.request_stepper >= 3 &&
@@ -117,10 +117,10 @@ const ServiceDeskInner = observer((props: any) => {
                         <li
                           className={`step-item ${
                             request._getRequest.request_stepper === 4
-                              ? "step-item-active"
+                              ? 'step-item-active'
                               : request._getRequest.request_stepper > 4
-                              ? "step-item-complete"
-                              : ""
+                              ? 'step-item-complete'
+                              : ''
                           }`}
                           onClick={() =>
                             request._getRequest.request_stepper >= 4 &&
@@ -132,10 +132,10 @@ const ServiceDeskInner = observer((props: any) => {
                         <li
                           className={`step-item ${
                             request._getRequest.request_stepper === 5
-                              ? "step-item-active"
+                              ? 'step-item-active'
                               : request._getRequest.request_stepper > 5
-                              ? "step-item-complete"
-                              : ""
+                              ? 'step-item-complete'
+                              : ''
                           }`}
                           onClick={() =>
                             request._getRequest.request_stepper >= 5 &&
@@ -150,7 +150,7 @@ const ServiceDeskInner = observer((props: any) => {
 
                   {request.step === 1 ? (
                     <Tabs>
-                      <div className="line-hr mb-32">
+                      <div className='line-hr mb-32'>
                         <TabList>
                           <Tab>Общее</Tab>
                           <Tab>Потребители услуг</Tab>
@@ -158,19 +158,19 @@ const ServiceDeskInner = observer((props: any) => {
                       </div>
 
                       <TabPanel>
-                        <div className="req-inner-body pad-b-128">
-                          <h3 className="title-subhead mb-16">Общие данные</h3>
-                          <div className="total-info mb-32">
-                            <ul className="info-list">
+                        <div className='req-inner-body pad-b-128'>
+                          <h3 className='title-subhead mb-16'>Общие данные</h3>
+                          <div className='total-info mb-32'>
+                            <ul className='info-list'>
                               <li>
-                                <span className="left">Номер заявки:</span>
-                                <span className="right">
+                                <span className='left'>Номер заявки:</span>
+                                <span className='right'>
                                   {request._getRequest.id}
                                 </span>
                               </li>
                               <li>
-                                <span className="left">Статус заявки:</span>
-                                <span className="right">
+                                <span className='left'>Статус заявки:</span>
+                                <span className='right'>
                                   {
                                     request._getRequestStatus.find(
                                       (t: ServiceCommon) =>
@@ -182,39 +182,39 @@ const ServiceDeskInner = observer((props: any) => {
                               </li>
                               {request._getManUser && (
                                 <li>
-                                  <span className="left">Менеджер заявки:</span>
-                                  <span className="right d-flex">
+                                  <span className='left'>Менеджер заявки:</span>
+                                  <span className='right d-flex'>
                                     {request._getManUser.full_name}
                                   </span>
                                 </li>
                               )}
                               <li>
-                                <span className="left">Организация:</span>
-                                <span className="right">
-                                  <span className="pre-primary-color">
+                                <span className='left'>Организация:</span>
+                                <span className='right'>
+                                  <span className='pre-primary-color'>
                                     {request._getRequest.client.longname}
                                   </span>
                                 </span>
                               </li>
                               <li>
-                                <span className="left">БИН:</span>
-                                <span className="right">
+                                <span className='left'>БИН:</span>
+                                <span className='right'>
                                   {request._getRequest.client.bin}
                                 </span>
                               </li>
                               <li>
-                                <span className="left">
+                                <span className='left'>
                                   Категория деятельности:
                                 </span>
-                                <span className="right">
+                                <span className='right'>
                                   {request._getRequest.service_category === 1
-                                    ? "ЕСБД"
-                                    : "БДКИ"}
+                                    ? 'ЕСБД'
+                                    : 'БДКИ'}
                                 </span>
                               </li>
                               <li>
-                                <span className="left">Тип сервиса:</span>
-                                <span className="right">
+                                <span className='left'>Тип сервиса:</span>
+                                <span className='right'>
                                   {
                                     request._getClientServiceType.find(
                                       (t: ServiceCommon) =>
@@ -225,53 +225,53 @@ const ServiceDeskInner = observer((props: any) => {
                                 </span>
                               </li>
                               <li>
-                                <span className="left">
+                                <span className='left'>
                                   Дата регистрации заявки:
                                 </span>
-                                <span className="right">
+                                <span className='right'>
                                   {request._getRequest.reg_date
                                     ? moment(
                                         request._getRequest.reg_date
-                                      ).format("MM.DD.YYYY")
-                                    : "-"}
+                                      ).format('MM.DD.YYYY в HH:mm')
+                                    : '-'}
                                 </span>
                               </li>
                               <li>
-                                <span className="left">
+                                <span className='left'>
                                   Дата исполнения заявки:
                                 </span>
-                                <span className="right">
+                                <span className='right'>
                                   {request._getRequest.fulfill_date
                                     ? moment(
                                         request._getRequest.fulfill_date
-                                      ).format("DD.MM.YYYY")
-                                    : "-"}
+                                      ).format('DD.MM.YYYY в HH:mm')
+                                    : '-'}
                                 </span>
                               </li>
                             </ul>
                           </div>
-                          <h3 className="title-subhead mb-16">
+                          <h3 className='title-subhead mb-16'>
                             Документы контрагента
                           </h3>
                           {request._getDocCategories &&
                           request._getDocCategories.length === 0
-                            ? "Документы отсутствуют."
+                            ? 'Документы отсутствуют.'
                             : request._getDocCategories.map(
                                 (c: Categories) =>
                                   c.doc_type.filter(
                                     (dt: any) => dt.file !== null
                                   ).length > 0 && (
                                     <>
-                                      <h5 className="title-subhead-h5 mb-16">
+                                      <h5 className='title-subhead-h5 mb-16'>
                                         {c.name}
                                       </h5>
-                                      <div className="files-added">
-                                        <ul className="files-list">
+                                      <div className='files-added'>
+                                        <ul className='files-list'>
                                           {c.doc_type.map(
                                             (d: any) =>
                                               d.file && (
                                                 <li>
-                                                  <i className="azla blank-alt-primary-icon"></i>
+                                                  <i className='azla blank-alt-primary-icon'></i>
                                                   <span
                                                     onClick={() =>
                                                       d.file &&
@@ -294,101 +294,101 @@ const ServiceDeskInner = observer((props: any) => {
                       </TabPanel>
 
                       <TabPanel>
-                        <div className="tab-content tab-1">
+                        <div className='tab-content tab-1'>
                           Потребители услуг – пользователи контрагента, которые
                           имеют доступ к базам данных БДКИ и ЕСБД.
-                          <h3 className="title-subhead mtb-16">
+                          <h3 className='title-subhead mtb-16'>
                             {request._getClientUsers.length} заявленных
                             пользователей
                           </h3>
                           {request._getClientUsers.length === 0
-                            ? "Пользователи отсутствуют. "
+                            ? 'Пользователи отсутствуют. '
                             : request._getClientUsers.map(
                                 (u: ClientUsers, index: number) => (
-                                  <div className="card mb-24 pad-24">
-                                    <div className="card-header">
-                                      <div className="title">
-                                        <h6 className="text">{u.full_name}</h6>
-                                        <span className="num">
+                                  <div className='card mb-24 pad-24'>
+                                    <div className='card-header'>
+                                      <div className='title'>
+                                        <h6 className='text'>{u.full_name}</h6>
+                                        <span className='num'>
                                           №{index + 1}
                                         </span>
                                       </div>
-                                      <p className="desc">
+                                      <p className='desc'>
                                         {u.department_name}
                                       </p>
                                     </div>
-                                    <div className="card-body pad-rl-16">
-                                      <div className="row">
-                                        <div className="col-md-6">
-                                          <div className="total-info">
-                                            <ul className="info-list">
+                                    <div className='card-body pad-rl-16'>
+                                      <div className='row'>
+                                        <div className='col-md-6'>
+                                          <div className='total-info'>
+                                            <ul className='info-list'>
                                               <li>
-                                                <span className="left">
+                                                <span className='left'>
                                                   ID пользователя:
                                                 </span>
-                                                <span className="right">
+                                                <span className='right'>
                                                   {u.id}
                                                 </span>
                                               </li>
                                               <li>
-                                                <span className="left">
+                                                <span className='left'>
                                                   ИИН сотрудника:
                                                 </span>
-                                                <span className="right">
+                                                <span className='right'>
                                                   {u.iin}
                                                 </span>
                                               </li>
                                               <li>
-                                                <span className="left">
+                                                <span className='left'>
                                                   Контактный номер:
                                                 </span>
-                                                <span className="right">
+                                                <span className='right'>
                                                   {u.idcard_number}
                                                 </span>
                                               </li>
                                               <li>
-                                                <span className="left">
+                                                <span className='left'>
                                                   Email:
                                                 </span>
-                                                <span className="right">
+                                                <span className='right'>
                                                   {u.email}
                                                 </span>
                                               </li>
                                             </ul>
                                           </div>
                                         </div>
-                                        <div className="col-md-6">
-                                          <div className="total-info">
-                                            <ul className="info-list">
+                                        <div className='col-md-6'>
+                                          <div className='total-info'>
+                                            <ul className='info-list'>
                                               <li>
-                                                <span className="left">
+                                                <span className='left'>
                                                   Первый руководитель:
                                                 </span>
-                                                <span className="right">
+                                                <span className='right'>
                                                   {u.first_head_full_name}
                                                 </span>
                                               </li>
                                               <li>
-                                                <span className="left">
+                                                <span className='left'>
                                                   Заместитель:
                                                 </span>
-                                                <span className="right">
+                                                <span className='right'>
                                                   {u.deputy_head_full_name}
                                                 </span>
                                               </li>
                                               <li>
-                                                <span className="left">
+                                                <span className='left'>
                                                   Курирующий менеджер:
                                                 </span>
-                                                <span className="right">
+                                                <span className='right'>
                                                   {u.manager_full_name}
                                                 </span>
                                               </li>
                                               <li>
-                                                <span className="left">
+                                                <span className='left'>
                                                   Контакты менеджера:
                                                 </span>
-                                                <span className="right">
+                                                <span className='right'>
                                                   {u.manager_contacts}
                                                 </span>
                                               </li>
@@ -404,76 +404,76 @@ const ServiceDeskInner = observer((props: any) => {
                       </TabPanel>
                     </Tabs>
                   ) : request.step === 2 ? (
-                    <div className="req-inner-body">
-                      <div className="tab-btn-content mb-32">
+                    <div className='req-inner-body'>
+                      <div className='tab-btn-content mb-32'>
                         {request._getRequest.is_model_contract &&
                         request._getDoc ? (
                           <div
                             className={`card-collapse tab-num-1 ${
-                              !request.signType ? "collapsed" : ""
+                              !request.signType ? 'collapsed' : ''
                             }`}
                           >
                             {/* При сворачивании дается класс "collapsed" */}
                             <div
                               className={
                                 request._getRequest.request_stepper === 3
-                                  ? "card-collapse-header success"
-                                  : "card-collapse-header"
+                                  ? 'card-collapse-header success'
+                                  : 'card-collapse-header'
                               }
                             >
                               {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
-                              <div className="collapsing-header">
+                              <div className='collapsing-header'>
                                 <h3
                                   className={
                                     request._getRequest.request_stepper === 3
-                                      ? "title-subhead mb-0 done-success"
-                                      : "title-subhead mb-0"
+                                      ? 'title-subhead mb-0 done-success'
+                                      : 'title-subhead mb-0'
                                   }
                                 >
                                   {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
                                   {request._getRequest.request_stepper === 3
-                                    ? "Договор подписан"
+                                    ? 'Договор подписан'
                                     : `На подписание: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}
                                 </h3>
                                 <span
-                                  className="btn-collapse"
+                                  className='btn-collapse'
                                   onClick={() =>
                                     (request.signType = !request.signType)
                                   }
                                 >
-                                  <i className="azla chevron-up-icon"></i>
+                                  <i className='azla chevron-up-icon'></i>
                                 </span>
                               </div>
-                              <div className="pad-rl-16 collapse-main">
-                                <div className="row">
-                                  <div className="col-md-6">
-                                    <p className="desc">Типовой договор</p>
+                              <div className='pad-rl-16 collapse-main'>
+                                <div className='row'>
+                                  <div className='col-md-6'>
+                                    <p className='desc'>Типовой договор</p>
                                     <button
-                                      type="button"
-                                      className="button btn-secondary btn-icon"
+                                      type='button'
+                                      className='button btn-secondary btn-icon'
                                       onClick={() =>
                                         request.downloadDocument(
                                           request._getDoc
                                         )
                                       }
                                     >
-                                      <i className="azla blank-alt-primary-icon"></i>
+                                      <i className='azla blank-alt-primary-icon'></i>
                                       Скачать договор
                                     </button>
                                   </div>
                                   {request._getManUser && (
-                                    <div className="col-md-6">
-                                      <p className="desc">Менеджер заявки</p>
-                                      <div className="profile mt-8">
+                                    <div className='col-md-6'>
+                                      <p className='desc'>Менеджер заявки</p>
+                                      <div className='profile mt-8'>
                                         <img
-                                          alt="ava"
-                                          className="ava"
+                                          alt='ava'
+                                          className='ava'
                                           src={
                                             process.env.PUBLIC_URL +
-                                            "/images/def-ava.svg"
+                                            '/images/def-ava.svg'
                                           }
                                         />
-                                        <span className="name">
+                                        <span className='name'>
                                           {request._getManUser.full_name}
                                         </span>
                                       </div>
@@ -483,13 +483,13 @@ const ServiceDeskInner = observer((props: any) => {
                               </div>
                             </div>
 
-                            <div className="collapse-content">
-                              <div className="collapse-body">
+                            <div className='collapse-content'>
+                              <div className='collapse-body'>
                                 {request._getConSigner &&
                                   (request._getConSigner as User) && (
-                                    <div className="collapse-signatory mb-24">
-                                      <h4 className="collapse-text">
-                                        Подписант от{" "}
+                                    <div className='collapse-signatory mb-24'>
+                                      <h4 className='collapse-text'>
+                                        Подписант от{' '}
                                         {request._getClients &&
                                           request._getClients.find(
                                             (t: Client) =>
@@ -497,25 +497,25 @@ const ServiceDeskInner = observer((props: any) => {
                                               request._getConSigner.client
                                           )?.longname}
                                       </h4>
-                                      <div className="signatory-profile">
-                                        <div className="col-md-6">
-                                          <div className="profile">
+                                      <div className='signatory-profile'>
+                                        <div className='col-md-6'>
+                                          <div className='profile'>
                                             <img
-                                              alt="ava"
-                                              className="ava"
+                                              alt='ava'
+                                              className='ava'
                                               src={
                                                 process.env.PUBLIC_URL +
-                                                "/images/def-ava.svg"
+                                                '/images/def-ava.svg'
                                               }
                                             />
-                                            <span className="name">
+                                            <span className='name'>
                                               {request._getConSigner.full_name}
                                             </span>
                                           </div>
                                         </div>
-                                        <div className="col-md-6">
-                                          <div className="signatory-status">
-                                            <p className="desc">
+                                        <div className='col-md-6'>
+                                          <div className='signatory-status'>
+                                            <p className='desc'>
                                               {request._getConSigner.position}
                                             </p>
 
@@ -527,11 +527,11 @@ const ServiceDeskInner = observer((props: any) => {
                                               .request_status === 8 ||
                                             request._getRequest
                                               .request_status === 10 ? (
-                                              <span className="btn-status done">
+                                              <span className='btn-status done'>
                                                 Подписано
                                               </span>
                                             ) : (
-                                              <span className="btn-status not-active">
+                                              <span className='btn-status not-active'>
                                                 Не Подписано
                                               </span>
                                             )}
@@ -541,9 +541,9 @@ const ServiceDeskInner = observer((props: any) => {
                                     </div>
                                   )}
                                 {(request._getManSigner as User) && (
-                                  <div className="collapse-signatory">
-                                    <h4 className="collapse-text">
-                                      Подписант от{" "}
+                                  <div className='collapse-signatory'>
+                                    <h4 className='collapse-text'>
+                                      Подписант от{' '}
                                       {request._getClients &&
                                         request._getClients.find(
                                           (t: Client) =>
@@ -552,35 +552,35 @@ const ServiceDeskInner = observer((props: any) => {
                                         )?.longname}
                                     </h4>
 
-                                    <div className="signatory-profile">
-                                      <div className="col-md-6">
-                                        <div className="profile">
+                                    <div className='signatory-profile'>
+                                      <div className='col-md-6'>
+                                        <div className='profile'>
                                           <img
-                                            alt="ava"
-                                            className="ava"
+                                            alt='ava'
+                                            className='ava'
                                             src={
                                               process.env.PUBLIC_URL +
-                                              "/images/def-ava.svg"
+                                              '/images/def-ava.svg'
                                             }
                                           />
-                                          <span className="name">
+                                          <span className='name'>
                                             {request._getManSigner.full_name}
                                           </span>
                                         </div>
                                       </div>
-                                      <div className="col-md-6">
-                                        <div className="signatory-status">
-                                          <p className="desc">
+                                      <div className='col-md-6'>
+                                        <div className='signatory-status'>
+                                          <p className='desc'>
                                             {request._getManSigner.position}
                                           </p>
 
                                           {request._getRequest.request_stepper >
                                           2 ? (
-                                            <span className="btn-status done">
+                                            <span className='btn-status done'>
                                               Подписано
                                             </span>
                                           ) : (
-                                            <span className="btn-status not-active">
+                                            <span className='btn-status not-active'>
                                               Не Подписано
                                             </span>
                                           )}
@@ -597,7 +597,7 @@ const ServiceDeskInner = observer((props: any) => {
                           <>
                             <div
                               className={`card-collapse tab-num-2 two-signatory ${
-                                !request.agreeNotType ? "collapsed" : ""
+                                !request.agreeNotType ? 'collapsed' : ''
                               }`}
                             >
                               <div
@@ -609,12 +609,12 @@ const ServiceDeskInner = observer((props: any) => {
                                   request._getRequest.request_status === 8 ||
                                   request._getRequest.request_status === 9 ||
                                   request._getRequest.request_status === 10
-                                    ? "success"
-                                    : ""
+                                    ? 'success'
+                                    : ''
                                 }`}
                               >
                                 {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
-                                <div className="collapsing-header">
+                                <div className='collapsing-header'>
                                   <h3
                                     className={
                                       request._getRequest.request_stepper ===
@@ -630,8 +630,8 @@ const ServiceDeskInner = observer((props: any) => {
                                       request._getRequest.request_status ===
                                         9 ||
                                       request._getRequest.request_status === 10
-                                        ? "title-subhead mb-0 done-success"
-                                        : "title-subhead mb-0"
+                                        ? 'title-subhead mb-0 done-success'
+                                        : 'title-subhead mb-0'
                                     }
                                   >
                                     {request._getRequest.request_stepper ===
@@ -642,49 +642,49 @@ const ServiceDeskInner = observer((props: any) => {
                                     request._getRequest.request_status === 8 ||
                                     request._getRequest.request_status === 9 ||
                                     request._getRequest.request_status === 10
-                                      ? "Договор согласован"
+                                      ? 'Договор согласован'
                                       : `На согласование: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}
                                   </h3>
                                   <span
-                                    className="btn-collapse"
+                                    className='btn-collapse'
                                     onClick={() =>
                                       (request.agreeNotType =
                                         !request.agreeNotType)
                                     }
                                   >
-                                    <i className="azla chevron-up-icon"></i>
+                                    <i className='azla chevron-up-icon'></i>
                                   </span>
                                 </div>
-                                <div className="pad-rl-16 collapse-main">
-                                  <div className="row">
-                                    <div className="col-md-6">
-                                      <p className="desc">Нетиповой договор</p>
+                                <div className='pad-rl-16 collapse-main'>
+                                  <div className='row'>
+                                    <div className='col-md-6'>
+                                      <p className='desc'>Нетиповой договор</p>
                                       <button
-                                        type="button"
-                                        className="button btn-secondary btn-icon"
+                                        type='button'
+                                        className='button btn-secondary btn-icon'
                                         onClick={() =>
                                           request.downloadDocument(
                                             request._getDoc
                                           )
                                         }
                                       >
-                                        <i className="azla blank-alt-primary-icon"></i>
+                                        <i className='azla blank-alt-primary-icon'></i>
                                         Скачать договор
                                       </button>
                                     </div>
                                     {request._getManUser && (
-                                      <div className="col-md-6">
-                                        <p className="desc">Менеджер заявки</p>
-                                        <div className="profile mt-8">
+                                      <div className='col-md-6'>
+                                        <p className='desc'>Менеджер заявки</p>
+                                        <div className='profile mt-8'>
                                           <img
-                                            alt="ava"
-                                            className="ava"
+                                            alt='ava'
+                                            className='ava'
                                             src={
                                               process.env.PUBLIC_URL +
-                                              "/images/def-ava.svg"
+                                              '/images/def-ava.svg'
                                             }
                                           />
-                                          <span className="name">
+                                          <span className='name'>
                                             {request._getManUser.full_name}
                                           </span>
                                         </div>
@@ -694,39 +694,39 @@ const ServiceDeskInner = observer((props: any) => {
                                 </div>
                               </div>
 
-                              <div className="collapse-content method-main">
-                                <div className="collapse-body">
-                                  <div className="method-signatory">
-                                    <div className="method-signatory-add">
+                              <div className='collapse-content method-main'>
+                                <div className='collapse-body'>
+                                  <div className='method-signatory'>
+                                    <div className='method-signatory-add'>
                                       {request._getReviews.map(
                                         (a: AgreeResult) => (
                                           <>
-                                            <div className="method-signatory-header">
-                                              <div className="left">
-                                                <h4 className="collapse-text mb-8">
-                                                  Согласующие от ГКБ{" "}
+                                            <div className='method-signatory-header'>
+                                              <div className='left'>
+                                                <h4 className='collapse-text mb-8'>
+                                                  Согласующие от ГКБ{' '}
                                                   {a.process_number}
                                                 </h4>
-                                                <p className="mb-0">
-                                                  {a.review_data.length}{" "}
-                                                  участников ·{" "}
+                                                <p className='mb-0'>
+                                                  {a.review_data.length}{' '}
+                                                  участников ·{' '}
                                                   {a.process_type ===
-                                                  "Sequential"
-                                                    ? "Последовательное согласование"
-                                                    : "Параллельное согласование"}
+                                                  'Sequential'
+                                                    ? 'Последовательное согласование'
+                                                    : 'Параллельное согласование'}
                                                 </p>
                                               </div>
-                                              <div className="right">
-                                                <p className="text-desc mb-0 mr-8">
+                                              <div className='right'>
+                                                <p className='text-desc mb-0 mr-8'>
                                                   Метод согласования:
                                                 </p>
-                                                <div className="tab-button">
+                                                <div className='tab-button'>
                                                   <span
                                                     className={`tab-btn ${
                                                       a.process_type ===
-                                                      "Sequential"
-                                                        ? "active"
-                                                        : ""
+                                                      'Sequential'
+                                                        ? 'active'
+                                                        : ''
                                                     }`}
                                                   >
                                                     Последовательный
@@ -734,9 +734,9 @@ const ServiceDeskInner = observer((props: any) => {
                                                   <span
                                                     className={`tab-btn ${
                                                       a.process_type ===
-                                                      "Parallel"
-                                                        ? "active"
-                                                        : ""
+                                                      'Parallel'
+                                                        ? 'active'
+                                                        : ''
                                                     }`}
                                                   >
                                                     Параллельный
@@ -745,24 +745,24 @@ const ServiceDeskInner = observer((props: any) => {
                                               </div>
                                             </div>
 
-                                            <div className="method-add-user">
-                                              <div className="method-add-users">
-                                                <ul className="method-list-users">
+                                            <div className='method-add-user'>
+                                              <div className='method-add-users'>
+                                                <ul className='method-list-users'>
                                                   {a.review_data.map(
                                                     (s: Result) => (
                                                       <li>
-                                                        <div className="left">
-                                                          <div className="profile">
+                                                        <div className='left'>
+                                                          <div className='profile'>
                                                             <img
-                                                              alt="ava"
-                                                              className="ava"
+                                                              alt='ava'
+                                                              className='ava'
                                                               src={
                                                                 process.env
                                                                   .PUBLIC_URL +
-                                                                "/images/def-ava.svg"
+                                                                '/images/def-ava.svg'
                                                               }
                                                             />
-                                                            <span className="name">
+                                                            <span className='name'>
                                                               {request._getAllUsers &&
                                                                 request._getAllUsers.find(
                                                                   (u: User) =>
@@ -772,7 +772,7 @@ const ServiceDeskInner = observer((props: any) => {
                                                             </span>
                                                           </div>
                                                         </div>
-                                                        <span className="position">
+                                                        <span className='position'>
                                                           {request._getAllUsers &&
                                                             request._getAllUsers.find(
                                                               (u: User) =>
@@ -784,15 +784,15 @@ const ServiceDeskInner = observer((props: any) => {
                                                         {s.is_approved !==
                                                           null &&
                                                         !s.is_approved ? (
-                                                          <span className="btn-status canceled">
+                                                          <span className='btn-status canceled'>
                                                             Отклонено
                                                           </span>
                                                         ) : s.is_approved ? (
-                                                          <span className="btn-status done">
+                                                          <span className='btn-status done'>
                                                             Согласовано
                                                           </span>
                                                         ) : (
-                                                          <span className="btn-status not-active">
+                                                          <span className='btn-status not-active'>
                                                             Не согласовано
                                                           </span>
                                                         )}
@@ -812,38 +812,38 @@ const ServiceDeskInner = observer((props: any) => {
                             </div>
                             <div
                               className={`card-collapse tab-num-1 ${
-                                request.signNotType ? "" : "collapsed "
+                                request.signNotType ? '' : 'collapsed '
                               } ${
                                 request._getRequest.request_status === 2 ||
                                 request._getRequest.request_status === 11
-                                  ? "disabled"
-                                  : ""
+                                  ? 'disabled'
+                                  : ''
                               }`}
                             >
                               {/* При сворачивании дается класс "collapsed" */}
                               <div
                                 className={
                                   request._getRequest.request_stepper > 2
-                                    ? "card-collapse-header success"
-                                    : "card-collapse-header"
+                                    ? 'card-collapse-header success'
+                                    : 'card-collapse-header'
                                 }
                               >
                                 {/* Если все ОКЕЙ то заменяется текст на "Договор подписан" и дается класс "success" */}
-                                <div className="collapsing-header">
+                                <div className='collapsing-header'>
                                   <h3
                                     className={
                                       request._getRequest.request_stepper > 2
-                                        ? "title-subhead mb-0 done-success"
-                                        : "title-subhead mb-0"
+                                        ? 'title-subhead mb-0 done-success'
+                                        : 'title-subhead mb-0'
                                     }
                                   >
                                     {/* При сворачивании дается класс "collapsed" текст стоит "Договор на подписании" */}
                                     {request._getRequest.request_stepper > 2
-                                      ? "Договор подписан"
+                                      ? 'Договор подписан'
                                       : `На подписание: Договор №${request._getDoc.id} - вер. ${request._getDoc.version}`}
                                   </h3>
                                   <span
-                                    className="btn-collapse"
+                                    className='btn-collapse'
                                     onClick={() => {
                                       if (
                                         request._getRequest.request_status !==
@@ -855,39 +855,39 @@ const ServiceDeskInner = observer((props: any) => {
                                           !request.signNotType;
                                     }}
                                   >
-                                    <i className="azla chevron-up-icon"></i>
+                                    <i className='azla chevron-up-icon'></i>
                                   </span>
                                 </div>
-                                <div className="pad-rl-16 collapse-main">
-                                  <div className="row">
-                                    <div className="col-md-6">
-                                      <p className="desc">Нетиповой договор</p>
+                                <div className='pad-rl-16 collapse-main'>
+                                  <div className='row'>
+                                    <div className='col-md-6'>
+                                      <p className='desc'>Нетиповой договор</p>
                                       <button
-                                        type="button"
-                                        className="button btn-secondary btn-icon"
+                                        type='button'
+                                        className='button btn-secondary btn-icon'
                                         onClick={() =>
                                           request.downloadDocument(
                                             request._getDoc
                                           )
                                         }
                                       >
-                                        <i className="azla blank-alt-primary-icon"></i>
+                                        <i className='azla blank-alt-primary-icon'></i>
                                         Скачать договор
                                       </button>
                                     </div>
                                     {request._getManUser && (
-                                      <div className="col-md-6">
-                                        <p className="desc">Менеджер заявки</p>
-                                        <div className="profile mt-8">
+                                      <div className='col-md-6'>
+                                        <p className='desc'>Менеджер заявки</p>
+                                        <div className='profile mt-8'>
                                           <img
-                                            alt="ava"
-                                            className="ava"
+                                            alt='ava'
+                                            className='ava'
                                             src={
                                               process.env.PUBLIC_URL +
-                                              "/images/def-ava.svg"
+                                              '/images/def-ava.svg'
                                             }
                                           />
-                                          <span className="name">
+                                          <span className='name'>
                                             {request._getManUser.full_name}
                                           </span>
                                         </div>
@@ -896,13 +896,13 @@ const ServiceDeskInner = observer((props: any) => {
                                   </div>
                                 </div>
                               </div>
-                              <div className="collapse-content">
-                                <div className="collapse-body">
+                              <div className='collapse-content'>
+                                <div className='collapse-body'>
                                   {request._getConSigner &&
                                     (request._getConSigner as User) && (
-                                      <div className="collapse-signatory mb-24">
-                                        <h4 className="collapse-text">
-                                          Подписант от{" "}
+                                      <div className='collapse-signatory mb-24'>
+                                        <h4 className='collapse-text'>
+                                          Подписант от{' '}
                                           {request._getClients &&
                                             request._getClients.find(
                                               (t: Client) =>
@@ -910,18 +910,18 @@ const ServiceDeskInner = observer((props: any) => {
                                                 request._getConSigner.client
                                             )?.longname}
                                         </h4>
-                                        <div className="signatory-profile">
-                                          <div className="col-md-6">
-                                            <div className="profile">
+                                        <div className='signatory-profile'>
+                                          <div className='col-md-6'>
+                                            <div className='profile'>
                                               <img
-                                                alt="ava"
-                                                className="ava"
+                                                alt='ava'
+                                                className='ava'
                                                 src={
                                                   process.env.PUBLIC_URL +
-                                                  "/images/def-ava.svg"
+                                                  '/images/def-ava.svg'
                                                 }
                                               />
-                                              <span className="name">
+                                              <span className='name'>
                                                 {
                                                   request._getConSigner
                                                     .full_name
@@ -929,9 +929,9 @@ const ServiceDeskInner = observer((props: any) => {
                                               </span>
                                             </div>
                                           </div>
-                                          <div className="col-md-6">
-                                            <div className="signatory-status">
-                                              <p className="desc">
+                                          <div className='col-md-6'>
+                                            <div className='signatory-status'>
+                                              <p className='desc'>
                                                 {request._getConSigner.position}
                                               </p>
                                               {request._getRequest
@@ -942,11 +942,11 @@ const ServiceDeskInner = observer((props: any) => {
                                                 .request_status === 8 ||
                                               request._getRequest
                                                 .request_status === 10 ? (
-                                                <span className="btn-status done">
+                                                <span className='btn-status done'>
                                                   Подписано
                                                 </span>
                                               ) : (
-                                                <span className="btn-status not-active">
+                                                <span className='btn-status not-active'>
                                                   Не Подписано
                                                 </span>
                                               )}
@@ -957,9 +957,9 @@ const ServiceDeskInner = observer((props: any) => {
                                     )}
                                   {request._getManSigner &&
                                     (request._getManSigner as User) && (
-                                      <div className="collapse-signatory">
-                                        <h4 className="collapse-text">
-                                          Подписант от{" "}
+                                      <div className='collapse-signatory'>
+                                        <h4 className='collapse-text'>
+                                          Подписант от{' '}
                                           {request._getClients &&
                                             request._getClients.find(
                                               (t: Client) =>
@@ -968,18 +968,18 @@ const ServiceDeskInner = observer((props: any) => {
                                             )?.longname}
                                         </h4>
 
-                                        <div className="signatory-profile">
-                                          <div className="col-md-6">
-                                            <div className="profile">
+                                        <div className='signatory-profile'>
+                                          <div className='col-md-6'>
+                                            <div className='profile'>
                                               <img
-                                                alt="ava"
-                                                className="ava"
+                                                alt='ava'
+                                                className='ava'
                                                 src={
                                                   process.env.PUBLIC_URL +
-                                                  "/images/def-ava.svg"
+                                                  '/images/def-ava.svg'
                                                 }
                                               />
-                                              <span className="name">
+                                              <span className='name'>
                                                 {
                                                   request._getManSigner
                                                     .full_name
@@ -987,23 +987,23 @@ const ServiceDeskInner = observer((props: any) => {
                                               </span>
                                             </div>
                                           </div>
-                                          <div className="col-md-6">
-                                            <div className="signatory-status">
-                                              <p className="desc">
+                                          <div className='col-md-6'>
+                                            <div className='signatory-status'>
+                                              <p className='desc'>
                                                 {request._getManSigner.position}
                                               </p>
                                               {request._getRequest
                                                 .request_stepper > 2 ? (
-                                                <span className="btn-status done">
+                                                <span className='btn-status done'>
                                                   Подписано
                                                 </span>
                                               ) : request._getRequest
                                                   .request_status === 6 ? (
-                                                <span className="btn-status not-active">
+                                                <span className='btn-status not-active'>
                                                   Не Подписано
                                                 </span>
                                               ) : (
-                                                ""
+                                                ''
                                               )}
                                             </div>
                                           </div>
@@ -1015,12 +1015,12 @@ const ServiceDeskInner = observer((props: any) => {
                             </div>
                           </>
                         ) : (
-                          ""
+                          ''
                         )}
-                        <div className="d-flex-align-c-spaceb mb-32">
-                          <h3 className="title-subhead">
-                            История изменения договора{" "}
-                            <span className="number">
+                        <div className='d-flex-align-c-spaceb mb-32'>
+                          <h3 className='title-subhead'>
+                            История изменения договора{' '}
+                            <span className='number'>
                               {request._getDogovors &&
                                 (request._getDogovors as Documents[]).length}
                             </span>
@@ -1028,9 +1028,9 @@ const ServiceDeskInner = observer((props: any) => {
                         </div>
                         {request._getDogovors &&
                         request._getDogovors.length === 0 ? (
-                          "Нет загруженных договоров."
+                          'Нет загруженных договоров.'
                         ) : (
-                          <table className="table req-table">
+                          <table className='table req-table'>
                             <thead>
                               <tr>
                                 <th>Название</th>
@@ -1065,27 +1065,27 @@ const ServiceDeskInner = observer((props: any) => {
                             </tbody>
                           </table>
                         )}
-                        <h3 className="title-subhead mb-16">
+                        <h3 className='title-subhead mb-16'>
                           Документы контрагента
                         </h3>
                         {request._getDocCategories &&
                         request._getDocCategories.length === 0
-                          ? "Документы отсутствуют."
+                          ? 'Документы отсутствуют.'
                           : request._getDocCategories.map(
                               (c: Categories) =>
                                 c.doc_type.filter((dt: any) => dt.file !== null)
                                   .length > 0 && (
                                   <>
-                                    <h5 className="title-subhead-h5 mb-16">
+                                    <h5 className='title-subhead-h5 mb-16'>
                                       {c.name}
                                     </h5>
-                                    <div className="files-added">
-                                      <ul className="files-list">
+                                    <div className='files-added'>
+                                      <ul className='files-list'>
                                         {c.doc_type.map(
                                           (d: any) =>
                                             d.file && (
                                               <li>
-                                                <i className="azla blank-alt-primary-icon"></i>
+                                                <i className='azla blank-alt-primary-icon'></i>
                                                 <span
                                                   onClick={() =>
                                                     d.file &&
@@ -1108,92 +1108,92 @@ const ServiceDeskInner = observer((props: any) => {
                     </div>
                   ) : request.step === 3 ? (
                     <>
-                      <h3 className="title-subhead mb-16">
+                      <h3 className='title-subhead mb-16'>
                         {request._getClientUsers.length} заявленных
                         пользователей
                       </h3>
                       {request._getClientUsers.length === 0
-                        ? "Пользователи отсутствуют. "
+                        ? 'Пользователи отсутствуют. '
                         : request._getClientUsers.map(
                             (u: ClientUsers, index: number) => (
-                              <div className="card mb-24 pad-24">
-                                <div className="card-header">
-                                  <div className="title">
-                                    <h6 className="text">{u.full_name}</h6>
-                                    <span className="num">№{index + 1}</span>
+                              <div className='card mb-24 pad-24'>
+                                <div className='card-header'>
+                                  <div className='title'>
+                                    <h6 className='text'>{u.full_name}</h6>
+                                    <span className='num'>№{index + 1}</span>
                                   </div>
-                                  <p className="desc">{u.department_name}</p>
+                                  <p className='desc'>{u.department_name}</p>
                                 </div>
-                                <div className="card-body pad-rl-16">
-                                  <div className="row">
-                                    <div className="col-md-6">
-                                      <div className="total-info">
-                                        <ul className="info-list">
+                                <div className='card-body pad-rl-16'>
+                                  <div className='row'>
+                                    <div className='col-md-6'>
+                                      <div className='total-info'>
+                                        <ul className='info-list'>
                                           <li>
-                                            <span className="left">
+                                            <span className='left'>
                                               ID пользователя:
                                             </span>
-                                            <span className="right">
+                                            <span className='right'>
                                               {u.id}
                                             </span>
                                           </li>
                                           <li>
-                                            <span className="left">
+                                            <span className='left'>
                                               ИИН сотрудника:
                                             </span>
-                                            <span className="right">
+                                            <span className='right'>
                                               {u.iin}
                                             </span>
                                           </li>
                                           <li>
-                                            <span className="left">
+                                            <span className='left'>
                                               Контактный номер:
                                             </span>
-                                            <span className="right">
+                                            <span className='right'>
                                               {u.idcard_number}
                                             </span>
                                           </li>
                                           <li>
-                                            <span className="left">Email:</span>
-                                            <span className="right">
+                                            <span className='left'>Email:</span>
+                                            <span className='right'>
                                               {u.email}
                                             </span>
                                           </li>
                                         </ul>
                                       </div>
                                     </div>
-                                    <div className="col-md-6">
-                                      <div className="total-info">
-                                        <ul className="info-list">
+                                    <div className='col-md-6'>
+                                      <div className='total-info'>
+                                        <ul className='info-list'>
                                           <li>
-                                            <span className="left">
+                                            <span className='left'>
                                               Первый руководитель:
                                             </span>
-                                            <span className="right">
+                                            <span className='right'>
                                               {u.first_head_full_name}
                                             </span>
                                           </li>
                                           <li>
-                                            <span className="left">
+                                            <span className='left'>
                                               Заместитель:
                                             </span>
-                                            <span className="right">
+                                            <span className='right'>
                                               {u.deputy_head_full_name}
                                             </span>
                                           </li>
                                           <li>
-                                            <span className="left">
+                                            <span className='left'>
                                               Курирующий менеджер:
                                             </span>
-                                            <span className="right">
+                                            <span className='right'>
                                               {u.manager_full_name}
                                             </span>
                                           </li>
                                           <li>
-                                            <span className="left">
+                                            <span className='left'>
                                               Контакты менеджера:
                                             </span>
-                                            <span className="right">
+                                            <span className='right'>
                                               {u.manager_contacts}
                                             </span>
                                           </li>
@@ -1208,19 +1208,19 @@ const ServiceDeskInner = observer((props: any) => {
                     </>
                   ) : request.step === 4 ? (
                     <>
-                      <div className="pad-b-128">
-                        <div className="req-inner-body">
-                          <div className="pad-rl-16">
-                            <div className="row">
-                              <div className="col-md-8">
-                                <h3 className="title-subhead mb-16">
+                      <div className='pad-b-128'>
+                        <div className='req-inner-body'>
+                          <div className='pad-rl-16'>
+                            <div className='row'>
+                              <div className='col-md-8'>
+                                <h3 className='title-subhead mb-16'>
                                   Тестирование сервисов
                                 </h3>
-                                <div className="files-added">
-                                  <ul className="files-list">
+                                <div className='files-added'>
+                                  <ul className='files-list'>
                                     {request.testProt && (
                                       <li>
-                                        <i className="azla blank-alt-primary-icon"></i>
+                                        <i className='azla blank-alt-primary-icon'></i>
                                         <span
                                           onClick={() =>
                                             request.downloadDocument(
@@ -1234,7 +1234,7 @@ const ServiceDeskInner = observer((props: any) => {
                                     )}
                                     {request.testAct && (
                                       <li>
-                                        <i className="azla blank-alt-primary-icon"></i>
+                                        <i className='azla blank-alt-primary-icon'></i>
                                         <span
                                           onClick={() =>
                                             request.downloadDocument(
@@ -1249,26 +1249,26 @@ const ServiceDeskInner = observer((props: any) => {
                                   </ul>
                                 </div>
 
-                                <h3 className="title-subhead mb-16">
+                                <h3 className='title-subhead mb-16'>
                                   Сценарий тестирования
                                 </h3>
-                                <p className="text-desc">
+                                <p className='text-desc'>
                                   Amet minim mollit non deserunt ullamco est sit
                                   aliqua dolor do amet sint. Velit officia
                                   consequat duis enim velit mollit. Exercitation
                                   veniam consequat sunt nostrud amet.
                                 </p>
                               </div>
-                              <div className="col-md-3 offset-md-1">
-                                <div className="keys-add">
-                                  <h3 className="title-subhead mb-16">
+                              <div className='col-md-3 offset-md-1'>
+                                <div className='keys-add'>
+                                  <h3 className='title-subhead mb-16'>
                                     Ключи доступа
                                   </h3>
-                                  <div className="keys-btn">
+                                  <div className='keys-btn'>
                                     {request.testKey ? (
                                       <button
-                                        type="button"
-                                        className="btn-file btn-icon"
+                                        type='button'
+                                        className='btn-file btn-icon'
                                         onClick={() =>
                                           request.downloadKeys(request.testKey)
                                         }
@@ -1277,21 +1277,21 @@ const ServiceDeskInner = observer((props: any) => {
                                       </button>
                                     ) : (
                                       <div
-                                        className="file-add-sd"
+                                        className='file-add-sd'
                                         onClick={() => {
                                           main.setModal(true);
                                           main.setModalType(16);
                                           main.setModalTypeEdit(1);
                                         }}
                                       >
-                                        <i className="azla plus-primary-icon size-18 mr-8"></i>
+                                        <i className='azla plus-primary-icon size-18 mr-8'></i>
                                         Тестовые ключи
                                       </div>
                                     )}
                                     {request.prodKey ? (
                                       <button
-                                        type="button"
-                                        className="btn-file btn-icon"
+                                        type='button'
+                                        className='btn-file btn-icon'
                                         onClick={() =>
                                           request.downloadKeys(request.prodKey)
                                         }
@@ -1300,14 +1300,14 @@ const ServiceDeskInner = observer((props: any) => {
                                       </button>
                                     ) : (
                                       <div
-                                        className="file-add-sd"
+                                        className='file-add-sd'
                                         onClick={() => {
                                           main.setModal(true);
                                           main.setModalType(16);
                                           main.setModalTypeEdit(2);
                                         }}
                                       >
-                                        <i className="azla plus-primary-icon size-18 mr-8"></i>
+                                        <i className='azla plus-primary-icon size-18 mr-8'></i>
                                         Боевые ключи
                                       </div>
                                     )}
@@ -1321,34 +1321,34 @@ const ServiceDeskInner = observer((props: any) => {
                     </>
                   ) : request.step === 5 ? (
                     <>
-                      <div className="pad-b-128">
-                        <div className="done-request">
-                          <h3 className="title-subhead mb-16">
+                      <div className='pad-b-128'>
+                        <div className='done-request'>
+                          <h3 className='title-subhead mb-16'>
                             Контрагент успешно зарегистрирован!
                           </h3>
 
-                          <h5 className="title-subhead-h5 mb-16">
+                          <h5 className='title-subhead-h5 mb-16'>
                             Общие данные
                           </h5>
 
-                          <div className="pad-rl-16 mb-32">
-                            <div className="row">
-                              <div className="col-md-6">
-                                <div className="total-info">
-                                  <ul className="info-list">
+                          <div className='pad-rl-16 mb-32'>
+                            <div className='row'>
+                              <div className='col-md-6'>
+                                <div className='total-info'>
+                                  <ul className='info-list'>
                                     <li>
-                                      <span className="left">
+                                      <span className='left'>
                                         Номер заявки:
                                       </span>
-                                      <span className="right">
+                                      <span className='right'>
                                         {request._getRequest.id}
                                       </span>
                                     </li>
                                     <li>
-                                      <span className="left">
+                                      <span className='left'>
                                         Статус заявки:
                                       </span>
-                                      <span className="right">
+                                      <span className='right'>
                                         {
                                           request._getRequestStatus.find(
                                             (t: ServiceCommon) =>
@@ -1359,22 +1359,22 @@ const ServiceDeskInner = observer((props: any) => {
                                       </span>
                                     </li>
                                     <li>
-                                      <span className="left">Организация:</span>
-                                      <span className="right">
+                                      <span className='left'>Организация:</span>
+                                      <span className='right'>
                                         {main.clientData.client.longname}
                                       </span>
                                     </li>
                                     <li>
-                                      <span className="left">БИН:</span>
-                                      <span className="right">
+                                      <span className='left'>БИН:</span>
+                                      <span className='right'>
                                         {main.clientData.client.bin}
                                       </span>
                                     </li>
                                     <li>
-                                      <span className="left">
+                                      <span className='left'>
                                         Категория деятельности:
                                       </span>
-                                      <span className="right">
+                                      <span className='right'>
                                         {
                                           request._getClientTypes.find(
                                             (t: any) =>
@@ -1385,8 +1385,8 @@ const ServiceDeskInner = observer((props: any) => {
                                       </span>
                                     </li>
                                     <li>
-                                      <span className="left">Тип сервиса:</span>
-                                      <span className="right">
+                                      <span className='left'>Тип сервиса:</span>
+                                      <span className='right'>
                                         {
                                           request._getClientServiceType.find(
                                             (t: ServiceCommon) =>
@@ -1397,24 +1397,24 @@ const ServiceDeskInner = observer((props: any) => {
                                       </span>
                                     </li>
                                     <li>
-                                      <span className="left">
+                                      <span className='left'>
                                         Дата регистрации заявки:
                                       </span>
-                                      <span className="right">
+                                      <span className='right'>
                                         {moment(
                                           request._getRequest.reg_date
-                                        ).format("DD.MM.YYYY")}
+                                        ).format('DD.MM.YYYY в HH:mm')}
                                       </span>
                                     </li>
                                     <li>
-                                      <span className="left">
+                                      <span className='left'>
                                         Дата исполнения заявки:
                                       </span>
-                                      <span className="right">
+                                      <span className='right'>
                                         {request._getRequest.fulfill_date &&
                                           moment(
                                             request._getRequest.fulfill_date
-                                          ).format("DD.MM.YYYY")}
+                                          ).format('DD.MM.YYYY в HH:mm')}
                                       </span>
                                     </li>
                                   </ul>
@@ -1423,9 +1423,9 @@ const ServiceDeskInner = observer((props: any) => {
                             </div>
                           </div>
 
-                          <h5 className="title-subhead-h5 mb-16">Документы</h5>
-                          <div className="files-added">
-                            <ul className="files-list">
+                          <h5 className='title-subhead-h5 mb-16'>Документы</h5>
+                          <div className='files-added'>
+                            <ul className='files-list'>
                               {request._getClientDocs &&
                                 (request._getClientDocs as Documents[])
                                   .filter(
@@ -1440,7 +1440,7 @@ const ServiceDeskInner = observer((props: any) => {
                                   )
                                   .map((d) => (
                                     <li>
-                                      <i className="azla blank-alt-primary-icon"></i>
+                                      <i className='azla blank-alt-primary-icon'></i>
                                       <span
                                         onClick={() =>
                                           d && request.downloadDocument(d)
@@ -1456,14 +1456,14 @@ const ServiceDeskInner = observer((props: any) => {
                                   ))}
                             </ul>
                           </div>
-                          <h5 className="title-subhead-h5 mb-16">
+                          <h5 className='title-subhead-h5 mb-16'>
                             Ключи доступа
                           </h5>
-                          <div className="d-flex">
+                          <div className='d-flex'>
                             {request.testKey && (
                               <button
-                                type="button"
-                                className="button btn-secondary mr-16"
+                                type='button'
+                                className='button btn-secondary mr-16'
                                 onClick={() =>
                                   request.downloadKeys(request.testKey)
                                 }
@@ -1473,8 +1473,8 @@ const ServiceDeskInner = observer((props: any) => {
                             )}
                             {request.prodKey && (
                               <button
-                                type="button"
-                                className="button btn-secondary"
+                                type='button'
+                                className='button btn-secondary'
                                 onClick={() =>
                                   request.downloadKeys(request.prodKey)
                                 }
@@ -1492,25 +1492,25 @@ const ServiceDeskInner = observer((props: any) => {
 
                   {request._getRequest.request_stepper === 3 &&
                     request._getRequest.request_status === 10 && (
-                      <div className="req-inner-footer">
-                        <div className="container">
-                          <div className="left">
+                      <div className='req-inner-footer'>
+                        <div className='container'>
+                          <div className='left'>
                             <button
-                              type="button"
+                              type='button'
                               onClick={() =>
                                 request.nextRequest(request._getRequest)
                               }
-                              className="button btn-primary mrl-32"
+                              className='button btn-primary mrl-32'
                             >
                               Подтвердить заполнение
                             </button>
                             <button
-                              type="button"
+                              type='button'
                               onClick={() => {
                                 main.setModalType(1);
                                 main.setModal(true);
                               }}
-                              className="button btn-danger"
+                              className='button btn-danger'
                             >
                               Отклонить
                             </button>
