@@ -1,10 +1,13 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { PartnersProps } from '../partners/PartnersProps.props';
-import { Documents, ServiceCommon } from '../../api/Models/ServiceModels';
+import { ServiceCommon, Documents } from '../../api/Models/ServiceModels';
 import moment from 'moment';
+import { ServiceDeskInnerProps } from './ServiceDeskInnerProps.props';
 
-const PartnersInnerFifthStep = ({ main, request }: PartnersProps) => {
+const ServiceDeskInnerFifthStep = ({
+  main,
+  request,
+}: ServiceDeskInnerProps) => {
   return (
     <>
       <div className='pad-b-128'>
@@ -38,13 +41,13 @@ const PartnersInnerFifthStep = ({ main, request }: PartnersProps) => {
                     <li>
                       <span className='left'>Организация:</span>
                       <span className='right'>
-                        {request._getRequest.client.longname}
+                        {main.clientData.client.longname}
                       </span>
                     </li>
                     <li>
                       <span className='left'>БИН:</span>
                       <span className='right'>
-                        {request._getRequest.client.bin}
+                        {main.clientData.client.bin}
                       </span>
                     </li>
                     <li>
@@ -53,7 +56,7 @@ const PartnersInnerFifthStep = ({ main, request }: PartnersProps) => {
                         {
                           request._getClientTypes.find(
                             (t: any) =>
-                              t.id === request._getRequest.client.client_type
+                              t.id === main.clientData.client.client_type
                           )?.name
                         }
                       </span>
@@ -119,7 +122,6 @@ const PartnersInnerFifthStep = ({ main, request }: PartnersProps) => {
                   ))}
             </ul>
           </div>
-
           <h5 className='title-subhead-h5 mb-16'>Ключи доступа</h5>
           <div className='d-flex'>
             {request.testKey && (
@@ -146,4 +148,5 @@ const PartnersInnerFifthStep = ({ main, request }: PartnersProps) => {
     </>
   );
 };
-export default observer(PartnersInnerFifthStep);
+
+export default observer(ServiceDeskInnerFifthStep);

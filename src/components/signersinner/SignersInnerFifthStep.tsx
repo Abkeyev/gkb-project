@@ -1,10 +1,10 @@
-import { observer } from 'mobx-react';
 import React from 'react';
-import { PartnersProps } from '../partners/PartnersProps.props';
-import { Documents, ServiceCommon } from '../../api/Models/ServiceModels';
+import { observer } from 'mobx-react';
+import { SignersInnerProps } from './SignersInnerProps.props';
+import { ServiceCommon, Documents } from '../../api/Models/ServiceModels';
 import moment from 'moment';
 
-const PartnersInnerFifthStep = ({ main, request }: PartnersProps) => {
+const SignersInnerFifthStep = ({ request }: SignersInnerProps) => {
   return (
     <>
       <div className='pad-b-128'>
@@ -146,4 +146,5 @@ const PartnersInnerFifthStep = ({ main, request }: PartnersProps) => {
     </>
   );
 };
-export default observer(PartnersInnerFifthStep);
+
+export default observer(SignersInnerFifthStep);

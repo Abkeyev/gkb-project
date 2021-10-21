@@ -91,7 +91,7 @@ const PartnersSigned = ({ filter, request }: PartnersProps) => {
                     }
                     /{r.service_category === 1 ? 'ЕСБД' : 'БДКИ'}
                   </td>
-                  <td>{moment(r.reg_date).format('DD.MM.YYYY')}</td>
+                  <td>{moment(r.reg_date).format('DD.MM.YYYY в HH:mm')}</td>
                 </tr>
               ))}
             </tbody>

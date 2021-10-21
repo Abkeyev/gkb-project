@@ -34,10 +34,10 @@ const ContractorsServices = ({ request }: ContractorsProps) => {
                       }
                     </td>
                     <td>{c.service_category === 1 ? 'ЕСБД' : 'БДКИ'}</td>
-                    <td>{moment(c.reg_date).format('DD.MM.YYYY')}</td>
+                    <td>{moment(c.reg_date).format('DD.MM.YYYY в HH:mm')}</td>
                     <td>
                       {c.fulfill_date &&
-                        moment(c.fulfill_date).format('DD.MM.YYYY')}
+                        moment(c.fulfill_date).format('DD.MM.YYYY в HH:mm')}
                     </td>
                   </tr>
                 ))}

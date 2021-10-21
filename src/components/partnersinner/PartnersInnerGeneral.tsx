@@ -67,7 +67,9 @@ const PartnersInnerGeneral = ({ request }: PartnersProps) => {
               <span className='left'>Дата регистрации заявки:</span>
               <span className='right'>
                 {request._getRequest.reg_date
-                  ? moment(request._getRequest.reg_date).format('MM.DD.YYYY')
+                  ? moment(request._getRequest.reg_date).format(
+                      'MM.DD.YYYY в HH:mm'
+                    )
                   : '-'}
               </span>
             </li>
@@ -76,7 +78,7 @@ const PartnersInnerGeneral = ({ request }: PartnersProps) => {
               <span className='right'>
                 {request._getRequest.fulfill_date
                   ? moment(request._getRequest.fulfill_date).format(
-                      'DD.MM.YYYY'
+                      'DD.MM.YYYY в HH:mm'
                     )
                   : '-'}
               </span>
