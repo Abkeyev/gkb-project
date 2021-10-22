@@ -1,29 +1,31 @@
-import { observer } from 'mobx-react';
-import React from 'react';
-import ModalTypeEighteen from '../components/modal/modals/ModalTypeEighteen';
-import ModalTypeFifteen from '../components/modal/modals/ModalTypeFifteen';
-import ModalTypeFourteen from '../components/modal/modals/ModalTypeFourteen';
-import ModalTypeSeventeen from '../components/modal/modals/ModalTypeSeventeen';
-import ModalTypeSixteen from '../components/modal/modals/ModalTypeSixteen';
-import ModalTypeZero from '../components/modal/modals/ModalTypeZero';
-import ModalTypeTen from '../components/modal/modals/ModalTypeTen';
-import ModalTypeOne from '../components/modal/modals/ModalTypeOne';
-import ModalTypeTwo from '../components/modal/modals/ModalTypeTwo';
-import ModalTypeThree from '../components/modal/modals/ModalTypeThree';
-import ModalTypeFour from '../components/modal/modals/ModalTypeFour';
-import ModalTypeFive from '../components/modal/modals/ModalTypeFive';
-import ModalTypeSix from '../components/modal/modals/ModalTypeSix';
-import ModalTypeSeven from '../components/modal/modals/ModalTypeSeven';
-import ModalTypeEight from '../components/modal/modals/ModalTypeEight';
-import ModalTypeNine from '../components/modal/modals/ModalTypeNine';
-import ModalTypeEleven from '../components/modal/modals/ModalTypeEleven';
-import ModalTypeThirteen from '../components/modal/modals/ModalTypeThirteen';
-import ModalTypeNineteen from '../components/modal/modals/ModalTypeNineteen';
-import ModalTypeTwenty from '../components/modal/modals/ModalTypeTwenty';
-import ModalTypeTwentyOne from '../components/modal/modals/ModalTypeTwentyOne';
-import ModalTypeTwentyTwo from '../components/modal/modals/ModalTypeTwentyTwo';
-import ModalTypeTwentyThree from '../components/modal/modals/ModalTypeTwentyThree';
-import ModalDefault from '../components/modal/modals/ModalDefault';
+import { observer } from "mobx-react";
+import React from "react";
+import ModalTypeEighteen from "../components/modal/modals/ModalTypeEighteen";
+import ModalTypeFifteen from "../components/modal/modals/ModalTypeFifteen";
+import ModalTypeFourteen from "../components/modal/modals/ModalTypeFourteen";
+import ModalTypeSeventeen from "../components/modal/modals/ModalTypeSeventeen";
+import ModalTypeSixteen from "../components/modal/modals/ModalTypeSixteen";
+import ModalTypeZero from "../components/modal/modals/ModalTypeZero";
+import ModalTypeTen from "../components/modal/modals/ModalTypeTen";
+import ModalTypeOne from "../components/modal/modals/ModalTypeOne";
+import ModalTypeTwo from "../components/modal/modals/ModalTypeTwo";
+import ModalTypeThree from "../components/modal/modals/ModalTypeThree";
+import ModalTypeFour from "../components/modal/modals/ModalTypeFour";
+import ModalTypeFive from "../components/modal/modals/ModalTypeFive";
+import ModalTypeSix from "../components/modal/modals/ModalTypeSix";
+import ModalTypeSeven from "../components/modal/modals/ModalTypeSeven";
+import ModalTypeEight from "../components/modal/modals/ModalTypeEight";
+import ModalTypeNine from "../components/modal/modals/ModalTypeNine";
+import ModalTypeEleven from "../components/modal/modals/ModalTypeEleven";
+import ModalTypeThirteen from "../components/modal/modals/ModalTypeThirteen";
+import ModalTypeNineteen from "../components/modal/modals/ModalTypeNineteen";
+import ModalTypeTwenty from "../components/modal/modals/ModalTypeTwenty";
+import ModalTypeTwentyOne from "../components/modal/modals/ModalTypeTwentyOne";
+import ModalTypeTwentyTwo from "../components/modal/modals/ModalTypeTwentyTwo";
+import ModalTypeTwentyThree from "../components/modal/modals/ModalTypeTwentyThree";
+import ModalTypeTwentyFour from "../components/modal/modals/ModalTypeTwentyFour";
+import ModalTypeTwentyFive from "../components/modal/modals/ModalTypeTwentyFive";
+import ModalDefault from "../components/modal/modals/ModalDefault";
 
 const Modal = observer((props: any) => {
   const { main, request } = props;
@@ -75,6 +77,10 @@ const Modal = observer((props: any) => {
         <ModalTypeTwentyTwo main={main} request={request} />
       ) : main.modalType === 23 ? (
         <ModalTypeTwentyThree main={main} request={request} />
+      ) : main.modalType === 24 ? (
+        <ModalTypeTwentyFour main={main} request={request} />
+      ) : main.modalType === 25 ? (
+        <ModalTypeTwentyFive main={main} request={request} />
       ) : (
         <ModalDefault main={main} request={request} />
       )}

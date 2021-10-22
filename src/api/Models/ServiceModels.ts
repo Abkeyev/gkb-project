@@ -53,6 +53,7 @@ export interface AgreeResult {
 export interface Result {
   is_approved: boolean | null;
   user_id: number;
+  comment: string;
 }
 
 export interface ClientUsers {
