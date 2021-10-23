@@ -4,6 +4,7 @@ import { ServiceCommon, Request } from '../../api/Models/ServiceModels';
 import { useHistory } from 'react-router';
 import moment from 'moment';
 import { observer } from 'mobx-react';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
 const OrganizationService = ({ main, request }: OrganizationProps) => {
   React.useEffect(() => {
@@ -11,7 +12,9 @@ const OrganizationService = ({ main, request }: OrganizationProps) => {
     request.getClientServiceType();
   }, []);
   const history = useHistory();
-  return (
+  return request?.loader ? (
+    <Spinner />
+  ) : (
     <>
       <div className='tab-content tab-4'>
         <h3 className='title-subhead mb-16'>Подключенные услуги</h3>

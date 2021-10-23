@@ -6,6 +6,7 @@ import {
 } from '../../api/Models/ServiceModels';
 import moment from 'moment';
 import { RequestProps } from './RequestProps.props';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
 const UnallocatedRequest = ({
   filterRequests,
@@ -15,7 +16,9 @@ const UnallocatedRequest = ({
   useEffect(() => {
     request.getRequests();
   }, []);
-  return (
+  return request?.loader ? (
+    <Spinner />
+  ) : (
     <div className='tab-content tab-1'>
       <h3 className='title-subhead mb-16'>
         Найдено <span className='number'>{filterRequests([1]).length}</span>

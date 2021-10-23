@@ -3,18 +3,6 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { Link, useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import moment from 'moment';
-import {
-  Agree,
-  AgreeResult,
-  Categories,
-  Client,
-  ClientUsers,
-  Documents,
-  Result,
-  ServiceCommon,
-  User,
-} from '../api/Models/ServiceModels';
 import { Modal } from '../containers';
 import PartnersInnerGeneral from '../components/partnersinner/PartnersInnerGeneral';
 import PartnersInnerServiceUsers from '../components/partnersinner/PartnersInnerServiceUsers';
@@ -23,7 +11,6 @@ import PartnersInnerThirdStep from '../components/partnersinner/PartnersInnerThi
 import PartnersInnerFourthStep from '../components/partnersinner/PartnersInnerFourthStep';
 import PartnersInnerFifthStep from '../components/partnersinner/PartnersInnerFifthStep';
 import PartnersInnerFooter from '../components/partnersinner/PartnersInnerFooter';
-import Spinner from '../components/common/Spinner';
 
 const PartnersInner = observer((props: any) => {
   const history = useHistory();
@@ -46,7 +33,7 @@ const PartnersInner = observer((props: any) => {
     <>
       {main.isOpenModal && <Modal main={main} request={request} />}
       <div className='main-body'>
-        {request._getRequest ? (
+        {request._getRequest && (
           <div className='container'>
             <div className='row'>
               <div className='col-lg-12'>
@@ -223,8 +210,6 @@ const PartnersInner = observer((props: any) => {
               </div>
             </div>
           </div>
-        ) : (
-          <Spinner />
         )}
       </div>
     </>

@@ -1,29 +1,15 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { observer } from 'mobx-react';
 import { useHistory } from 'react-router';
-import {
-  Address,
-  AddressTypes,
-  AuthPerson,
-  Categories,
-  Client,
-  ClientService,
-  ClientUsers,
-  Contact,
-  Documents,
-  ServiceCommon,
-  User,
-  Request,
-} from '../api/Models/ServiceModels';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import ContractorsAbout from '../components/contractors/ContractorsAbout';
 import ContractorsDocs from '../components/contractors/ContractorsDocs';
 import ContractorsUsers from '../components/contractors/ContractorsUsers';
 import ContractorsServices from '../components/contractors/ContractorsServices';
 import ContractorsServiceUsers from '../components/contractors/ContractorsServiceUsers';
+import { ReactComponent as Spinner } from '../styles/spinner.svg';
 
 const ContractorsInner = observer((props: any) => {
   const { main, request } = props;
@@ -31,24 +17,16 @@ const ContractorsInner = observer((props: any) => {
   const history = useHistory();
 
   React.useEffect(() => {
-    request.getPosition();
-    request.getClient(id);
-    request.getClientUser(id);
     request.getClientUsersForAdd(id);
-    request.getClientAllUsers(id);
     request.getClientService();
-    request.getDocumentsCategories();
     request.getClientTypes();
-    request.getDocumentsType();
     request.getClientContact(id);
     request.getClientAddress(id);
-    request.getAuthPersons(id);
     request.getClientAddressTypes();
     request.getClientBankDetails(id);
     request.getSigningAuth();
     request.getPersonStatus();
     request.getClientServiceType();
-    request.getDocuments(id);
     request.getClientRequests(id);
   }, []);
   return (
@@ -86,15 +64,17 @@ const ContractorsInner = observer((props: any) => {
                 </div>
                 <div className='req-inner-body pad-b-128'>
                   <TabPanel>
-                    <ContractorsAbout main={main} request={request} />
+                    <ContractorsAbout id={id} main={main} request={request} />
                   </TabPanel>
 
                   <TabPanel>
-                    <ContractorsDocs request={request} />
+                    <Suspense fallback={<Spinner />}>
+                      <ContractorsDocs id={id} request={request} />
+                    </Suspense>
                   </TabPanel>
 
                   <TabPanel>
-                    <ContractorsUsers main={main} request={request} />
+                    <ContractorsUsers id={id} main={main} request={request} />
                   </TabPanel>
                   <TabPanel>
                     <ContractorsServices request={request} />

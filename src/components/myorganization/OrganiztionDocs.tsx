@@ -2,6 +2,7 @@ import React from 'react';
 import { OrganizationProps } from './Organization.props';
 import { observer } from 'mobx-react';
 import { Categories } from '../../api/Models/ServiceModels';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
 const MyOrganization = ({ main, request }: OrganizationProps) => {
   React.useEffect(() => {
@@ -9,7 +10,9 @@ const MyOrganization = ({ main, request }: OrganizationProps) => {
     request.getDocumentsCategories();
     request.getDocuments(main.clientData.client.id);
   }, []);
-  return (
+  return request?.loader ? (
+    <Spinner />
+  ) : (
     <>
       <h3 className='title-subhead mb-16'>Документы</h3>
       {request._getDocCategories && request._getDocCategories.length === 0

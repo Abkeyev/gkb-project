@@ -4,6 +4,7 @@ import moment from 'moment';
 import { OrganizationProps } from './Organization.props';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
 const ClientOrganization = ({ main, request }: OrganizationProps) => {
   React.useEffect(() => {
@@ -12,7 +13,9 @@ const ClientOrganization = ({ main, request }: OrganizationProps) => {
     request.getPersonStatus();
     request.getPosition();
   }, []);
-  return (
+  return request?.loader ? (
+    <Spinner />
+  ) : (
     <>
       <div className='tab-content tab-1'>
         <h3 className='title-subhead mb-8'>

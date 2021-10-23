@@ -9,6 +9,7 @@ import moment from 'moment';
 import { OnClickOutside } from '../utils/utils';
 import PartnersOutbox from '../components/partners/PartnersOutbox';
 import PartnersSigned from '../components/partners/PartnersSigned';
+import { ReactComponent as Spinner } from '../styles/spinner.svg';
 
 const Partners = observer((props: any) => {
   const { request, main } = props;
@@ -346,7 +347,11 @@ const Partners = observer((props: any) => {
                 </div>
 
                 <TabPanel>
-                  <PartnersOutbox request={request} filter={filterRequests} />
+                  {request?.loader ? (
+                    <Spinner />
+                  ) : (
+                    <PartnersOutbox request={request} filter={filterRequests} />
+                  )}
                 </TabPanel>
 
                 <TabPanel>

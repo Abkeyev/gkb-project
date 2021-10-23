@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Request, ServiceCommon } from '../../api/Models/ServiceModels';
 import moment from 'moment';
 import { SignersProps } from './SignersProps.props';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
 const SignersNeedToSign = ({
   filterRequests,
@@ -21,7 +22,11 @@ const SignersNeedToSign = ({
           {filterRequests([6], main.clientData.user.id).length}
         </span>
       </h3>
-      {filterRequests().length === 0 ? (
+      {request?.loader ? (
+        <Spinner />
+      ) : request?.loader ? (
+        <Spinner />
+      ) : filterRequests().length === 0 ? (
         'Заявки отсутствуют.'
       ) : (
         <table className='table req-table'>

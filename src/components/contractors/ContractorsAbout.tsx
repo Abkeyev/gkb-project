@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { ContractorsProps } from './ContractorsProps.props';
 import {
@@ -8,7 +8,13 @@ import {
   AddressTypes,
 } from '../../api/Models/ServiceModels';
 import moment from 'moment';
-const ContractorsAbout = ({ main, request }: ContractorsProps) => {
+const ContractorsAbout = ({ id, request }: ContractorsProps) => {
+  useEffect(() => {
+    request.getAuthPersons(id);
+    request.getPosition();
+    request.getClient(id);
+    request.getClientUser(id);
+  }, []);
   return (
     <>
       <h3 className='title-subhead mb-16'>Об организации</h3>

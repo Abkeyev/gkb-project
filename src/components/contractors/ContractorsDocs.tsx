@@ -3,7 +3,12 @@ import { ContractorsProps } from './ContractorsProps.props';
 import { observer } from 'mobx-react';
 import { Categories } from '../../api/Models/ServiceModels';
 
-const ContractorsDocs = ({ request }: ContractorsProps) => {
+const ContractorsDocs = ({ id, request }: ContractorsProps) => {
+  React.useEffect(() => {
+    request.getDocuments(id);
+    request.getDocumentsType();
+    request.getDocumentsCategories();
+  }, []);
   return (
     <>
       <h3 className='title-subhead mb-16'>Документы</h3>

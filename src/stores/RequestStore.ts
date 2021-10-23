@@ -1,4 +1,4 @@
-import { action, computed, makeAutoObservable, runInAction, toJS } from "mobx";
+import { action, computed, makeAutoObservable, runInAction, toJS } from 'mobx';
 import {
   Request,
   Documents,
@@ -17,10 +17,10 @@ import {
   AgreeResult,
   Result,
   ServiceDesk,
-} from "../api/Models/ServiceModels";
-import { signWithBase64 } from "../ncaLayer";
-import api from "../api/Api";
-import { downloadBlob } from "../utils/utils";
+} from '../api/Models/ServiceModels';
+import { signWithBase64 } from '../ncaLayer';
+import api from '../api/Api';
+import { downloadBlob } from '../utils/utils';
 
 class RequestStore {
   // custom
@@ -46,8 +46,8 @@ class RequestStore {
   agreeUsers: number[] = [];
   agreeGroup: Agree[] = [];
   requestId: number | null = null;
-  base64file: string = "";
-  service: string = "";
+  base64file: string = '';
+  service: string = '';
   data: any | null = null;
   signType: boolean = true;
   signNotType: boolean = false;
@@ -56,6 +56,7 @@ class RequestStore {
   prodKey: Documents | null = null;
   testAct: Documents | null = null;
   testProt: Documents | null = null;
+  loader: boolean | true = true;
 
   private requests: Request[] | [];
   private reviews: AgreeResult[] | [];
@@ -263,6 +264,10 @@ class RequestStore {
     this.step = step;
   }
 
+  setLoader(state: boolean) {
+    this.loader = state;
+  }
+
   setSignStep(step: number) {
     this.signStep = step;
   }
@@ -302,21 +307,27 @@ class RequestStore {
   }
 
   async getClientRequests(id: number) {
+    this.setLoader(true);
     await api.service
       .getClientRequests(id)
       .then((r: Request[]) => (this.requests = r));
+    this.setLoader(false);
   }
 
   async getMineRequest(id: number) {
+    this.setLoader(true);
     await api.service
       .getMineRequest(id)
       .then((r: Request[]) => (this.mineRequests = r));
+    this.setLoader(false);
   }
 
   async getVoteRequest(id: number) {
+    this.setLoader(true);
     await api.service
       .getVoteRequest(id)
       .then((r: Request[]) => (this.voteRequests = r));
+    this.setLoader(false);
   }
 
   async getDogovor(id: number) {
@@ -348,7 +359,7 @@ class RequestStore {
       clientId && this.getSigners(clientId);
       !r.is_model_contract && this.getReview(r.id);
       r.client && this.getClientAllUsers(r.client.id);
-      console.log(r.client_user, "r.client_user");
+      console.log(r.client_user, 'r.client_user');
       r.client_user && this.getClientUsers(r.client_user);
       r.client_doc && this.getClientDocs(r.client_doc, r);
       this.getDogovor(id);
@@ -395,7 +406,9 @@ class RequestStore {
   }
   // User Пользователи
   async getUsers() {
+    this.setLoader(true);
     await api.service.getUsers().then((r: User[]) => (this.allUsers = r));
+    this.setLoader(false);
   }
   async addUser(data: any) {
     await api.client
@@ -421,9 +434,11 @@ class RequestStore {
   }
 
   async getClientUsersForAdd(id: number) {
+    this.setLoader(true);
     await api.service
       .getClientUsersForAdd(id)
       .then((res) => (this.clientUsersForAdd = res));
+    this.setLoader(false);
   }
 
   async getRequestStatus() {
@@ -443,7 +458,9 @@ class RequestStore {
   }
 
   async getUser(id: number) {
+    this.setLoader(true);
     await api.service.getUser(id).then((r: User) => (this.user = r));
+    this.setLoader(false);
   }
 
   async getSigners(id: number) {
@@ -453,16 +470,18 @@ class RequestStore {
   }
 
   async getDocuments(id: number) {
+    this.setLoader(true);
     await api.service
       .getDocuments(id)
       .then(
         (r: Documents[]) =>
           r &&
           (this.documents = r.filter(
-            (rr: Documents) => rr.doc_status !== "Archive"
+            (rr: Documents) => rr.doc_status !== 'Archive'
           ))
       )
       .then(() => runInAction(async () => await this.getDocumentsCategories()));
+    this.setLoader(false);
   }
 
   // Используеться: in all components
@@ -497,13 +516,17 @@ class RequestStore {
   }
 
   async getClients() {
+    this.setLoader(true);
     await api.service.getClients().then((r: Client[]) => (this.clients = r));
+    this.setLoader(false);
   }
 
   //Используется: Organization and Profile
 
   async getClient(id: number) {
+    this.setLoader(true);
     await api.service.getClient(id).then((r: Client) => (this.client = r));
+    this.setLoader(false);
   }
 
   async editClient(id: number, data: any) {
@@ -633,12 +656,12 @@ class RequestStore {
       ...c,
       doc_type: c.doc_type.map((t: number) =>
         this.documents.find(
-          (d: Documents) => d.doc_status === "Active" && d.doc_type === t
+          (d: Documents) => d.doc_status === 'Active' && d.doc_type === t
         )
           ? {
               name: this.types.find((tt: any) => tt.id === t)?.name,
               file: this.documents.find(
-                (d: Documents) => d.doc_status === "Active" && d.doc_type === t
+                (d: Documents) => d.doc_status === 'Active' && d.doc_type === t
               ),
             }
           : {
@@ -729,7 +752,7 @@ class RequestStore {
       ids.map((id: number, index: number) =>
         promises.push(
           api.service.getDocument(id).then((res: Documents) => {
-            if (res.doc_status !== "Active") return;
+            if (res.doc_status !== 'Active') return;
             if (res.doc_type === 11) {
               this.testKey = res;
             } else if (res.doc_type === 10) {
@@ -784,9 +807,11 @@ class RequestStore {
   }
 
   async getClientService() {
+    this.setLoader(true);
     await api.service.getClientService().then((res) => {
       this.clientService = res;
     });
+    this.setLoader(false);
   }
 
   async getClientServices(id: number) {
@@ -953,7 +978,7 @@ class RequestStore {
 
   getDocTypes() {
     const doc_cat = this.categories.find(
-      (c: Categories) => c.name === "Заявка"
+      (c: Categories) => c.name === 'Заявка'
     );
     return doc_cat
       ? this.types.filter((c: ServiceCommon) => c.id === +doc_cat.doc_type)
@@ -1002,14 +1027,14 @@ class RequestStore {
   }
 
   async signDoc() {
-    console.log(this.base64file, "64");
+    console.log(this.base64file, '64');
     if (this.base64file.length) {
       await signWithBase64(this.base64file)
         .then((res) => {
           this.afterNca();
         })
         .catch((err) => console.error(err.message));
-    } else console.log("no base 64");
+    } else console.log('no base 64');
   }
 
   async afterNca() {

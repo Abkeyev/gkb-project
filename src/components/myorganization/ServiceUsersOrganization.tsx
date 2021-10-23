@@ -2,12 +2,15 @@ import React from 'react';
 import { ServiceCommon, ClientUsers } from '../../api/Models/ServiceModels';
 import { OrganizationProps } from './Organization.props';
 import { observer } from 'mobx-react';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
 const ServiceUsersOrganization = ({ main, request }: OrganizationProps) => {
   React.useEffect(() => {
     request.getClientUsersForAdd(main.clientData.client.id);
   }, []);
-  return (
+  return request?.loader ? (
+    <Spinner />
+  ) : (
     <>
       <h3 className='title-subhead mb-8'>
         Пользователи услуг{' '}

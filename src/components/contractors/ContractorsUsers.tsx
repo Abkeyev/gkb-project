@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { ContractorsProps } from './ContractorsProps.props';
 import { ServiceCommon, User, Client } from '../../api/Models/ServiceModels';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
-const ContractorsUsers = ({ main, request }: ContractorsProps) => {
+const ContractorsUsers = ({ id, request }: ContractorsProps) => {
+  useEffect(() => {
+    request.getClientAllUsers(id);
+  }, []);
   return (
     <>
       <div className='tab-content tab-1'>

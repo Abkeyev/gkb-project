@@ -12,6 +12,7 @@ import FileReaderInput from 'react-file-reader-input';
 import { Modal } from '../containers';
 import CardServiceUsers from '../components/partnersnew/CardServiceUsers';
 import PartnersNewFooter from '../components/partnersnew/PartnersNewFooter';
+import { ReactComponent as Spinner } from '../styles/spinner.svg';
 
 const PartnersNew = observer((props: any) => {
   const { main, request } = props;
@@ -146,182 +147,188 @@ const PartnersNew = observer((props: any) => {
                     <p className='text-desc'>
                       Пожалуйста прикрепите следующие документы организации
                     </p>
-                    <div className='reg-file-add mb-32'>
-                      <ul>
-                        <li>
-                          <div className='name'>
-                            <span className='text'>
-                              Справка о регистрации/перерегистрации юридического
-                              лица
-                            </span>
-                            {file1 && (
-                              <span className='file-name'>
-                                {file1.name || file1.doc_name}
+                    {request?.loader ? (
+                      <Spinner />
+                    ) : (
+                      <div className='reg-file-add mb-32'>
+                        <ul>
+                          <li>
+                            <div className='name'>
+                              <span className='text'>
+                                Справка о регистрации/перерегистрации
+                                юридического лица
                               </span>
-                            )}
-                          </div>
-                          {file1 ? (
-                            <button
-                              className='btn-icon delete'
-                              onClick={() => {
-                                setFile1(null);
-                              }}
-                            >
-                              <i className='azla size-18 trash-icon-alert mr-8'></i>
-                              Удалить файл
-                            </button>
-                          ) : (
-                            <FileReaderInput
-                              as='url'
-                              accept='image/jpeg,image/png,image/gif,application/pdf'
-                              onChange={(e, f) => handleChange(e, f, 3, 1, 1)}
-                            >
-                              <button className='btn-icon add'>
-                                <i className='azla size-18 pin-primary-icon mr-8'></i>
-                                Прикрепить файл
+                              {file1 && (
+                                <span className='file-name'>
+                                  {file1.name || file1.doc_name}
+                                </span>
+                              )}
+                            </div>
+                            {file1 ? (
+                              <button
+                                className='btn-icon delete'
+                                onClick={() => {
+                                  setFile1(null);
+                                }}
+                              >
+                                <i className='azla size-18 trash-icon-alert mr-8'></i>
+                                Удалить файл
                               </button>
-                            </FileReaderInput>
-                          )}
-                        </li>
-                        <li>
-                          <div className='name'>
-                            <span className='text'>
-                              Решение учредителя с данными о приеме на работу
-                              первого руководителя
-                            </span>
-                            {file2 && (
-                              <span className='file-name'>
-                                {file2.name || file2.doc_name}
-                              </span>
+                            ) : (
+                              <FileReaderInput
+                                as='url'
+                                accept='image/jpeg,image/png,image/gif,application/pdf'
+                                onChange={(e, f) => handleChange(e, f, 3, 1, 1)}
+                              >
+                                <button className='btn-icon add'>
+                                  <i className='azla size-18 pin-primary-icon mr-8'></i>
+                                  Прикрепить файл
+                                </button>
+                              </FileReaderInput>
                             )}
-                          </div>
-                          {file2 ? (
-                            <button
-                              className='btn-icon delete'
-                              onClick={() => {
-                                setFile2(null);
-                              }}
-                            >
-                              <i className='azla size-18 trash-icon-alert mr-8'></i>
-                              Удалить файл
-                            </button>
-                          ) : (
-                            <FileReaderInput
-                              as='url'
-                              accept='image/jpeg,image/png,image/gif,application/pdf'
-                              onChange={(e, f) => handleChange(e, f, 4, 1, 2)}
-                            >
-                              <button className='btn-icon add'>
-                                <i className='azla size-18 pin-primary-icon mr-8'></i>
-                                Прикрепить файл
+                          </li>
+                          <li>
+                            <div className='name'>
+                              <span className='text'>
+                                Решение учредителя с данными о приеме на работу
+                                первого руководителя
+                              </span>
+                              {file2 && (
+                                <span className='file-name'>
+                                  {file2.name || file2.doc_name}
+                                </span>
+                              )}
+                            </div>
+                            {file2 ? (
+                              <button
+                                className='btn-icon delete'
+                                onClick={() => {
+                                  setFile2(null);
+                                }}
+                              >
+                                <i className='azla size-18 trash-icon-alert mr-8'></i>
+                                Удалить файл
                               </button>
-                            </FileReaderInput>
-                          )}
-                        </li>
-                        <li>
-                          <div className='name'>
-                            <span className='text'>
-                              Приказ о приеме на работу первого руководителя
-                            </span>
-                            {file3 && (
-                              <span className='file-name'>
-                                {file3.name || file3.doc_name}
-                              </span>
+                            ) : (
+                              <FileReaderInput
+                                as='url'
+                                accept='image/jpeg,image/png,image/gif,application/pdf'
+                                onChange={(e, f) => handleChange(e, f, 4, 1, 2)}
+                              >
+                                <button className='btn-icon add'>
+                                  <i className='azla size-18 pin-primary-icon mr-8'></i>
+                                  Прикрепить файл
+                                </button>
+                              </FileReaderInput>
                             )}
-                          </div>
-                          {file3 ? (
-                            <button
-                              className='btn-icon delete'
-                              onClick={() => {
-                                setFile3(null);
-                              }}
-                            >
-                              <i className='azla size-18 trash-icon-alert mr-8'></i>
-                              Удалить файл
-                            </button>
-                          ) : (
-                            <FileReaderInput
-                              as='url'
-                              accept='image/jpeg,image/png,image/gif,application/pdf'
-                              onChange={(e, f) => handleChange(e, f, 5, 1, 3)}
-                            >
-                              <button className='btn-icon add'>
-                                <i className='azla size-18 pin-primary-icon mr-8'></i>
-                                Прикрепить файл
+                          </li>
+                          <li>
+                            <div className='name'>
+                              <span className='text'>
+                                Приказ о приеме на работу первого руководителя
+                              </span>
+                              {file3 && (
+                                <span className='file-name'>
+                                  {file3.name || file3.doc_name}
+                                </span>
+                              )}
+                            </div>
+                            {file3 ? (
+                              <button
+                                className='btn-icon delete'
+                                onClick={() => {
+                                  setFile3(null);
+                                }}
+                              >
+                                <i className='azla size-18 trash-icon-alert mr-8'></i>
+                                Удалить файл
                               </button>
-                            </FileReaderInput>
-                          )}
-                        </li>
-                        <li>
-                          <div className='name'>
-                            <span className='text'>
-                              Документ, удостоверяющий личность первого
-                              руководителя
-                            </span>
-                            {file4 && (
-                              <span className='file-name'>
-                                {file4.name || file4.doc_name}
-                              </span>
+                            ) : (
+                              <FileReaderInput
+                                as='url'
+                                accept='image/jpeg,image/png,image/gif,application/pdf'
+                                onChange={(e, f) => handleChange(e, f, 5, 1, 3)}
+                              >
+                                <button className='btn-icon add'>
+                                  <i className='azla size-18 pin-primary-icon mr-8'></i>
+                                  Прикрепить файл
+                                </button>
+                              </FileReaderInput>
                             )}
-                          </div>
+                          </li>
+                          <li>
+                            <div className='name'>
+                              <span className='text'>
+                                Документ, удостоверяющий личность первого
+                                руководителя
+                              </span>
+                              {file4 && (
+                                <span className='file-name'>
+                                  {file4.name || file4.doc_name}
+                                </span>
+                              )}
+                            </div>
 
-                          {file4 ? (
-                            <button
-                              className='btn-icon delete'
-                              onClick={() => {
-                                setFile4(null);
-                              }}
-                            >
-                              <i className='azla size-18 trash-icon-alert mr-8'></i>
-                              Удалить файл
-                            </button>
-                          ) : (
-                            <FileReaderInput
-                              as='url'
-                              accept='image/jpeg,image/png,image/gif,application/pdf'
-                              onChange={(e, f) => handleChange(e, f, 6, 2, 4)}
-                            >
-                              <button className='btn-icon add'>
-                                <i className='azla size-18 pin-primary-icon mr-8'></i>
-                                Прикрепить файл
+                            {file4 ? (
+                              <button
+                                className='btn-icon delete'
+                                onClick={() => {
+                                  setFile4(null);
+                                }}
+                              >
+                                <i className='azla size-18 trash-icon-alert mr-8'></i>
+                                Удалить файл
                               </button>
-                            </FileReaderInput>
-                          )}
-                        </li>
-                        <li>
-                          <div className='name'>
-                            <span className='text'>Устав юрического лица</span>
-                            {file5 && (
-                              <span className='file-name'>
-                                {file5.name || file5.doc_name}
-                              </span>
+                            ) : (
+                              <FileReaderInput
+                                as='url'
+                                accept='image/jpeg,image/png,image/gif,application/pdf'
+                                onChange={(e, f) => handleChange(e, f, 6, 2, 4)}
+                              >
+                                <button className='btn-icon add'>
+                                  <i className='azla size-18 pin-primary-icon mr-8'></i>
+                                  Прикрепить файл
+                                </button>
+                              </FileReaderInput>
                             )}
-                          </div>
-                          {file5 ? (
-                            <button
-                              className='btn-icon delete'
-                              onClick={() => {
-                                setFile5(null);
-                              }}
-                            >
-                              <i className='azla size-18 trash-icon-alert mr-8'></i>
-                              Удалить файл
-                            </button>
-                          ) : (
-                            <FileReaderInput
-                              as='url'
-                              accept='image/jpeg,image/png,image/gif,application/pdf'
-                              onChange={(e, f) => handleChange(e, f, 2, 1, 5)}
-                            >
-                              <button className='btn-icon add'>
-                                <i className='azla size-18 pin-primary-icon mr-8'></i>
-                                Прикрепить файл
+                          </li>
+                          <li>
+                            <div className='name'>
+                              <span className='text'>
+                                Устав юрического лица
+                              </span>
+                              {file5 && (
+                                <span className='file-name'>
+                                  {file5.name || file5.doc_name}
+                                </span>
+                              )}
+                            </div>
+                            {file5 ? (
+                              <button
+                                className='btn-icon delete'
+                                onClick={() => {
+                                  setFile5(null);
+                                }}
+                              >
+                                <i className='azla size-18 trash-icon-alert mr-8'></i>
+                                Удалить файл
                               </button>
-                            </FileReaderInput>
-                          )}
-                        </li>
-                      </ul>
-                    </div>
+                            ) : (
+                              <FileReaderInput
+                                as='url'
+                                accept='image/jpeg,image/png,image/gif,application/pdf'
+                                onChange={(e, f) => handleChange(e, f, 2, 1, 5)}
+                              >
+                                <button className='btn-icon add'>
+                                  <i className='azla size-18 pin-primary-icon mr-8'></i>
+                                  Прикрепить файл
+                                </button>
+                              </FileReaderInput>
+                            )}
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
 
                   <div className='create-page-docs'>
