@@ -11,7 +11,6 @@ const Contractors = observer((props: any) => {
   const [search, setSearch] = React.useState('');
   const [bin, setBin] = React.useState('');
   const [services, setServices] = React.useState<number[]>([]);
-  const [loading, setLoading] = React.useState<boolean>(true);
   const history = useHistory();
   const wrapperRef = useRef<any>(null);
   useEffect(() => {
@@ -29,7 +28,6 @@ const Contractors = observer((props: any) => {
     // useOutsideAlerter(wrapperRef);
     request.getClients();
     request.getClientTypes();
-    setLoading(false);
   }, []);
   return (
     <div className='main-body'>
