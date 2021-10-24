@@ -15,7 +15,7 @@ const MyOrganization = observer((props: any) => {
 
   // React.useEffect(() => {
   //   request.getPosition();
-  //   request.getClients();
+  //   request.getClients();s
   //   request.getClient(main.clientData.client.id);
   //   request.getClientUser(main.clientData.client.id);
   //   request.getClientUsersForAdd(main.clientData.client.id);

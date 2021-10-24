@@ -1,5 +1,11 @@
-import React from "react";
-import { Route, HashRouter, Switch, Redirect } from "react-router-dom";
+import React from 'react';
+import {
+  Route,
+  HashRouter,
+  Switch,
+  Redirect,
+  useHistory,
+} from 'react-router-dom';
 import {
   Modal,
   Registration,
@@ -19,11 +25,11 @@ import {
   Manager,
   Signers,
   SignersInner,
-} from "./containers";
-import { LoginPage } from "./components";
-import PrivateRoute from "./PrivateRoute";
-import { observer } from "mobx-react";
-import { connection } from "./ncaLayer";
+} from './containers';
+import { LoginPage } from './components';
+import PrivateRoute from './PrivateRoute';
+import { observer } from 'mobx-react';
+import { connection } from './ncaLayer';
 
 const App = observer((props: any) => {
   const { main, request } = props;
@@ -33,17 +39,17 @@ const App = observer((props: any) => {
   }, []);
 
   return (
-    <div className="app-root modal-open">
+    <div className='app-root modal-open'>
       <HashRouter>
         {main.logged && !main.isReg && (
           <Sidebar main={main} request={request} />
         )}
         <Switch>
           <Route
-            path="/login"
+            path='/login'
             component={() =>
               main.logged ? (
-                <Redirect to={{ pathname: "/" }} />
+                <Redirect to={{ pathname: '/' }} />
               ) : (
                 <LoginPage request={request} main={main} />
               )
@@ -52,15 +58,15 @@ const App = observer((props: any) => {
           />
           <PrivateRoute
             main={main}
-            path="/"
+            path='/'
             component={() =>
-              main.getRole === "Agent" && main.isReg ? (
+              main.getRole === 'Agent' && main.isReg ? (
                 <Registration main={main} request={request} />
-              ) : main.getRole === "Service Desk" ? (
+              ) : main.getRole === 'Service Desk' ? (
                 <ServiceDesk request={request} main={main} />
-              ) : main.getRole === "Agent" ? (
+              ) : main.getRole === 'Agent' ? (
                 <Partners request={request} main={main} />
-              ) : main.getRole === "Signer" ? (
+              ) : main.getRole === 'Signer' ? (
                 <Signers request={request} main={main} />
               ) : (
                 <Request request={request} main={main} />
@@ -70,7 +76,7 @@ const App = observer((props: any) => {
           />
           <PrivateRoute
             main={main}
-            path="/partner/:id"
+            path='/partner/:id'
             component={(props: any) => (
               <PartnersInner {...props} main={main} request={request} />
             )}
@@ -78,7 +84,7 @@ const App = observer((props: any) => {
           />
           <PrivateRoute
             main={main}
-            path="/request/:id"
+            path='/request/:id'
             component={(props: any) => (
               <RequestInner {...props} main={main} request={request} />
             )}
@@ -86,7 +92,7 @@ const App = observer((props: any) => {
           />
           <PrivateRoute
             main={main}
-            path="/signer/:id"
+            path='/signer/:id'
             component={(props: any) => (
               <SignersInner {...props} main={main} request={request} />
             )}
@@ -94,13 +100,13 @@ const App = observer((props: any) => {
           />
           <PrivateRoute
             main={main}
-            path="/users"
+            path='/users'
             component={() => <Manager main={main} request={request} />}
             exact
           />
           <PrivateRoute
             main={main}
-            path="/service-desk/:id"
+            path='/service-desk/:id'
             component={(props: any) => (
               <ServiceDeskInner {...props} main={main} request={request} />
             )}
@@ -108,13 +114,19 @@ const App = observer((props: any) => {
           />
           <PrivateRoute
             main={main}
-            path="/contractors"
-            component={() => <Contractors main={main} request={request} />}
+            path='/contractors'
+            component={() =>
+              main.getRole === 'Agent' ? (
+                <Redirect to={{ pathname: '/' }} />
+              ) : (
+                <Contractors main={main} request={request} />
+              )
+            }
             exact
           />
           <PrivateRoute
             main={main}
-            path="/contractors/:id"
+            path='/contractors/:id'
             component={(props: any) => (
               <ContractorsInner {...props} main={main} request={request} />
             )}
@@ -122,7 +134,7 @@ const App = observer((props: any) => {
           />
           <PrivateRoute
             main={main}
-            path="/service/:id"
+            path='/service/:id'
             component={(props: any) => (
               <ServiceInner {...props} main={main} request={request} />
             )}
@@ -130,19 +142,19 @@ const App = observer((props: any) => {
           />
           <PrivateRoute
             main={main}
-            path="/profile"
+            path='/profile'
             component={() => <Profile main={main} request={request} />}
             exact
           />
           <PrivateRoute
             main={main}
-            path="/organization"
+            path='/organization'
             component={() => <MyOrganization main={main} request={request} />}
             exact
           />
           <PrivateRoute
             main={main}
-            path="/request-new"
+            path='/request-new'
             component={() => <PartnersNew main={main} request={request} />}
             exact
           />

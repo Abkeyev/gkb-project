@@ -18,17 +18,13 @@ const ModalTypeFive = ({ main, request }: ModalTypes) => {
                 className='ava'
                 src={process.env.PUBLIC_URL + '/images/def-ava.svg'}
               />
-              <span className='name'>Султангалиева К.И</span>
+              <span className='name'>{request._getConSigner.full_name}</span>
             </div>
           </div>
 
           <div className='comment mb-32'>
             <h5>Комментарий:</h5>
-            <p>
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Velit officia consequat duis enim velit mollit.
-              Exercitation veniam consequat sunt nostrud amet.
-            </p>
+            <p>{request._getRequest.client_comment}</p>
           </div>
         </div>
       </div>

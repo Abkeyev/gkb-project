@@ -3,9 +3,19 @@ import { User, ServiceCommon, Client } from '../../api/Models/ServiceModels';
 import moment from 'moment';
 import { OrganizationProps } from './Organization.props';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
 const ClientOrganization = ({ main, request }: OrganizationProps) => {
-  return (
+  React.useEffect(() => {
+    request.getClients();
+    request.getClientAllUsers(main.clientData.client.id);
+    request.getPersonStatus();
+    request.getPosition();
+  }, []);
+  return request?.loader ? (
+    <Spinner />
+  ) : (
     <>
       <div className='tab-content tab-1'>
         <h3 className='title-subhead mb-8'>
@@ -216,4 +226,4 @@ const ClientOrganization = ({ main, request }: OrganizationProps) => {
   );
 };
 
-export default ClientOrganization;
+export default observer(ClientOrganization);

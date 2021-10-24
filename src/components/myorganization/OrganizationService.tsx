@@ -3,10 +3,18 @@ import { OrganizationProps } from './Organization.props';
 import { ServiceCommon, Request } from '../../api/Models/ServiceModels';
 import { useHistory } from 'react-router';
 import moment from 'moment';
+import { observer } from 'mobx-react';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
 const OrganizationService = ({ main, request }: OrganizationProps) => {
+  React.useEffect(() => {
+    request.getClientRequests(main.clientData.client.id);
+    request.getClientServiceType();
+  }, []);
   const history = useHistory();
-  return (
+  return request?.loader ? (
+    <Spinner />
+  ) : (
     <>
       <div className='tab-content tab-4'>
         <h3 className='title-subhead mb-16'>Подключенные услуги</h3>
@@ -33,10 +41,10 @@ const OrganizationService = ({ main, request }: OrganizationProps) => {
                       }
                     </td>
                     <td>{c.service_category === 1 ? 'БДКИ' : 'ЕСБД'}</td>
-                    <td>{moment(c.reg_date).format('DD.MM.YYYY')}</td>
+                    <td>{moment(c.reg_date).format('DD.MM.YYYY в HH:mm')}</td>
                     <td>
                       {c.fulfill_date &&
-                        moment(c.fulfill_date).format('DD.MM.YYYY')}
+                        moment(c.fulfill_date).format('DD.MM.YYYY в HH:mm')}
                     </td>
                   </tr>
                 ))}
@@ -47,4 +55,4 @@ const OrganizationService = ({ main, request }: OrganizationProps) => {
   );
 };
 
-export default OrganizationService;
+export default observer(OrganizationService);

@@ -1,10 +1,18 @@
 import React from 'react';
 import { OrganizationProps } from './Organization.props';
-import { TabPanel } from 'react-tabs';
+import { observer } from 'mobx-react';
 import { Categories } from '../../api/Models/ServiceModels';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
 const MyOrganization = ({ main, request }: OrganizationProps) => {
-  return (
+  React.useEffect(() => {
+    request.getDocumentsType();
+    request.getDocumentsCategories();
+    request.getDocuments(main.clientData.client.id);
+  }, []);
+  return request?.loader ? (
+    <Spinner />
+  ) : (
     <>
       <h3 className='title-subhead mb-16'>Документы</h3>
       {request._getDocCategories && request._getDocCategories.length === 0
@@ -50,4 +58,4 @@ const MyOrganization = ({ main, request }: OrganizationProps) => {
   );
 };
 
-export default MyOrganization;
+export default observer(MyOrganization);

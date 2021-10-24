@@ -56,6 +56,7 @@ class RequestStore {
   prodKey: Documents | null = null;
   testAct: Documents | null = null;
   testProt: Documents | null = null;
+  loader: boolean | true = true;
 
   private requests: Request[] | [];
   private reviews: AgreeResult[] | [];
@@ -197,6 +198,7 @@ class RequestStore {
   get _getUser() {
     return this.user;
   }
+  // Organization and ContractorsInner
   get _getUsers() {
     return this.users;
   }
@@ -262,6 +264,10 @@ class RequestStore {
     this.step = step;
   }
 
+  setLoader(state: boolean) {
+    this.loader = state;
+  }
+
   setSignStep(step: number) {
     this.signStep = step;
   }
@@ -301,21 +307,27 @@ class RequestStore {
   }
 
   async getClientRequests(id: number) {
+    this.setLoader(true);
     await api.service
       .getClientRequests(id)
       .then((r: Request[]) => (this.requests = r));
+    this.setLoader(false);
   }
 
   async getMineRequest(id: number) {
+    this.setLoader(true);
     await api.service
       .getMineRequest(id)
       .then((r: Request[]) => (this.mineRequests = r));
+    this.setLoader(false);
   }
 
   async getVoteRequest(id: number) {
+    this.setLoader(true);
     await api.service
       .getVoteRequest(id)
       .then((r: Request[]) => (this.voteRequests = r));
+    this.setLoader(false);
   }
 
   async getDogovor(id: number) {
@@ -394,7 +406,9 @@ class RequestStore {
   }
   // User Пользователи
   async getUsers() {
+    this.setLoader(true);
     await api.service.getUsers().then((r: User[]) => (this.allUsers = r));
+    this.setLoader(false);
   }
   async addUser(data: any) {
     await api.client
@@ -420,9 +434,11 @@ class RequestStore {
   }
 
   async getClientUsersForAdd(id: number) {
+    this.setLoader(true);
     await api.service
       .getClientUsersForAdd(id)
       .then((res) => (this.clientUsersForAdd = res));
+    this.setLoader(false);
   }
 
   async getRequestStatus() {
@@ -442,7 +458,9 @@ class RequestStore {
   }
 
   async getUser(id: number) {
+    this.setLoader(true);
     await api.service.getUser(id).then((r: User) => (this.user = r));
+    this.setLoader(false);
   }
 
   async getSigners(id: number) {
@@ -452,6 +470,7 @@ class RequestStore {
   }
 
   async getDocuments(id: number) {
+    this.setLoader(true);
     await api.service
       .getDocuments(id)
       .then(
@@ -462,6 +481,7 @@ class RequestStore {
           ))
       )
       .then(() => runInAction(async () => await this.getDocumentsCategories()));
+    this.setLoader(false);
   }
 
   // Используеться: in all components
@@ -496,13 +516,17 @@ class RequestStore {
   }
 
   async getClients() {
+    this.setLoader(true);
     await api.service.getClients().then((r: Client[]) => (this.clients = r));
+    this.setLoader(false);
   }
 
   //Используется: Organization and Profile
 
   async getClient(id: number) {
+    this.setLoader(true);
     await api.service.getClient(id).then((r: Client) => (this.client = r));
+    this.setLoader(false);
   }
 
   async editClient(id: number, data: any) {
@@ -783,9 +807,11 @@ class RequestStore {
   }
 
   async getClientService() {
+    this.setLoader(true);
     await api.service.getClientService().then((res) => {
       this.clientService = res;
     });
+    this.setLoader(false);
   }
 
   async getClientServices(id: number) {
@@ -934,11 +960,12 @@ class RequestStore {
     });
   }
 
-  async sendReviews(id: number, is_approved: boolean) {
+  async sendReviews(id: number, is_approved: boolean, comment: string) {
     this._getRequest &&
       this.addReview(this._getRequest.id, {
         user_id: id,
-        is_approved: is_approved,
+        is_approved,
+        comment,
       });
   }
 
