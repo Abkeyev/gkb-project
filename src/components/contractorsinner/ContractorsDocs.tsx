@@ -1,15 +1,18 @@
 import React from 'react';
-import { ContractorsProps } from './ContractorsProps.props';
+import { ContractorsInnerProps } from './ContractorsInnerProps.props';
 import { observer } from 'mobx-react';
 import { Categories } from '../../api/Models/ServiceModels';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
-const ContractorsDocs = ({ id, request }: ContractorsProps) => {
+const ContractorsDocs = ({ id, request }: ContractorsInnerProps) => {
   React.useEffect(() => {
     request.getDocuments(id);
     request.getDocumentsType();
     request.getDocumentsCategories();
   }, []);
-  return (
+  return request.loader ? (
+    <Spinner />
+  ) : (
     <>
       <h3 className='title-subhead mb-16'>Документы</h3>
       {request._getDocCategories && request._getDocCategories.length === 0

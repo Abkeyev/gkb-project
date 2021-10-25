@@ -1,7 +1,9 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 
 const CardServiceUsers = ({ u, index }: any) => {
+  React.useEffect(() => {
+    console.log(u);
+  }, []);
   return (
     <div className='card mb-24 pad-24'>
       <div className='card-header'>
@@ -32,6 +34,10 @@ const CardServiceUsers = ({ u, index }: any) => {
                   <span className='left'>Email:</span>
                   <span className='right'>{u.email}</span>
                 </li>
+                <li>
+                  <span className='left'>Глобальный IP:</span>
+                  <span className='right'>{u.global_ip}</span>
+                </li>
               </ul>
             </div>
           </div>
@@ -53,6 +59,10 @@ const CardServiceUsers = ({ u, index }: any) => {
                 <li>
                   <span className='left'>Контакты менеджера:</span>
                   <span className='right'>{u.manager_contacts}</span>
+                </li>
+                <li>
+                  <span className='left'>№ удос-ния личности:</span>
+                  <span className='right'>{u.idcard_number}</span>
                 </li>
               </ul>
             </div>

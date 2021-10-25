@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
-import { ContractorsProps } from './ContractorsProps.props';
+import { ContractorsInnerProps } from './ContractorsInnerProps.props';
 import {
   Contact,
   AuthPerson,
@@ -8,14 +8,18 @@ import {
   AddressTypes,
 } from '../../api/Models/ServiceModels';
 import moment from 'moment';
-const ContractorsAbout = ({ id, request }: ContractorsProps) => {
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
+const ContractorsAbout = ({ id, request }: ContractorsInnerProps) => {
   useEffect(() => {
     request.getAuthPersons(id);
     request.getPosition();
     request.getClient(id);
     request.getClientUser(id);
+    request.getClientTypes();
   }, []);
-  return (
+  return request.loader ? (
+    <Spinner />
+  ) : (
     <>
       <h3 className='title-subhead mb-16'>Об организации</h3>
       {request._getClient && (

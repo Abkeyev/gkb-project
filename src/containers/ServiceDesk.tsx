@@ -7,6 +7,7 @@ import { Request as RequestModel } from '../api/Models/ServiceModels';
 import { OnClickOutside } from '../utils/utils';
 import ServiceDeskIncoming from '../components/ServiceDesk/ServiceDeskIncoming';
 import ServiceDeskFilter from '../components/ServiceDesk/ServiceDeskFilter';
+import ServiceDeskViewed from '../components/ServiceDesk/ServiceDeskViewed';
 
 const ServiceDesk = observer((props: any) => {
   const { request } = props;
@@ -75,6 +76,7 @@ const ServiceDesk = observer((props: any) => {
                 <div>
                   <TabList>
                     <Tab>Входящие</Tab>
+                    <Tab>Рассмотренные</Tab>
                   </TabList>
                 </div>
 
@@ -98,6 +100,13 @@ const ServiceDesk = observer((props: any) => {
 
                 <TabPanel>
                   <ServiceDeskIncoming
+                    request={request}
+                    history={history}
+                    filterRequests={filterRequests}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <ServiceDeskViewed
                     request={request}
                     history={history}
                     filterRequests={filterRequests}

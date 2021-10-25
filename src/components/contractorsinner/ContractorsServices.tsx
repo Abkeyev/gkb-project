@@ -1,13 +1,19 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { ContractorsProps } from './ContractorsProps.props';
+import { ContractorsInnerProps } from './ContractorsInnerProps.props';
 import { ServiceCommon, Request } from '../../api/Models/ServiceModels';
 import moment from 'moment';
 import { useHistory } from 'react-router';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
-const ContractorsServices = ({ request }: ContractorsProps) => {
+const ContractorsServices = ({ id, request }: ContractorsInnerProps) => {
   const history = useHistory();
-  return (
+  React.useEffect(() => {
+    request.getClientRequests(id);
+  }, []);
+  return request.loader ? (
+    <Spinner />
+  ) : (
     <>
       <div className='tab-content tab-4'>
         <h3 className='title-subhead mb-16'>Подключенные услуги</h3>

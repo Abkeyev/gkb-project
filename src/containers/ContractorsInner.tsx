@@ -1,15 +1,14 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { observer } from 'mobx-react';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-import ContractorsAbout from '../components/contractors/ContractorsAbout';
-import ContractorsDocs from '../components/contractors/ContractorsDocs';
-import ContractorsUsers from '../components/contractors/ContractorsUsers';
-import ContractorsServices from '../components/contractors/ContractorsServices';
-import ContractorsServiceUsers from '../components/contractors/ContractorsServiceUsers';
-import { ReactComponent as Spinner } from '../styles/spinner.svg';
+import ContractorsAbout from '../components/contractorsinner/ContractorsAbout';
+import ContractorsDocs from '../components/contractorsinner/ContractorsDocs';
+import ContractorsUsers from '../components/contractorsinner/ContractorsUsers';
+import ContractorsServices from '../components/contractorsinner/ContractorsServices';
+import ContractorsServiceUsers from '../components/contractorsinner/ContractorsServiceUsers';
 
 const ContractorsInner = observer((props: any) => {
   const { main, request } = props;
@@ -19,7 +18,6 @@ const ContractorsInner = observer((props: any) => {
   React.useEffect(() => {
     request.getClientUsersForAdd(id);
     request.getClientService();
-    request.getClientTypes();
     request.getClientContact(id);
     request.getClientAddress(id);
     request.getClientAddressTypes();
@@ -27,7 +25,6 @@ const ContractorsInner = observer((props: any) => {
     request.getSigningAuth();
     request.getPersonStatus();
     request.getClientServiceType();
-    request.getClientRequests(id);
   }, []);
   return (
     <div className='main-body'>
@@ -68,19 +65,17 @@ const ContractorsInner = observer((props: any) => {
                   </TabPanel>
 
                   <TabPanel>
-                    <Suspense fallback={<Spinner />}>
-                      <ContractorsDocs id={id} request={request} />
-                    </Suspense>
+                    <ContractorsDocs id={id} request={request} />
                   </TabPanel>
 
                   <TabPanel>
                     <ContractorsUsers id={id} main={main} request={request} />
                   </TabPanel>
                   <TabPanel>
-                    <ContractorsServices request={request} />
+                    <ContractorsServices id={id} request={request} />
                   </TabPanel>
                   <TabPanel>
-                    <ContractorsServiceUsers request={request} />
+                    <ContractorsServiceUsers id={id} request={request} />
                   </TabPanel>
                 </div>
               </Tabs>

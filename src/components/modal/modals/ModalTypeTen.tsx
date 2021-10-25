@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 
 const ModalTypeOne = ({ main, request }: ModalTypes) => {
   const [search, setSearch] = React.useState('');
-  const [users, setUsers] = React.useState<ClientUser[]>([]);
+  const [users, setUsers] = React.useState<ClientUser[]>(main.usersNew);
 
   return (
     <BaseModal size={'modal-large-xl'} main={main}>
@@ -43,63 +43,57 @@ const ModalTypeOne = ({ main, request }: ModalTypes) => {
               {request._getClientUsersForAdd &&
                 (request._getClientUsersForAdd as ClientUser[])
                   .filter((f: ClientUser) => f.full_name.includes(search))
-                  .map(
-                    (r: ClientUser) =>
-                      main.usersNew.filter((u: ClientUser) => u.id === r.id)
-                        .length === 0 && (
-                        <li key={r.id}>
-                          <div className='profile'>
-                            <div className='form-check gkb-checkbox'>
-                              <input
-                                className='form-check-input'
-                                type='checkbox'
-                                checked={
-                                  users.filter((u: ClientUser) => u.id === r.id)
-                                    .length > 0
-                                }
-                                onChange={() => {
-                                  console.log(
-                                    users.filter(
-                                      (u: ClientUser) => u.id === r.id
-                                    ).length > 0
-                                  );
-                                  users.filter((u: ClientUser) => u.id === r.id)
-                                    .length > 0
-                                    ? setUsers([
-                                        ...users.filter(
-                                          (u: ClientUser) => u.id !== r.id
-                                        ),
-                                      ])
-                                    : setUsers([...users, r]);
-                                }}
-                                id={`input${r.id}`}
-                                required
-                              />
-                              <label
-                                className='form-check-label'
-                                htmlFor={`input${r.id}`}
-                              >
-                                <img
-                                  className='ava'
-                                  src={
-                                    process.env.PUBLIC_URL +
-                                    '/images/def-ava.svg'
-                                  }
-                                />
-                                <span className='name'>{r.full_name}</span>
-                              </label>
-                            </div>
-                          </div>
-                          <span className='position'>
-                            {
-                              request._getPosition.find(
-                                (t: ServiceCommon) => t.id === r.position
-                              )?.name
+                  .map((r: ClientUser) => (
+                    <li key={r.id}>
+                      <div className='profile'>
+                        <div className='form-check gkb-checkbox'>
+                          <input
+                            className='form-check-input'
+                            type='checkbox'
+                            checked={
+                              users.filter((u: ClientUser) => u.id === r.id)
+                                .length > 0
                             }
-                          </span>
-                        </li>
-                      )
-                  )}
+                            onChange={() => {
+                              console.log(
+                                users.filter((u: ClientUser) => u.id === r.id)
+                                  .length > 0
+                              );
+                              users.filter((u: ClientUser) => u.id === r.id)
+                                .length > 0
+                                ? setUsers([
+                                    ...users.filter(
+                                      (u: ClientUser) => u.id !== r.id
+                                    ),
+                                  ])
+                                : setUsers([...users, r]);
+                            }}
+                            id={`input${r.id}`}
+                            required
+                          />
+                          <label
+                            className='form-check-label'
+                            htmlFor={`input${r.id}`}
+                          >
+                            <img
+                              className='ava'
+                              src={
+                                process.env.PUBLIC_URL + '/images/def-ava.svg'
+                              }
+                            />
+                            <span className='name'>{r.full_name}</span>
+                          </label>
+                        </div>
+                      </div>
+                      <span className='position'>
+                        {
+                          request._getPosition.find(
+                            (t: ServiceCommon) => t.id === r.position
+                          )?.name
+                        }
+                      </span>
+                    </li>
+                  ))}
             </ul>
           </div>
         </div>

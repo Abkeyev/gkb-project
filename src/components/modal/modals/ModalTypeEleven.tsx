@@ -327,7 +327,7 @@ const ModalTypeEleven = ({ main, request }: ModalTypes) => {
                           iin: iin !== '' ? iin : main.modalTypeData?.iin,
                         });
                       } finally {
-                        main.setModal(false);
+                        main.setModalType(10);
                         setFirstRuk('');
                         setZam('');
                         setMan('');
