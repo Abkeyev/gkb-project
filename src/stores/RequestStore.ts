@@ -1,4 +1,4 @@
-import { action, computed, makeAutoObservable, runInAction, toJS } from "mobx";
+import { action, computed, makeAutoObservable, runInAction, toJS } from 'mobx';
 import {
   Request,
   Documents,
@@ -17,10 +17,10 @@ import {
   AgreeResult,
   Result,
   ServiceDesk,
-} from "../api/Models/ServiceModels";
-import { signWithBase64 } from "../ncaLayer";
-import api from "../api/Api";
-import { downloadBlob } from "../utils/utils";
+} from '../api/Models/ServiceModels';
+import { signWithBase64 } from '../ncaLayer';
+import api from '../api/Api';
+import { downloadBlob } from '../utils/utils';
 
 class RequestStore {
   // custom
@@ -46,8 +46,8 @@ class RequestStore {
   agreeUsers: number[] = [];
   agreeGroup: Agree[] = [];
   requestId: number | null = null;
-  base64file: string = "";
-  service: string = "";
+  base64file: string = '';
+  service: string = '';
   data: any | null = null;
   signType: boolean = true;
   signNotType: boolean = false;
@@ -377,6 +377,7 @@ class RequestStore {
         this.signNotType = false;
       }
       this.request = r;
+      console.log(r);
     });
   }
   // Client User Пользователи
@@ -481,7 +482,7 @@ class RequestStore {
         (r: Documents[]) =>
           r &&
           (this.documents = r.filter(
-            (rr: Documents) => rr.doc_status !== "Archive"
+            (rr: Documents) => rr.doc_status !== 'Archive'
           ))
       )
       .then(() => runInAction(async () => await this.getDocumentsCategories()));
@@ -548,7 +549,9 @@ class RequestStore {
   }
 
   async getManSigner(id: number) {
-    await api.service.getUser(id).then((u: User) => (this.manSigner = u));
+    await api.service
+      .getUser(id)
+      .then((u: User) => ((this.manSigner = u), console.log(u)));
   }
 
   async getSomeClient(id: number) {
@@ -660,12 +663,12 @@ class RequestStore {
       ...c,
       doc_type: c.doc_type.map((t: number) =>
         this.documents.find(
-          (d: Documents) => d.doc_status === "Active" && d.doc_type === t
+          (d: Documents) => d.doc_status === 'Active' && d.doc_type === t
         )
           ? {
               name: this.types.find((tt: any) => tt.id === t)?.name,
               file: this.documents.find(
-                (d: Documents) => d.doc_status === "Active" && d.doc_type === t
+                (d: Documents) => d.doc_status === 'Active' && d.doc_type === t
               ),
             }
           : {
@@ -758,7 +761,7 @@ class RequestStore {
       ids.map((id: number, index: number) =>
         promises.push(
           api.service.getDocument(id).then((res: Documents) => {
-            if (res.doc_status !== "Active") return;
+            if (res.doc_status !== 'Active') return;
             if (res.doc_type === 11) {
               this.testKey = res;
             } else if (res.doc_type === 10) {
@@ -984,7 +987,7 @@ class RequestStore {
 
   getDocTypes() {
     const doc_cat = this.categories.find(
-      (c: Categories) => c.name === "Заявка"
+      (c: Categories) => c.name === 'Заявка'
     );
     return doc_cat
       ? this.types.filter((c: ServiceCommon) => c.id === +doc_cat.doc_type)
@@ -1038,7 +1041,7 @@ class RequestStore {
           this.afterNca(res);
         })
         .catch((err) => console.error(err.message));
-    } else console.error("no base 64");
+    } else console.error('no base 64');
   }
 
   async afterNca(base64: string) {

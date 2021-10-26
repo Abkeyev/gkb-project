@@ -1,19 +1,19 @@
-import { action, makeAutoObservable, runInAction, computed } from "mobx";
-import api from "../api/Api";
+import { action, makeAutoObservable, runInAction, computed } from 'mobx';
+import api from '../api/Api';
 import {
   AuthPerson,
   Client,
   ClientUsers,
   Documents,
   User,
-} from "../api/Models/ServiceModels";
-import Cookies from "../utils/cookies";
-import { getKeyInfoCall } from "../ncaLayer";
+} from '../api/Models/ServiceModels';
+import Cookies from '../utils/cookies';
+import { getKeyInfoCall } from '../ncaLayer';
 
 export enum CheckState {
-  NotValidated = "notValidated",
-  Failed = "failed",
-  OK = "ok",
+  NotValidated = 'notValidated',
+  Failed = 'failed',
+  OK = 'ok',
 }
 
 export interface ClientData {
@@ -26,19 +26,19 @@ class MainStore {
   logged: boolean = false;
   isReg: boolean = false;
   clientExist: boolean = false;
-  loginState: "login" | "ecp" | "ecpr" = "login";
+  loginState: 'login' | 'ecp' | 'ecpr' = 'login';
   loginError: boolean = false;
-  loginErrorText: string = "";
+  loginErrorText: string = '';
   isOpenModal: boolean = false;
   modalType: number = 0;
   modalTypeEdit: number = 0;
   modalTypeData: any = null;
   modalManager: boolean = false;
   decline: boolean = false;
-  declineReason: string = "";
-  key: string = "";
-  login: string = "";
-  password: string = "";
+  declineReason: string = '';
+  key: string = '';
+  login: string = '';
+  password: string = '';
   usersNew: ClientUsers[] | [] = [];
   doc: Documents | null = null;
 
@@ -48,7 +48,7 @@ class MainStore {
   private _refreshToken: string | null;
 
   constructor() {
-    this.role = "";
+    this.role = '';
     this._refreshToken = null;
     this._accessToken = null;
     this._clientData = {
@@ -61,25 +61,25 @@ class MainStore {
     this.clientExist = false;
     this.usersNew = [];
     if (
-      Cookies.get("refresh") &&
-      Cookies.get("refresh").length > 10 &&
-      Cookies.get("access") &&
-      Cookies.get("access").length > 10 &&
-      Cookies.get("clientData") &&
-      Cookies.get("clientData").length > 5 &&
-      Cookies.get("role") &&
-      Cookies.get("role").length > 4 &&
-      Cookies.get("isReg") &&
-      Cookies.get("isReg").length > 3 &&
-      Cookies.get("clientExist") &&
-      Cookies.get("clientExist").length > 3
+      Cookies.get('refresh') &&
+      Cookies.get('refresh').length > 10 &&
+      Cookies.get('access') &&
+      Cookies.get('access').length > 10 &&
+      Cookies.get('clientData') &&
+      Cookies.get('clientData').length > 5 &&
+      Cookies.get('role') &&
+      Cookies.get('role').length > 4 &&
+      Cookies.get('isReg') &&
+      Cookies.get('isReg').length > 3 &&
+      Cookies.get('clientExist') &&
+      Cookies.get('clientExist').length > 3
     ) {
-      this.role = Cookies.get("role");
-      this.isReg = Cookies.get("isReg") === "true" ? true : false;
-      this.clientExist = Cookies.get("clientExist") === "true" ? true : false;
-      this._refreshToken = Cookies.get("refresh");
-      this._accessToken = Cookies.get("access");
-      this._clientData = JSON.parse(Cookies.get("clientData"));
+      this.role = Cookies.get('role');
+      this.isReg = Cookies.get('isReg') === 'true' ? true : false;
+      this.clientExist = Cookies.get('clientExist') === 'true' ? true : false;
+      this._refreshToken = Cookies.get('refresh');
+      this._accessToken = Cookies.get('access');
+      this._clientData = JSON.parse(Cookies.get('clientData'));
       this.logged = true;
     } else {
       this.logout(false);
@@ -144,16 +144,16 @@ class MainStore {
   }
 
   setNewUsers(users: ClientUsers[]) {
-    this.usersNew = [...this.usersNew, ...users];
+    this.usersNew = users;
   }
 
   logout(reload: boolean = false) {
-    Cookies.remove("refresh");
-    Cookies.remove("access");
-    Cookies.remove("clientData");
-    Cookies.remove("role");
-    Cookies.remove("isReg");
-    Cookies.remove("clientExist");
+    Cookies.remove('refresh');
+    Cookies.remove('access');
+    Cookies.remove('clientData');
+    Cookies.remove('role');
+    Cookies.remove('isReg');
+    Cookies.remove('clientExist');
     this._accessToken = null;
     this._refreshToken = null;
     this._clientData = {
@@ -164,7 +164,7 @@ class MainStore {
     this.isReg = false;
     this.clientExist = false;
     this.logged = false;
-    if (reload == true) document.location.href = "/";
+    if (reload == true) document.location.href = '/';
   }
 
   private async setTokens(r: any) {
@@ -177,12 +177,12 @@ class MainStore {
     this.isReg = r.reg_flag;
     this.clientExist = r.client_exist_flag;
 
-    Cookies.set("refresh", r.token_data.refresh, { expires: 7 });
-    Cookies.set("access", r.token_data.access, { expires: 7 });
-    Cookies.set("role", r.role, { expires: 7 });
-    Cookies.set("isReg", r.reg_flag, { expires: 7 });
-    Cookies.set("clientExist", r.client_exist_flag, { expires: 7 });
-    Cookies.set("clientData", await JSON.stringify(this._clientData), {
+    Cookies.set('refresh', r.token_data.refresh, { expires: 7 });
+    Cookies.set('access', r.token_data.access, { expires: 7 });
+    Cookies.set('role', r.role, { expires: 7 });
+    Cookies.set('isReg', r.reg_flag, { expires: 7 });
+    Cookies.set('clientExist', r.client_exist_flag, { expires: 7 });
+    Cookies.set('clientData', await JSON.stringify(this._clientData), {
       expires: 7,
     });
   }
@@ -190,8 +190,8 @@ class MainStore {
   finishReg() {
     this.isReg = false;
     this.clientExist = false;
-    Cookies.set("isReg", false, { expires: 7 });
-    Cookies.set("clientExist", false, { expires: 7 });
+    Cookies.set('isReg', false, { expires: 7 });
+    Cookies.set('clientExist', false, { expires: 7 });
     window.location.reload();
   }
 
@@ -223,12 +223,12 @@ class MainStore {
         runInAction(async () => {
           await api.client
             .authEcp({
-              bin: this.getSubstring(res.subjectDn, "SERIALNUMBER=").substr(3),
+              bin: this.getSubstring(res.subjectDn, 'SERIALNUMBER=').substr(3),
               fio: `${this.getSubstring(
                 res.subjectDn,
-                "CN="
-              )} ${this.getSubstring(res.subjectDn, "G=")}`,
-              name: this.getSubstring(res.subjectDn, "O=").replace(/\\/g, ""),
+                'CN='
+              )} ${this.getSubstring(res.subjectDn, 'G=')}`,
+              name: this.getSubstring(res.subjectDn, 'O=').replace(/\\/g, ''),
             })
             .then((r) => {
               r &&
@@ -252,7 +252,7 @@ class MainStore {
 
   getSubstring(text: string, string: string) {
     const start = text.indexOf(string) + string.length;
-    return text.substring(start, text.indexOf(",", start));
+    return text.substring(start, text.indexOf(',', start));
   }
 
   async decileReg(id: string) {
