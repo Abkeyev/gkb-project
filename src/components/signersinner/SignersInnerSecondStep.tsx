@@ -396,8 +396,16 @@ const SignersInnerSecondStep = ({ request, main }: SignersInnerProps) => {
                                         )?.name}
                                     </span>
 
-                                    {s.is_approved !== null &&
-                                    !s.is_approved ? (
+                                    {s.is_approved ? (
+                                      <span className="btn-status done">
+                                        Согласовано
+                                      </span>
+                                    ) : (s.is_approved !== null &&
+                                        !s.is_approved) ||
+                                      request._getRequest.request_status ===
+                                        4 ||
+                                      request._getRequest.request_status ===
+                                        3 ? (
                                       <button
                                         className="btn-status canceled btn-status-icon"
                                         style={{ border: 0 }}
@@ -409,10 +417,6 @@ const SignersInnerSecondStep = ({ request, main }: SignersInnerProps) => {
                                         Отклонено
                                         <i className="azla chat-icon-danger"></i>
                                       </button>
-                                    ) : s.is_approved ? (
-                                      <span className="btn-status done">
-                                        Согласовано
-                                      </span>
                                     ) : main.clientData.user.id ===
                                       s.user_id ? (
                                       <div className="d-flex-align-c-spaceb">
@@ -432,7 +436,7 @@ const SignersInnerSecondStep = ({ request, main }: SignersInnerProps) => {
                                         <button
                                           onClick={() => {
                                             main.setModal(true);
-                                            main.setModalType(1);
+                                            main.setModalType(24);
                                           }}
                                           className="delete-signatory"
                                         ></button>

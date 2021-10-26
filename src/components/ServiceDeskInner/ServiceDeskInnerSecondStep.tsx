@@ -360,8 +360,12 @@ const ServiceDeskInnerSecondStep = ({
                                         )?.position}
                                     </span>
 
-                                    {s.is_approved !== null &&
-                                    !s.is_approved ? (
+                                    {s.is_approved ? (
+                                      <span className="btn-status done">
+                                        Согласовано
+                                      </span>
+                                    ) : s.is_approved !== null &&
+                                      !s.is_approved ? (
                                       <button
                                         className="btn-status canceled btn-status-icon"
                                         style={{ border: 0 }}
@@ -373,10 +377,6 @@ const ServiceDeskInnerSecondStep = ({
                                         Отклонено
                                         <i className="azla chat-icon-danger"></i>
                                       </button>
-                                    ) : s.is_approved ? (
-                                      <span className="btn-status done">
-                                        Согласовано
-                                      </span>
                                     ) : (
                                       <span className="btn-status not-active">
                                         Не согласовано
