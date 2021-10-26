@@ -1,5 +1,10 @@
 export interface ContractorsProps {
-  main?: any;
-  request?: any;
-  id?: any;
+  request: any;
+  bin: any;
+  setBin: any;
+  service: any;
+  setService: any;
+  services: any;
+  setServices: any;
+  wrapperRef: any;
 }

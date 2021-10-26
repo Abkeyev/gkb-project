@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
-import { ContractorsProps } from './ContractorsProps.props';
+import { ContractorsInnerProps } from './ContractorsInnerProps.props';
 import { ServiceCommon, User, Client } from '../../api/Models/ServiceModels';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { ReactComponent as Spinner } from '../../styles/spinner.svg';
 
-const ContractorsUsers = ({ id, request }: ContractorsProps) => {
+const ContractorsUsers = ({ id, request }: ContractorsInnerProps) => {
   useEffect(() => {
     request.getClientAllUsers(id);
   }, []);
-  return (
+  return request.loader ? (
+    <Spinner />
+  ) : (
     <>
       <div className='tab-content tab-1'>
         <h3 className='title-subhead mb-8'>

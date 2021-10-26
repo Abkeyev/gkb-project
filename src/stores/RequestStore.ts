@@ -447,7 +447,12 @@ class RequestStore {
   }
 
   async addRequest(data: any) {
-    await api.service.addRequest(data).catch((err) => console.error(err));
+    await api.service
+      .addRequest(data)
+      .catch((err) => console.error(err))
+      .then((res) => {
+        window.location.replace(`/#/partner/${res.id}`);
+      });
   }
 
   async updateUser(id: number, fields: any) {
@@ -711,8 +716,10 @@ class RequestStore {
   }
 
   async getClientAllUsers(id: number) {
+    this.setLoader(true);
     await api.service.getClientUsers(id).then((res) => {
       this.users = res && res.filter((r: User) => r.person_status === 1);
+      this.setLoader(false);
     });
   }
 

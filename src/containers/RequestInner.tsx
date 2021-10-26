@@ -58,7 +58,7 @@ const RequestInner = observer((props: any) => {
                     {request._getRequest.request_status === 4 ||
                     request._getRequest.request_status === 3 ? (
                       <div className='mess-card alert-mess mb-32 col-md-8'>
-                        <h5>Заявка отклонена менеджером</h5>
+                        <h5>Заявка отклонена</h5>
                         <p>Причина: {request._getRequest.client_comment}</p>
                       </div>
                     ) : request._getRequest.request_status === 10 &&

@@ -353,7 +353,7 @@ const PartnersNew = observer((props: any) => {
 
                     {(main.usersNew as ClientUsers[]).map(
                       (u: ClientUsers, index) => (
-                        <CardServiceUsers u={u} index={index} />
+                        <CardServiceUsers u={u} key={index} index={index} />
                       )
                     )}
                     <PartnersNewFooter

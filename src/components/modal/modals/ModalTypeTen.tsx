@@ -5,9 +5,8 @@ import { ClientUser, ServiceCommon } from "../../../api/Models/ServiceModels";
 import { observer } from "mobx-react";
 
 const ModalTypeOne = ({ main, request }: ModalTypes) => {
-  const [search, setSearch] = React.useState("");
-  const [users, setUsers] = React.useState<ClientUser[]>([]);
-
+  const [search, setSearch] = React.useState('');
+  const [users, setUsers] = React.useState<ClientUser[]>(main.usersNew);
   return (
     <BaseModal size={"modal-large-xl"} main={main}>
       <div className="modal-body">
@@ -42,7 +41,8 @@ const ModalTypeOne = ({ main, request }: ModalTypes) => {
             <ul>
               {request._getClientUsersForAdd &&
                 (request._getClientUsersForAdd as ClientUser[])
-                  .filter((f: ClientUser) => f.full_name.includes(search))
+                  .filter((f: ClientUser) => f.full_name.includes(search)
+=====
                   .map(
                     (r: ClientUser) =>
                       main.usersNew.filter((u: ClientUser) => u.id === r.id)
@@ -90,11 +90,48 @@ const ModalTypeOne = ({ main, request }: ModalTypes) => {
                               request._getPosition.find(
                                 (t: ServiceCommon) => t.id === r.position
                               )?.name
+
                             }
-                          </span>
-                        </li>
-                      )
-                  )}
+                            onChange={() => {
+                              console.log(
+                                users.filter((u: ClientUser) => u.id === r.id)
+                                  .length > 0
+                              );
+                              users.filter((u: ClientUser) => u.id === r.id)
+                                .length > 0
+                                ? setUsers([
+                                    ...users.filter(
+                                      (u: ClientUser) => u.id !== r.id
+                                    ),
+                                  ])
+                                : setUsers([...users, r]);
+                            }}
+                            id={`input${r.id}`}
+                            required
+                          />
+                          <label
+                            className='form-check-label'
+                            htmlFor={`input${r.id}`}
+                          >
+                            <img
+                              className='ava'
+                              src={
+                                process.env.PUBLIC_URL + '/images/def-ava.svg'
+                              }
+                            />
+                            <span className='name'>{r.full_name}</span>
+                          </label>
+                        </div>
+                      </div>
+                      <span className='position'>
+                        {
+                          request._getPosition.find(
+                            (t: ServiceCommon) => t.id === r.position
+                          )?.name
+                        }
+                      </span>
+                    </li>
+                  ))}
             </ul>
           </div>
         </div>

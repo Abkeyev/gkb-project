@@ -36,7 +36,9 @@ const ModalTypeThirteen = ({ main, request }: ModalTypes) => {
                             ...request.data,
                             counterparty_signer_user: r.id,
                           })
-                          .then(() => window.location.replace('/'))
+                          .then(() => {
+                            main.setModal(false);
+                          })
                       }
                     >
                       <div className='profile'>
