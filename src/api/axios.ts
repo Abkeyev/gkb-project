@@ -14,7 +14,7 @@ export class Server {
       .get(url, config)
       .then((r) => r?.data)
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         if (error && error.response && error.response.status === 401) {
           Cookies.remove("refresh");
           Cookies.remove("access");

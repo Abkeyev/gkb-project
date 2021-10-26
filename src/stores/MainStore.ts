@@ -221,7 +221,6 @@ class MainStore {
     await getKeyInfoCall()
       .then((res) => {
         runInAction(async () => {
-          console.log(res);
           await api.client
             .authEcp({
               bin: this.getSubstring(res.subjectDn, "SERIALNUMBER=").substr(3),
