@@ -126,7 +126,11 @@ const PartnersInnerSecondStep = ({ main, request }: PartnersProps) => {
                               <div className="d-flex-align-c-spaceb">
                                 <button
                                   className="btn-status-signatory btn-icon active mr-16"
-                                  onClick={() => request.getBase64()}
+                                  onClick={() =>
+                                    request.getBase64(
+                                      main.clientData.client.bin
+                                    )
+                                  }
                                 >
                                   <i className="azla edit-white-icon"></i>
                                   Подписать
@@ -396,8 +400,12 @@ const PartnersInnerSecondStep = ({ main, request }: PartnersProps) => {
                                           )?.name}
                                       </span>
 
-                                      {s.is_approved !== null &&
-                                      !s.is_approved ? (
+                                      {s.is_approved ? (
+                                        <span className="btn-status done">
+                                          Согласовано
+                                        </span>
+                                      ) : s.is_approved !== null &&
+                                        !s.is_approved ? (
                                         <button
                                           className="btn-status canceled btn-status-icon"
                                           style={{ border: 0 }}
@@ -409,10 +417,6 @@ const PartnersInnerSecondStep = ({ main, request }: PartnersProps) => {
                                           Отклонено
                                           <i className="azla chat-icon-danger"></i>
                                         </button>
-                                      ) : s.is_approved ? (
-                                        <span className="btn-status done">
-                                          Согласовано
-                                        </span>
                                       ) : (
                                         <span className="btn-status not-active">
                                           Не согласовано

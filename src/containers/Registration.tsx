@@ -1,21 +1,21 @@
-import React from 'react';
-import { observer } from 'mobx-react';
-import 'react-tabs/style/react-tabs.css';
-import { Documents, ServiceCommon } from '../api/Models/ServiceModels';
-import moment from 'moment';
-import { runInAction } from 'mobx';
-import RegistrationZeroStep from '../components/registration/RegistrationZeroStep';
-import RegistrationFirstStep from '../components/registration/RegistrationFirstStep';
-import RegistrationSecondStep from '../components/registration/RegistrationSecondStep';
+import React from "react";
+import { observer } from "mobx-react";
+import "react-tabs/style/react-tabs.css";
+import { Documents, ServiceCommon } from "../api/Models/ServiceModels";
+import moment from "moment";
+import { runInAction } from "mobx";
+import RegistrationZeroStep from "../components/registration/RegistrationZeroStep";
+import RegistrationFirstStep from "../components/registration/RegistrationFirstStep";
+import RegistrationSecondStep from "../components/registration/RegistrationSecondStep";
 
 const Registration = observer((props: any) => {
   const { main, request } = props;
   const [step, setStep] = React.useState(0);
-  const [iin, setIin] = React.useState('');
-  const [position, setPosition] = React.useState('');
-  const [signingAuth, setSigningAuth] = React.useState('');
-  const [otherPosition, setOtherPosition] = React.useState('');
-  const [otherSigningAuth, setOtherSigningAuth] = React.useState('');
+  const [iin, setIin] = React.useState("");
+  const [position, setPosition] = React.useState("");
+  const [signingAuth, setSigningAuth] = React.useState("");
+  const [otherPosition, setOtherPosition] = React.useState("");
+  const [otherSigningAuth, setOtherSigningAuth] = React.useState("");
   const [file1, setFile1] = React.useState<any | null>(null);
   const [file2, setFile2] = React.useState<any | null>(null);
   const [file3, setFile3] = React.useState<any | null>(null);
@@ -31,7 +31,7 @@ const Registration = observer((props: any) => {
       if (request._getDocuments.length > 0) {
         request.addedFiles = [];
         (request._getDocuments as Documents[])
-          .filter((dd: Documents) => dd.doc_status === 'Active')
+          .filter((dd: Documents) => dd.doc_status === "Active")
           .map((d: Documents) => {
             if (d.doc_type === 3 && d.doc_category === 1) {
               setFile1(d);
@@ -62,7 +62,6 @@ const Registration = observer((props: any) => {
   ) => {
     e.preventDefault();
     const file = e && e.target && e.target.files && e.target.files[0];
-    console.log(file);
     if (file && file.size < 5000000) {
       if (index === 1) setFile1(file);
       else if (index === 2) setFile2(file);
@@ -72,13 +71,13 @@ const Registration = observer((props: any) => {
       else if (index === 6) setFile6(file);
       else if (index === 7) setFile7(file);
       var bodyFormData = new FormData();
-      bodyFormData.append('file', file);
-      bodyFormData.append('service_type', '');
-      bodyFormData.append('doc_category', doc_category);
-      bodyFormData.append('comments', '');
-      bodyFormData.append('version', '1');
-      bodyFormData.append('doc_type', doc_type);
-      bodyFormData.append('is_draft', 'true');
+      bodyFormData.append("file", file);
+      bodyFormData.append("service_type", "");
+      bodyFormData.append("doc_category", doc_category);
+      bodyFormData.append("comments", "");
+      bodyFormData.append("version", "1");
+      bodyFormData.append("doc_type", doc_type);
+      bodyFormData.append("is_draft", "true");
       request.addDocument(main.clientData.client.id, bodyFormData);
     }
   };
@@ -86,7 +85,7 @@ const Registration = observer((props: any) => {
   const deleteDoc = (file: any) => {
     const data = {
       ...file,
-      doc_status: 'Archive',
+      doc_status: "Archive",
     };
     request.deleteDocument(main.clientData.client.id, data);
   };
@@ -97,22 +96,22 @@ const Registration = observer((props: any) => {
         full_name: main.clientData.auth_person.full_name,
         client: main.clientData.client.id,
         position:
-          position === 'other'
+          position === "other"
             ? request._getPosition.find((t: any) => t.name === otherPosition)
                 ?.id
             : position,
         sign_auth: signingAuth,
-        signing_authority_comment: signingAuth === '1' ? otherSigningAuth : '',
+        signing_authority_comment: signingAuth === "1" ? otherSigningAuth : "",
       })
       .then(() => main.finishReg());
   };
 
   return (
-    <section className='register-page'>
-      <div className='container'>
+    <section className="register-page">
+      <div className="container">
         <form>
-          <div className='logo-image'>
-            <img src={process.env.PUBLIC_URL + '/logo-image.png'} alt='logo' />
+          <div className="logo-image">
+            <img src={process.env.PUBLIC_URL + "/logo-image.png"} alt="logo" />
           </div>
           {step === 0 ? (
             <RegistrationZeroStep

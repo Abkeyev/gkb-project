@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
-import { Request, ServiceCommon } from '../../api/Models/ServiceModels';
-import moment from 'moment';
-import { SignersProps } from './SignersProps.props';
-import { ReactComponent as Spinner } from '../../styles/spinner.svg';
+import { observer } from "mobx-react";
+import React, { useEffect } from "react";
+import { Request, ServiceCommon } from "../../api/Models/ServiceModels";
+import moment from "moment";
+import { SignersProps } from "./SignersProps.props";
+import { ReactComponent as Spinner } from "../../styles/spinner.svg";
 
 const SignersNeedToSign = ({
   filterRequests,
@@ -15,21 +15,19 @@ const SignersNeedToSign = ({
     request.getVoteRequest(main.clientData.user.id);
   }, []);
   return (
-    <div className='tab-content tab-1'>
-      <h3 className='title-subhead mb-16'>
-        На подписание{' '}
-        <span className='number'>
+    <div className="tab-content tab-1">
+      <h3 className="title-subhead mb-16">
+        На подписание{" "}
+        <span className="number">
           {filterRequests([6], main.clientData.user.id).length}
         </span>
       </h3>
       {request?.loader ? (
         <Spinner />
-      ) : request?.loader ? (
-        <Spinner />
-      ) : filterRequests().length === 0 ? (
-        'Заявки отсутствуют.'
+      ) : filterRequests([6], main.clientData.user.id).length === 0 ? (
+        "Заявки отсутствуют."
       ) : (
-        <table className='table req-table'>
+        <table className="table req-table">
           <thead>
             <tr>
               <th>БИН</th>
@@ -44,7 +42,7 @@ const SignersNeedToSign = ({
               <tr onClick={() => history.push(`/signer/${r.id}`)}>
                 <td>{r.client.bin}</td>
                 <td>{r.client.longname}</td>
-                <td>{r.service_category === 1 ? 'ЕСБД' : 'БДКИ'}</td>
+                <td>{r.service_category === 1 ? "ЕСБД" : "БДКИ"}</td>
                 <td>
                   {
                     request._getClientServiceType.find(
@@ -52,7 +50,7 @@ const SignersNeedToSign = ({
                     )?.name
                   }
                 </td>
-                <td>{moment(r.reg_date).format('DD.MM.YYYY в HH:mm')}</td>
+                <td>{moment(r.reg_date).format("DD.MM.YYYY в HH:mm")}</td>
               </tr>
             ))}
           </tbody>

@@ -18,7 +18,9 @@ const ModalTypeTwentyFive = ({ main, request }: ModalTypes) => {
                 className="ava"
                 src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
               />
-              <span className="name">{request._getConSigner.full_name}</span>
+              <span className="name">
+                {request._getRequest.client.longname}
+              </span>
             </div>
           </div>
 
