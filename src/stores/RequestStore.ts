@@ -677,6 +677,7 @@ class RequestStore {
             }
       ),
     })));
+    console.log(this._getDocCategories);
   }
 
   async addDocument(id: number, data: any) {
