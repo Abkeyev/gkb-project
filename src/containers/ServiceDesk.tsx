@@ -10,7 +10,7 @@ import ServiceDeskFilter from '../components/ServiceDesk/ServiceDeskFilter';
 import ServiceDeskViewed from '../components/ServiceDesk/ServiceDeskViewed';
 
 const ServiceDesk = observer((props: any) => {
-  const { request } = props;
+  const { request, main } = props;
   const [service, setService] = useState(false);
   const [services, setServices] = useState<number[]>([]);
   const [category, setCategory] = useState(false);
@@ -110,6 +110,7 @@ const ServiceDesk = observer((props: any) => {
                     request={request}
                     history={history}
                     filterRequests={filterRequests}
+                    main={main}
                   />
                 </TabPanel>
               </Tabs>
