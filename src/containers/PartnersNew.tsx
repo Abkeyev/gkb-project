@@ -98,6 +98,19 @@ const PartnersNew = observer((props: any) => {
                 <div className="header-text-inner justify-content-between mb-32">
                   <h1 className="title-main mb-32">Новая заявка</h1>
                 </div>
+
+                <h3 className="title-subhead mb-16">Выберите базу</h3>
+                <div className="choose-service-data">
+                  <div className="radio-default mb-16">
+                      <input type="radio" id="radio-1" name="testing-1" />
+                      <label htmlFor="radio-1">ЕСБД – Единая Страховая База Данных <span>ЕСБД - база данных страховых полисов.</span></label>
+                  </div>
+                  <div className="radio-default">
+                      <input type="radio" id="radio-2" name="testing-1" />
+                      <label htmlFor="radio-2">БДКИ – База Данных Кредитных Историй <span>База Данных Кредитных Историй (БДКИ) содержит в себе кредитные данные физических лиц РК.</span></label>
+                  </div>
+                </div>
+
                 <div className="create-page-inner">
                   <h3 className="title-subhead mb-16">Выберите сервис</h3>
                   <div className="choose-service">
