@@ -15,6 +15,7 @@ export interface Request {
   is_model_contract: boolean;
   counterparty_signer_user: number;
   manager_signer_user: number;
+  request_choice_stepper: number;
 }
 
 export interface ServiceDesk {
@@ -40,13 +41,13 @@ export interface ServiceDesk {
 
 export interface Agree {
   user_name: number[];
-  process_type: "Sequential" | "Parallel";
+  process_type: 'Sequential' | 'Parallel';
   process_number: number;
 }
 
 export interface AgreeResult {
   review_data: Result[];
-  process_type: "Sequential" | "Parallel";
+  process_type: 'Sequential' | 'Parallel';
   process_number: number;
 }
 

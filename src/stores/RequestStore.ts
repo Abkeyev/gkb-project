@@ -25,6 +25,7 @@ import { downloadBlob } from '../utils/utils';
 class RequestStore {
   // custom
   step: number = 1;
+  step_choice: number = 1;
   tab: number = 0;
   tabIndexReq: number = 0;
   tabIndexPar: number = 0;
@@ -262,6 +263,10 @@ class RequestStore {
 
   setStep(step: number) {
     this.step = step;
+  }
+
+  setChoiceStep(step: number) {
+    this.step_choice = step;
   }
 
   setLoader(state: boolean) {
@@ -677,7 +682,6 @@ class RequestStore {
             }
       ),
     })));
-    console.log(this._getDocCategories);
   }
 
   async addDocument(id: number, data: any) {
@@ -852,6 +856,7 @@ class RequestStore {
 
   async getClientServiceType() {
     await api.service.getClientServiceType().then((res) => {
+      console.log(res);
       this.clientServiceType = res;
     });
   }
