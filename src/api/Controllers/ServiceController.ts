@@ -1,6 +1,6 @@
-import { server } from "../axios";
-import { baseURL } from "../const";
-import { Documents, Request } from "../Models/ServiceModels";
+import { server } from '../axios';
+import { baseURL } from '../const';
+import { Documents, Request } from '../Models/ServiceModels';
 
 export class ServiceController {
   // ДОКУМЕНТЫ
@@ -34,9 +34,14 @@ export class ServiceController {
       baseURL,
     });
   }
+  async getDocsTypesByServiceId(id: number) {
+    return server.get(`/doc/type/service_type/${id}`, {
+      baseURL,
+    });
+  }
   async downloadDocument(id: number): Promise<any> {
     return server.get(`/download_file/${id}`, {
-      responseType: "blob",
+      responseType: 'blob',
       baseURL,
     });
   }
@@ -44,7 +49,7 @@ export class ServiceController {
     return server.get(
       `/request/${doc.id}/keys/download?doc_type=${doc.doc_type}`,
       {
-        responseType: "blob",
+        responseType: 'blob',
         baseURL,
       }
     );
@@ -53,7 +58,7 @@ export class ServiceController {
     return server.post(`/client_document/${id}`, data, {
       baseURL,
       headers: {
-        "Content-Type": `multipart/form-data`,
+        'Content-Type': `multipart/form-data`,
       },
     });
   }
@@ -66,7 +71,7 @@ export class ServiceController {
     return server.post(`/request/${id}/keys/upload`, data, {
       baseURL,
       headers: {
-        "Content-Type": `multipart/form-data`,
+        'Content-Type': `multipart/form-data`,
       },
     });
   }

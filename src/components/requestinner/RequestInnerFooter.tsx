@@ -44,7 +44,8 @@ const RequestInnerFooter = ({ request, main, history }: RequestInnerProps) => {
                   В архив
                 </button>
               </div>
-            ) : (
+            ) : request._getRequest?.manager_signer_user ===
+              main.clientData.user.id ? (
               <div className='right'>
                 <p>Первичная проверка прошла успешно?</p>
                 <button
@@ -67,7 +68,7 @@ const RequestInnerFooter = ({ request, main, history }: RequestInnerProps) => {
                   Да, успешно
                 </button>
               </div>
-            )}
+            ) : null}
           </div>
         ) : request._getRequest.request_stepper === 1 &&
           request._getRequest.request_status === 1 ? (
