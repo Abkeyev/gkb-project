@@ -102,9 +102,13 @@ class RequestStore {
   private signers: any[] | [];
   private serviceDesk: ServiceDesk[] | [];
   private getDocCategories: Categories[] | [];
+  private docsTypes: any[] | [];
 
   get _getRequests() {
     return this.requests;
+  }
+  get _getDocsTypes() {
+    return this.docsTypes;
   }
   get _getDocCategories() {
     return this.getDocCategories;
@@ -684,6 +688,12 @@ class RequestStore {
     })));
   }
 
+  async getDocsTypeByServiceId(id: number) {
+    await api.service.getDocsTypesByServiceId(id).then((res: []) => {
+      this.docsTypes = res;
+    });
+  }
+
   async addDocument(id: number, data: any) {
     await api.service.addDocument(id, data).then((r) => {
       if (r && r.id) this.addedFiles = [...this.addedFiles, r.id];
@@ -1107,6 +1117,7 @@ class RequestStore {
     this.serviceDesk = [];
     this.serviceUsers = [];
     this.getDocCategories = [];
+    this.docsTypes = [];
 
     makeAutoObservable(this, {
       getRequests: action.bound,
@@ -1220,6 +1231,7 @@ class RequestStore {
       _getVoteRequests: computed,
       _getServiceDesk: computed,
       _getServiceUsers: computed,
+      _getDocsTypes: computed,
       getAgreeStatus: computed,
       getLastVersion: computed,
     });
