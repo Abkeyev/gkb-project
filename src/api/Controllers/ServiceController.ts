@@ -359,6 +359,15 @@ export class ServiceController {
       }
     );
   }
+  async nextStatus(id: number): Promise<any> {
+    return server.post(
+      `/request/${id}/next_status`,
+      {},
+      {
+        baseURL,
+      }
+    );
+  }
   async toSign(id: number, request_id: number): Promise<any> {
     return server.get(`/request/to_sign/${id}?request_id=${request_id}`, {
       baseURL,

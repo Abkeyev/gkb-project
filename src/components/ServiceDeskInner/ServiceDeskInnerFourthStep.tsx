@@ -1,6 +1,6 @@
-import React from 'react';
-import { observer } from 'mobx-react';
-import { ServiceDeskInnerProps } from './ServiceDeskInnerProps.props';
+import React from "react";
+import { observer } from "mobx-react";
+import { ServiceDeskInnerProps } from "./ServiceDeskInnerProps.props";
 
 const ServiceDeskInnerFourthStep = ({
   request,
@@ -8,17 +8,17 @@ const ServiceDeskInnerFourthStep = ({
 }: ServiceDeskInnerProps) => {
   return (
     <>
-      <div className='pad-b-128'>
-        <div className='req-inner-body'>
-          <div className='pad-rl-16'>
-            <div className='row'>
-              <div className='col-md-8'>
-                <h3 className='title-subhead mb-16'>Тестирование сервисов</h3>
-                <div className='files-added'>
-                  <ul className='files-list'>
+      <div className="pad-b-128">
+        <div className="req-inner-body">
+          <div className="pad-rl-16">
+            <div className="row">
+              <div className="col-md-8">
+                <h3 className="title-subhead mb-16">Тестирование сервисов</h3>
+                <div className="files-added">
+                  <ul className="files-list">
                     {request.testProt && (
                       <li>
-                        <i className='azla blank-alt-primary-icon'></i>
+                        <i className="azla blank-alt-primary-icon"></i>
                         <span
                           onClick={() =>
                             request.downloadDocument(request.testProt)
@@ -30,7 +30,7 @@ const ServiceDeskInnerFourthStep = ({
                     )}
                     {request.testAct && (
                       <li>
-                        <i className='azla blank-alt-primary-icon'></i>
+                        <i className="azla blank-alt-primary-icon"></i>
                         <span
                           onClick={() =>
                             request.downloadDocument(request.testAct)
@@ -43,60 +43,81 @@ const ServiceDeskInnerFourthStep = ({
                   </ul>
                 </div>
 
-                <h3 className='title-subhead mb-16'>Сценарий тестирования</h3>
-                <p className='text-desc'>
+                <h3 className="title-subhead mb-16">Сценарий тестирования</h3>
+                <p className="text-desc">
                   Amet minim mollit non deserunt ullamco est sit aliqua dolor do
                   amet sint. Velit officia consequat duis enim velit mollit.
                   Exercitation veniam consequat sunt nostrud amet.
                 </p>
               </div>
-              <div className='col-md-3 offset-md-1'>
-                <div className='keys-add'>
-                  <h3 className='title-subhead mb-16'>Ключи доступа</h3>
-                  <div className='keys-btn'>
-                    {request.testKey ? (
-                      <button
-                        type='button'
-                        className='btn-file btn-icon'
-                        onClick={() => request.downloadKeys(request.testKey)}
-                      >
-                        Скачать тестовые ключи
-                      </button>
-                    ) : (
-                      <div
-                        className='file-add-sd'
-                        onClick={() => {
-                          main.setModal(true);
-                          main.setModalType(16);
-                          main.setModalTypeEdit(1);
-                        }}
-                      >
-                        <i className='azla plus-primary-icon size-18 mr-8'></i>
-                        Тестовые ключи
-                      </div>
-                    )}
-                    {request.prodKey ? (
-                      <button
-                        type='button'
-                        className='btn-file btn-icon'
-                        onClick={() => request.downloadKeys(request.prodKey)}
-                      >
-                        Скачать боевые ключи
-                      </button>
-                    ) : (
-                      <div
-                        className='file-add-sd'
-                        onClick={() => {
-                          main.setModal(true);
-                          main.setModalType(16);
-                          main.setModalTypeEdit(2);
-                        }}
-                      >
-                        <i className='azla plus-primary-icon size-18 mr-8'></i>
-                        Боевые ключи
-                      </div>
-                    )}
-                  </div>
+              <div className="col-md-3 offset-md-1">
+                <div className="keys-add">
+                  <ul className="step-progressbar grid-view">
+                    <li
+                      className={`step-item ${
+                        request._getRequest.request_status === 10
+                          ? "step-item-active"
+                          : "step-item-complete"
+                      }`}
+                      onClick={() => {}}
+                    >
+                      Servicedesk отправил тестовые ключи
+                    </li>
+                    <li
+                      className={`step-item ${
+                        request._getRequest.request_status === 12
+                          ? "step-item-active"
+                          : request._getRequest.request_status === 8 ||
+                            request._getRequest.request_status === 13 ||
+                            request._getRequest.request_status === 14 ||
+                            request._getRequest.request_status === 7
+                          ? "step-item-complete"
+                          : ""
+                      }`}
+                      onClick={() => {}}
+                    >
+                      Контрагент получил тестовые ключи
+                    </li>
+                    <li
+                      className={`step-item ${
+                        request._getRequest.request_status === 8
+                          ? "step-item-active"
+                          : request._getRequest.request_status === 13 ||
+                            request._getRequest.request_status === 14 ||
+                            request._getRequest.request_status === 7
+                          ? "step-item-complete"
+                          : ""
+                      }`}
+                      onClick={() => {}}
+                    >
+                      Контрагент подписал “Акт прохождения тестирования”
+                    </li>
+                    <li
+                      className={`step-item ${
+                        request._getRequest.request_status === 13
+                          ? "step-item-active"
+                          : request._getRequest.request_status === 14 ||
+                            request._getRequest.request_status === 7
+                          ? "step-item-complete"
+                          : ""
+                      }`}
+                      onClick={() => {}}
+                    >
+                      Servicedesk отправил “боевые” ключи
+                    </li>
+                    <li
+                      className={`step-item ${
+                        request._getRequest.request_status === 14
+                          ? "step-item-active"
+                          : request._getRequest.request_status === 7
+                          ? "step-item-complete"
+                          : ""
+                      }`}
+                      onClick={() => {}}
+                    >
+                      Контрагент получил “боевые” ключи
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>

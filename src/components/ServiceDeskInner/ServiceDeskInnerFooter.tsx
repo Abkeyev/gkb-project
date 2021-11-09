@@ -1,28 +1,25 @@
-import { observer } from 'mobx-react';
-import React from 'react';
-import { ServiceDeskInnerProps } from './ServiceDeskInnerProps.props';
+import { observer } from "mobx-react";
+import React from "react";
+import { ServiceDeskInnerProps } from "./ServiceDeskInnerProps.props";
 
-const ServiceDeskInnerFooter = ({ request, main }: ServiceDeskInnerProps) => {
+const ServiceDeskInnerFooter = ({
+  request,
+  main,
+  test,
+}: ServiceDeskInnerProps) => {
   return (
-    <div className='req-inner-footer'>
-      <div className='container'>
-        <div className='left'>
+    <div className="req-inner-footer">
+      <div className="container">
+        <div className="right">
+          {test
+            ? "Подтвердите отправление тестовых ключей на почту контрагента:"
+            : "Подтвердите отправление “боевых” ключей на почту контрагента:"}
           <button
-            type='button'
-            onClick={() => request.nextRequest(request._getRequest)}
-            className='button btn-primary mrl-32'
+            type="button"
+            onClick={() => request.nextStatus()}
+            className="button btn-primary mrl-32"
           >
-            Подтвердить заполнение
-          </button>
-          <button
-            type='button'
-            onClick={() => {
-              main.setModalType(1);
-              main.setModal(true);
-            }}
-            className='button btn-danger'
-          >
-            Отклонить
+            Подтвердить
           </button>
         </div>
       </div>
