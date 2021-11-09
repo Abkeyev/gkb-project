@@ -104,7 +104,9 @@ const AboutOrganization = ({ main, request }: OrganizationProps) => {
                     ))}
                 <li>
                   <span className='left'>ОКЭД:</span>
-                  <span className='right'>{main.clientData.client.oked}</span>
+                  <span className='right'>
+                    {main.clientData.client.oked?.map((item: string) => item)}
+                  </span>
                 </li>
               </ul>
             </div>

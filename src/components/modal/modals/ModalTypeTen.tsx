@@ -8,6 +8,10 @@ const ModalTypeOne = ({ main, request }: ModalTypes) => {
   const [search, setSearch] = React.useState('');
   const [users, setUsers] = React.useState<ClientUser[]>(main.usersNew);
 
+  React.useEffect(() => {
+    console.log(users);
+  }, [users]);
+
   return (
     <BaseModal size={'modal-large-xl'} main={main}>
       <div className='modal-body'>
@@ -63,7 +67,7 @@ const ModalTypeOne = ({ main, request }: ModalTypes) => {
                                 .length > 0
                                 ? setUsers([
                                     ...users.filter(
-                                      (u: ClientUser) => u.id !== r.id
+                                      (u: ClientUser) => r.id !== u.id
                                     ),
                                   ])
                                 : setUsers([...users, r]);

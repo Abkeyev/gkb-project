@@ -13,6 +13,7 @@ const ServiceDeskViewed = ({
   filterRequests,
   history,
 }: ServiceDeskProps) => {
+  React.useEffect(() => {}, []);
   return request?.loader ? (
     <Spinner />
   ) : (

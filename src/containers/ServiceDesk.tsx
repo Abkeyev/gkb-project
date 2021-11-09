@@ -10,7 +10,7 @@ import ServiceDeskFilter from "../components/ServiceDesk/ServiceDeskFilter";
 import ServiceDeskViewed from "../components/ServiceDesk/ServiceDeskViewed";
 
 const ServiceDesk = observer((props: any) => {
-  const { request } = props;
+  const { request, main } = props;
   const [service, setService] = useState(false);
   const [services, setServices] = useState<number[]>([]);
   const [category, setCategory] = useState(false);
@@ -25,7 +25,8 @@ const ServiceDesk = observer((props: any) => {
   OnClickOutside(serviceRef, () => setService(false));
 
   const filterRequests = (type: number[] = []) => {
-    const req = request._getRequests
+    const req = request._getRequests &&
+      request._getRequests
       .slice()
       .sort((a: RequestModel, b: RequestModel) => {
         return new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime();
@@ -35,7 +36,7 @@ const ServiceDesk = observer((props: any) => {
     return req.length > 0
       ? req
           .filter(
-            (cc: RequestModel) =>
+            (cc: Request) =>
               cc.client.longname
                 .toLocaleLowerCase()
                 .includes(bin.toLocaleLowerCase()) ||
@@ -43,10 +44,11 @@ const ServiceDesk = observer((props: any) => {
                 .toLocaleLowerCase()
                 .includes(bin.toLocaleLowerCase())
           )
-          .filter((ccc: RequestModel) =>
+          .filter((ccc: Request) =>
             services.length === 0 ? true : services.includes(ccc.service_type)
           )
-          .filter((ccc: RequestModel) =>
+          .filter((cccc: Request) => cccc.request_stepper > 3)
+          .filter((ccc: Request) =>
             categories.length === 0
               ? true
               : categories.includes(ccc.client.client_type)
@@ -111,6 +113,7 @@ const ServiceDesk = observer((props: any) => {
                     request={request}
                     history={history}
                     filterRequests={filterRequests}
+                    main={main}
                   />
                 </TabPanel>
               </Tabs>

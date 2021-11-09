@@ -13,7 +13,7 @@ const ServiceDeskIncoming = ({
   history,
   filterRequests,
 }: ServiceDeskProps) => {
-  React.useEffect(() => {
+  React.useMemo(() => {
     request.getRequests();
     request.getClients();
     request.getClientServiceType();
