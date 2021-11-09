@@ -1,13 +1,13 @@
-import React, { useState, useRef } from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { useHistory } from 'react-router';
-import 'react-tabs/style/react-tabs.css';
-import { observer } from 'mobx-react';
-import { Request as RequestModel } from '../api/Models/ServiceModels';
-import { OnClickOutside } from '../utils/utils';
-import ServiceDeskIncoming from '../components/ServiceDesk/ServiceDeskIncoming';
-import ServiceDeskFilter from '../components/ServiceDesk/ServiceDeskFilter';
-import ServiceDeskViewed from '../components/ServiceDesk/ServiceDeskViewed';
+import React, { useState, useRef } from "react";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { useHistory } from "react-router";
+import "react-tabs/style/react-tabs.css";
+import { observer } from "mobx-react";
+import { Request as RequestModel } from "../api/Models/ServiceModels";
+import { OnClickOutside } from "../utils/utils";
+import ServiceDeskIncoming from "../components/ServiceDesk/ServiceDeskIncoming";
+import ServiceDeskFilter from "../components/ServiceDesk/ServiceDeskFilter";
+import ServiceDeskViewed from "../components/ServiceDesk/ServiceDeskViewed";
 
 const ServiceDesk = observer((props: any) => {
   const { request } = props;
@@ -15,8 +15,8 @@ const ServiceDesk = observer((props: any) => {
   const [services, setServices] = useState<number[]>([]);
   const [category, setCategory] = useState(false);
   const [categories, setCategories] = useState<number[]>([]);
-  const [bin, setBin] = useState<string>('');
-  const [sortTitle, setSortTitle] = useState('');
+  const [bin, setBin] = useState<string>("");
+  const [sortTitle, setSortTitle] = useState("");
   const history = useHistory();
   const catRef = useRef<any>(null);
   const serviceRef = useRef<any>(null);
@@ -24,14 +24,14 @@ const ServiceDesk = observer((props: any) => {
   OnClickOutside(catRef, () => setCategory(false));
   OnClickOutside(serviceRef, () => setService(false));
 
-  const filterRequests = (step: number[] = []) => {
+  const filterRequests = (type: number[] = []) => {
     const req = request._getRequests
       .slice()
       .sort((a: RequestModel, b: RequestModel) => {
         return new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime();
       })
       .reverse();
-    if (sortTitle === 'сначала старые') req.reverse();
+    if (sortTitle === "сначала старые") req.reverse();
     return req.length > 0
       ? req
           .filter(
@@ -51,20 +51,21 @@ const ServiceDesk = observer((props: any) => {
               ? true
               : categories.includes(ccc.client.client_type)
           )
+          .filter((rr: RequestModel) => rr.request_stepper > 3)
           .filter((r: RequestModel) =>
-            step.length === 0 ? true : step.includes(r.request_stepper)
+            type.length === 0 ? true : type.includes(r.request_status)
           )
       : [];
   };
 
   return (
-    <div className='main-body'>
-      <div className='container'>
-        <div className='row'>
-          <div className='col-lg-12'>
-            <div className='req-manager p-50 pad-b-128'>
-              <div className='header-text justify-content-between mb-24'>
-                <h1 className='title-main'>Заявки</h1>
+    <div className="main-body">
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="req-manager p-50 pad-b-128">
+              <div className="header-text justify-content-between mb-24">
+                <h1 className="title-main">Заявки</h1>
               </div>
 
               <Tabs

@@ -889,6 +889,14 @@ class RequestStore {
           });
         }));
   }
+  async nextStatus() {
+    this._getRequest &&
+      (await api.service.nextStatus(this._getRequest.id).then(() => {
+        runInAction(async () => {
+          this._getRequest && (await this.getRequest(this._getRequest.id));
+        });
+      }));
+  }
   async updateRequest(data: any) {
     this._getRequest &&
       (await api.service.updateRequest(this._getRequest, data).then(() => {
@@ -1142,6 +1150,7 @@ class RequestStore {
       endRequest: action.bound,
       nextRequest: action.bound,
       nextRequestStatus: action.bound,
+      nextStatus: action.bound,
       setDoc: action.bound,
       editClient: action.bound,
       setTempDoc: action.bound,
