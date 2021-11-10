@@ -3,7 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useHistory } from "react-router";
 import "react-tabs/style/react-tabs.css";
 import { observer } from "mobx-react";
-import { Request as RequestModel } from "../api/Models/ServiceModels";
+import { Request } from "../api/Models/ServiceModels";
 import { OnClickOutside } from "../utils/utils";
 import ServiceDeskIncoming from "../components/ServiceDesk/ServiceDeskIncoming";
 import ServiceDeskFilter from "../components/ServiceDesk/ServiceDeskFilter";
@@ -25,13 +25,16 @@ const ServiceDesk = observer((props: any) => {
   OnClickOutside(serviceRef, () => setService(false));
 
   const filterRequests = (type: number[] = []) => {
-    const req = request._getRequests &&
+    const req =
+      request._getRequests &&
       request._getRequests
-      .slice()
-      .sort((a: RequestModel, b: RequestModel) => {
-        return new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime();
-      })
-      .reverse();
+        .slice()
+        .sort((a: Request, b: Request) => {
+          return (
+            new Date(a.reg_date).getTime() - new Date(b.reg_date).getTime()
+          );
+        })
+        .reverse();
     if (sortTitle === "сначала старые") req.reverse();
     return req.length > 0
       ? req
@@ -53,8 +56,8 @@ const ServiceDesk = observer((props: any) => {
               ? true
               : categories.includes(ccc.client.client_type)
           )
-          .filter((rr: RequestModel) => rr.request_stepper > 3)
-          .filter((r: RequestModel) =>
+          .filter((rr: Request) => rr.request_stepper > 3)
+          .filter((r: Request) =>
             type.length === 0 ? true : type.includes(r.request_status)
           )
       : [];
