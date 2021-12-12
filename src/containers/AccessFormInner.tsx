@@ -12,7 +12,7 @@ import PartnersInnerFourthStep from "../components/partnersinner/PartnersInnerFo
 import PartnersInnerFifthStep from "../components/partnersinner/PartnersInnerFifthStep";
 import PartnersInnerFooter from "../components/partnersinner/PartnersInnerFooter";
 
-const PartnersInner = observer((props: any) => {
+const AccessFormInner = observer((props: any) => {
   const history = useHistory();
   const { main, request } = props;
 
@@ -36,182 +36,149 @@ const PartnersInner = observer((props: any) => {
           <div className="container">
             <div className="row">
               <div className="col-lg-12">
-                <div className="req-manager-inner p-16-50 pad-b-128">
-                  <div className="req-inner-header">
-                    <div className="back-breadcrumbs">
-                      <div onClick={() => history.goBack()} className="back">
-                        <i className="azla arrow-left-icon"></i> Назад
+              <div className="req-manager p-50 pad-b-128 access-form-page">
+                <div className="header-text justify-content-between mb-24">
+                  <h1 className="title-main">Новая форма на предоставление доступа</h1>
+                </div>
+
+                <h3 className="title-subhead mb-16">
+                  Выберите сервис
+                </h3>
+                <p>Выберите из списка активный сервис, к которому вы хотите добавить пользователей</p>
+                
+                
+                <div className="col-md-7 mb-32">
+                  <div className='form-multiselect mb-0 special-select'>
+
+
+                            {/* Когда выбрали то дается класс - Open */}
+                    <div className="multi js-multi-button ">
+                      <div className='input-wrapper'>
+                            {/* Когда выбрали то дается класс - selected */}
+                            <div className="types-input selected azla form-icon chevron-down-icon">
+                              
+                                {/* <span className="types-placeholder">Выберите сервис</span> */}
+
+                                <div className='multi-list'>
+                                  <div className="service-name">
+                                    БДКИ
+                                  </div>
+                                  <div className="service-desc">
+                                    Изъятие данных Изъятие данныхИзъятие данныхИзъятие данныхИзъятие данных Изъятие данныхИзъятие данных Изъятие данныхИзъятие данныхИзъятие данных
+                                  </div>
+                                  <div className="service-users">
+                                  8 пользователей
+                                  </div>
+                                </div>
+
+                            </div>
+                        <label className='label'></label>
                       </div>
-                      <div className="breadcrumbs">
-                        <Link to="/">Заявки</Link> /{" "}
-                        <span>Заявка №{request._getRequest.id}</span>
+                      
+                  <div className='multi-menu'>
+                    <div className='multi-option option-current'>
+
+                      <div className='multi-list'>
+                        <div className="service-name">
+                          БДКИ
+                        </div>
+                        <div className="service-desc">
+                          Изъятие данных Изъятие данныхИзъятие данныхИзъятие данныхИзъятие данных Изъятие данныхИзъятие данных Изъятие данныхИзъятие данныхИзъятие данных
+                        </div>
+                        <div className="service-users">
+                        8 пользователей
+                        </div>
+                      </div>
+
+                      <div className='multi-list'>
+                        <div className="service-name">
+                          ЕСБД
+                        </div>
+                        <div className="service-desc">
+                        Изъятие данных Изъятие 
+                        </div>
+                        <div className="service-users">
+                        8 пользователей
+                        </div>
+                      </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  </div>
+
+                  {/* Добавляется при выборе сервиса */}
+                  <div className='d-flex-align-c-spaceb mb-32'>
+                    <div className='d-grid'>
+                      <h3 className='title-subhead mb-8'>
+                        Новые пользователи услуг{' '}
+                        <span className='number'>{main.usersNew.length}</span>
+                      </h3>
+                      <p>Пользователи организации, которые будут пользоваться выбранным сервисом</p>
+                    </div>
+                    <button
+                      className='btn button btn-primary btn-icon'
+                      onClick={() => {
+                        main.setModal(true);
+                        main.setModalType(26);
+                      }}
+                    >
+                      <i className='azla add-plusRound-icon'></i> Добавить
+                    </button>
+                  </div>
+
+
+                  {/* После модалки и выборе вот карточка добавляется */}
+                  
+                  <div className='card card-rights mb-24 pad-24'>
+                      <div className='card-header'>
+
+                        <div className='card-header-rights'>
+                          <div className='left'>
+                            <span className='num'>№ 12</span>
+                            <h6 className='text'>Султангалиева Камилла Избасарова</h6>
+                          </div>
+                          <div className='right'>
+                            <span className="use-service">Использует 2 сервиса</span>
+                            <span className="close"><i className="azla close-primary-icon"></i></span>
+                          </div>
+                        </div>
+                        <p className='desc'>Аналитик – Департамент финансового анализа – ТОО “М-Ломбард”</p>
+                      </div>
+                      <div className='card-body pad-rl-16'>
+                        <div className='row'>
+                          <div className='col-md-12'>
+                            <div className='total-info'>
+                                <h6>Права доступа</h6>
+                                <ul>
+                                  <li><i className='azla icon-success-check'></i> Просмотр данных по субъектам и контрактам</li>
+                                  <li><i className='azla icon-success-check'></i> Создание/редактирование данных по субъектам и контрактам</li>
+                                </ul>
+                                <button className='add-rights'><i className='azla add-primary-icon'></i> Изменить права</button>
+                            </div>
+                          </div>
+                          
+                        </div>
                       </div>
                     </div>
 
-                    <h1 className="title-main mb-32">
-                      Заявка №{request._getRequest.id} -{" "}
-                      {request._getClient &&
-                        request._getClient.longname &&
-                        request._getClient.longname}
-                    </h1>
 
-                    {(request._getRequest.request_status === 4 ||
-                      request._getRequest.request_status === 3) && (
-                      <div className="mess-card alert-mess mb-32 col-md-8">
-                        <h5>Заявка отклонена</h5>
-                        <p>Причина: {request._getRequest.client_comment}</p>
-                      </div>
-                    )}
-
-                    <div className="status-bar">
-                      <ul className="step-progressbar">
-                        <li
-                          className={`step-item ${
-                            request._getRequest.request_stepper === 1
-                              ? "step-item-active"
-                              : "step-item-complete"
-                          }`}
-                          onClick={() => request.setStep(1)}
-                        >
-                          Проверка
-                        </li>
-                        <li
-                          className={`step-item ${
-                            request._getRequest.request_stepper === 2
-                              ? "step-item-active"
-                              : request._getRequest.request_stepper > 2
-                              ? "step-item-complete"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            request._getRequest.request_stepper >= 2 &&
-                            request.setStep(2)
-                          }
-                        >
-                          Подписание
-                          <br />
-                          договора
-                        </li>
-                        <li
-                          className={`step-item ${
-                            request._getRequest.request_stepper === 3
-                              ? "step-item-active"
-                              : request._getRequest.request_stepper > 3
-                              ? "step-item-complete"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            request._getRequest.request_stepper >= 3 &&
-                            request.setStep(3)
-                          }
-                        >
-                          Форма
-                          <br />
-                          доступа
-                        </li>
-                        <li
-                          className={`step-item ${
-                            request._getRequest.request_stepper === 4
-                              ? "step-item-active"
-                              : request._getRequest.request_stepper > 4
-                              ? "step-item-complete"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            request._getRequest.request_stepper >= 4 &&
-                            request.setStep(4)
-                          }
-                        >
-                          Тестирование
-                        </li>
-                        <li
-                          className={`step-item ${
-                            request._getRequest.request_stepper === 5
-                              ? "step-item-active"
-                              : request._getRequest.request_stepper > 5
-                              ? "step-item-complete"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            request._getRequest.request_stepper >= 5 &&
-                            request.setStep(5)
-                          }
-                        >
-                          Готово
-                        </li>
-                      </ul>
+                
+                  {/* Футер */}
+                  <div className="req-inner-footer">
+                    <div className="container">
+                      <Link
+                        to="/access-form-new"
+                        className="button btn-primary btn-icon ml-32 d-inline-flex"
+                      >
+                        Далее
+                      </Link>
                     </div>
                   </div>
 
-                  {(request._getRequest.request_status === 10 ||
-                    request._getRequest.request_status === 12 ||
-                    request._getRequest.request_status === 8 ||
-                    request._getRequest.request_status === 13 ||
-                    request._getRequest.request_status === 14) &&
-                  request._getRequest.request_stepper > 3 ? (
-                    <div className="mess-card mb-32 col-md-8">
-                      Пожалуйста, ожидайте. Департамент Servicedesk ГКБ должен
-                      выслать вам на почту тестовые, а затем, после подписания
-                      акта, “боевые” ключи. Вы должны подтверждать получение
-                      ключей!
-                    </div>
-                  ) : request._getRequest.request_status === 3 &&
-                    request._getRequest.request_status === 4 ? (
-                    ""
-                  ) : request._getRequest.request_status === 6 &&
-                    request._getRequest.request_status === 9 ? (
-                    <div className="mess-card mb-32 col-md-8">
-                      Договор отправлен на подписание. Пожалуйста, ожидайте
-                      подписания документа представителями контрагента и АО
-                      “Государственное Кредитное Бюро”.
-                    </div>
-                  ) : request._getRequest.request_status === 2 ? (
-                    <div className="mess-card mb-32 col-md-8">
-                      Данная заявка проходит первичную проверку менеджером.
-                      Пожалуйста, ожидайте. Среднее время проверки составляет 1
-                      день.
-                    </div>
-                  ) : request._getRequest.request_status === 1 ? (
-                    <div className="mess-card mb-32 col-md-8">
-                      Менеджер заявки готовит ваш договор на рассмотрение.
-                      Приложенный договор вы увидите в секции “История изменения
-                      договора”. Вы так же можете добавлять/изменять договор и
-                      выносить его на расмотрение загрузив файл в систему.
-                    </div>
-                  ) : (
-                    ""
-                  )}
 
-                  {request.step === 1 ? (
-                    <Tabs>
-                      <div className="line-hr mb-32">
-                        <TabList>
-                          <Tab>Общее</Tab>
-                          <Tab>Потребители услуг</Tab>
-                        </TabList>
-                      </div>
-
-                      <TabPanel>
-                        <PartnersInnerGeneral request={request} />
-                      </TabPanel>
-
-                      <TabPanel>
-                        <PartnersInnerServiceUsers request={request} />
-                      </TabPanel>
-                    </Tabs>
-                  ) : request.step === 2 ? (
-                    <PartnersInnerSecondStep main={main} request={request} />
-                  ) : request.step === 3 ? (
-                    <PartnersInnerThirdStep request={request} />
-                  ) : request.step === 4 ? (
-                    <PartnersInnerFourthStep request={request} />
-                  ) : request.step === 5 ? (
-                    <PartnersInnerFifthStep request={request} />
-                  ) : (
-                    <></>
-                  )}
-                  <PartnersInnerFooter request={request} />
-                </div>
+              </div>
               </div>
             </div>
           </div>
@@ -220,4 +187,4 @@ const PartnersInner = observer((props: any) => {
     </>
   );
 });
-export default PartnersInner;
+export default AccessFormInner;
