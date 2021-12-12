@@ -20,6 +20,8 @@ import ServiceDeskInner from "./ServiceDeskInner";
 import Signers from "./Signers";
 import SignersInner from "./SignersInner";
 import AccessForm from "./AccessForm";
+import AccessFormNew from "./AccessFormNew";
+import AccessFormInner from "./AccessFormInner";
 
 export {
   Login,
@@ -44,4 +46,6 @@ export {
   Signers,
   SignersInner,
   AccessForm,
+  AccessFormNew,
+  AccessFormInner,
 };
