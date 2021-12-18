@@ -128,6 +128,17 @@ export interface ClientUserAccess {
   right_ids: number[];
 }
 
+export interface Right {
+  id: number;
+  name: string;
+  service_type: number[];
+}
+
+export interface ClientUserService {
+  client_user_data: ClientUserAccess;
+  service_count: number;
+}
+
 export interface ClientService {
   id: number;
   service_category: number;

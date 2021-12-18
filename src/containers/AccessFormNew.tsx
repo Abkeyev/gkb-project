@@ -4,7 +4,13 @@ import "react-tabs/style/react-tabs.css";
 import { Link, useHistory } from "react-router-dom";
 import { observer } from "mobx-react";
 import { Modal } from ".";
-import { ServiceCommon } from "../api/Models/ServiceModels";
+import {
+  Client,
+  ClientUserAccess,
+  ClientUserService,
+  Right,
+  ServiceCommon,
+} from "../api/Models/ServiceModels";
 
 const AccessFormNew = observer((props: any) => {
   const history = useHistory();
@@ -33,6 +39,7 @@ const AccessFormNew = observer((props: any) => {
     request.getClientUsersForAdd(main.clientData.client.id);
     request.getClients();
     request.getPosition();
+    request.getRights();
     request.getUsers();
     request.getRequestStatus();
     request.getDocumentsCategories();
@@ -119,7 +126,9 @@ const AccessFormNew = observer((props: any) => {
                     <div className="d-grid">
                       <h3 className="title-subhead mb-8">
                         Новые пользователи услуг{" "}
-                        <span className="number">{main.usersNew.length}</span>
+                        <span className="number">
+                          {main.usersNewAccess.length}
+                        </span>
                       </h3>
                       <p>
                         Пользователи организации, которые будут пользоваться
@@ -139,54 +148,79 @@ const AccessFormNew = observer((props: any) => {
 
                   {/* После модалки и выборе вот карточка добавляется */}
 
-                  <div className="card card-rights mb-24 pad-24">
-                    <div className="card-header">
-                      <div className="card-header-rights">
-                        <div className="left">
-                          <span className="num">№ 12</span>
-                          <h6 className="text">
-                            Султангалиева Камилла Избасарова
-                          </h6>
+                  {main.usersNewAccess.length > 0 &&
+                    main.usersNewAccess.map((u: ClientUserAccess) => (
+                      <div className="card card-rights mb-24 pad-24">
+                        <div className="card-header">
+                          <div className="card-header-rights">
+                            <div className="left">
+                              <span className="num">№ {u.id}</span>
+                              <h6 className="text">{u.full_name}</h6>
+                            </div>
+                            <div className="right">
+                              <span className="use-service">
+                                Использует{" "}
+                                {
+                                  request._getClientUserService.find(
+                                    (t: ClientUserService) =>
+                                      t.client_user_data.id === u.id
+                                  )?.service_count
+                                }{" "}
+                                сервиса
+                              </span>
+                              <span
+                                className="close"
+                                onClick={() =>
+                                  main.setNewAccessUsers([
+                                    ...main.usersNewAccess.filter(
+                                      (a: ClientUserAccess) => a.id !== u.id
+                                    ),
+                                  ])
+                                }
+                              >
+                                <i className="azla close-primary-icon"></i>
+                              </span>
+                            </div>
+                          </div>
+                          <p className="desc">
+                            {
+                              request._getPosition.find(
+                                (t: ServiceCommon) => t.id === +u.position_name
+                              )?.name
+                            }{" "}
+                            – {u.department_name} –
+                            {request._getClients &&
+                              request._getClients.find(
+                                (t: Client) => t.id === u.client
+                              )?.longname}
+                          </p>
                         </div>
-                        <div className="right">
-                          <span className="use-service">
-                            Использует 2 сервиса
-                          </span>
-                          <span className="close">
-                            <i className="azla close-primary-icon"></i>
-                          </span>
-                        </div>
-                      </div>
-                      <p className="desc">
-                        Аналитик – Департамент финансового анализа – ТОО
-                        “М-Ломбард”
-                      </p>
-                    </div>
-                    <div className="card-body pad-rl-16">
-                      <div className="row">
-                        <div className="col-md-12">
-                          <div className="total-info">
-                            <h6>Права доступа</h6>
-                            <ul>
-                              <li>
-                                <i className="azla icon-success-check"></i>{" "}
-                                Просмотр данных по субъектам и контрактам
-                              </li>
-                              <li>
-                                <i className="azla icon-success-check"></i>{" "}
-                                Создание/редактирование данных по субъектам и
-                                контрактам
-                              </li>
-                            </ul>
-                            <button className="add-rights">
-                              <i className="azla add-primary-icon"></i> Изменить
-                              права
-                            </button>
+                        <div className="card-body pad-rl-16">
+                          <div className="row">
+                            <div className="col-md-12">
+                              <div className="total-info">
+                                <h6>Права доступа</h6>
+                                <ul>
+                                  {u.right_ids.map((r: number) => (
+                                    <li>
+                                      <i className="azla icon-success-check"></i>{" "}
+                                      {request._getRights &&
+                                        request._getRights.find(
+                                          (t: Right) => t.id === r
+                                        )?.name}
+                                    </li>
+                                  ))}
+                                </ul>
+                                <button className="add-rights">
+                                  <i className="azla add-primary-icon"></i>{" "}
+                                  Изменить права
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    ))}
 
                   {/* Футер */}
                   <div className="req-inner-footer">

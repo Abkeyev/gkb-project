@@ -1,4 +1,4 @@
-import { action, computed, makeAutoObservable, runInAction, toJS } from 'mobx';
+import { action, computed, makeAutoObservable, runInAction, toJS } from "mobx";
 import {
   Request,
   Documents,
@@ -17,10 +17,12 @@ import {
   AgreeResult,
   Result,
   ServiceDesk,
-} from '../api/Models/ServiceModels';
-import { signWithBase64 } from '../ncaLayer';
-import api from '../api/Api';
-import { downloadBlob } from '../utils/utils';
+  ClientUserAccess,
+  Right,
+} from "../api/Models/ServiceModels";
+import { signWithBase64 } from "../ncaLayer";
+import api from "../api/Api";
+import { downloadBlob } from "../utils/utils";
 
 class RequestStore {
   // custom
@@ -47,8 +49,8 @@ class RequestStore {
   agreeUsers: number[] = [];
   agreeGroup: Agree[] = [];
   requestId: number | null = null;
-  base64file: string = '';
-  service: string = '';
+  base64file: string = "";
+  service: string = "";
   data: any | null = null;
   signType: boolean = true;
   signNotType: boolean = false;
@@ -72,6 +74,8 @@ class RequestStore {
   private clients: Client[];
   private clientUsers: Client[] | [];
   private serviceUsers: ClientUsers[] | [];
+  private clientUserService: ClientUserAccess[] | [];
+  private rights: Right[] | [];
   private clientDocs: Documents[] | [];
   private clientUsersForAdd: ClientUsers[] | [];
   private client: Client | null;
@@ -107,6 +111,9 @@ class RequestStore {
   get _getRequests() {
     return this.requests;
   }
+  get _getRights() {
+    return this.rights;
+  }
   get _getDocsTypes() {
     return this.docsTypes;
   }
@@ -133,6 +140,9 @@ class RequestStore {
   }
   get _getServiceUsers() {
     return this.serviceUsers;
+  }
+  get _getClientUserService() {
+    return this.clientUserService;
   }
   get _getAllUsers() {
     return this.allUsers;
@@ -315,6 +325,12 @@ class RequestStore {
     });
   }
 
+  async getRights() {
+    await api.service.getRights().then((r: Right[]) => {
+      this.rights = r;
+    });
+  }
+
   async getClientRequests(id: number) {
     this.setLoader(true);
     await api.service
@@ -444,9 +460,13 @@ class RequestStore {
 
   async getClientUsersForAdd(id: number) {
     this.setLoader(true);
-    await api.service
-      .getClientUsersForAdd(id)
-      .then((res) => (this.clientUsersForAdd = res));
+    await api.service.getClientUsersForAdd(id).then((res) => {
+      this.clientUsersForAdd = res;
+      runInAction(
+        async () =>
+          await this.getClientUserServiceCount(res.map((item: any) => item.id))
+      );
+    });
     this.setLoader(false);
   }
 
@@ -491,7 +511,7 @@ class RequestStore {
         (r: Documents[]) =>
           r &&
           (this.documents = r.filter(
-            (rr: Documents) => rr.doc_status !== 'Archive'
+            (rr: Documents) => rr.doc_status !== "Archive"
           ))
       )
       .then(() => runInAction(async () => await this.getDocumentsCategories()));
@@ -672,12 +692,12 @@ class RequestStore {
       ...c,
       doc_type: c.doc_type.map((t: number) =>
         this.documents.find(
-          (d: Documents) => d.doc_status === 'Active' && d.doc_type === t
+          (d: Documents) => d.doc_status === "Active" && d.doc_type === t
         )
           ? {
               name: this.types.find((tt: any) => tt.id === t)?.name,
               file: this.documents.find(
-                (d: Documents) => d.doc_status === 'Active' && d.doc_type === t
+                (d: Documents) => d.doc_status === "Active" && d.doc_type === t
               ),
             }
           : {
@@ -769,6 +789,22 @@ class RequestStore {
     Promise.all(promises).then(() => (this.serviceUsers = users));
   }
 
+  async getClientUserServiceCount(ids: number[]) {
+    let users: ClientUserAccess[] = [];
+    let promises: any[] = [];
+    (await (ids.length > 0)) &&
+      ids.map((id: number) =>
+        promises.push(
+          api.service
+            .getClientServiceCount(id)
+            .then((res: ClientUserAccess) => {
+              users.push(res);
+            })
+        )
+      );
+    Promise.all(promises).then(() => (this.clientUserService = users));
+  }
+
   async getClientDocs(ids: number[], r: Request | null = null) {
     let docs: Documents[] = [];
     let promises: any[] = [];
@@ -776,7 +812,7 @@ class RequestStore {
       ids.map((id: number, index: number) =>
         promises.push(
           api.service.getDocument(id).then((res: Documents) => {
-            if (res.doc_status !== 'Active') return;
+            if (res.doc_status !== "Active") return;
             if (res.doc_type === 11) {
               this.testKey = res;
             } else if (res.doc_type === 10) {
@@ -1011,7 +1047,7 @@ class RequestStore {
 
   getDocTypes() {
     const doc_cat = this.categories.find(
-      (c: Categories) => c.name === 'Заявка'
+      (c: Categories) => c.name === "Заявка"
     );
     return doc_cat
       ? this.types.filter((c: ServiceCommon) => c.id === +doc_cat.doc_type)
@@ -1065,7 +1101,7 @@ class RequestStore {
           this.afterNca(res);
         })
         .catch((err) => console.error(err.message));
-    } else console.error('no base 64');
+    } else console.error("no base 64");
   }
 
   async afterNca(base64: string) {
@@ -1094,7 +1130,9 @@ class RequestStore {
     this.client = null;
     this.someClient = null;
     this.authPersons = [];
+    this.rights = [];
     this.clientUsersForAdd = [];
+    this.clientUserService = [];
     this.authPerson = null;
     this.contacts = [];
     this.address = [];
@@ -1129,6 +1167,7 @@ class RequestStore {
 
     makeAutoObservable(this, {
       getRequests: action.bound,
+      getRights: action.bound,
       getClientRequests: action.bound,
       getMineRequest: action.bound,
       getVoteRequest: action.bound,
@@ -1201,6 +1240,7 @@ class RequestStore {
       _getClientServiceById: computed,
       _getClientUsersForAdd: computed,
       _getDoc: computed,
+      _getRights: computed,
       _getDocCategories: computed,
       _getUser: computed,
       _getDogovors: computed,
@@ -1226,6 +1266,7 @@ class RequestStore {
       _getClientDocs: computed,
       _getClientUser: computed,
       _getClientService: computed,
+      _getClientUserService: computed,
       _getClientServiceType: computed,
       _getPosition: computed,
       _getSigningAuth: computed,
