@@ -1240,6 +1240,20 @@
   bottom: -32px;
   height: 32px;
 }
+.paper-signatory .three-col.manager-list ul li .profile {
+  width: 60%;
+}
+.paper-signatory .three-col.manager-list ul li .position {
+  width: 25%;
+}
+.paper-signatory .three-col.manager-list ul li .services-use {
+  width: 15%;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: right;
+  color: #939393;
+}
 
 .choose-service {
   display: flex;

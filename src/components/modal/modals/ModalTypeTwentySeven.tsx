@@ -49,7 +49,7 @@ const ModalTypeTwentySeven = ({ main, request }: ModalTypes) => {
             />
           </div>
 
-          <div className="manager-list">
+          <div className="manager-list three-col">
             <ul>
               {request._getClientUsersForAdd &&
                 (request._getClientUsersForAdd as ClientUserAccess[])
@@ -101,6 +101,7 @@ const ModalTypeTwentySeven = ({ main, request }: ModalTypes) => {
                           )?.name
                         }
                       </span>
+                      <span className="services-use">16 сервисов</span>
                     </li>
                   ))}
             </ul>
