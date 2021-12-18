@@ -41,13 +41,13 @@ export interface ServiceDesk {
 
 export interface Agree {
   user_name: number[];
-  process_type: 'Sequential' | 'Parallel';
+  process_type: "Sequential" | "Parallel";
   process_number: number;
 }
 
 export interface AgreeResult {
   review_data: Result[];
-  process_type: 'Sequential' | 'Parallel';
+  process_type: "Sequential" | "Parallel";
   process_number: number;
 }
 
@@ -108,6 +108,24 @@ export interface ClientUser {
   position: number | null;
   person_status: number;
   user_auth: number;
+}
+
+export interface ClientUserAccess {
+  client: number;
+  contacts: string;
+  department_name: string;
+  deputy_head_full_name: string;
+  email: string;
+  first_head_full_name: string;
+  full_name: string;
+  global_ip: string;
+  id: number;
+  idcard_number: string;
+  iin: string;
+  manager_contacts: string;
+  manager_full_name: string;
+  position_name: string;
+  right_ids: number[];
 }
 
 export interface ClientService {
