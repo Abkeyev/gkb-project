@@ -6,6 +6,12 @@ import { observer } from "mobx-react";
 const ModalTypeTwentyEight = ({ main, request }: ModalTypes) => {
   const [fullName, setFullName] = React.useState("");
   const [position, setPosition] = React.useState("");
+  const [phone, setPhone] = React.useState('');
+  const [department, setDepartment] = React.useState('');
+  const [firstRuk, setFirstRuk] = React.useState('');
+  const [zam, setZam] = React.useState('');
+  const [man, setMan] = React.useState('');
+  const [manCon, setManCon] = React.useState('');
   const [email, setEmail] = React.useState("");
   return (
     <div className="modal modal-large">
@@ -33,9 +39,64 @@ const ModalTypeTwentyEight = ({ main, request }: ModalTypes) => {
           </div>
           <div className="modal-body">
             <div className="write-reasons">
+
+              {/* При нажатий на "Редактировать" текст заменяется на "Редактировать профиль" */}
               <h3 className="text-left title-subhead mb-32">
-                Добавить пользователя
+                Профиль пользователя услуг
               </h3>
+
+              <div className='total-info mb-32'>
+                <ul className='info-list'>
+                  <li>
+                    <span className='left'>ФИО:</span>
+                    <span className='right'>ТекстЗамена</span>
+                  </li>
+                  <li>
+                    <span className='left'>ID пользователя:</span>
+                    <span className='right'>ТекстЗамена</span>
+                  </li>
+                  <li>
+                    <span className='left'>ИИН сотрудника:</span>
+                    <span className='right'>ТекстЗамена</span>
+                  </li>
+                  <li>
+                    <span className='left'>Контактный номер:</span>
+                    <span className='right'>ТекстЗамена</span>
+                  </li>
+                  <li>
+                    <span className='left'>Email:</span>
+                    <span className='right'>ТекстЗамена</span>
+                  </li>
+                  <li>
+                    <span className='left'>Первый руководитель:</span>
+                    <span className='right'>ТекстЗамена</span>
+                  </li>
+                  <li>
+                    <span className='left'>Заместитель:</span>
+                    <span className='right'>ТекстЗамена</span>
+                  </li>
+                  <li>
+                    <span className='left'>Курирующий менеджер:</span>
+                    <span className='right'>ТекстЗамена</span>
+                  </li>
+                  <li>
+                    <span className='left'>Контакты менеджера:</span>
+                    <span className='right'>ТекстЗамена</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="profile-info">
+                <button
+                  type="button"
+                  className="button btn-secondary"
+                >
+                  <i className="azla edit-primary-icon btn-icon"></i>
+                  Редактировать
+                </button>
+              </div>
+
+
+              {/* Отсюда все заменяется, все что нужно снизу */}
               <div className="form-wrapper">
                 <input
                   type="text"
@@ -45,11 +106,12 @@ const ModalTypeTwentyEight = ({ main, request }: ModalTypes) => {
                 />
                 <label>ФИО</label>
               </div>
+              
               <div className="form-wrapper">
                 <select
                   defaultValue={position}
                   onChange={(e) => setPosition(e.target.value)}
-                  className="form-control"
+                  className="form-control azla form-icon chevron-down-icon"
                 >
                   <option>Выберите должность</option>
                   {request._getPosition.map((c: ServiceCommon) => (
@@ -60,6 +122,27 @@ const ModalTypeTwentyEight = ({ main, request }: ModalTypes) => {
                 </select>
                 <label>Должность</label>
               </div>
+
+              <div className="form-wrapper">
+                <input
+                  type="text"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  placeholder="Введите департамент"
+                />
+                <label>Департамент</label>
+              </div>
+
+              <div className="form-wrapper">
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+7 (_ _ _) _ _ _ _ - _ _ - _ _"
+                />
+                <label>Телефон</label>
+              </div>
+
               <div className="form-wrapper">
                 <input
                   type="text"
@@ -69,37 +152,46 @@ const ModalTypeTwentyEight = ({ main, request }: ModalTypes) => {
                 />
                 <label>Email</label>
               </div>
-              {/* <div className="form-wrapper">
-                    <input
-                      type="text"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="Введите телефон"
-                    />
-                    <label>Телефон</label>
-                  </div>
-                  <div className="form-wrapper">
-                    <input
-                      type="text"
-                      value={phoneType}
-                      onChange={(e) => setPhoneType(e.target.value)}
-                      placeholder="Введите тип телефона"
-                    />
-                    <label>Тип телефона</label>
-                  </div>
-                  <div className="form-check gkb-checkbox">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      checked={check}
-                      onChange={() => setCheck(!check)}
-                      id="checkMeanNum"
-                      required
-                    />
-                    <label className="form-check-label" htmlFor="checkMeanNum">
-                      Основной номер
-                    </label>
-                  </div> */}
+
+              <div className="form-wrapper">
+                <input
+                  type="text"
+                  value={firstRuk}
+                  onChange={(e) => setFirstRuk(e.target.value)}
+                  placeholder="Первый руководитель"
+                />
+                <label>Первый руководитель</label>
+              </div>
+              
+              <div className="form-wrapper">
+                <input
+                  type="text"
+                  value={zam}
+                  onChange={(e) => setZam(e.target.value)}
+                  placeholder="Заместитель"
+                />
+                <label>Заместитель</label>
+              </div>
+              
+              <div className="form-wrapper">
+                <input
+                  type="text"
+                  value={man}
+                  onChange={(e) => setMan(e.target.value)}
+                  placeholder="Курирующий менеджер"
+                />
+                <label>Курирующий менеджер</label>
+              </div>
+              
+              <div className="form-wrapper">
+                <input
+                  type="text"
+                  value={manCon}
+                  onChange={(e) => setManCon(e.target.value)}
+                  placeholder="Контакты менеджера"
+                />
+                <label>Контакты менеджера</label>
+              </div>
               <div className="d-flex mt-16">
                 <button
                   type="button"
@@ -132,9 +224,10 @@ const ModalTypeTwentyEight = ({ main, request }: ModalTypes) => {
                   onClick={() => main.setModal(false)}
                   className="button btn-secondary"
                 >
-                  Отмена
+                  Отменить
                 </button>
               </div>
+
             </div>
           </div>
         </div>

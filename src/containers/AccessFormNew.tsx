@@ -139,7 +139,7 @@ const AccessFormNew = observer((props: any) => {
                       className="btn button btn-primary btn-icon"
                       onClick={() => {
                         main.setModal(true);
-                        main.setModalType(27);
+                        main.setModalType(28);
                       }}
                     >
                       <i className="azla add-plusRound-icon"></i> Добавить

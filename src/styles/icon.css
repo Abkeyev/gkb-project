@@ -24,6 +24,7 @@
   padding-right: 40px;
   background-position: right 8px center;
   background-size: 24px;
+  appearance: none;
 }
 .chevron-down-icon {
   background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDE1TDEyLjM1MzYgMTUuMzUzNkwxMiAxNS43MDcxTDExLjY0NjQgMTUuMzUzNkwxMiAxNVpNMTguMzUzNiA5LjM1MzU1TDEyLjM1MzYgMTUuMzUzNkwxMS42NDY0IDE0LjY0NjRMMTcuNjQ2NCA4LjY0NjQ1TDE4LjM1MzYgOS4zNTM1NVpNMTEuNjQ2NCAxNS4zNTM2TDUuNjQ2NDUgOS4zNTM1NUw2LjM1MzU1IDguNjQ2NDVMMTIuMzUzNiAxNC42NDY0TDExLjY0NjQgMTUuMzUzNloiIGZpbGw9IiMyMEI1QkUiLz4KPC9zdmc+Cg==");
