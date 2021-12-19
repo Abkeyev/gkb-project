@@ -82,6 +82,9 @@ hr:not([size]) {
 .pad-t-24 {
   padding-top: 24px;
 }
+.pad-t-64 {
+  padding-top: 64px;
+}
 .pad-b-24 {
   padding-bottom: 24px;
 }
