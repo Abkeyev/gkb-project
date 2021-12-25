@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { PartnersProps } from '../partners/PartnersProps.props';
-import { ClientUsers } from '../../api/Models/ServiceModels';
+import { ClientUserAccess } from '../../api/Models/ServiceModels';
 import CardServiceUsers from '../partnersnew/CardServiceUsers';
 
 const PartnersInnerThirdStep = ({ request }: PartnersProps) => {
@@ -12,7 +12,7 @@ const PartnersInnerThirdStep = ({ request }: PartnersProps) => {
       </h3>
       {request._getClientUsers.length === 0
         ? 'Пользователи отсутствуют. '
-        : request._getClientUsers.map((u: ClientUsers, index: number) => (
+        : request._getClientUsers.map((u: ClientUserAccess, index: number) => (
             <CardServiceUsers u={u} index={index} />
           ))}
     </>

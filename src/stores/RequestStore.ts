@@ -72,7 +72,7 @@ class RequestStore {
   private request: Request | null;
   private clientTypes: ClientTypes[];
   private clients: Client[];
-  private clientUsers: Client[] | [];
+  private clientUsers: ClientUserAccess[] | [];
   private serviceUsers: ClientUsers[] | [];
   private clientUserService: ClientUserAccess[] | [];
   private rights: Right[] | [];
@@ -385,6 +385,7 @@ class RequestStore {
       !r.is_model_contract && this.getReview(r.id);
       r.client && this.getClientAllUsers(r.client.id);
       r.client_user && this.getClientUsers(r.client_user);
+      r.client_user && this.getClientUserServiceCount(r.client_user);
       r.client_doc && this.getClientDocs(r.client_doc, r);
       this.getDogovor(id);
       r.request_stepper > 1 && this.setStep(r.request_stepper);
@@ -462,10 +463,13 @@ class RequestStore {
     this.setLoader(true);
     await api.service.getClientUsersForAdd(id).then((res) => {
       this.clientUsersForAdd = res;
-      runInAction(
-        async () =>
-          await this.getClientUserServiceCount(res.map((item: any) => item.id))
-      );
+      res &&
+        runInAction(
+          async () =>
+            await this.getClientUserServiceCount(
+              res.map((item: any) => item.id)
+            )
+        );
     });
     this.setLoader(false);
   }
@@ -482,6 +486,15 @@ class RequestStore {
       .catch((err) => console.error(err))
       .then((res) => {
         window.location.replace(`/#/partner/${res.id}`);
+      });
+  }
+
+  async addAccessForm(data: any) {
+    await api.service
+      .addAccessForm(data)
+      .catch((err) => console.error(err))
+      .then((res) => {
+        window.location.replace(`/#/access-form/${res.id}`);
       });
   }
 
@@ -762,12 +775,12 @@ class RequestStore {
   }
 
   async getClientUsers(ids: number[]) {
-    let users: Client[] = [];
+    let users: ClientUserAccess[] = [];
     let promises: any[] = [];
     (await (ids.length > 0)) &&
       ids.map((id: number) =>
         promises.push(
-          api.service.getClientUser(id).then((res: Client) => {
+          api.service.getClientUser(id).then((res: ClientUserAccess) => {
             users.push(res);
           })
         )
@@ -902,7 +915,6 @@ class RequestStore {
 
   async getClientServiceType() {
     await api.service.getClientServiceType().then((res) => {
-      console.log(res);
       this.clientServiceType = res;
     });
   }

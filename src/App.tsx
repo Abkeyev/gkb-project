@@ -26,8 +26,8 @@ import {
   Signers,
   SignersInner,
   AccessForm,
-  AccessFormNew,
   AccessFormInner,
+  AccessFormNew,
 } from "./containers";
 import { LoginPage } from "./components";
 import PrivateRoute from "./PrivateRoute";
@@ -176,7 +176,9 @@ const App = observer((props: any) => {
           <PrivateRoute
             main={main}
             path="/access-form/:id"
-            component={() => <AccessFormInner main={main} request={request} />}
+            component={(props: any) => (
+              <AccessFormInner {...props} main={main} request={request} />
+            )}
             exact
           />
         </Switch>

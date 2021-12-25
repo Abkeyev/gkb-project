@@ -293,6 +293,11 @@ export class ServiceController {
       baseURL,
     });
   }
+  async addAccessForm(data: any): Promise<any> {
+    return server.post(`/client_request`, data, {
+      baseURL,
+    });
+  }
   async sendAgree(request: Request): Promise<any> {
     return server.put(
       `/client_request/${request.id}`,

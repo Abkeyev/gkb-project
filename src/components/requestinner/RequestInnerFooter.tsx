@@ -1,33 +1,33 @@
-import React from 'react';
-import { observer } from 'mobx-react';
-import { RequestInnerProps } from './RequestInnerProps.props';
+import React from "react";
+import { observer } from "mobx-react";
+import { RequestInnerProps } from "./RequestInnerProps.props";
 
 const RequestInnerFooter = ({ request, main, history }: RequestInnerProps) => {
   return (
-    <div className='req-inner-footer'>
-      <div className='container'>
+    <div className="req-inner-footer">
+      <div className="container">
         {request._getManUser &&
         request._getRequest.request_stepper === 1 &&
         (request._getRequest.request_status === 2 ||
           request._getRequest.request_status === 4) ? (
-          <div className='manager-req mrl-32'>
-            <div className='left'>
+          <div className="manager-req mrl-32">
+            <div className="left">
               <p>Менеджер заявки</p>
-              <div className='profile'>
+              <div className="profile">
                 <img
-                  alt='ava'
-                  className='ava'
-                  src={process.env.PUBLIC_URL + '/images/def-ava.svg'}
+                  alt="ava"
+                  className="ava"
+                  src={process.env.PUBLIC_URL + "/images/def-ava.svg"}
                 />
-                <span className='name'>{request._getManUser.full_name}</span>
+                <span className="name">{request._getManUser.full_name}</span>
               </div>
             </div>
 
             {request._getRequest.request_status === 4 ? (
-              <div className='right alert'>
+              <div className="right alert">
                 <p>Заявка отклонена</p>
                 <button
-                  className='button btn-secondary'
+                  className="button btn-secondary"
                   onClick={() =>
                     request
                       .updateRequest({
@@ -36,8 +36,8 @@ const RequestInnerFooter = ({ request, main, history }: RequestInnerProps) => {
                       })
                       .then(() => {
                         main.decline = false;
-                        main.declineReason = '';
-                        history.push('/');
+                        main.declineReason = "";
+                        history.push("/");
                       })
                   }
                 >
@@ -46,10 +46,10 @@ const RequestInnerFooter = ({ request, main, history }: RequestInnerProps) => {
               </div>
             ) : request._getRequest?.manager_signer_user ===
               main.clientData.user.id ? (
-              <div className='right'>
+              <div className="right">
                 <p>Первичная проверка прошла успешно?</p>
                 <button
-                  className='button btn-secondary mr-8'
+                  className="button btn-secondary mr-8"
                   onClick={() => {
                     main.setModal(true);
                     main.setModalType(1);
@@ -58,10 +58,10 @@ const RequestInnerFooter = ({ request, main, history }: RequestInnerProps) => {
                   Нет
                 </button>
                 <button
-                  className='button btn-primary'
+                  className="button btn-primary"
                   onClick={() =>
                     request
-                      .nextRequest(request._getRequest, true)
+                      .nextRequest(request._getRequest)
                       .then(() => request.setStep(2))
                   }
                 >
@@ -73,17 +73,17 @@ const RequestInnerFooter = ({ request, main, history }: RequestInnerProps) => {
         ) : request._getRequest.request_stepper === 1 &&
           request._getRequest.request_status === 1 ? (
           <button
-            type='button'
+            type="button"
             onClick={() => {
               main.setModalType(0);
               main.setModal(true);
             }}
-            className='button btn-primary mrl-32'
+            className="button btn-primary mrl-32"
           >
             Назначить
           </button>
         ) : (
-          ''
+          ""
         )}
       </div>
     </div>

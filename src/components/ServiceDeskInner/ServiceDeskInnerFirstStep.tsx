@@ -4,7 +4,7 @@ import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
 import {
   ServiceCommon,
   Categories,
-  ClientUsers,
+  ClientUserAccess,
 } from '../../api/Models/ServiceModels';
 import moment from 'moment';
 import { ServiceDeskInnerProps } from '../ServiceDeskInner/ServiceDeskInnerProps.props';
@@ -143,7 +143,7 @@ const ServiceDeskInnerFirstStep = ({ request }: ServiceDeskInnerProps) => {
           </h3>
           {request._getClientUsers.length === 0
             ? 'Пользователи отсутствуют. '
-            : request._getClientUsers.map((u: ClientUsers, index: number) => (
+            : request._getClientUsers.map((u: ClientUserAccess, index: number) => (
                 <div className='card mb-24 pad-24'>
                   <div className='card-header'>
                     <div className='title'>

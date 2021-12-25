@@ -27,6 +27,7 @@ import ModalTypeTwentyFour from "../components/modal/modals/ModalTypeTwentyFour"
 import ModalTypeTwentyFive from "../components/modal/modals/ModalTypeTwentyFive";
 import ModalTypeTwentySeven from "../components/modal/modals/ModalTypeTwentySeven";
 import ModalTypeTwentyEight from "../components/modal/modals/ModalTypeTwentyEight";
+import ModalTypeTwentyNine from "../components/modal/modals/ModalTypeTwentyNine";
 import ModalDefault from "../components/modal/modals/ModalDefault";
 import ModalSuccess from "../components/modal/modals/ModalSuccess";
 
@@ -90,6 +91,8 @@ const Modal = observer((props: any) => {
         <ModalTypeTwentySeven main={main} request={request} />
       ) : main.modalType === 28 ? (
         <ModalTypeTwentyEight main={main} request={request} />
+      ) : main.modalType === 29 ? (
+        <ModalTypeTwentyNine main={main} request={request} />
       ) : (
         <ModalDefault main={main} request={request} />
       )}

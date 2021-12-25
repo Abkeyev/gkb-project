@@ -12,7 +12,6 @@ import { observer } from "mobx-react";
 const ModalTypeTwentySeven = ({ main, request }: ModalTypes) => {
   const [search, setSearch] = React.useState("");
   const [rights, setRights] = React.useState<number[]>([]);
-  const [right, setRight] = React.useState<number>();
   const [step, setStep] = React.useState(0);
   const [users, setUsers] = React.useState<ClientUserAccess[]>(
     main.usersNewAccess
@@ -72,9 +71,17 @@ const ModalTypeTwentySeven = ({ main, request }: ModalTypes) => {
                               <input
                                 className="form-check-input"
                                 type="checkbox"
+                                disabled={
+                                  request._getClientUsers.filter(
+                                    (c: ClientUserAccess) => c.id === r.id
+                                  ).length > 0
+                                }
                                 checked={
                                   users.filter(
                                     (u: ClientUserAccess) => u.id === r.id
+                                  ).length > 0 ||
+                                  request._getClientUsers.filter(
+                                    (c: ClientUserAccess) => c.id === r.id
                                   ).length > 0
                                 }
                                 onChange={() => {
@@ -145,6 +152,7 @@ const ModalTypeTwentySeven = ({ main, request }: ModalTypes) => {
                 type="button"
                 onClick={() => {
                   main.setNewAccessUsers(users);
+                  setSearch("");
                   setStep(1);
                 }}
                 className="button btn-primary w-160"
@@ -159,7 +167,7 @@ const ModalTypeTwentySeven = ({ main, request }: ModalTypes) => {
           <div className="modal-body">
             <div className="paper-signatory">
               <div className="modal-back">
-                <span className="btn-modal-back">
+                <span className="btn-modal-back" onClick={() => setStep(0)}>
                   <i className="azla arrow-left-primary-icon"></i> Выбрано{" "}
                   {users.length} пользователя
                 </span>

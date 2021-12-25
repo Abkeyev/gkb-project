@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 import { PartnersProps } from '../partners/PartnersProps.props';
-import { ClientUsers } from '../../api/Models/ServiceModels';
+import { ClientUserAccess } from '../../api/Models/ServiceModels';
 
 const PartnersInnerServiceUsers = ({ request }: PartnersProps) => {
   return (
@@ -14,7 +14,7 @@ const PartnersInnerServiceUsers = ({ request }: PartnersProps) => {
         </h3>
         {request._getClientUsers.length === 0
           ? 'Пользователи отсутствуют. '
-          : request._getClientUsers.map((u: ClientUsers, index: number) => (
+          : request._getClientUsers.map((u: ClientUserAccess, index: number) => (
               <div className='card mb-24 pad-24'>
                 <div className='card-header'>
                   <div className='title'>

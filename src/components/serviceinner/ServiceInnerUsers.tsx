@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { ClientUsers } from '../../api/Models/ServiceModels';
+import { ClientUserAccess } from '../../api/Models/ServiceModels';
 import { ServiceDeskInnerProps } from '../ServiceDeskInner/ServiceDeskInnerProps.props';
 
 const ServiceInnerUsers = ({ request }: ServiceDeskInnerProps) => {
@@ -14,7 +14,7 @@ const ServiceInnerUsers = ({ request }: ServiceDeskInnerProps) => {
 
         {request._getClientUsers.length === 0
           ? 'Пользователи отсутствуют. '
-          : request._getClientUsers.map((c: ClientUsers) => (
+          : request._getClientUsers.map((c: ClientUserAccess) => (
               <div className='card mb-24 pad-24'>
                 <div className='card-header'>
                   <div className='title'>

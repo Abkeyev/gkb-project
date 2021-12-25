@@ -9,9 +9,9 @@ const AccessFormOutbox = ({ request, filter }: AccessFormProps) => {
   return (
     <div className="tab-content tab-1">
       <h3 className="title-subhead mb-16">
-        Найдено <span className="number">{filter().length}</span>
+        Исходящие <span className="number">{filter([1, 2]).length}</span>
       </h3>
-      {filter().length === 0 ? (
+      {filter([1, 2]).length === 0 ? (
         "Заявки отсутствуют."
       ) : (
         <table className="table req-table">
@@ -25,8 +25,8 @@ const AccessFormOutbox = ({ request, filter }: AccessFormProps) => {
             </tr>
           </thead>
           <tbody>
-            {filter().map((r: Request) => (
-              <tr onClick={() => history.push(`/access-form/1`)}>
+            {filter([1, 2]).map((r: Request) => (
+              <tr onClick={() => history.push(`/access-form/${r.id}`)}>
                 <td>{r.client.bin}</td>
                 <td>{r.client.longname}</td>
                 <td>

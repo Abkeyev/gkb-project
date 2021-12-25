@@ -19,9 +19,9 @@ import ServiceDesk from "./ServiceDesk";
 import ServiceDeskInner from "./ServiceDeskInner";
 import Signers from "./Signers";
 import SignersInner from "./SignersInner";
-import AccessForm from "./AccessForm";
-import AccessFormNew from "./AccessFormNew";
-import AccessFormInner from "./AccessFormInner";
+import AccessForm from "../components/accessform/AccessForm";
+import AccessFormNew from "../components/accessform/AccessFormNew";
+import AccessFormInner from "../components/accessform/AccessFormInner";
 
 export {
   Login,

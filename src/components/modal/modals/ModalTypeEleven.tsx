@@ -1,92 +1,92 @@
-import React from 'react';
-import { ServiceCommon } from '../../../api/Models/ServiceModels';
-import { ModalTypes } from './ModalTypes.props';
-import { observer } from 'mobx-react';
+import React from "react";
+import { ServiceCommon } from "../../../api/Models/ServiceModels";
+import { ModalTypes } from "./ModalTypes.props";
+import { observer } from "mobx-react";
 
 const ModalTypeEleven = ({ main, request }: ModalTypes) => {
-  const [firstRuk, setFirstRuk] = React.useState('');
-  const [zam, setZam] = React.useState('');
-  const [man, setMan] = React.useState('');
-  const [manCon, setManCon] = React.useState('');
-  const [fullName, setFullName] = React.useState('');
-  const [position, setPosition] = React.useState('');
-  const [phone, setPhone] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [department, setDepartment] = React.useState('');
-  const [iin, setIin] = React.useState('');
-  const [idcard_number, setIdcardNumber] = React.useState('');
-  const [global_ip, setGlobalIp] = React.useState('');
+  const [firstRuk, setFirstRuk] = React.useState("");
+  const [zam, setZam] = React.useState("");
+  const [man, setMan] = React.useState("");
+  const [manCon, setManCon] = React.useState("");
+  const [fullName, setFullName] = React.useState("");
+  const [position, setPosition] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [department, setDepartment] = React.useState("");
+  const [iin, setIin] = React.useState("");
+  const [idcard_number, setIdcardNumber] = React.useState("");
+  const [global_ip, setGlobalIp] = React.useState("");
   return (
-    <div className='modal modal-large'>
+    <div className="modal modal-large">
       <div
-        className='modal-backbg'
+        className="modal-backbg"
         onClick={() => {
           main.setModal(false);
-          setFirstRuk('');
-          setZam('');
-          setMan('');
-          setManCon('');
-          setFullName('');
-          setPosition('');
-          setDepartment('');
-          setPhone('');
-          setEmail('');
+          setFirstRuk("");
+          setZam("");
+          setMan("");
+          setManCon("");
+          setFullName("");
+          setPosition("");
+          setDepartment("");
+          setPhone("");
+          setEmail("");
         }}
       ></div>
-      <div className='modal-dialog'>
-        <div className='modal-content fadeInModal animated'>
-          <div className='modal-close'>
+      <div className="modal-dialog">
+        <div className="modal-content fadeInModal animated">
+          <div className="modal-close">
             <i
-              className='azla close-icon'
+              className="azla close-icon"
               onClick={() => {
                 main.setModal(false);
-                setFirstRuk('');
-                setZam('');
-                setMan('');
-                setManCon('');
-                setFullName('');
-                setPosition('');
-                setDepartment('');
-                setPhone('');
-                setEmail('');
+                setFirstRuk("");
+                setZam("");
+                setMan("");
+                setManCon("");
+                setFullName("");
+                setPosition("");
+                setDepartment("");
+                setPhone("");
+                setEmail("");
               }}
             ></i>
           </div>
-          <div className='modal-body'>
-            <div className='write-reasons'>
-              <h3 className='text-left title-subhead mb-32'>
+          <div className="modal-body">
+            <div className="write-reasons">
+              <h3 className="text-left title-subhead mb-32">
                 {main.modalTypeEdit === 2
-                  ? 'Редактировать пользователя'
-                  : 'Добавить пользователя'}
+                  ? "Редактировать пользователя"
+                  : "Добавить пользователя"}
               </h3>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={
                     main.modalTypeEdit === 2
                       ? main.modalTypeData?.full_name
                       : fullName
                   }
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder='Введите ФИО'
+                  placeholder="Введите ФИО"
                 />
                 <label>ФИО</label>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
-                  type='number'
+                  type="number"
                   size={12}
                   defaultValue={
                     main.modalTypeEdit === 2 ? main.modalTypeData?.iin : iin
                   }
                   onChange={(e) => setIin(e.target.value)}
-                  placeholder='Введите ИИН'
+                  placeholder="Введите ИИН"
                 />
                 <label>ИИН</label>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
-                  type='number'
+                  type="number"
                   size={9}
                   defaultValue={
                     main.modalTypeEdit === 2
@@ -94,24 +94,24 @@ const ModalTypeEleven = ({ main, request }: ModalTypes) => {
                       : idcard_number
                   }
                   onChange={(e) => setIdcardNumber(e.target.value)}
-                  placeholder='Введите № удостоверения личности'
+                  placeholder="Введите № удостоверения личности"
                 />
                 <label>№ удостоверения личности</label>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={
                     main.modalTypeEdit === 2
                       ? main.modalTypeData?.global_ip
                       : global_ip
                   }
                   onChange={(e) => setGlobalIp(e.target.value)}
-                  placeholder='Введите Глобальный IP'
+                  placeholder="Введите Глобальный IP"
                 />
                 <label>Глобальный IP</label>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <select
                   defaultValue={
                     main.modalTypeEdit === 2
@@ -119,7 +119,7 @@ const ModalTypeEleven = ({ main, request }: ModalTypes) => {
                       : position
                   }
                   onChange={(e) => setPosition(e.target.value)}
-                  className='form-control'
+                  className="form-control"
                 >
                   <option>Выберите должность</option>
                   {request._getPosition.map((c: ServiceCommon) => (
@@ -129,224 +129,224 @@ const ModalTypeEleven = ({ main, request }: ModalTypes) => {
                   ))}
                 </select>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={
                     main.modalTypeEdit === 2
                       ? main.modalTypeData?.department_name
                       : department
                   }
                   onChange={(e) => setDepartment(e.target.value)}
-                  placeholder='Введите департамент'
+                  placeholder="Введите департамент"
                 />
                 <label>Департамент</label>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
                   defaultValue={
                     main.modalTypeEdit === 2
                       ? main.modalTypeData?.contacts
                       : phone
                   }
-                  type='text'
+                  type="text"
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder='+7 (_ _ _) _ _ _ - _ _ - _ _'
+                  placeholder="+7 (_ _ _) _ _ _ - _ _ - _ _"
                 />
                 <label>Контактный номер</label>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={
                     main.modalTypeEdit === 2 ? main.modalTypeData?.email : email
                   }
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder='Введите почту'
+                  placeholder="Введите почту"
                 />
                 <label>Email</label>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={
                     main.modalTypeEdit === 2
                       ? main.modalTypeData?.first_head_full_name
                       : firstRuk
                   }
                   onChange={(e) => setFirstRuk(e.target.value)}
-                  placeholder='Первый руководитель'
+                  placeholder="Первый руководитель"
                 />
                 <label>Первый руководитель</label>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={
                     main.modalTypeEdit === 2
                       ? main.modalTypeData?.deputy_head_full_name
                       : zam
                   }
                   onChange={(e) => setZam(e.target.value)}
-                  placeholder='Введите заместитель'
+                  placeholder="Введите заместитель"
                 />
                 <label>Заместитель</label>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={
                     main.modalTypeEdit === 2
                       ? main.modalTypeData?.manager_full_name
                       : man
                   }
                   onChange={(e) => setMan(e.target.value)}
-                  placeholder='Введите менеджера'
+                  placeholder="Введите менеджера"
                 />
                 <label>Курирующий менеджер</label>
               </div>
-              <div className='form-wrapper'>
+              <div className="form-wrapper">
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={
                     main.modalTypeEdit === 2
                       ? main.modalTypeData?.manager_contacts
                       : manCon
                   }
                   onChange={(e) => setManCon(e.target.value)}
-                  placeholder='Введите контакты менеджера'
+                  placeholder="Введите контакты менеджера"
                 />
                 <label>Контакты менеджера</label>
               </div>
-              <div className='d-flex mt-16'>
+              <div className="d-flex mt-16">
                 <button
-                  type='button'
+                  type="button"
                   onClick={() => {
                     if (main.modalTypeEdit === 2) {
                       try {
                         request.editClientUser(main.modalTypeData?.id, {
                           client: main.clientData.client.id,
                           first_head_full_name:
-                            firstRuk !== ''
+                            firstRuk !== ""
                               ? firstRuk
                               : main.modalTypeData?.first_head_full_name,
                           deputy_head_full_name:
-                            zam !== ''
+                            zam !== ""
                               ? zam
                               : main.modalTypeData?.deputy_head_full_name,
                           manager_full_name:
-                            man !== ''
+                            man !== ""
                               ? man
                               : main.modalTypeData?.manager_full_name,
                           manager_contacts:
-                            manCon !== ''
+                            manCon !== ""
                               ? manCon
                               : main.modalTypeData?.manager_contacts,
                           full_name:
-                            fullName !== ''
+                            fullName !== ""
                               ? fullName
                               : main.modalTypeData?.full_name,
                           position_name:
-                            position !== ''
+                            position !== ""
                               ? position
                               : main.modalTypeData?.position_name,
                           department_name:
-                            department !== ''
+                            department !== ""
                               ? department
                               : main.modalTypeData?.department_name,
                           contacts:
-                            phone !== '' ? phone : main.modalTypeData?.contacts,
+                            phone !== "" ? phone : main.modalTypeData?.contacts,
                           email:
-                            email !== '' ? email : main.modalTypeData?.email,
+                            email !== "" ? email : main.modalTypeData?.email,
                           global_ip:
-                            global_ip !== ''
+                            global_ip !== ""
                               ? global_ip
                               : main.modalTypeData?.global_ip,
                           idcard_number:
-                            idcard_number !== ''
+                            idcard_number !== ""
                               ? idcard_number
                               : main.modalTypeData?.idcard_number,
-                          iin: iin !== '' ? iin : main.modalTypeData?.iin,
+                          iin: iin !== "" ? iin : main.modalTypeData?.iin,
                         });
                       } finally {
                         main.setModal(false);
-                        setFirstRuk('');
-                        setZam('');
-                        setMan('');
-                        setManCon('');
-                        setFullName('');
-                        setPosition('');
-                        setDepartment('');
-                        setPhone('');
-                        setEmail('');
+                        setFirstRuk("");
+                        setZam("");
+                        setMan("");
+                        setManCon("");
+                        setFullName("");
+                        setPosition("");
+                        setDepartment("");
+                        setPhone("");
+                        setEmail("");
                       }
                     } else {
                       try {
                         request.regClientUser({
                           client: main.clientData.client.id,
                           first_head_full_name:
-                            firstRuk !== ''
+                            firstRuk !== ""
                               ? firstRuk
                               : main.modalTypeData?.first_head_full_name,
                           deputy_head_full_name:
-                            zam !== ''
+                            zam !== ""
                               ? zam
                               : main.modalTypeData?.deputy_head_full_name,
                           manager_full_name:
-                            man !== ''
+                            man !== ""
                               ? man
                               : main.modalTypeData?.manager_full_name,
                           manager_contacts:
-                            manCon !== ''
+                            manCon !== ""
                               ? manCon
                               : main.modalTypeData?.manager_contacts,
                           full_name:
-                            fullName !== ''
+                            fullName !== ""
                               ? fullName
                               : main.modalTypeData?.full_name,
                           position_name:
-                            position !== ''
+                            position !== ""
                               ? position
                               : main.modalTypeData?.position_name,
                           department_name:
-                            department !== ''
+                            department !== ""
                               ? department
                               : main.modalTypeData?.department_name,
                           contacts:
-                            phone !== '' ? phone : main.modalTypeData?.contacts,
+                            phone !== "" ? phone : main.modalTypeData?.contacts,
                           email:
-                            email !== '' ? email : main.modalTypeData?.email,
+                            email !== "" ? email : main.modalTypeData?.email,
                           global_ip:
-                            global_ip !== ''
+                            global_ip !== ""
                               ? global_ip
                               : main.modalTypeData?.global_ip,
                           idcard_number:
-                            idcard_number !== ''
+                            idcard_number !== ""
                               ? idcard_number
                               : main.modalTypeData?.idcard_number,
-                          iin: iin !== '' ? iin : main.modalTypeData?.iin,
+                          iin: iin !== "" ? iin : main.modalTypeData?.iin,
                         });
                       } finally {
                         main.setModalType(10);
-                        setFirstRuk('');
-                        setZam('');
-                        setMan('');
-                        setManCon('');
-                        setFullName('');
-                        setPosition('');
-                        setDepartment('');
-                        setPhone('');
-                        setEmail('');
+                        setFirstRuk("");
+                        setZam("");
+                        setMan("");
+                        setManCon("");
+                        setFullName("");
+                        setPosition("");
+                        setDepartment("");
+                        setPhone("");
+                        setEmail("");
                       }
                     }
                   }}
-                  className='button btn-primary mr-16'
+                  className="button btn-primary mr-16"
                 >
                   Сохранить
                 </button>
                 {main.modalTypeEdit === 2 && (
                   <button
-                    type='button'
+                    type="button"
                     onClick={() => {
                       try {
                         request.deleteClientUser(
@@ -355,18 +355,18 @@ const ModalTypeEleven = ({ main, request }: ModalTypes) => {
                         );
                       } finally {
                         main.setModal(false);
-                        setFirstRuk('');
-                        setZam('');
-                        setMan('');
-                        setManCon('');
-                        setFullName('');
-                        setPosition('');
-                        setDepartment('');
-                        setPhone('');
-                        setEmail('');
+                        setFirstRuk("");
+                        setZam("");
+                        setMan("");
+                        setManCon("");
+                        setFullName("");
+                        setPosition("");
+                        setDepartment("");
+                        setPhone("");
+                        setEmail("");
                       }
                     }}
-                    className='button btn-danger'
+                    className="button btn-danger"
                   >
                     Удалить пользователя
                   </button>

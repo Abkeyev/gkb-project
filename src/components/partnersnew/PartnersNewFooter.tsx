@@ -1,16 +1,17 @@
-import React from 'react';
-import { ClientUser } from '../../api/Models/ServiceModels';
-import { observer } from 'mobx-react';
+import React from "react";
+import { ClientUser } from "../../api/Models/ServiceModels";
+import { observer } from "mobx-react";
 
 const PartnersNewFooter = ({ main, request, filesId, tab }: any) => {
   return (
-    <div className='req-inner-footer'>
-      <div className='container'>
-        <div className='manager-req mrl-32'>
+    <div className="req-inner-footer">
+      <div className="container">
+        <div className="manager-req mrl-32">
           {request.step_choice === 1 && (
             <button
-              type='button'
-              className='button btn-primary'
+              type="button"
+              className="button btn-primary"
+              disabled={request.service === ""}
               onClick={() => {
                 request.setChoiceStep(2);
               }}
@@ -20,9 +21,9 @@ const PartnersNewFooter = ({ main, request, filesId, tab }: any) => {
           )}
           {request.step_choice === 2 && (
             <button
-              type='button'
-              className='button btn-primary'
-              disabled={request.service === '' || main.usersNew.length === 0}
+              type="button"
+              className="button btn-primary"
+              disabled={request.service === "" || main.usersNew.length === 0}
               onClick={() => {
                 main.setModal(true);
                 main.setModalType(13);
