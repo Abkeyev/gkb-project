@@ -13,7 +13,6 @@ import {
 } from "../../api/Models/ServiceModels";
 
 const AccessFormNew = observer((props: any) => {
-  const history = useHistory();
   const { main, request } = props;
   const [open, setOpen] = React.useState(false);
   const [req, setReq] = React.useState<Request | null>(null);
@@ -153,7 +152,7 @@ const AccessFormNew = observer((props: any) => {
                           <h3 className="title-subhead mb-8">
                             Новые пользователи услуг{" "}
                             <span className="number">
-                              {main.usersNewAccess.length}
+                              {request.usersNewAccess.length}
                             </span>
                           </h3>
                           <p>
@@ -172,8 +171,8 @@ const AccessFormNew = observer((props: any) => {
                         </button>
                       </div>
 
-                      {main.usersNewAccess.length > 0 &&
-                        main.usersNewAccess.map(
+                      {request.usersNewAccess.length > 0 &&
+                        request.usersNewAccess.map(
                           (u: ClientUserAccess, index: number) => (
                             <div className="card card-rights mb-24 pad-24">
                               <div className="card-header">
@@ -194,19 +193,17 @@ const AccessFormNew = observer((props: any) => {
                                   <div className="right">
                                     <span className="use-service">
                                       Использует{" "}
-                                      {
-                                        request._getClientUserService.find(
-                                          (t: ClientUserService) =>
-                                            t.client_user_data.id === u.id
-                                        )?.service_count
-                                      }{" "}
+                                      {request._getClientUserService.find(
+                                        (t: ClientUserService) =>
+                                          t.client_user_data.id === u.id
+                                      )?.service_count || 0}{" "}
                                       сервиса
                                     </span>
                                     <span
                                       className="close"
                                       onClick={() =>
-                                        main.setNewAccessUsers([
-                                          ...main.usersNewAccess.filter(
+                                        request.setNewAccessUsers([
+                                          ...request.usersNewAccess.filter(
                                             (a: ClientUserAccess) =>
                                               a.id !== u.id
                                           ),
@@ -274,10 +271,10 @@ const AccessFormNew = observer((props: any) => {
                       <button
                         type="button"
                         className="button btn-primary btn-icon ml-32 d-inline-flex"
-                        disabled={main.usersNewAccess.length === 0}
+                        disabled={request.usersNewAccess.length === 0}
                         onClick={() => {
                           try {
-                            main.usersNewAccess.map(
+                            request.usersNewAccess.map(
                               (u: ClientUserAccess, index: number) =>
                                 request.editClientUser(u.id, u)
                             );
@@ -289,17 +286,18 @@ const AccessFormNew = observer((props: any) => {
                                   request._getRequest.service_category,
                                 client_doc: request._getRequest.client_doc,
                                 request_status: 1,
-                                request_stepper: 1,
+                                request_stepper: 6,
                                 service_type: 15,
                                 client_user: [
                                   ...request._getRequest.client_user,
-                                  ...main.usersNewAccess.map(
+                                  ...request.usersNewAccess.map(
                                     (u: ClientUserAccess) => u.id
                                   ),
                                 ],
                               })
                               .then(() => {
                                 main.setModal(false);
+                                request.setStep(1);
                               });
                           }
                         }}

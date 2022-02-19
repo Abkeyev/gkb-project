@@ -19,6 +19,7 @@ import {
   ServiceDesk,
   ClientUserAccess,
   Right,
+  CatDocType,
 } from "../api/Models/ServiceModels";
 import { signWithBase64 } from "../ncaLayer";
 import api from "../api/Api";
@@ -60,6 +61,7 @@ class RequestStore {
   testAct: Documents | null = null;
   testProt: Documents | null = null;
   loader: boolean | true = true;
+  usersNewAccess: ClientUserAccess[] | [] = [];
 
   private requests: Request[] | [];
   private reviews: AgreeResult[] | [];
@@ -106,7 +108,7 @@ class RequestStore {
   private signers: any[] | [];
   private serviceDesk: ServiceDesk[] | [];
   private getDocCategories: Categories[] | [];
-  private docsTypes: any[] | [];
+  private docsTypes: CatDocType[] | [];
 
   get _getRequests() {
     return this.requests;
@@ -271,6 +273,14 @@ class RequestStore {
     return ++lastVersion;
   }
 
+  setDocsTypes(docs: CatDocType[]) {
+    this.docsTypes = docs;
+  }
+
+  setNewAccessUsers(users: ClientUserAccess[]) {
+    this.usersNewAccess = users;
+  }
+
   setManUser(manUser: User | null) {
     if (manUser) this.manUser = manUser;
   }
@@ -372,7 +382,7 @@ class RequestStore {
       );
   }
 
-  async getRequest(id: number, clientId: number | null = null) {
+  async getRequest(id: number, main: any | null = null) {
     this.manUser = null;
     await api.service.getRequest(id).then((r: Request) => {
       r.client && this.getClient(r.client.id);
@@ -381,7 +391,11 @@ class RequestStore {
       r.counterparty_signer_user &&
         this.getConSigner(r.counterparty_signer_user);
       r.manager_signer_user && this.getManSigner(r.manager_signer_user);
-      clientId && this.getSigners(clientId);
+      main &&
+        this.getSigners(
+          main.clientData.client.id,
+          main.role === "Service Desk" ? true : false
+        );
       !r.is_model_contract && this.getReview(r.id);
       r.client && this.getClientAllUsers(r.client.id);
       r.client_user && this.getClientUsers(r.client_user);
@@ -463,6 +477,11 @@ class RequestStore {
     this.setLoader(true);
     await api.service.getClientUsersForAdd(id).then((res) => {
       this.clientUsersForAdd = res;
+      this.usersNewAccess = res.filter(
+        (s: ClientUserAccess) =>
+          this._getClientUsers.filter((c: ClientUserAccess) => c.id === s.id)
+            .length === 0
+      );
       res &&
         runInAction(
           async () =>
@@ -494,6 +513,7 @@ class RequestStore {
       .addAccessForm(data)
       .catch((err) => console.error(err))
       .then((res) => {
+        this.request = res;
         window.location.replace(`/#/access-form/${res.id}`);
       });
   }
@@ -510,9 +530,9 @@ class RequestStore {
     this.setLoader(false);
   }
 
-  async getSigners(id: number) {
+  async getSigners(id: number, isID: boolean) {
     await api.service
-      .getSigners(id)
+      .getSigners(id, isID)
       .then((signers: any[]) => (this.signers = signers));
   }
 
@@ -722,8 +742,8 @@ class RequestStore {
   }
 
   async getDocsTypeByServiceId(id: number) {
-    await api.service.getDocsTypesByServiceId(id).then((res: []) => {
-      this.docsTypes = res;
+    await api.service.getDocsTypesByServiceId(id).then((res: any) => {
+      this.docsTypes = res.data;
     });
   }
 
@@ -935,7 +955,7 @@ class RequestStore {
       });
     });
   }
-  async nextRequest(request: Request) {
+  async nextRequest(request: Request, isForm?: boolean) {
     await api.service.nextRequest(request).then((res) => {
       runInAction(async () => {
         await this.getRequest(request.id);
@@ -1130,6 +1150,7 @@ class RequestStore {
   }
 
   constructor() {
+    this.usersNewAccess = [];
     this.requests = [];
     this.mineRequests = [];
     this.voteRequests = [];
@@ -1181,6 +1202,7 @@ class RequestStore {
       getRequests: action.bound,
       getRights: action.bound,
       getClientRequests: action.bound,
+      setNewAccessUsers: action.bound,
       getMineRequest: action.bound,
       getVoteRequest: action.bound,
       getRequest: action.bound,

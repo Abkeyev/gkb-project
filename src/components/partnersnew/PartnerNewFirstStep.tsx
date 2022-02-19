@@ -62,10 +62,12 @@ const PartnerNewFirstStep = ({
             </h3>
             <select
               value={request.service}
-              onChange={(e) => setDocs(e)}
+              onChange={(e) => e.target.value !== "-1" && setDocs(e)}
               className="form-control-v mt-24"
             >
-              <option>Выберите сервис {tab === "1" ? "ЕСБД" : "БДКИ"}</option>
+              <option value={-1}>
+                Выберите сервис {tab === "1" ? "ЕСБД" : "БДКИ"}
+              </option>
               {request._getClientServiceType.map((c: ServiceCommon) => (
                 <option key={c.id} value={c.id}>
                   {c.name}

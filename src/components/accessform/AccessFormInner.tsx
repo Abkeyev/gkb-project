@@ -38,7 +38,10 @@ const AccessFormInner = observer((props: any) => {
     request.getRequest(id);
     request.getRights();
     request.getPosition();
-    request.getSigners(main.clientData.client.id);
+    request.getSigners(
+      main.clientData.client.id,
+      main.role === "Service Desk" ? true : false
+    );
   }, []);
 
   return (
@@ -64,7 +67,7 @@ const AccessFormInner = observer((props: any) => {
                       </div>
                     )}
 
-                  {request.step === 1 ? (
+                  {request.step === 6 ? (
                     <div className="req-inner-body">
                       <h3 className="title-subhead mb-16">Общие данные</h3>
                       <div className="total-info mb-32">
@@ -97,7 +100,14 @@ const AccessFormInner = observer((props: any) => {
                           </li>
                           <li>
                             <span className="left">Статус заявки:</span>
-                            <span className="right">Нераспределено</span>
+                            <span className="right">
+                              {
+                                request._getRequestStatus.find(
+                                  (t: ServiceCommon) =>
+                                    t.id === request._getRequest.request_status
+                                )?.name
+                              }
+                            </span>
                           </li>
 
                           <li>
@@ -217,12 +227,10 @@ const AccessFormInner = observer((props: any) => {
                                 <div className="right">
                                   <span className="use-service">
                                     Использует{" "}
-                                    {
-                                      request._getClientUserService.find(
-                                        (t: ClientUserService) =>
-                                          t.client_user_data.id === u.id
-                                      )?.service_count
-                                    }{" "}
+                                    {request._getClientUserService.find(
+                                      (t: ClientUserService) =>
+                                        t.client_user_data.id === u.id
+                                    )?.service_count || 0}{" "}
                                     сервиса
                                   </span>
                                 </div>
@@ -276,7 +284,7 @@ const AccessFormInner = observer((props: any) => {
                         )
                       )}
                     </div>
-                  ) : request.step === 2 ? (
+                  ) : request.step === 7 ? (
                     <div className="req-inner-body">
                       <div className="pad-rl-16">
                         <div className="row">
@@ -322,21 +330,14 @@ const AccessFormInner = observer((props: any) => {
                                       ? "step-item-active"
                                       : "step-item-complete"
                                   }`}
-                                  onClick={() => {}}
                                 >
                                   Servicedesk отправил тестовые/боевые ключи
                                 </li>
                                 <li
                                   className={`step-item ${
-                                    request._getRequest.request_status === 12
+                                    request._getRequest.request_status === 14
                                       ? "step-item-active"
-                                      : request._getRequest.request_status ===
-                                          8 ||
-                                        request._getRequest.request_status ===
-                                          13 ||
-                                        request._getRequest.request_status ===
-                                          14 ||
-                                        request._getRequest.request_status === 7
+                                      : request._getRequest.request_status === 7
                                       ? "step-item-complete"
                                       : ""
                                   }`}
@@ -350,7 +351,7 @@ const AccessFormInner = observer((props: any) => {
                         </div>
                       </div>
                     </div>
-                  ) : (
+                  ) : request.step === 5 ? (
                     <div className="req-inner-body">
                       <div className="pad-b-64">
                         <div className="done-request">
@@ -497,47 +498,61 @@ const AccessFormInner = observer((props: any) => {
                         </Link>
                       </div>
                     </div>
+                  ) : (
+                    ""
                   )}
-                  {main.role === "Service Desk" &&
-                  request._getRequest.request_status === 1 &&
-                  request._getRequest.request_stepper === 1 ? (
-                    <div className="req-inner-footer">
-                      <div className="container">
+                  <div className="req-inner-footer">
+                    <div className="container">
+                      {main.role === "Service Desk" &&
+                        request._getRequest.request_status !== 4 && (
+                          <button
+                            className="button btn-danger mr-8"
+                            onClick={() => {
+                              main.setModal(true);
+                              main.setModalType(1);
+                            }}
+                          >
+                            Отклонить
+                          </button>
+                        )}
+                      {main.role === "Service Desk" &&
+                      request._getRequest.request_status === 1 &&
+                      request._getRequest.request_stepper === 6 &&
+                      request._getRequest.responsible_user === null ? (
                         <button
                           type="button"
                           className="button btn-primary btn-icon ml-32 d-inline-flex"
                           onClick={() => {
                             main.setModalType(0);
                             main.setModal(true);
+                            main.setModalTypeData("1");
                           }}
                         >
                           <i className="azla add-plusRound-icon"></i>
                           Назначить
                         </button>
-                      </div>
-                    </div>
-                  ) : main.role === "Service Desk" &&
-                    request._getRequest.request_status === 2 &&
-                    request._getRequest.request_stepper === 1 ? (
-                    <div className="req-inner-footer">
-                      <div className="container">
+                      ) : main.role === "Service Desk" &&
+                        request._getRequest.request_status === 2 &&
+                        request._getRequest.request_stepper === 6 &&
+                        request._getRequest.responsible_user !== null ? (
                         <button
                           type="button"
                           className="button btn-primary btn-icon ml-32 d-inline-flex"
                           onClick={() =>
                             request
                               .nextRequest(request._getRequest)
+                              .then(() => request.nextStatus())
                               .then(() => request.setStep(2))
                           }
                         >
                           Далее
                         </button>
-                      </div>
-                    </div>
-                  ) : main.role === "Service Desk" &&
-                    request._getRequest.request_stepper === 2 ? (
-                    <div className="req-inner-footer">
-                      <div className="container">
+                      ) : (main.role === "Service Desk" &&
+                          request._getRequest.request_status === 10 &&
+                          request._getRequest.request_stepper === 7) ||
+                        (main.role === "Agent" &&
+                          request._getRequest.request_status === 14 &&
+                          request._getRequest.request_stepper === 7) ? (
                         <div className="right">
                           Подтвердите отправление тестовых/боевых ключей на
                           почту контрагента:
@@ -549,11 +564,11 @@ const AccessFormInner = observer((props: any) => {
                             Подтвердить
                           </button>
                         </div>
-                      </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                  ) : (
-                    ""
-                  )}
+                  </div>
                 </div>
               </div>
             </div>

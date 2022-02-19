@@ -14,7 +14,7 @@ const ModalTypeTwentySeven = ({ main, request }: ModalTypes) => {
   const [rights, setRights] = React.useState<number[]>([]);
   const [step, setStep] = React.useState(0);
   const [users, setUsers] = React.useState<ClientUserAccess[]>(
-    main.usersNewAccess
+    request.usersNewAccess
   );
 
   React.useEffect(() => {
@@ -121,12 +121,10 @@ const ModalTypeTwentySeven = ({ main, request }: ModalTypes) => {
                             }
                           </span>
                           <span className="services-use">
-                            {
-                              request._getClientUserService.find(
-                                (t: ClientUserService) =>
-                                  t.client_user_data.id === r.id
-                              )?.service_count
-                            }{" "}
+                            {request._getClientUserService.find(
+                              (t: ClientUserService) =>
+                                t.client_user_data.id === r.id
+                            )?.service_count || 0}{" "}
                             сервисов
                           </span>
                         </li>
@@ -151,7 +149,13 @@ const ModalTypeTwentySeven = ({ main, request }: ModalTypes) => {
               <button
                 type="button"
                 onClick={() => {
-                  main.setNewAccessUsers(users);
+                  const s = users.filter(
+                    (u: ClientUserAccess) =>
+                      request._getClientUsers.filter(
+                        (c: ClientUserAccess) => c.id === u.id
+                      ).length === 0
+                  );
+                  request.setNewAccessUsers(s);
                   setSearch("");
                   setStep(1);
                 }}
@@ -221,11 +225,17 @@ const ModalTypeTwentySeven = ({ main, request }: ModalTypes) => {
                 onClick={() => {
                   main.setModal(false);
                   setStep(0);
-                  const u = users.map((uu: ClientUserAccess) => ({
+                  let u = users.filter(
+                    (u: ClientUserAccess) =>
+                      request._getClientUsers.filter(
+                        (c: ClientUserAccess) => c.id === u.id
+                      ).length === 0
+                  );
+                  u = users.map((uu: ClientUserAccess) => ({
                     ...uu,
                     right_ids: rights,
                   }));
-                  main.setNewAccessUsers(u);
+                  request.setNewAccessUsers(u);
                 }}
                 className="button btn-primary w-160"
               >

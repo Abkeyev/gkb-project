@@ -227,3 +227,9 @@ export interface Categories {
   name: string;
   doc_type: any[];
 }
+
+export interface CatDocType {
+  doc_category_id: number;
+  doc_type_id: number;
+  doc_type_name: string;
+}

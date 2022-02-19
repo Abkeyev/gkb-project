@@ -23,7 +23,9 @@ const PartnersNewFooter = ({ main, request, filesId, tab }: any) => {
             <button
               type="button"
               className="button btn-primary"
-              disabled={request.service === "" || main.usersNew.length === 0}
+              disabled={
+                request.service === "" || request.usersNewAccess.length === 0
+              }
               onClick={() => {
                 main.setModal(true);
                 main.setModalType(13);
@@ -35,7 +37,9 @@ const PartnersNewFooter = ({ main, request, filesId, tab }: any) => {
                     request.addedFiles.length > 0
                       ? [...filesId, ...request.addedFiles]
                       : [...filesId],
-                  client_user: main.usersNew.map((u: ClientUser) => u.id),
+                  client_user: request.usersNewAccess.map(
+                    (u: ClientUser) => u.id
+                  ),
                   request_status: 1,
                   request_stepper: 1,
                 };

@@ -212,10 +212,13 @@ export class ServiceController {
       }
     );
   }
-  async getSigners(id: number): Promise<any> {
-    return server.get(`/user/signing_auth/${id}`, {
-      baseURL,
-    });
+  async getSigners(id: number, isSD: boolean): Promise<any> {
+    return server.get(
+      `/user/signing_auth/${id}?data=${isSD ? "service_desk" : "manager"}`,
+      {
+        baseURL,
+      }
+    );
   }
   // СПРАВОЧНИК
   async getPosition(): Promise<any> {

@@ -56,10 +56,7 @@ const ModalTypeTwentyNine = ({ main, request }: ModalTypes) => {
             type="button"
             onClick={() => {
               main.setModal(false);
-              const nau = main.usersNewAccess.filter(
-                (u: ClientUserAccess) => u.id !== rights.id
-              );
-              main.setNewAccessUsers([...nau, rights]);
+              request.editClientUser(rights.id, rights);
             }}
             className="button btn-primary w-160"
           >

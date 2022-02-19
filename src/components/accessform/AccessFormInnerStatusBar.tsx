@@ -8,11 +8,16 @@ const AccessFormInnerStatusBar = ({ main, request }: AccessFormInnerProps) => {
       <ul className="step-progressbar">
         <li
           className={`step-item ${
-            request._getRequest.request_stepper === 1
+            request._getRequest.request_stepper === 6
               ? "step-item-active"
               : "step-item-complete"
           }`}
-          onClick={() => request.setStep(1)}
+          onClick={() =>
+            (request._getRequest.request_stepper === 6 ||
+              request._getRequest.request_stepper === 7 ||
+              request._getRequest.request_stepper === 5) &&
+            request.setStep(6)
+          }
         >
           Данные
           <br />
@@ -20,13 +25,17 @@ const AccessFormInnerStatusBar = ({ main, request }: AccessFormInnerProps) => {
         </li>
         <li
           className={`step-item ${
-            request._getRequest.request_stepper === 2
+            request._getRequest.request_stepper === 7
               ? "step-item-active"
-              : request._getRequest.request_stepper > 2
+              : request._getRequest.request_stepper === 5
               ? "step-item-complete"
               : ""
           }`}
-          onClick={() => request.setStep(2)}
+          onClick={() =>
+            (request._getRequest.request_stepper === 5 ||
+              request._getRequest.request_stepper === 7) &&
+            request.setStep(7)
+          }
         >
           Ключи
           <br />
@@ -34,13 +43,15 @@ const AccessFormInnerStatusBar = ({ main, request }: AccessFormInnerProps) => {
         </li>
         <li
           className={`step-item ${
-            request._getRequest.request_stepper === 3
+            request._getRequest.request_stepper === 5
               ? "step-item-active"
-              : request._getRequest.request_stepper > 3
+              : request._getRequest.request_stepper === 0
               ? "step-item-complete"
               : ""
           }`}
-          onClick={() => request.setStep(3)}
+          onClick={() =>
+            request._getRequest.request_stepper === 5 && request.setStep(5)
+          }
         >
           Готово
         </li>

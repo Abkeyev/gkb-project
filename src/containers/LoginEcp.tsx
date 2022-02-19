@@ -14,7 +14,7 @@ const LoginEcp = (props: any) => {
       </div>
       <div className="special-card" onClick={() => open && setOpen(false)}>
         <h1 className="title-main">
-          {main.loginState === "ecp" ? "Вход" : "Регистрация"} по ЭПЦ
+          {main.loginState === "ecp" ? "Вход" : "Регистрация"} по ЭЦП
         </h1>
         <div className="login-input">
           <div className="form-group">

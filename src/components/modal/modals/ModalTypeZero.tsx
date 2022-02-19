@@ -30,26 +30,21 @@ const ModalTypeZero = ({ main, request }: ModalTypes) => {
                   .map((r: User) => (
                     <li
                       onClick={() => {
-                        request._getRequest.request_status === 1
-                          ? request
-                              .nextRequestStatus(r.id)
-                              .then((res: any) => {
-                                main.setModal(false);
-                                request.setManUser(r);
-                              })
-                              .catch((err: any) => {
-                                main.setModal(false);
-                                console.error(err);
-                              })
-                          : request
-                              .updateRequest({
-                                responsible_user: r.id,
-                                client: request._getRequest.client.id,
-                              })
-                              .then((res: any) => {
-                                main.setModal(false);
-                                request.setManUser(r);
-                              });
+                        if (main.modalTypeData === "1") {
+                          main.setModalType(26);
+                          main.setModal(true);
+                          main.setModalTypeData(r);
+                        } else
+                          request
+                            .nextRequestStatus(r.id)
+                            .then((res: any) => {
+                              main.setModal(false);
+                              request.setManUser(r);
+                            })
+                            .catch((err: any) => {
+                              main.setModal(false);
+                              console.error(err);
+                            });
                       }}
                     >
                       <div className="profile">
