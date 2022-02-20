@@ -15,7 +15,10 @@ import {
 const AccessFormNew = observer((props: any) => {
   const { main, request } = props;
   const [open, setOpen] = React.useState(false);
+  const [openService, setOpenService] = React.useState(false);
   const [req, setReq] = React.useState<Request | null>(null);
+  const [service, setService] = React.useState<string>("-1");
+
   const useOutsideAlerter = (ref: any) => {
     React.useEffect(() => {
       function handleClickOutside(event: any) {
@@ -30,8 +33,24 @@ const AccessFormNew = observer((props: any) => {
     }, [ref]);
   };
 
+  const useOutsideAlerter2 = (ref: any) => {
+    React.useEffect(() => {
+      function handleClickOutside(event: any) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setOpenService(false);
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  };
+
   const wrapperRef = React.useRef(null);
   useOutsideAlerter(wrapperRef);
+  const wrapperRef2 = React.useRef(null);
+  useOutsideAlerter2(wrapperRef2);
 
   React.useEffect(() => {
     request.getClientServiceType();
@@ -69,7 +88,7 @@ const AccessFormNew = observer((props: any) => {
                     добавить пользователей
                   </p>
 
-                  <div className="col-md-7 mb-32">
+                  <div className="col-md-7 mb-24">
                     <div
                       className="form-multiselect mb-0 special-select"
                       ref={wrapperRef}
@@ -101,7 +120,7 @@ const AccessFormNew = observer((props: any) => {
                               </div>
                             ) : (
                               <span className="types-placeholder">
-                                Выберите сервис
+                                Выберите активный сервис
                               </span>
                             )}
                           </div>
@@ -144,6 +163,24 @@ const AccessFormNew = observer((props: any) => {
                       </div>
                     </div>
                   </div>
+
+                  {req && req.service_type === 15 && (
+                    <select
+                      value={service}
+                      onChange={(e) =>
+                        e.target.value !== "-1" &&
+                        setService(e.target.value + "")
+                      }
+                      className="col-md-7 form-control-v mb-32"
+                    >
+                      <option value="-1">Выберите сервис</option>
+                      {request._getClientServiceType.map((c: ServiceCommon) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
 
                   {request._getRequest && (
                     <>
@@ -287,7 +324,10 @@ const AccessFormNew = observer((props: any) => {
                                 client_doc: request._getRequest.client_doc,
                                 request_status: 1,
                                 request_stepper: 6,
-                                service_type: 15,
+                                service_type:
+                                  req && req.service_type === 15
+                                    ? service
+                                    : request._getRequest.service_type,
                                 client_user: [
                                   ...request._getRequest.client_user,
                                   ...request.usersNewAccess.map(
