@@ -50,45 +50,49 @@ const PartnersInnerFourthStep = ({ request }: PartnersProps) => {
               <div className="col-md-3 offset-md-1">
                 <div className="keys-add">
                   <ul className="step-progressbar grid-view">
-                    <li
-                      className={`step-item ${
-                        request._getRequest.request_status === 10
-                          ? "step-item-active"
-                          : "step-item-complete"
-                      }`}
-                      onClick={() => {}}
-                    >
-                      Servicedesk отправил тестовые ключи
-                    </li>
-                    <li
-                      className={`step-item ${
-                        request._getRequest.request_status === 12
-                          ? "step-item-active"
-                          : request._getRequest.request_status === 8 ||
-                            request._getRequest.request_status === 13 ||
-                            request._getRequest.request_status === 14 ||
-                            request._getRequest.request_status === 7
-                          ? "step-item-complete"
-                          : ""
-                      }`}
-                      onClick={() => {}}
-                    >
-                      Контрагент получил тестовые ключи
-                    </li>
-                    <li
-                      className={`step-item ${
-                        request._getRequest.request_status === 8
-                          ? "step-item-active"
-                          : request._getRequest.request_status === 13 ||
-                            request._getRequest.request_status === 14 ||
-                            request._getRequest.request_status === 7
-                          ? "step-item-complete"
-                          : ""
-                      }`}
-                      onClick={() => {}}
-                    >
-                      Контрагент подписал “Акт прохождения тестирования”
-                    </li>
+                    {request._getRequest.service_category !== 1 && (
+                      <>
+                        <li
+                          className={`step-item ${
+                            request._getRequest.request_status === 10
+                              ? "step-item-active"
+                              : "step-item-complete"
+                          }`}
+                          onClick={() => {}}
+                        >
+                          Servicedesk отправил тестовые ключи
+                        </li>
+                        <li
+                          className={`step-item ${
+                            request._getRequest.request_status === 12
+                              ? "step-item-active"
+                              : request._getRequest.request_status === 8 ||
+                                request._getRequest.request_status === 13 ||
+                                request._getRequest.request_status === 14 ||
+                                request._getRequest.request_status === 7
+                              ? "step-item-complete"
+                              : ""
+                          }`}
+                          onClick={() => {}}
+                        >
+                          Контрагент получил тестовые ключи
+                        </li>
+                        <li
+                          className={`step-item ${
+                            request._getRequest.request_status === 8
+                              ? "step-item-active"
+                              : request._getRequest.request_status === 13 ||
+                                request._getRequest.request_status === 14 ||
+                                request._getRequest.request_status === 7
+                              ? "step-item-complete"
+                              : ""
+                          }`}
+                          onClick={() => {}}
+                        >
+                          Контрагент подписал “Акт прохождения тестирования”
+                        </li>
+                      </>
+                    )}
                     <li
                       className={`step-item ${
                         request._getRequest.request_status === 13

@@ -35,8 +35,11 @@ const PartnersNewFooter = ({ main, request, filesId, tab }: any) => {
                   service_type: request.service,
                   client_doc:
                     request.addedFiles.length > 0
-                      ? [...filesId, ...request.addedFiles]
-                      : [...filesId],
+                      ? [
+                          ...filesId.map((u: any) => u.id),
+                          ...request.addedFiles,
+                        ]
+                      : [...filesId.map((u: any) => u.id)],
                   client_user: request.usersNewAccess.map(
                     (u: ClientUser) => u.id
                   ),
