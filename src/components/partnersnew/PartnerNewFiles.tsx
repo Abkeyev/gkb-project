@@ -82,6 +82,7 @@ const PartnerNewFiles = ({
                       request={request}
                       files={filesId}
                       setFiles={setFilesId}
+                      main={main}
                     />
                   );
                 })}

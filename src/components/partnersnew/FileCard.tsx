@@ -9,14 +9,29 @@ interface FileCardProps {
   files: Documents[];
   setFiles: any;
   handleChange: any;
+  main: any;
 }
 
 const FileCard = (props: FileCardProps) => {
-  const { type, request, setFiles, files, handleChange } = props;
-  const fil = files.find(
-    (f: Documents) =>
-      f.doc_category === type.doc_category_id && f.doc_type === type.doc_type_id
-  );
+  const { type, request, setFiles, files, handleChange, main } = props;
+  const [fil, setFil]: any = React.useState();
+
+  React.useEffect(() => {
+    setFil(
+      files.find(
+        (f: Documents) =>
+          f.doc_category === type.doc_category_id &&
+          f.doc_type === type.doc_type_id
+      )
+    );
+  }, [files, fil]);
+
+  const handleDelete = () => {
+    fil.doc_status = "Archive";
+    setFiles([...files.filter((f: Documents) => f.doc_type !== fil.doc_type)]);
+    request.deleteDocument(main.clientData.client.id, fil);
+  };
+
   return (
     <li key={type.doc_type_id}>
       <div className="name">
@@ -26,14 +41,7 @@ const FileCard = (props: FileCardProps) => {
         {fil ? <span className="file-name">{fil.doc_name}</span> : null}
       </div>
       {fil ? (
-        <button
-          className="btn-icon delete"
-          onClick={() =>
-            setFiles([
-              ...files.filter((f: Documents) => f.doc_type !== fil.doc_type),
-            ])
-          }
-        >
+        <button className="btn-icon delete" onClick={() => handleDelete()}>
           <i className="azla size-18 trash-icon-alert mr-8"></i>
           Удалить файл
         </button>
