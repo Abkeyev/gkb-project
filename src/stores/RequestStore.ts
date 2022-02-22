@@ -512,9 +512,14 @@ class RequestStore {
     await api.service
       .addAccessForm(data)
       .catch((err) => console.error(err))
-      .then((res) => {
+      .then(async (res) => {
         this.request = res;
-        window.location.replace(`/#/access-form/${res.id}`);
+        try {
+          await api.service.generateAccessForm(res.id);
+        } finally {
+          this.getBase64();
+          window.location.replace(`/#/access-form/${res.id}`);
+        }
       });
   }
 

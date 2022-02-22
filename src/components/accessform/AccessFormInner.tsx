@@ -284,7 +284,9 @@ const AccessFormInner = observer((props: any) => {
                         )
                       )}
                     </div>
-                  ) : request.step === 7 ? (
+                  ) : request.step === 7 &&
+                    (request._getRequest.request_status === 10 ||
+                      request._getRequest.request_status === 12) ? (
                     <div className="req-inner-body">
                       <div className="pad-rl-16">
                         <div className="row">
@@ -335,9 +337,9 @@ const AccessFormInner = observer((props: any) => {
                                 </li>
                                 <li
                                   className={`step-item ${
-                                    request._getRequest.request_status === 14
+                                    request._getRequest.request_status === 12
                                       ? "step-item-active"
-                                      : request._getRequest.request_status === 7
+                                      : request._getRequest.request_status === 8
                                       ? "step-item-complete"
                                       : ""
                                   }`}
@@ -351,7 +353,8 @@ const AccessFormInner = observer((props: any) => {
                         </div>
                       </div>
                     </div>
-                  ) : request.step === 5 ? (
+                  ) : request.step === 7 &&
+                    request._getRequest.request_status === 8 ? (
                     <div className="req-inner-body">
                       <div className="pad-b-64">
                         <div className="done-request">
@@ -503,70 +506,72 @@ const AccessFormInner = observer((props: any) => {
                   )}
                   <div className="req-inner-footer">
                     <div className="container">
-                      {main.role === "Service Desk" &&
-                        request._getRequest.request_status !== 4 && (
-                          <button
-                            className="button btn-danger mr-8"
-                            onClick={() => {
-                              main.setModal(true);
-                              main.setModalType(1);
-                            }}
-                          >
-                            Отклонить
-                          </button>
-                        )}
-                      {main.role === "Service Desk" &&
-                      request._getRequest.request_status === 1 &&
-                      request._getRequest.request_stepper === 6 &&
-                      request._getRequest.responsible_user === null ? (
-                        <button
-                          type="button"
-                          className="button btn-primary btn-icon ml-32 d-inline-flex"
-                          onClick={() => {
-                            main.setModalType(0);
-                            main.setModal(true);
-                            main.setModalTypeData("1");
-                          }}
-                        >
-                          <i className="azla add-plusRound-icon"></i>
-                          Назначить
-                        </button>
-                      ) : main.role === "Service Desk" &&
-                        request._getRequest.request_status === 2 &&
+                      <div className="right">
+                        {main.role === "Service Desk" &&
+                        request._getRequest.request_status === 1 &&
                         request._getRequest.request_stepper === 6 &&
-                        request._getRequest.responsible_user !== null ? (
-                        <button
-                          type="button"
-                          className="button btn-primary btn-icon ml-32 d-inline-flex"
-                          onClick={() =>
-                            request
-                              .nextRequest(request._getRequest)
-                              .then(() => request.nextStatus())
-                              .then(() => request.setStep(2))
-                          }
-                        >
-                          Далее
-                        </button>
-                      ) : (main.role === "Service Desk" &&
-                          request._getRequest.request_status === 10 &&
-                          request._getRequest.request_stepper === 7) ||
-                        (main.role === "Agent" &&
-                          request._getRequest.request_status === 14 &&
-                          request._getRequest.request_stepper === 7) ? (
-                        <div className="right">
-                          Подтвердите отправление тестовых/боевых ключей на
-                          почту контрагента:
+                        request._getRequest.responsible_user === null ? (
                           <button
                             type="button"
-                            onClick={() => request.nextStatus()}
-                            className="button btn-primary mrl-32"
+                            className="button btn-primary btn-icon ml-32 d-inline-flex"
+                            onClick={() => {
+                              main.setModalType(0);
+                              main.setModal(true);
+                              main.setModalTypeData("1");
+                            }}
                           >
-                            Подтвердить
+                            <i className="azla add-plusRound-icon"></i>
+                            Назначить
                           </button>
-                        </div>
-                      ) : (
-                        ""
-                      )}
+                        ) : main.role === "Service Desk" &&
+                          request._getRequest.request_status === 2 &&
+                          request._getRequest.request_stepper === 6 &&
+                          request._getRequest.responsible_user !== null ? (
+                          <button
+                            type="button"
+                            className="button btn-primary btn-icon ml-32 d-inline-flex"
+                            onClick={() =>
+                              request
+                                .nextRequest(request._getRequest)
+                                .then(() => request.nextStatus())
+                                .then(() => request.setStep(2))
+                            }
+                          >
+                            Далее
+                          </button>
+                        ) : (main.role === "Service Desk" &&
+                            request._getRequest.request_status === 10 &&
+                            request._getRequest.request_stepper === 7) ||
+                          (main.role === "Agent" &&
+                            request._getRequest.request_status === 12 &&
+                            request._getRequest.request_stepper === 7) ? (
+                          <>
+                            Подтвердите отправление тестовых/боевых ключей на
+                            почту контрагента:
+                            <button
+                              type="button"
+                              onClick={() => request.nextStatus()}
+                              className="button btn-primary mrl-32"
+                            >
+                              Подтвердить
+                            </button>
+                          </>
+                        ) : (
+                          ""
+                        )}
+                        {main.role === "Service Desk" &&
+                          request._getRequest.request_status !== 4 && (
+                            <button
+                              className="button btn-danger ml-8"
+                              onClick={() => {
+                                main.setModal(true);
+                                main.setModalType(1);
+                              }}
+                            >
+                              Отклонить
+                            </button>
+                          )}
+                      </div>
                     </div>
                   </div>
                 </div>

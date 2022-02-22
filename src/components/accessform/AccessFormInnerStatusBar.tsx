@@ -25,15 +25,19 @@ const AccessFormInnerStatusBar = ({ main, request }: AccessFormInnerProps) => {
         </li>
         <li
           className={`step-item ${
-            request._getRequest.request_stepper === 7
+            request._getRequest.request_stepper === 7 &&
+            (request._getRequest.request_status === 10 ||
+              request._getRequest.request_status === 12)
               ? "step-item-active"
-              : request._getRequest.request_stepper === 5
+              : request._getRequest.request_stepper === 7 &&
+                request._getRequest.request_status === 8
               ? "step-item-complete"
               : ""
           }`}
           onClick={() =>
-            (request._getRequest.request_stepper === 5 ||
-              request._getRequest.request_stepper === 7) &&
+            request._getRequest.request_stepper === 7 &&
+            (request._getRequest.request_status === 10 ||
+              request._getRequest.request_status === 12) &&
             request.setStep(7)
           }
         >
@@ -43,14 +47,17 @@ const AccessFormInnerStatusBar = ({ main, request }: AccessFormInnerProps) => {
         </li>
         <li
           className={`step-item ${
-            request._getRequest.request_stepper === 5
+            request._getRequest.request_stepper === 7 &&
+            request._getRequest.request_status === 8
               ? "step-item-active"
               : request._getRequest.request_stepper === 0
               ? "step-item-complete"
               : ""
           }`}
           onClick={() =>
-            request._getRequest.request_stepper === 5 && request.setStep(5)
+            request._getRequest.request_stepper === 7 &&
+            request._getRequest.request_status === 8 &&
+            request.setStep(7)
           }
         >
           Готово

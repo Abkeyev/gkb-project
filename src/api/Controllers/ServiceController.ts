@@ -301,6 +301,11 @@ export class ServiceController {
       baseURL,
     });
   }
+  async generateAccessForm(id: number): Promise<any> {
+    return server.get(`/request/${id}/generate_approval_form`, {
+      baseURL,
+    });
+  }
   async sendAgree(request: Request): Promise<any> {
     return server.put(
       `/client_request/${request.id}`,
