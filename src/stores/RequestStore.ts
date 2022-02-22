@@ -517,8 +517,7 @@ class RequestStore {
         try {
           await api.service.generateAccessForm(res.id);
         } finally {
-          this.getBase64();
-          window.location.replace(`/#/access-form/${res.id}`);
+          this.getBase64(true);
         }
       });
   }
@@ -1118,30 +1117,30 @@ class RequestStore {
     });
   }
 
-  async getBase64() {
+  async getBase64(isAccessForm?: boolean) {
     this.request &&
       (await api.service
         .downloadFileForSign(this.request.id)
         .then((response: any) => {
           runInAction(async () => {
             if (response && response.base64) {
-              await this.signDoc(response.base64);
+              await this.signDoc(response.base64, isAccessForm);
             }
           });
         }));
   }
 
-  async signDoc(base64: string) {
+  async signDoc(base64: string, isAccessForm?: boolean) {
     if (base64.length) {
       await signWithBase64(base64)
         .then((res) => {
-          this.afterNca(res);
+          this.afterNca(res, isAccessForm);
         })
         .catch((err) => console.error(err.message));
     } else console.error("no base 64");
   }
 
-  async afterNca(base64: string) {
+  async afterNca(base64: string, isAccessForm?: boolean) {
     this.request &&
       (await api.service
         .uploadSignedFile(this.request.id, {
@@ -1150,6 +1149,9 @@ class RequestStore {
         .then(() => {
           runInAction(async () => {
             this.request && this.getRequest(this.request.id);
+            isAccessForm &&
+              this.request &&
+              window.location.replace(`/#/access-form/${this.request.id}`);
           });
         }));
   }
