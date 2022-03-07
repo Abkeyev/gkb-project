@@ -20,6 +20,7 @@ import {
   ClientUserAccess,
   Right,
   CatDocType,
+  ClientUserService,
 } from "../api/Models/ServiceModels";
 import { signWithBase64 } from "../ncaLayer";
 import api from "../api/Api";
@@ -76,7 +77,7 @@ class RequestStore {
   private clients: Client[];
   private clientUsers: ClientUserAccess[] | [];
   private serviceUsers: ClientUsers[] | [];
-  private clientUserService: ClientUserAccess[] | [];
+  private clientUserService: ClientUserService[] | [];
   private rights: Right[] | [];
   private clientDocs: Documents[] | [];
   private clientUsersForAdd: ClientUsers[] | [];
@@ -827,14 +828,15 @@ class RequestStore {
   }
 
   async getClientUserServiceCount(ids: number[]) {
-    let users: ClientUserAccess[] = [];
+    let users: ClientUserService[] = [];
     let promises: any[] = [];
     (await (ids.length > 0)) &&
       ids.map((id: number) =>
         promises.push(
           api.service
             .getClientServiceCount(id)
-            .then((res: ClientUserAccess) => {
+            .then((res: ClientUserService) => {
+              console.log(res, "res");
               users.push(res);
             })
         )

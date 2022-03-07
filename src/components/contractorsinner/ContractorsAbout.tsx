@@ -41,9 +41,8 @@ const ContractorsAbout = ({ id, request }: ContractorsInnerProps) => {
               <span className="left">Вебсайт:</span>
               <span className="right d-flex">
                 <a
-                  href={request._getClient.website}
+                  href={"//" + request._getClient.website}
                   target="_blank"
-                  rel="noreferrer"
                   className="pre-primary-color"
                 >
                   {request._getClient.website}
@@ -53,11 +52,10 @@ const ContractorsAbout = ({ id, request }: ContractorsInnerProps) => {
             <li>
               <span className="left">Сегмент деятельности:</span>
               <span className="right">
-                {
+                {request._getClientTypes &&
                   request._getClientTypes.find(
                     (t: any) => t.id === request._getClient.client_type
-                  )?.name
-                }
+                  )?.name}
               </span>
             </li>
             {request._getAuthPersons &&

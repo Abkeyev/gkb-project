@@ -227,10 +227,12 @@ const AccessFormInner = observer((props: any) => {
                                 <div className="right">
                                   <span className="use-service">
                                     Использует{" "}
-                                    {request._getClientUserService.find(
-                                      (t: ClientUserService) =>
-                                        t.client_user_data.id === u.id
-                                    )?.service_count || 0}{" "}
+                                    {(request._getClientUserService &&
+                                      request._getClientUserService.find(
+                                        (t: ClientUserService) =>
+                                          t.client_user_data.id === u.id
+                                      )?.service_count) ||
+                                      0}{" "}
                                     сервиса
                                   </span>
                                 </div>

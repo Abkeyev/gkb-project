@@ -1,32 +1,32 @@
-import React from 'react';
-import moment from 'moment';
-import { ServiceCommon, Documents } from '../../api/Models/ServiceModels';
-import { RequestInnerProps } from './RequestInnerProps.props';
-import { Link } from 'react-router-dom';
+import React from "react";
+import moment from "moment";
+import { ServiceCommon, Documents } from "../../api/Models/ServiceModels";
+import { RequestInnerProps } from "./RequestInnerProps.props";
+import { Link } from "react-router-dom";
 
 const RequestInnerFifthStep = ({ request, main }: RequestInnerProps) => {
   return (
     <>
-      <div className='pad-b-128'>
-        <div className='done-request'>
-          <h3 className='title-subhead mb-16'>
+      <div className="pad-b-128">
+        <div className="done-request">
+          <h3 className="title-subhead mb-16">
             Контрагент успешно зарегистрирован!
           </h3>
 
-          <h5 className='title-subhead-h5 mb-16'>Общие данные</h5>
+          <h5 className="title-subhead-h5 mb-16">Общие данные</h5>
 
-          <div className='pad-rl-16 mb-32'>
-            <div className='row'>
-              <div className='col-md-6'>
-                <div className='total-info'>
-                  <ul className='info-list'>
+          <div className="pad-rl-16 mb-32">
+            <div className="row">
+              <div className="col-md-6">
+                <div className="total-info">
+                  <ul className="info-list">
                     <li>
-                      <span className='left'>Номер заявки:</span>
-                      <span className='right'>{request._getRequest.id}</span>
+                      <span className="left">Номер заявки:</span>
+                      <span className="right">{request._getRequest.id}</span>
                     </li>
                     <li>
-                      <span className='left'>Статус заявки:</span>
-                      <span className='right'>
+                      <span className="left">Статус заявки:</span>
+                      <span className="right">
                         {
                           request._getRequestStatus.find(
                             (t: ServiceCommon) =>
@@ -36,8 +36,8 @@ const RequestInnerFifthStep = ({ request, main }: RequestInnerProps) => {
                       </span>
                     </li>
                     <li>
-                      <span className='left'>Организация:</span>
-                      <span className='right'>
+                      <span className="left">Организация:</span>
+                      <span className="right">
                         <Link
                           to={`/contractors/${request._getRequest.client.id}`}
                         >
@@ -46,14 +46,14 @@ const RequestInnerFifthStep = ({ request, main }: RequestInnerProps) => {
                       </span>
                     </li>
                     <li>
-                      <span className='left'>БИН:</span>
-                      <span className='right'>
+                      <span className="left">БИН:</span>
+                      <span className="right">
                         {main.clientData.client.bin}
                       </span>
                     </li>
                     <li>
-                      <span className='left'>Категория деятельности:</span>
-                      <span className='right'>
+                      <span className="left">Категория деятельности:</span>
+                      <span className="right">
                         {
                           request._getClientTypes.find(
                             (t: any) =>
@@ -63,8 +63,8 @@ const RequestInnerFifthStep = ({ request, main }: RequestInnerProps) => {
                       </span>
                     </li>
                     <li>
-                      <span className='left'>Тип сервиса:</span>
-                      <span className='right'>
+                      <span className="left">Тип сервиса:</span>
+                      <span className="right">
                         {
                           request._getClientServiceType.find(
                             (t: ServiceCommon) =>
@@ -74,19 +74,19 @@ const RequestInnerFifthStep = ({ request, main }: RequestInnerProps) => {
                       </span>
                     </li>
                     <li>
-                      <span className='left'>Дата регистрации заявки:</span>
-                      <span className='right'>
+                      <span className="left">Дата регистрации заявки:</span>
+                      <span className="right">
                         {moment(request._getRequest.reg_date).format(
-                          'DD.MM.YYYY в HH:mm'
+                          "DD.MM.YYYY в HH:mm"
                         )}
                       </span>
                     </li>
                     <li>
-                      <span className='left'>Дата исполнения заявки:</span>
-                      <span className='right'>
+                      <span className="left">Дата исполнения заявки:</span>
+                      <span className="right">
                         {request._getRequest.fulfill_date &&
                           moment(request._getRequest.fulfill_date).format(
-                            'DD.MM.YYYY в HH:mm'
+                            "DD.MM.YYYY в HH:mm"
                           )}
                       </span>
                     </li>
@@ -96,9 +96,9 @@ const RequestInnerFifthStep = ({ request, main }: RequestInnerProps) => {
             </div>
           </div>
 
-          <h5 className='title-subhead-h5 mb-16'>Документы</h5>
-          <div className='files-added'>
-            <ul className='files-list'>
+          <h5 className="title-subhead-h5 mb-16">Документы</h5>
+          <div className="files-added">
+            <ul className="files-list">
               {request._getClientDocs &&
                 (request._getClientDocs as Documents[])
                   .filter(
@@ -111,7 +111,7 @@ const RequestInnerFifthStep = ({ request, main }: RequestInnerProps) => {
                   )
                   .map((d) => (
                     <li>
-                      <i className='azla blank-alt-primary-icon'></i>
+                      <i className="azla blank-alt-primary-icon"></i>
                       <span onClick={() => d && request.downloadDocument(d)}>
                         {
                           request._getTypes.find(
@@ -124,12 +124,12 @@ const RequestInnerFifthStep = ({ request, main }: RequestInnerProps) => {
             </ul>
           </div>
 
-          <h5 className='title-subhead-h5 mb-16'>Ключи доступа</h5>
-          <div className='d-flex'>
+          <h5 className="title-subhead-h5 mb-16">Ключи доступа</h5>
+          <div className="d-flex">
             {request.testKey && (
               <button
-                type='button'
-                className='button btn-secondary mr-16'
+                type="button"
+                className="button btn-secondary mr-16"
                 onClick={() => request.downloadKeys(request.testKey)}
               >
                 Скачать тестовые ключи
@@ -137,8 +137,8 @@ const RequestInnerFifthStep = ({ request, main }: RequestInnerProps) => {
             )}
             {request.prodKey && (
               <button
-                type='button'
-                className='button btn-secondary'
+                type="button"
+                className="button btn-secondary"
                 onClick={() => request.downloadKeys(request.prodKey)}
               >
                 Скачать боевые ключи

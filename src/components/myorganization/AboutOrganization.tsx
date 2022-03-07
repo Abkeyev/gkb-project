@@ -45,9 +45,8 @@ const AboutOrganization = ({ main, request }: OrganizationProps) => {
                   <span className="left">Вебсайт:</span>
                   <span className="right d-flex">
                     <a
-                      href={request._getClient.website}
+                      href={"//" + request._getClient.website}
                       target="_blank"
-                      rel="noreferrer"
                       className="pre-primary-color"
                     >
                       {request._getClient.website}

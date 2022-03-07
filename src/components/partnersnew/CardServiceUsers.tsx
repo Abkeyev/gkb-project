@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Client,
   ClientUserAccess,
@@ -7,10 +6,7 @@ import {
   ServiceCommon,
 } from "../../api/Models/ServiceModels";
 
-const CardServiceUsers = ({ request, main, u, index }: any) => {
-  React.useEffect(() => {
-    console.log(u);
-  }, []);
+const CardServiceUsers = ({ request, main, u, index, count = false }: any) => {
   return (
     <div className="card card-rights mb-24 pad-24">
       <div className="card-header">
@@ -29,13 +25,19 @@ const CardServiceUsers = ({ request, main, u, index }: any) => {
             </h6>
           </div>
           <div className="right">
-            <span className="use-service">
-              Использует{" "}
-              {request._getClientUserService.find(
-                (t: ClientUserService) => t.client_user_data.id === u.id
-              )?.service_count || 0}{" "}
-              сервиса
-            </span>
+            {!count ? (
+              <span className="use-service">
+                Использует{" "}
+                {(request._getClientUserService &&
+                  request._getClientUserService.find(
+                    (t: ClientUserService) => t.client_user_data.id === u.id
+                  )?.service_count) ||
+                  0}{" "}
+                сервиса
+              </span>
+            ) : (
+              ""
+            )}
             <span
               className="close"
               onClick={() =>
@@ -51,11 +53,12 @@ const CardServiceUsers = ({ request, main, u, index }: any) => {
           </div>
         </div>
         <p className="desc">
-          {
+          {console.log(u, "uuu")}
+          {console.log(request._getPosition, "request._getPosition")}
+          {request._getPosition &&
             request._getPosition.find(
               (t: ServiceCommon) => t.id === +u.position_name
-            )?.name
-          }{" "}
+            )?.name}{" "}
           – {u.department_name} –
           {request._getClients &&
             request._getClients.find((t: Client) => t.id === u.client)
