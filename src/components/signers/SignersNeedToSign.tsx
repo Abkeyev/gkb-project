@@ -6,7 +6,7 @@ import { SignersProps } from "./SignersProps.props";
 import { ReactComponent as Spinner } from "../../styles/spinner.svg";
 
 const SignersNeedToSign = ({
-  filterRequests,
+  filterVoteRequests,
   main,
   request,
   history,
@@ -19,12 +19,12 @@ const SignersNeedToSign = ({
       <h3 className="title-subhead mb-16">
         На подписание{" "}
         <span className="number">
-          {filterRequests([6], main.clientData.user.id).length}
+          {filterVoteRequests([6], main.clientData.user.id).length}
         </span>
       </h3>
       {request?.loader ? (
         <Spinner />
-      ) : filterRequests([6], main.clientData.user.id).length === 0 ? (
+      ) : filterVoteRequests([6], main.clientData.user.id).length === 0 ? (
         "Заявки отсутствуют."
       ) : (
         <table className="table req-table">
@@ -38,21 +38,23 @@ const SignersNeedToSign = ({
             </tr>
           </thead>
           <tbody>
-            {filterRequests([6], main.clientData.user.id).map((r: Request) => (
-              <tr onClick={() => history.push(`/signer/${r.id}`)}>
-                <td>{r.client.bin}</td>
-                <td>{r.client.longname}</td>
-                <td>{r.service_category === 1 ? "ЕСБД" : "БДКИ"}</td>
-                <td>
-                  {
-                    request._getClientServiceType.find(
-                      (t: ServiceCommon) => t.id === r.service_type
-                    )?.name
-                  }
-                </td>
-                <td>{moment(r.reg_date).format("DD.MM.YYYY в HH:mm")}</td>
-              </tr>
-            ))}
+            {filterVoteRequests([6], main.clientData.user.id).map(
+              (r: Request) => (
+                <tr onClick={() => history.push(`/signer/${r.id}`)}>
+                  <td>{r.client.bin}</td>
+                  <td>{r.client.longname}</td>
+                  <td>{r.service_category === 1 ? "ЕСБД" : "БДКИ"}</td>
+                  <td>
+                    {
+                      request._getClientServiceType.find(
+                        (t: ServiceCommon) => t.id === r.service_type
+                      )?.name
+                    }
+                  </td>
+                  <td>{moment(r.reg_date).format("DD.MM.YYYY в HH:mm")}</td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       )}

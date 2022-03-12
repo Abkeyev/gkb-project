@@ -323,10 +323,12 @@ class RequestStore {
   }
 
   async getRequests() {
+    this.setLoader(true);
     await api.service.getRequests().then((r: Request[]) => {
       this.requests = r;
       this.request = null;
       this.setStep(1);
+      this.setLoader(false);
     });
   }
 

@@ -67,7 +67,7 @@ const AccessFormInner = observer((props: any) => {
                       </div>
                     )}
 
-                  {request.step === 6 ? (
+                  {request.step === 7 ? (
                     <div className="req-inner-body">
                       <h3 className="title-subhead mb-16">Общие данные</h3>
                       <div className="total-info mb-32">
@@ -286,9 +286,7 @@ const AccessFormInner = observer((props: any) => {
                         )
                       )}
                     </div>
-                  ) : request.step === 7 &&
-                    (request._getRequest.request_status === 10 ||
-                      request._getRequest.request_status === 12) ? (
+                  ) : request.step === 6 ? (
                     <div className="req-inner-body">
                       <div className="pad-rl-16">
                         <div className="row">
@@ -355,8 +353,7 @@ const AccessFormInner = observer((props: any) => {
                         </div>
                       </div>
                     </div>
-                  ) : request.step === 7 &&
-                    request._getRequest.request_status === 8 ? (
+                  ) : request.step === 5 ? (
                     <div className="req-inner-body">
                       <div className="pad-b-64">
                         <div className="done-request">

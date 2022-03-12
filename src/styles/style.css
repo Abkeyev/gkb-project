@@ -123,6 +123,7 @@
 /* Sidebar */
 .main-body {
   margin-left: 272px;
+  padding-bottom: 128px;
   transition: 0.3s;
 }
 .left-sidebar {
@@ -1377,13 +1378,13 @@
   margin-left: 216px;
 }
 .services-type {
-  background: #EAF6F5;
+  background: #eaf6f5;
   border-radius: 4px;
   padding: 4px 8px;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
-  color: #19959C;
+  color: #19959c;
   margin-right: 8px;
 }
 .link-file {
@@ -1391,6 +1392,26 @@
   font-size: 16px;
   line-height: 20px;
   text-decoration-line: underline;
-  color: #19959C;
+  color: #19959c;
   cursor: pointer;
+}
+
+.filter-inputs .gkb-checkbox label,
+.filter .gkb-checkbox label {
+  display: grid;
+  grid-gap: 12px;
+  grid-template-columns: 24px 1fr;
+  user-select: none;
+}
+.filter-inputs .gkb-checkbox > label::before,
+.filter .gkb-checkbox > label::before {
+  margin: 3px 1px 3px 1px;
+}
+.filter-inputs .gkb-checkbox > input,
+.filter .gkb-checkbox > input {
+  background: none;
+}
+
+.input-wrapper input.no-icon:focus {
+  background: none;
 }
