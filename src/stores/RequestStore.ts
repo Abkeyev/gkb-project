@@ -1121,7 +1121,7 @@ class RequestStore {
     });
   }
 
-  async getBase64(isAccessForm?: boolean) {
+  async getBase64(isAccessForm: boolean = false) {
     this.request &&
       (await api.service
         .downloadFileForSign(this.request.id)
@@ -1134,7 +1134,7 @@ class RequestStore {
         }));
   }
 
-  async signDoc(base64: string, isAccessForm?: boolean) {
+  async signDoc(base64: string, isAccessForm: boolean) {
     if (base64.length) {
       await signWithBase64(base64)
         .then((res) => {
@@ -1144,7 +1144,7 @@ class RequestStore {
     } else console.error("no base 64");
   }
 
-  async afterNca(base64: string, isAccessForm?: boolean) {
+  async afterNca(base64: string, isAccessForm: boolean) {
     this.request &&
       (await api.service
         .uploadSignedFile(this.request.id, {

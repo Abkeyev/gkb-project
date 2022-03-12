@@ -229,30 +229,33 @@ class MainStore {
     await getKeyInfoCall()
       .then((res) => {
         runInAction(async () => {
-          await api.client
-            .authEcp({
-              bin: this.getSubstring(res.subjectDn, "SERIALNUMBER=").substr(3),
-              fio: `${this.getSubstring(
-                res.subjectDn,
-                "CN="
-              )} ${this.getSubstring(res.subjectDn, "G=")}`,
-              name: this.getSubstring(res.subjectDn, "O=").replace(/\\/g, ""),
-            })
-            .then((r) => {
-              r &&
-                runInAction(async () => {
-                  await this.setTokens(r);
-                  setTimeout(() => window.location.reload(), 500);
-                });
-            })
-            .catch((err) => {
-              if (err && err.detail) {
-                runInAction(async () => {
-                  this.loginError = true;
-                  this.loginErrorText = err.detail;
-                });
-              }
-            });
+          res.algorithm === "RSA" &&
+            (await api.client
+              .authEcp({
+                bin: this.getSubstring(res.subjectDn, "SERIALNUMBER=").substr(
+                  3
+                ),
+                fio: `${this.getSubstring(
+                  res.subjectDn,
+                  "CN="
+                )} ${this.getSubstring(res.subjectDn, "G=")}`,
+                name: this.getSubstring(res.subjectDn, "O=").replace(/\\/g, ""),
+              })
+              .then((r) => {
+                r &&
+                  runInAction(async () => {
+                    await this.setTokens(r);
+                    setTimeout(() => window.location.reload(), 500);
+                  });
+              })
+              .catch((err) => {
+                if (err && err.detail) {
+                  runInAction(async () => {
+                    this.loginError = true;
+                    this.loginErrorText = err.detail;
+                  });
+                }
+              }));
         });
       })
       .catch((err) => console.error(err.message));
