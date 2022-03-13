@@ -4,6 +4,7 @@ import { CatDocType, Documents } from "../../api/Models/ServiceModels";
 import { PartnerNewProps } from "./PartnerNewProps.props";
 import FileCard from "./FileCard";
 import { observer } from "mobx-react";
+import { toJS } from "mobx";
 
 const PartnerNewFiles = ({
   request,
@@ -14,7 +15,8 @@ const PartnerNewFiles = ({
   React.useEffect(() => {
     setDocs();
   }, [request._getDocsTypes]);
-  const setDocs = () => {
+  const setDocs = (isNew: boolean = false) => {
+    let docs: Documents[] = isNew ? [] : filesId;
     if (request._getDocuments.length > 0) {
       (request._getDocuments as Documents[])
         .filter((dd: Documents) => dd.doc_status === "Active")
@@ -24,17 +26,18 @@ const PartnerNewFiles = ({
               if (
                 dt.doc_category_id === d.doc_category &&
                 dt.doc_type_id === d.doc_type &&
-                filesId.filter(
+                docs.filter(
                   (f: Documents) =>
                     f.doc_category === dt.doc_category_id &&
                     f.doc_type === dt.doc_type_id
                 ).length === 0
               ) {
-                setFilesId([...filesId, d]);
+                docs.push(d);
               }
             });
         });
     }
+    setFilesId([...docs]);
   };
   const handleChange = (
     e: any,
@@ -54,9 +57,13 @@ const PartnerNewFiles = ({
         bodyFormData.append("version", "1");
         bodyFormData.append("doc_type", doc_type);
         bodyFormData.append("is_draft", "true");
-        setFilesId([...filesId, bodyFormData]);
-        request.addDocument(main.clientData.client.id, bodyFormData, true);
-        setDocs();
+        request
+          .addDocument(main.clientData.client.id, bodyFormData, true)
+          .then(() =>
+            request
+              .getDocuments(main.clientData.client.id)
+              .then(() => setDocs(true))
+          );
       }
     });
   };
@@ -83,6 +90,7 @@ const PartnerNewFiles = ({
                       files={filesId}
                       setFiles={setFilesId}
                       main={main}
+                      setDocs={setDocs}
                     />
                   );
                 })}

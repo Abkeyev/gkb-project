@@ -1,3 +1,4 @@
+import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
 import FileReaderInput from "react-file-reader-input";
@@ -10,10 +11,11 @@ interface FileCardProps {
   setFiles: any;
   handleChange: any;
   main: any;
+  setDocs: any;
 }
 
 const FileCard = (props: FileCardProps) => {
-  const { type, request, setFiles, files, handleChange, main } = props;
+  const { type, request, setFiles, files, handleChange, main, setDocs } = props;
   const [fil, setFil]: any = React.useState();
 
   React.useEffect(() => {
@@ -24,23 +26,27 @@ const FileCard = (props: FileCardProps) => {
           f.doc_type === type.doc_type_id
       )
     );
-  }, [files, fil]);
+  }, [files, setFiles]);
 
   const handleDelete = () => {
     fil.doc_status = "Archive";
+    request
+      .deleteDocument(main.clientData.client.id, fil)
+      .then(() =>
+        request.getDocuments(main.clientData.client.id).then(() => setDocs())
+      );
     setFiles([...files.filter((f: Documents) => f.doc_type !== fil.doc_type)]);
-    request.deleteDocument(main.clientData.client.id, fil);
   };
 
   return (
     <li key={type.doc_type_id}>
       <div className="name">
-        {console.log(type, "type")}
-        {console.log(files, "files")}
         <span className="text">{type.doc_type_name}</span>
-        {fil ? <span className="file-name">{fil.doc_name}</span> : null}
+        {fil && fil.doc_status != "Archive" ? (
+          <span className="file-name">{fil.doc_name}</span>
+        ) : null}
       </div>
-      {fil ? (
+      {fil && fil.doc_status != "Archive" ? (
         <button className="btn-icon delete" onClick={() => handleDelete()}>
           <i className="azla size-18 trash-icon-alert mr-8"></i>
           Удалить файл

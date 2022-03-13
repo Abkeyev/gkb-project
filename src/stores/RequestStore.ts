@@ -420,7 +420,6 @@ class RequestStore {
         this.signNotType = false;
       }
       this.request = r;
-      console.log(r);
     });
   }
   // Client User Пользователи
@@ -618,9 +617,7 @@ class RequestStore {
   }
 
   async getManSigner(id: number) {
-    await api.service
-      .getUser(id)
-      .then((u: User) => ((this.manSigner = u), console.log(u)));
+    await api.service.getUser(id).then((u: User) => (this.manSigner = u));
   }
 
   async getSomeClient(id: number) {
@@ -838,7 +835,6 @@ class RequestStore {
           api.service
             .getClientServiceCount(id)
             .then((res: ClientUserService) => {
-              console.log(res, "res");
               users.push(res);
             })
         )
@@ -849,6 +845,7 @@ class RequestStore {
   async getClientDocs(ids: number[], r: Request | null = null) {
     let docs: Documents[] = [];
     let promises: any[] = [];
+    this.doc = null;
     (await (ids.length > 0)) &&
       ids.map((id: number, index: number) =>
         promises.push(
@@ -880,21 +877,24 @@ class RequestStore {
             ) {
               this.doc = res;
               docs.push(res);
-            } else if (res.doc_type === 1) {
+            } else if (
+              res.doc_type === 1 &&
+              res.is_signed_by_agent &&
+              r &&
+              r.request_status === 6
+            ) {
+              this.doc = res;
+              docs.push(res);
+            } else if (
+              res.doc_type === 1 &&
+              r &&
+              (r.request_status === 2 || r.request_status === 9)
+            ) {
               this.doc = res;
               docs.push(res);
             } else {
               docs.push(res);
             }
-            // if (r) {
-            //   if (r.request_stepper > 2 && index === ids.length - 1)
-            //     this.downloadSignedFile(r.id);
-            //   else {
-            //     if (index === ids.length - 1) {
-            //       this.doc = res;
-            //     }
-            //   }
-            // }
           })
         )
       );
