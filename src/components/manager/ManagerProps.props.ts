@@ -10,4 +10,7 @@ export interface ManagerProps {
   setService?: any;
   sortTitle?: any;
   setSortTitle?: any;
+  date?: any;
+  setDate?: any;
+  sortRef?: any;
 }

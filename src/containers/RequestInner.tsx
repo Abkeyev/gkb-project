@@ -26,6 +26,7 @@ const RequestInner = observer((props: any) => {
     request.getDocumentsType();
     request.getClientTypes();
     request.getRequest(id, main);
+    request.getRights();
   }, []);
 
   return (

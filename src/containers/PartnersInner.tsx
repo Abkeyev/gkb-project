@@ -27,6 +27,7 @@ const PartnersInner = observer((props: any) => {
     request.getDocuments(main.clientData.client.id);
     request.getClientTypes();
     request.getRequest(id);
+    request.getRights();
   }, []);
 
   return (

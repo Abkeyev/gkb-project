@@ -81,7 +81,7 @@ const Signers = observer((props: any) => {
                   request.tabIndexPar = i;
                 }}
               >
-                <div className="">
+                <div className="mb-24">
                   <TabList>
                     <Tab>На подписание</Tab>
                     <Tab>На согласование</Tab>

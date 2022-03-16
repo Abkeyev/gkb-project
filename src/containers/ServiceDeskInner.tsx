@@ -37,6 +37,7 @@ const ServiceDeskInner = observer((props: any) => {
     request.getDocumentsType();
     request.getClientTypes();
     request.getRequest(id);
+    request.getRights();
   }, []);
 
   return (

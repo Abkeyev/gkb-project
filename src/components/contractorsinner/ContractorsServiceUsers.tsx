@@ -13,7 +13,7 @@ const ContractorsServiceUsers = ({ request }: ContractorsInnerProps) => {
       </p>
       {(request._getClientUsersForAdd as ClientUsers[]).map(
         (u: ClientUsers, index) => (
-          <CardServiceUsers u={u} index={index} count />
+          <CardServiceUsers request={request} u={u} index={index} count />
         )
       )}
     </>

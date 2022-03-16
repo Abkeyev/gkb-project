@@ -318,29 +318,30 @@ const AccessFormNew = observer((props: any) => {
                                 request.editClientUser(u.id, u)
                             );
                           } finally {
-                            request
-                              .addAccessForm({
-                                client: main.clientData.client.id,
-                                service_category:
-                                  request._getRequest.service_category,
-                                client_doc: request._getRequest.client_doc,
-                                request_status: 1,
-                                request_stepper: 6,
-                                service_type:
-                                  req && req.service_type === 15
-                                    ? service
-                                    : request._getRequest.service_type,
-                                client_user: [
-                                  ...request._getRequest.client_user,
-                                  ...request.usersNewAccess.map(
-                                    (u: ClientUserAccess) => u.id
-                                  ),
-                                ],
-                              })
-                              .then(() => {
-                                main.setModal(false);
-                                request.setStep(1);
-                              });
+                            service !== "-1" &&
+                              request
+                                .addAccessForm({
+                                  client: main.clientData.client.id,
+                                  service_category:
+                                    request._getRequest.service_category,
+                                  client_doc: request._getRequest.client_doc,
+                                  request_status: 1,
+                                  request_stepper: 6,
+                                  service_type:
+                                    req && req.service_type === 15
+                                      ? service
+                                      : request._getRequest.service_type,
+                                  client_user: [
+                                    ...request._getRequest.client_user,
+                                    ...request.usersNewAccess.map(
+                                      (u: ClientUserAccess) => u.id
+                                    ),
+                                  ],
+                                })
+                                .then(() => {
+                                  main.setModal(false);
+                                  request.setStep(1);
+                                });
                           }
                         }}
                       >

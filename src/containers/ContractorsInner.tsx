@@ -27,6 +27,7 @@ const ContractorsInner = observer((props: any) => {
     request.getPersonStatus();
     request.getClientServiceType();
     request.getPosition();
+    request.getRights();
   }, []);
   return (
     <div className="main-body">

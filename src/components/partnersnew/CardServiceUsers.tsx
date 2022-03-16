@@ -53,12 +53,11 @@ const CardServiceUsers = ({ request, main, u, index, count = false }: any) => {
           </div>
         </div>
         <p className="desc">
-          {console.log(u, "uuu")}
-          {console.log(request._getPosition, "request._getPosition")}
-          {request._getPosition &&
+          {
             request._getPosition.find(
               (t: ServiceCommon) => t.id === +u.position_name
-            )?.name}{" "}
+            )?.name
+          }{" "}
           – {u.department_name} –
           {request._getClients &&
             request._getClients.find((t: Client) => t.id === u.client)
