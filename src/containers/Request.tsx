@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { useHistory } from 'react-router';
-import 'react-tabs/style/react-tabs.css';
-import { observer } from 'mobx-react';
-import { Request as RequestModel } from '../api/Models/ServiceModels';
-import { OnClickOutside } from '../utils/utils';
-import UnallocatedRequests from '../components/request/UnallocatedRequest';
-import NeedSignRequest from '../components/request/NeedSignRequest';
-import SignedRequest from '../components/request/SignedRequest';
-import RequestArchive from '../components/request/RequestArchive';
-import RequestFilter from '../components/request/RequestFilter';
+import React, { useState, useEffect, useRef } from "react";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { useHistory } from "react-router";
+import "react-tabs/style/react-tabs.css";
+import { observer } from "mobx-react";
+import { Request as RequestModel } from "../api/Models/ServiceModels";
+import { OnClickOutside } from "../utils/utils";
+import UnallocatedRequests from "../components/request/UnallocatedRequest";
+import NeedSignRequest from "../components/request/NeedSignRequest";
+import SignedRequest from "../components/request/SignedRequest";
+import RequestArchive from "../components/request/RequestArchive";
+import RequestDeclined from "../components/request/RequestDeclined";
+import RequestFilter from "../components/request/RequestFilter";
 
 const Request = observer((props: any) => {
   const { request, main } = props;
@@ -17,8 +18,8 @@ const Request = observer((props: any) => {
   const [services, setServices] = useState<number[]>([]);
   const [category, setCategory] = useState(false);
   const [categories, setCategories] = useState<number[]>([]);
-  const [bin, setBin] = useState<string>('');
-  const [sortTitle, setSortTitle] = useState('');
+  const [bin, setBin] = useState<string>("");
+  const [sortTitle, setSortTitle] = useState("");
   const history = useHistory();
   const catRef = useRef<any>(null);
   const serviceRef = useRef<any>(null);
@@ -66,7 +67,7 @@ const Request = observer((props: any) => {
             );
           })
           .reverse();
-    if (sortTitle === 'сначала старые') req.reverse();
+    if (sortTitle === "сначала старые") req.reverse();
     return req.length > 0
       ? req
           .filter(
@@ -93,13 +94,13 @@ const Request = observer((props: any) => {
   };
 
   return (
-    <div className='main-body'>
-      <div className='container'>
-        <div className='row'>
-          <div className='col-lg-12'>
-            <div className='req-manager p-50 pad-b-128'>
-              <div className='header-text justify-content-between mb-24'>
-                <h1 className='title-main'>Заявки</h1>
+    <div className="main-body">
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="req-manager p-50 pad-b-128">
+              <div className="header-text justify-content-between mb-24">
+                <h1 className="title-main">Заявки</h1>
               </div>
               <Tabs
                 selectedIndex={request.tabIndexPar}
@@ -112,6 +113,7 @@ const Request = observer((props: any) => {
                     <Tab>Нераспределенные</Tab>
                     <Tab>Мои</Tab>
                     <Tab>Подписанные</Tab>
+                    <Tab>Отклоненные</Tab>
                     <Tab>В архиве</Tab>
                   </TabList>
                 </div>
@@ -151,6 +153,13 @@ const Request = observer((props: any) => {
                 </TabPanel>
                 <TabPanel>
                   <SignedRequest
+                    request={request}
+                    filterRequests={filterRequests}
+                    history={history}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <RequestDeclined
                     request={request}
                     filterRequests={filterRequests}
                     history={history}

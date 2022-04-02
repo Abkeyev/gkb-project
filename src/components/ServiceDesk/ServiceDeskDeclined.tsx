@@ -1,30 +1,27 @@
-import React from "react";
 import { observer } from "mobx-react";
+import React from "react";
+import { ReactComponent as Spinner } from "../../styles/spinner.svg";
+import {
+  Request as RequestModel,
+  ServiceCommon,
+} from "../../api/Models/ServiceModels";
 import moment from "moment";
-import { Request, ServiceCommon } from "../../api/Models/ServiceModels";
-import { SignersProps } from "./SignersProps.props";
+import { ServiceDeskProps } from "./ServiceDeskProps.props";
 
-const SignersViewed = ({
-  filterVoteRequests,
-  history,
-  main,
+const ServiceDeskDeclined = ({
   request,
-}: SignersProps) => {
-  return (
-    <div className="tab-content tab-2">
+  filterRequests,
+  history,
+}: ServiceDeskProps) => {
+  React.useEffect(() => {}, []);
+  return request?.loader ? (
+    <Spinner />
+  ) : (
+    <div className="tab-content tab-1">
       <h3 className="title-subhead mb-16">
-        Расcмотренные{" "}
-        <span className="number">
-          {
-            filterVoteRequests(
-              [5, 7, 8, 10, 12, 13, 14],
-              main.clientData.user.id
-            ).length
-          }
-        </span>
+        Найдено <span className="number">{filterRequests([4]).length}</span>
       </h3>
-      {filterVoteRequests([5, 7, 8, 10, 12, 13, 14], main.clientData.user.id)
-        .length === 0 ? (
+      {filterRequests([4]).length === 0 ? (
         "Заявки отсутствуют."
       ) : (
         <table className="table req-table">
@@ -38,11 +35,8 @@ const SignersViewed = ({
             </tr>
           </thead>
           <tbody>
-            {filterVoteRequests(
-              [5, 7, 8, 10, 12, 13, 14],
-              main.clientData.user.id
-            ).map((r: Request) => (
-              <tr onClick={() => history.push(`/signer/${r.id}`)}>
+            {filterRequests([4]).map((r: RequestModel) => (
+              <tr onClick={() => history.push(`/service-desk/${r.id}`)}>
                 <td>{r.client.bin}</td>
                 <td>{r.client.longname}</td>
                 <td>
@@ -70,4 +64,4 @@ const SignersViewed = ({
   );
 };
 
-export default observer(SignersViewed);
+export default observer(ServiceDeskDeclined);

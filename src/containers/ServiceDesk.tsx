@@ -8,6 +8,7 @@ import { OnClickOutside } from "../utils/utils";
 import ServiceDeskIncoming from "../components/ServiceDesk/ServiceDeskIncoming";
 import ServiceDeskFilter from "../components/ServiceDesk/ServiceDeskFilter";
 import ServiceDeskViewed from "../components/ServiceDesk/ServiceDeskViewed";
+import ServiceDeskDeclined from "../components/ServiceDesk/ServiceDeskDeclined";
 
 const ServiceDesk = observer((props: any) => {
   const { request, main } = props;
@@ -50,13 +51,12 @@ const ServiceDesk = observer((props: any) => {
           .filter((ccc: Request) =>
             services.length === 0 ? true : services.includes(ccc.service_type)
           )
-          .filter((cccc: Request) => cccc.request_stepper > 3)
+          .filter((cccc: Request) => cccc.request_stepper >= 3)
           .filter((ccc: Request) =>
             categories.length === 0
               ? true
               : categories.includes(ccc.client.client_type)
           )
-          .filter((rr: Request) => rr.request_stepper > 3)
           .filter((r: Request) =>
             type.length === 0 ? true : type.includes(r.request_status)
           )
@@ -83,6 +83,7 @@ const ServiceDesk = observer((props: any) => {
                   <TabList>
                     <Tab>Входящие</Tab>
                     <Tab>Рассмотренные</Tab>
+                    <Tab>Отклоненные</Tab>
                   </TabList>
                 </div>
 
@@ -113,6 +114,14 @@ const ServiceDesk = observer((props: any) => {
                 </TabPanel>
                 <TabPanel>
                   <ServiceDeskViewed
+                    request={request}
+                    history={history}
+                    filterRequests={filterRequests}
+                    main={main}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <ServiceDeskDeclined
                     request={request}
                     history={history}
                     filterRequests={filterRequests}

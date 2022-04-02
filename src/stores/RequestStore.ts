@@ -344,6 +344,12 @@ class RequestStore {
     });
   }
 
+  async getTestStatus(id: number) {
+    await api.service.getTestStatus(id).then((r: any) => {
+      console.log(r, "test status");
+    });
+  }
+
   async getClientRequests(id: number) {
     this.setLoader(true);
     await api.service

@@ -1,5 +1,5 @@
 import React from "react";
-import { ClientUser } from "../../api/Models/ServiceModels";
+import { ClientUserAccess } from "../../api/Models/ServiceModels";
 import { observer } from "mobx-react";
 
 const PartnersNewFooter = ({ main, request, filesId, tab }: any) => {
@@ -29,6 +29,10 @@ const PartnersNewFooter = ({ main, request, filesId, tab }: any) => {
               onClick={() => {
                 main.setModal(true);
                 main.setModalType(13);
+                const cu = request.usersNewAccess.map(
+                  (u: ClientUserAccess) => u.id
+                );
+                console.log(cu, "cu");
                 request.data = {
                   client: main.clientData.client.id,
                   service_category: tab,
@@ -40,9 +44,7 @@ const PartnersNewFooter = ({ main, request, filesId, tab }: any) => {
                           ...request.addedFiles,
                         ]
                       : [...filesId.map((u: any) => u.id)],
-                  client_user: request.usersNewAccess.map(
-                    (u: ClientUser) => u.id
-                  ),
+                  client_user: cu,
                   request_status: 1,
                   request_stepper: 1,
                 };

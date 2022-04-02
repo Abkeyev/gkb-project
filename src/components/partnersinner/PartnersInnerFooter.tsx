@@ -5,8 +5,7 @@ import { PartnersProps } from "../partners/PartnersProps.props";
 const PartnersInnerFooter = ({ request }: PartnersProps) => {
   return (
     <>
-      {request._getRequest.request_stepper > 3 &&
-      request._getRequest.request_status === 8 ? (
+      {request._getRequest.request_status === 8 ? (
         <div className="req-inner-footer">
           <div className="container">
             <div className="left">

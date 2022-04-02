@@ -2,18 +2,6 @@ import React from "react";
 import "react-tabs/style/react-tabs.css";
 import { Link, useHistory } from "react-router-dom";
 import { observer } from "mobx-react";
-import moment from "moment";
-import {
-  Agree,
-  AgreeResult,
-  Categories,
-  Client,
-  ClientUsers,
-  Documents,
-  Result,
-  ServiceCommon,
-  User,
-} from "../api/Models/ServiceModels";
 import { Modal } from "../containers";
 import ServiceDeskInnerFirstStep from "../components/ServiceDeskInner/ServiceDeskInnerFirstStep";
 import ServiceDeskInnerSecondStep from "../components/ServiceDeskInner/ServiceDeskInnerSecondStep";
@@ -38,6 +26,7 @@ const ServiceDeskInner = observer((props: any) => {
     request.getClientTypes();
     request.getRequest(id);
     request.getRights();
+    request.getTestStatus(id);
   }, []);
 
   return (

@@ -366,6 +366,11 @@ export class ServiceController {
       baseURL,
     });
   }
+  async getTestStatus(id: number): Promise<any> {
+    return server.get(`/request/${id}/step/status`, {
+      baseURL,
+    });
+  }
   async nextRequest(request: Request): Promise<any> {
     return server.get(`/client_request/next_step/${request.id}`, {
       baseURL,
